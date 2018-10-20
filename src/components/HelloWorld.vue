@@ -4,23 +4,30 @@
     <div>
       <input type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
       <input type="text" v-model="tel" placeholder="เบอร์">
-      <button @click="insertTofoodcenter(tel, name)">Add</button>
+      <button @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
     </div>
 
     <hr>
-
-    <ul :key="key" v-for="(foodcenter, key) in foodcenters">
-      <li v-if="updateKey === key">
+    <div class="detail">
+    <div :key="key" v-for="(foodcenter, key) in foodcenters" style="">
+      <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
         <button @click="updatefoodcenter(updateTel, updateName)">Save</button>
-      </li>
-      <li v-else>
-        {{foodcenter.name}} : {{foodcenter.tel}}
+      </div>
+      <div v-else>
+        <div class="row">
+          <div class="column">
+        <h1>{{foodcenter.name}}</h1>
+         <h1>{{foodcenter.tel}}</h1>
+         <h1>จำนวนคิวที่ต้องรอ {{foodcenter.q}} </h1>
         <button @click="setUpdatefoodcenter(key, foodcenter)">Update</button>
         <button @click="deletefoodcenter(key)">Delete</button>
-      </li>
-    </ul>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
   </div>
 </template>
 
@@ -46,14 +53,16 @@ export default {
       name: '',
       updateTel: '',
       updateName: '',
-      updateKey: ''
+      updateKey: '',
+      q: ''
     }
   },
   methods: {
     insertTofoodcenter (tel, name) {
       let data = {
         tel: tel,
-        name: name
+        name: name,
+        q: 0
       }
       foodcenterRef.push(data)
       this.tel = ''
@@ -87,18 +96,26 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
+* {
+    box-sizing: border-box;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+.column {
+    float: left;
+    width: 300px;
+    padding: 10px;
+    height: 300px; /* Should be removed. Only for demonstration */
+    background-color:#aaa;
+    border: 1px solid black;
+    margin: 10px 10px;
+
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+@media screen and (max-width: 33%) {
+    .column {
+        width: 100%;
+    }
 }
-a {
-  color: #42b983;
+.detail {
+  margin-left: 33%;
+  margin-right: 33%;
 }
 </style>
