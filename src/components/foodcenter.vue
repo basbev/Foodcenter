@@ -45,7 +45,7 @@ firebase.initializeApp(config)
 var database = firebase.database()
 var foodcenterRef = database.ref('/foodcenter')
 export default {
-  name: 'HelloWorld',
+  name: 'foodcenter',
   data () {
     return {
       foodcenters: {},
@@ -87,7 +87,7 @@ export default {
     }
   },
   mounted () {
-    foodcenterRef.on('value', (snapshot) => {
+    foodcenterRef.on('value', snapshot => {
       this.foodcenters = snapshot.val()
     })
   }
@@ -97,22 +97,21 @@ export default {
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 .column {
-    float: left;
-    width: 300px;
-    padding: 10px;
-    height: 300px; /* Should be removed. Only for demonstration */
-    background-color:#aaa;
-    border: 1px solid black;
-    margin: 10px 10px;
-
+  float: left;
+  width: 300px;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+  background-color: #aaa;
+  border: 1px solid black;
+  margin: 10px 10px;
 }
 @media screen and (max-width: 33%) {
-    .column {
-        width: 100%;
-    }
+  .column {
+    width: 100%;
+  }
 }
 .detail {
   margin-left: 33%;
