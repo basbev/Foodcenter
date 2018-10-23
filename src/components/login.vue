@@ -1,33 +1,4 @@
 <template>
-<div>
-<div class="container">
-<div class="row">
-<div class="col s12 m8 offset-m2">
-<div class="login card-panel red lighten-5 white-text center">
-<form>
-<div class="input-field">
-<input type="text" id="user">
-<label for="user">Username</label>
-</div>
-<div class="input-field">
-<input type="password" id="password">
-<label for="password">Password</label>
-</div>
-<button class="btn btn-large grey lighten-4 black-text">Login To FoodCenter</button>
-            <a class="bd-tw-button button" data-social-network="Facebook" data-social-action="facebook" data-social-target="http://localhost:4000" target="_blank" href="https://twitter.com/intent/tweet?text=Bulma: a modern CSS framework based on Flexbox&amp;hashtags=bulmaio&amp;url=http://localhost:4000&amp;via=jgthms">
-              <span class="icon">
-                <i class="fab fa-facebook"></i>
-              </span>
-              <span>
-                facebook
-              </span>
-            </a>
-</form>
-</div>
-</div>
-</div>
-</div>
-<section class="hero is-success is-fullheight">
         <div class="hero-body">
             <div class="container has-text-centered">
                 <div class="column is-4 is-offset-4">
@@ -35,7 +6,7 @@
                     <p class="subtitle has-text-grey">Please login to FoodCenter.</p>
                     <div class="box">
                         <figure class="avatar">
-                            <img src="https://placehold.it/128x128">
+                            <img src="/static/page_2.jpg">
                         </figure>
                         <form>
                             <div class="field">
@@ -55,19 +26,23 @@
                   Remember me
                 </label>
                             </div>
-                            <button class="button is-block is-info is-large is-fullwidth">Login</button>
+                            <div class="buttons is-centered">
+  <span class="button is-success">Login</span>
+  <a class="bd-tw-button button" href="/">
+              <span class="icon">
+                <i class="fab fa-facebook"></i>
+              </span>
+              <span>
+                facebook
+              </span>
+            </a>
+  <span class="button is-danger">Sign Up</span>
+</div>
                         </form>
                     </div>
-                    <p class="has-text-grey">
-                        <a href="../">Sign Up</a> &nbsp;·&nbsp;
-                        <a href="../">Forgot Password</a> &nbsp;·&nbsp;
-                        <a href="../">Need Help?</a>
-                    </p>
                 </div>
             </div>
         </div>
-    </section>
-</div>
 </template>
 
 <script>
@@ -85,6 +60,7 @@ html,body {
   font-family: 'Open Sans', serif;
   font-size: 14px;
   font-weight: 300;
+  background: #F2F6FA;
 }
 .hero.is-success {
   background: #F2F6FA;
