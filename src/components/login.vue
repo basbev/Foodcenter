@@ -11,13 +11,13 @@
           <form>
             <div class="field">
               <div class="control">
-                <input class="input is-large" type="email" placeholder="Your Email" autofocus="">
+                <input class="input is-large" type="email" placeholder="Your Email" autofocus="" id="email" v-model="email">
               </div>
             </div>
 
             <div class="field">
               <div class="control">
-                <input class="input is-large" type="password" placeholder="Your Password">
+                <input class="input is-large" type="password" placeholder="Your Password" id="password" v-model="password">
               </div>
             </div>
             <div class="field">
@@ -27,8 +27,8 @@
               </label>
             </div>
             <div class="buttons is-centered">
-              <span class="button is-success">Login</span>
-              <a class="bd-tw-button button" @click="sign()" href="/">
+              <span class="button is-success" v-on:click="login">Login</span>
+              <a class="bd-tw-button button">
                 <span class="icon">
                   <i class="fab fa-facebook"></i>
                 </span>
@@ -46,10 +46,30 @@
 </template>
 
 <script>
+import firebase from 'firebase'
 export default {
   name: 'login',
-  data () {
+  data: function () {
     return {
+      email: '',
+      password: ''
+    }
+  },
+  methods: {
+    login: function (e) {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then(
+          user => {
+            alert(`You are logged in as ${user.email}`)
+            this.$router.go({ path: this.$router.path })
+          },
+          err => {
+            alert(err.message)
+          }
+        )
+      e.preventDefault()
     }
   }
 }
