@@ -33,15 +33,6 @@
 
 <script>
 import * as firebase from 'firebase'
-var config = {
-  apiKey: 'AIzaSyDIfmWOTTfPFqBIN7h3J3-yt-Ey2hpYnOk',
-  authDomain: 'foodcenter-23d67.firebaseapp.com',
-  databaseURL: 'https://foodcenter-23d67.firebaseio.com',
-  projectId: 'foodcenter-23d67',
-  storageBucket: 'foodcenter-23d67.appspot.com',
-  messagingSenderId: '4604297708'
-}
-firebase.initializeApp(config)
 var database = firebase.database()
 var foodcenterRef = database.ref('/foodcenter')
 export default {
