@@ -33,7 +33,14 @@
               </span>
             </a>
           </p>
-          <p class="control">
+          <p class="control" v-if="isLoggedIn" v-on:click="logout">
+            <a class="bd-tw-button button" href="/">
+              <span>
+                Logout
+              </span>
+            </a>
+          </p>
+          <p class="control" v-if="!isLoggedIn">
             <a class="bd-tw-button button" href="/">
               <span>
                 Login
