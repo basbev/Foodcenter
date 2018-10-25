@@ -20,14 +20,9 @@
                 <input class="input is-large" type="password" placeholder="Your Password" id="password" v-model="password">
               </div>
             </div>
-            <div class="field">
-              <label class="checkbox">
-                <input type="checkbox">
-                Remember me
-              </label>
-            </div>
+            <hr>
             <div class="buttons is-centered">
-              <span class="button is-success" v-on:click="login">Login</span>
+              <span class="bd-tw-button button" v-on:click="register">Register</span>
               <a class="bd-tw-button button">
                 <span class="icon">
                   <i class="fab fa-facebook"></i>
@@ -36,7 +31,6 @@
                   facebook
                 </span>
               </a>
-              <span class="button is-danger">Sign Up</span>
             </div>
           </form>
         </div>
@@ -64,7 +58,7 @@ export default {
         .then(
           user => {
             // console.log(user);
-            alert(`Account Created for ${user.email}`)
+            alert(`Account Created for ${this.email}`)
             this.$router.go({ path: this.$router.path })
           },
           err => {
