@@ -41,14 +41,14 @@
             </a>
           </p>
           <p class="control" v-if="!isLoggedIn">
-            <a class="bd-tw-button button" href="/">
+            <a class="bd-tw-button button" href="#/">
               <span>
                 Login
               </span>
             </a>
           </p>
-          <p class="control">
-            <a class="button is-primary" href="/">
+          <p class="control" v-if="!isLoggedIn">
+            <a class="button is-primary" href="#/Register">
               <span>Sign Up</span>
             </a>
           </p>
