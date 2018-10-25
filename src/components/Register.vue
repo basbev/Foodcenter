@@ -10,14 +10,20 @@
           </figure>
           <form>
             <div class="field">
-              <div class="control">
+              <div class="control has-icons-left has-icons-right">
                 <input class="input is-large" type="email" placeholder="Your Email" autofocus="" id="email" v-model="email">
+                <span class="icon is-small is-left">
+      <i class="fas fa-envelope"></i>
+    </span>
               </div>
             </div>
 
             <div class="field">
-              <div class="control">
+              <div class="control has-icons-left">
                 <input class="input is-large" type="password" placeholder="Your Password" id="password" v-model="password">
+                <span class="icon is-small is-left">
+      <i class="fas fa-lock"></i>
+    </span>
               </div>
             </div>
             <div class="field">
