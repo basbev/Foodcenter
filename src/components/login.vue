@@ -34,7 +34,7 @@
             </div>
             <div class="buttons is-centered">
               <span class="button is-success" v-on:click="login">Login</span>
-              <a class="bd-tw-button button">
+              <a class="bd-tw-button button" v-on:click="loginFacebook">
                 <span class="icon">
                   <i class="fab fa-facebook"></i>
                 </span>
@@ -69,6 +69,23 @@ export default {
         .then(
           user => {
             alert(`You are logged in as ${this.email}`)
+            this.$router.go({ path: this.$router.path })
+          },
+          err => {
+            alert(err.message)
+          }
+        )
+      e.preventDefault()
+    },
+    loginFacebook: function (e) {
+      var provider = new firebase.auth.FacebookAuthProvider()
+      firebase
+        .auth()
+        .signInWithPopup(provider)
+        .then(
+          user => {
+            var displayName = firebase.auth().currentUser.displayName
+            alert(`You are logged in as ${displayName}`)
             this.$router.go({ path: this.$router.path })
           },
           err => {
