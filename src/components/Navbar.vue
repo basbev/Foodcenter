@@ -28,7 +28,7 @@
         <div class="field is-grouped">
           <p class="control" v-if="isLoggedIn">
             <a class="bd-tw-button button" href="/">
-              <span class="email">
+              <span class="text">
                 {{currentUser}}
               </span>
             </a>
@@ -81,7 +81,11 @@ export default {
   created () {
     if (firebase.auth().currentUser) {
       this.isLoggedIn = true
-      this.currentUser = firebase.auth().currentUser.email
+      if (firebase.auth().currentUser.displayName === null) {
+        this.currentUser = firebase.auth().currentUser.email
+      } else {
+        this.currentUser = firebase.auth().currentUser.displayName
+      }
     }
   },
   methods: {
