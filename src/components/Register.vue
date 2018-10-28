@@ -11,7 +11,7 @@
           <form>
             <div class="field">
               <div class="control has-icons-left has-icons-right">
-                <input class="input is-large" type="email" placeholder="Your Email" autofocus="" id="email" v-model="email">
+                <input class="input is-large" type="text" placeholder="Your Email" autofocus="" id="text" v-model="username">
                 <span class="icon is-small is-left">
       <i class="fas fa-envelope"></i>
     </span>
@@ -28,7 +28,7 @@
             </div>
             <hr>
             <div class="buttons is-centered">
-              <span class="bd-tw-button button" v-on:click="register">Register</span>
+              <span class="bd-tw-button button" v-on:click="registerW">Register</span>
               <a class="bd-tw-button button">
                 <span class="icon">
                   <i class="fab fa-facebook"></i>
@@ -47,13 +47,16 @@
 
 <script>
 import firebase from 'firebase'
-
+var database = firebase.database()
+var foodcenterRef = database.ref('/user')
 export default {
   name: 'Register',
   data: function () {
     return {
       email: '',
-      password: ''
+      password: '',
+      username: '',
+      permission: ''
     }
   },
   methods: {
@@ -72,6 +75,14 @@ export default {
           }
         )
       e.preventDefault()
+    },
+    registerW: function () {
+      let data = {
+        username: this.username,
+        password: this.password,
+        permission: '1'
+      }
+      foodcenterRef.push(data)
     }
   }
 }
