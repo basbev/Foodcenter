@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import foodcenter from '@/components/foodcenter'
 import login from '@/components/login'
 import Register from '@/components/Register'
+import Update from '@/components/Update'
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/Register',
       name: 'Register',
       component: Register
+    },
+    {
+      path: '/Update',
+      name: 'Update',
+      component: Update
     }
   ]
 })
