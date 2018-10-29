@@ -11,7 +11,7 @@
           <form>
             <div class="field">
               <div class="control has-icons-left has-icons-right">
-                <input class="input is-large" type="email" placeholder="Your Email" autofocus="" id="email" v-model="email">
+                <input class="input is-large" type="text" placeholder="Username" autofocus="" id="email" v-model="email">
               <span class="icon is-small is-left">
       <i class="fas fa-envelope"></i>
     </span>
@@ -20,7 +20,7 @@
 
             <div class="field">
               <div class="control has-icons-left">
-                <input class="input is-large" type="password" placeholder="Your Password" id="password" v-model="password">
+                <input class="input is-large" type="password" placeholder="Password" id="password" v-model="password">
               <span class="icon is-small is-left">
       <i class="fas fa-lock"></i>
     </span>
@@ -33,8 +33,8 @@
               </label>
             </div>
             <div class="buttons is-centered">
-              <span class="button is-success" v-on:click="login">Login</span>
-              <a class="bd-tw-button button" v-on:click="loginFacebook">
+              <span class="button is-success" >Login</span>
+                <a class="bd-tw-button button" v-on:click="loginFacebook">
                 <span class="icon">
                   <i class="fab fa-facebook"></i>
                 </span>
@@ -42,7 +42,9 @@
                   facebook
                 </span>
               </a>
-              <span class="button is-danger">Sign Up</span>
+              <a class="button is-primary" href="#/Register">
+              <span>Sign Up</span>
+            </a>
             </div>
           </form>
         </div>
@@ -58,7 +60,9 @@ export default {
   data: function () {
     return {
       email: '',
-      password: ''
+      password: '',
+      username: '',
+      permission: ''
     }
   },
   methods: {
@@ -69,7 +73,7 @@ export default {
         .then(
           user => {
             alert(`You are logged in as ${this.email}`)
-            this.$router.go({ path: this.$router.path })
+            this.$router.push('/foodcenter')
           },
           err => {
             alert(err.message)
@@ -87,6 +91,7 @@ export default {
             var displayName = firebase.auth().currentUser.displayName
             alert(`You are logged in as ${displayName}`)
             this.$router.go({ path: this.$router.path })
+            this.$router.push('/foodcenter')
           },
           err => {
             alert(err.message)
