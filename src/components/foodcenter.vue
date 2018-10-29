@@ -6,11 +6,21 @@
       <input type="text" v-model="tel" placeholder="เบอร์">
       <button @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
     </div>
-
     <hr>
-    <div class="detail">
-    <div :key="key" v-for="(foodcenter, key) in foodcenters" style="">
-      <div v-if="updateKey === key">
+  <section class="section">
+        <div class="container">
+          <div class="columns is-multiline">
+            <div class="column is-one-third" :key="key" v-for="(foodcenter, key) in foodcenters">
+              <article class="notification media has-background-white">
+                <figure class="media-left">
+                  <span class="icon">
+                    <i class="has-text-warning fa fa-columns fa-lg"></i>
+                  </span>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <h1 class="title is-size-4">ร้านอาหาร</h1>
+                    <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
         <button @click="updatefoodcenter(updateTel, updateName)">Save</button>
@@ -26,8 +36,13 @@
         </div>
         </div>
       </div>
-    </div>
-  </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
   </div>
 </template>
 
@@ -87,25 +102,4 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
-* {
-  box-sizing: border-box;
-}
-.column {
-  float: left;
-  width: 300px;
-  padding: 10px;
-  height: 300px; /* Should be removed. Only for demonstration */
-  background-color: #aaa;
-  border: 1px solid black;
-  margin: 10px 10px;
-}
-@media screen and (max-width: 33%) {
-  .column {
-    width: 100%;
-  }
-}
-.detail {
-  margin-left: 33%;
-  margin-right: 33%;
-}
 </style>
