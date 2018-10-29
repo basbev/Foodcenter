@@ -13,7 +13,7 @@
 
   <div id="navbarExampleTransparentExample" class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item" href="/">
+      <a class="navbar-item" href="#/foodcenter">
         <span class="icon">
                 <i class="fas fa-home"></i>
               </span>
@@ -95,6 +95,7 @@ export default {
         .signOut()
         .then(() => {
           this.$router.go({ path: this.$router.path })
+          this.$router.push('/')
         })
     }
   }
