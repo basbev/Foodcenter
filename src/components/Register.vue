@@ -82,7 +82,8 @@ export default {
         password: this.password,
         permission: '1'
       }
-      foodcenterRef.push(data)
+      foodcenterRef.child(this.username).push(data)
+      this.$router.push('/')
     }
   }
 }

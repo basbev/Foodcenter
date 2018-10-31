@@ -11,7 +11,7 @@
           <form>
             <div class="field">
               <div class="control has-icons-left has-icons-right">
-                <input class="input is-large" type="text" placeholder="Username" autofocus="" id="email" v-model="email">
+                <input class="input is-large" type="text" placeholder="Username" autofocus="" id="user" v-model="username">
               <span class="icon is-small is-left">
       <i class="fas fa-envelope"></i>
     </span>
@@ -33,7 +33,7 @@
               </label>
             </div>
             <div class="buttons is-centered">
-              <span class="button is-success" >Login</span>
+              <span class="button is-success" v-on:click="loginWeb">Login</span>
                 <a class="bd-tw-button button" v-on:click="loginFacebook">
                 <span class="icon">
                   <i class="fab fa-facebook"></i>
@@ -50,6 +50,13 @@
         </div>
       </div>
     </div>
+    <div class="column is-one-third" :key="key" v-for="(user, key) in users">
+      <div class="" :key="key" v-for="(user, key) in user">
+    <h1>Username :{{user.username}}</h1>
+    <h1>password :{{user.password}}</h1>
+    <h1>permission :{{user.permission}}</h1>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -60,36 +67,34 @@ export default {
   data: function () {
     return {
       email: '',
-      password: '',
+      permission: '',
+      getuser: {},
+      users: {},
       username: '',
-      permission: ''
+      password: ''
     }
   },
   methods: {
-    login: function (e) {
-      firebase
-        .auth()
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then(
-          user => {
-            alert(`You are logged in as ${this.email}`)
-            this.$router.push('/foodcenter')
-          },
-          err => {
-            alert(err.message)
-          }
-        )
-      e.preventDefault()
+    loginWeb: function (e) {
+      if (this.user === null) {
+        if (this.username !== '' && this.password !== '') {
+          this.$store.dispatch('signIn', {username: this.username, password: this.password})
+            .then(() => {
+            }).catch(err => {
+              alert(err)
+            })
+        } else alert(`No space information`)
+        if (this.isLoggedIn === true) {
+          this.$router.push('/foodcenter')
+        } else {
+          this.$router.push('/')
+        }
+      }
     },
     loginFacebook: function (e) {
-      var provider = new firebase.auth.FacebookAuthProvider()
-      firebase
-        .auth()
-        .signInWithPopup(provider)
+      this.$store.dispatch('loginfacebook')
         .then(
           user => {
-            var displayName = firebase.auth().currentUser.displayName
-            alert(`You are logged in as ${displayName}`)
             this.$router.go({ path: this.$router.path })
             this.$router.push('/foodcenter')
           },
@@ -98,6 +103,21 @@ export default {
           }
         )
       e.preventDefault()
+    }
+  },
+  mounted () {
+    const dbRefObject = firebase.database().ref().child('user')
+    dbRefObject.on('value', snap => {
+      this.users = snap.val()
+      console.log(this.users)
+    })
+  },
+  computed: {
+    user () {
+      return this.$store.getters.user
+    },
+    isLoggedIn () {
+      return this.$store.getters.isLoggedIn
     }
   }
 }

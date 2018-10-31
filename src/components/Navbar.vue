@@ -29,7 +29,7 @@
           <p class="control" v-if="isLoggedIn">
             <a class="bd-tw-button button" href="#/Update">
               <span class="text">
-                {{currentUser}}
+                {{this.user}}
               </span>
             </a>
           </p>
@@ -74,7 +74,6 @@ export default {
   name: 'navbar',
   data () {
     return {
-      isLoggedIn: false,
       currentUser: false
     }
   },
@@ -97,6 +96,14 @@ export default {
           this.$router.go({ path: this.$router.path })
           this.$router.push('/')
         })
+    }
+  },
+  computed: {
+    user () {
+      return this.$store.getters.user
+    },
+    isLoggedIn () {
+      return this.$store.getters.isLoggedIn
     }
   }
 }

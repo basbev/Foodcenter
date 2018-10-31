@@ -95,6 +95,7 @@ export default {
   mounted () {
     foodcenterRef.on('value', snapshot => {
       this.foodcenters = snapshot.val()
+      console.log(this.foodcenters)
     })
   }
 }
