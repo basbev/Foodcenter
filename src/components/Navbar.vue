@@ -27,7 +27,7 @@
       <div class="navbar-item">
         <div class="field is-grouped">
           <p class="control" v-if="isLoggedIn">
-            <a class="bd-tw-button button" href="#/Update">
+            <a class="bd-tw-button button" href="#/Profile">
               <span class="text">
                 {{this.user}}
               </span>
