@@ -4,6 +4,7 @@ import foodcenter from '@/components/foodcenter'
 import login from '@/components/login'
 import Register from '@/components/Register'
 import Update from '@/components/Update'
+import shop from '@/components/shop'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/Update',
       name: 'Update',
       component: Update
+    },
+    {
+      path: '/shop',
+      name: 'shop',
+      component: shop
     }
   ]
 })

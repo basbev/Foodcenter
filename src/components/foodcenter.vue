@@ -10,7 +10,8 @@
   <section class="section">
         <div class="container">
           <div class="columns is-multiline">
-            <div class="column is-one-third" :key="key" v-for="(foodcenter, key) in foodcenters">
+            <div class="column is-one-third" :key="key" v-for="(shop, key) in shops">
+              <div class="" :key="key" v-for="(shop, key) in shop">
               <article class="notification media has-background-white">
                 <figure class="media-left">
                   <span class="icon">
@@ -28,21 +29,29 @@
       <div v-else>
         <div class="row">
           <div class="column">
-        <h1>{{foodcenter.name}}</h1>
-         <h1>{{foodcenter.tel}}</h1>
-         <h1>จำนวนคิวที่ต้องรอ {{foodcenter.q}} </h1>
-        <button @click="setUpdatefoodcenter(key, foodcenter)">Update</button>
+        <h1>{{shop.name}}</h1>
+         <h1>{{shop.tel}}</h1>
+         <h1>จำนวนคิวที่ต้องรอ {{shop.q}} </h1>
+        <button @click="setUpdatefoodcenter(key, shop)">Update</button>
         <button @click="deletefoodcenter(key)">Delete</button>
+        <button @click="SelectShop(shop.name)" class="button is-danger">Select</button>
         </div>
         </div>
       </div>
                   </div>
                 </div>
               </article>
+              </div>
             </div>
           </div>
         </div>
       </section>
+      <div class="column is-one-third" :key="key" v-for="(shop, key) in shops">
+      <div class="" :key="key" v-for="(shop, key) in shop">
+    <h1>Username :{{shop.name}}</h1>
+    <h1>password :{{shop.tel}}</h1>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -60,7 +69,8 @@ export default {
       updateTel: '',
       updateName: '',
       updateKey: '',
-      q: ''
+      q: '',
+      shops: {}
     }
   },
   methods: {
@@ -70,7 +80,7 @@ export default {
         name: name,
         q: 0
       }
-      foodcenterRef.push(data)
+      foodcenterRef.child(this.name).push(data)
       this.tel = ''
       this.name = ''
     },
@@ -90,13 +100,31 @@ export default {
     },
     deletefoodcenter (key) {
       foodcenterRef.child(key).remove()
+    },
+    SelectShop (name) {
+      this.$store.dispatch('selectShop', {name})
+        .then(
+          user => {
+            this.$router.push('/shop')
+          },
+          err => {
+            alert(err.message)
+          }
+        )
     }
   },
   mounted () {
-    foodcenterRef.on('value', snapshot => {
-      this.foodcenters = snapshot.val()
-      console.log(this.foodcenters)
+    const dbRefObject = firebase.database().ref().child('foodcenter')
+    dbRefObject.on('value', snap => {
+      this.shops = snap.val()
+      console.log(this.shops)
+      console.log(this.selectShop)
     })
+  },
+  computed: {
+    selectShop () {
+      return this.$store.getters.selectShop
+    }
   }
 }
 </script>
