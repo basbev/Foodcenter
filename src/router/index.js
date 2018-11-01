@@ -5,6 +5,7 @@ import login from '@/components/login'
 import Register from '@/components/Register'
 import Update from '@/components/Update'
 import Profile from '@/components/Profile'
+import shop from '@/components/shop'
 
 Vue.use(Router)
 
@@ -34,6 +35,11 @@ export default new Router({
       path: '/Profile',
       name: 'Profile',
       component: Profile
+    },
+    {
+      path: '/shop',
+      name: 'shop',
+      component: shop
     }
   ]
 })
