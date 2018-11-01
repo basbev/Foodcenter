@@ -4,18 +4,23 @@ const state = {
   user: null,
   password: null,
   profile: null,
-  getuser: null
+  getuser: null,
+  selectShop: null
 }
 
 const getters = {
   user: state => state.user,
-  isLoggedIn: state => (state.user !== null)
+  isLoggedIn: state => (state.user !== null),
+  selectShop: state => state.selectShop
 }
 
 const mutations = {
   setUser: (state, userSet, passSet) => {
     state.user = userSet
     state.password = passSet
+  },
+  setselectShop: (state, shop) => {
+    state.selectShop = shop
   }
 }
 
@@ -56,6 +61,9 @@ const actions = {
   },
   autoSign ({commit}, payload) {
     commit('setUser', payload.displayName)
+  },
+  selectShop ({commit}, shop) {
+    commit('setselectShop', shop)
   }
 }
 export default {
