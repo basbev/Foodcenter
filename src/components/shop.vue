@@ -1,6 +1,6 @@
 <template>
 <div>
-    <h1>This Shop is {{ this.selectShop }} </h1>
+    <h1>This Shop is {{ this.selectShop.name }} </h1>
     </div>
 </template>
 <script>
