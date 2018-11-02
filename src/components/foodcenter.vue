@@ -46,11 +46,14 @@
           </div>
         </div>
       </section>
-      <div class="column is-one-third" :key="key" v-for="(shop, key) in shops">
-      <div class="" :key="key" v-for="(shop, key) in shop">
-    <h1>Username :{{shop.name}}</h1>
-    <h1>password :{{shop.tel}}</h1>
+      <div class="column is-one-third" :key="key" v-for="(details, key) in shops">
+      <div class="" :key="key" v-for="(detail, key) in details">
+        <div class="" :key="key" v-for="(detail, key) in detail">
+    <h1>name :{{detail.name}}</h1>
+    <h1>Tel :{{detail.tel}}</h1>
+    <h1>Q :{{detail.q}}</h1>
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -80,7 +83,7 @@ export default {
         name: name,
         q: 0
       }
-      foodcenterRef.child(this.name).push(data)
+      foodcenterRef.child(this.name).child('detail').push(data)
       this.tel = ''
       this.name = ''
     },
