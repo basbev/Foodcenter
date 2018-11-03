@@ -24,10 +24,9 @@
                   <i class="fab fa-hot"></i>
                   </span>
                   <div class="message-body">
-                    Block-scoped. Cannot be re-assigned. Not immutable.
+                    ไม่มีเมนูเเนะนำ.
                   </div>
                 </article>
-              <pre class=" language-javascript"><code class=" language-javascript"><span class="token keyword">const</span> test <span class="token operator">=</span> <span class="token string">'test'</span><span class="token punctuation">;</span></code></pre>
             </div>
             <div class="box">
               <h4 id="let" class="title is-3">เมนูอาหารทั่วไป</h4>
@@ -36,33 +35,67 @@
                   <i class="fas fa-info-circle"></i>
                 </span>
                 <div class="message-body">
-                  Block-scoped. Can be re-assigned.
+                  เมนูประจำร้าน
                 </div>
               </article>
-            <pre class=" language-javascript"><code class=" language-javascript"><span class="token keyword">let</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span></code></pre>
+              <div class="message-body">
+                                    <div class="row" :key="key" v-for="(menu, key) in menus">
+                          <h1>name :{{menu.foodname}}</h1>
+                      <h1>Tel :{{menu.foodprice}}</h1>
+                      <button @click="AddCart" class="button is-danger">Add Cart</button>
+                          </div>
+                </div>
           </div>
       </div>
     </div>
   </div>
+  <div>
+      <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
+      <input type="text" v-model="foodprice" placeholder="ราคาต่อจาน">
+      <button @click="insertmenu(foodname, foodprice)">เพิ่มร้านอาหาร</button>
+    </div>
 </div>
 </section>
     </div>
 </template>
 <script>
+import * as firebase from 'firebase'
+var database = firebase.database()
+var foodcenterRef = database.ref('/foodcenter')
 export default {
   name: 'shop',
   data () {
     return {
+      foodname: '',
+      foodprice: '',
+      menu: '',
+      menus: {}
     }
   },
   created () {
   },
   methods: {
+    insertmenu (foodname, foodprice) {
+      let data = {
+        foodname: foodname,
+        foodprice: foodprice
+      }
+      foodcenterRef.child('menu').child(this.selectShop.name).push(data)
+      this.foodname = ''
+      this.foodprice = ''
+    }
   },
   computed: {
     selectShop () {
       return this.$store.getters.selectShop
     }
+  },
+  mounted () {
+    const dbRefObject = foodcenterRef.child('menu').child(this.selectShop.name)
+    dbRefObject.on('value', snap => {
+      this.menus = snap.val()
+      console.log(this.menus)
+    })
   }
 }
 </script>

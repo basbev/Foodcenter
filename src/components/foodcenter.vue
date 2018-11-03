@@ -10,8 +10,8 @@
   <section class="section">
         <div class="container">
           <div class="columns is-multiline">
-            <div class="column is-one-third" :key="key" v-for="(shop, key) in shops">
-              <div class="" :key="key" v-for="(shop, key) in shop">
+            <div class="column is-one-third" :key="key" v-for="(details, key) in shops">
+      <div class="" :key="key" v-for="(detail, key) in details">
               <article class="notification media has-background-white">
                 <figure class="media-left">
                   <span class="icon">
@@ -29,12 +29,12 @@
       <div v-else>
         <div class="row">
           <div class="column">
-        <h1>{{shop.name}}</h1>
-         <h1>{{shop.tel}}</h1>
-         <h1>จำนวนคิวที่ต้องรอ {{shop.q}} </h1>
+        <h1>name :{{detail.name}}</h1>
+    <h1>Tel :{{detail.tel}}</h1>
+    <h1>คิวต้องที่ต้องงรอ :{{detail.q}}</h1>
         <button @click="setUpdatefoodcenter(key, shop)">Update</button>
         <button @click="deletefoodcenter(key)">Delete</button>
-        <button @click="SelectShop(shop.name)" class="button is-danger">Select</button>
+        <button @click="SelectShop(detail.name)" class="button is-danger">Select</button>
         </div>
         </div>
       </div>
@@ -48,12 +48,10 @@
       </section>
       <div class="column is-one-third" :key="key" v-for="(details, key) in shops">
       <div class="" :key="key" v-for="(detail, key) in details">
-        <div class="" :key="key" v-for="(detail, key) in detail">
     <h1>name :{{detail.name}}</h1>
     <h1>Tel :{{detail.tel}}</h1>
     <h1>Q :{{detail.q}}</h1>
       </div>
-    </div>
     </div>
   </div>
 </template>
@@ -83,7 +81,7 @@ export default {
         name: name,
         q: 0
       }
-      foodcenterRef.child(this.name).child('detail').push(data)
+      foodcenterRef.child('detail').child(this.name).push(data)
       this.tel = ''
       this.name = ''
     },
@@ -117,7 +115,7 @@ export default {
     }
   },
   mounted () {
-    const dbRefObject = firebase.database().ref().child('foodcenter')
+    const dbRefObject = foodcenterRef.child('detail')
     dbRefObject.on('value', snap => {
       this.shops = snap.val()
       console.log(this.shops)
