@@ -56,7 +56,8 @@ export default {
       email: '',
       password: '',
       username: '',
-      permission: ''
+      permission: '',
+      hasUser: {}
     }
   },
   methods: {
@@ -77,13 +78,23 @@ export default {
       e.preventDefault()
     },
     registerW: function () {
-      let data = {
-        username: this.username,
-        password: this.password,
-        permission: '1'
+      const dbReflist = foodcenterRef.child(this.username)
+      dbReflist.on('child_added', snap => {
+        this.hasUser = snap.val()
+        console.log(this.hasUser)
+      })
+      if (this.hasUser.username == null) {
+        let data = {
+          username: this.username,
+          password: this.password,
+          permission: '1'
+        }
+        foodcenterRef.child(this.username).push(data)
+        this.$router.push('/')
+      } else {
+        alert('UnSuccessfully sign Up')
+        this.hasUser = {}
       }
-      foodcenterRef.child(this.username).push(data)
-      this.$router.push('/')
     }
   }
 }
