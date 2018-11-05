@@ -7,6 +7,7 @@ import Update from '@/components/Update'
 import Profile from '@/components/Profile'
 import shop from '@/components/shop'
 import Cart from '@/components/Cart'
+import Admin from '@/components/Admin'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ export default new Router({
       path: '/Cart',
       name: 'Cart',
       component: Cart
+    },
+    {
+      path: '/Admin',
+      name: 'Admin',
+      component: Admin
     }
   ]
 })
