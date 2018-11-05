@@ -5,13 +5,25 @@ const state = {
   password: null,
   profile: null,
   getuser: null,
-  selectShop: null
+  selectShop: null,
+  added: []
 }
 
 const getters = {
   user: state => state.user,
   isLoggedIn: state => (state.user !== null),
-  selectShop: state => state.selectShop
+  selectShop: state => state.selectShop,
+  cartProducts: state => {
+    return state.added.map(({ Akey, quantity }) => {
+      const product = state.added.find(p => p.Akey === Akey)
+
+      return {
+        name: product.foodname,
+        price: product.foodprice,
+        quantity
+      }
+    })
+  }
 }
 
 const mutations = {
@@ -21,6 +33,20 @@ const mutations = {
   },
   setselectShop: (state, shop) => {
     state.selectShop = shop
+  },
+  ADD_TO_CART: (state, {Akey, foodname, foodprice}) => {
+    const record = state.added.find(p => p.Akey === Akey)
+    console.log(Akey, foodname, foodprice)
+    if (!record) {
+      state.added.push({
+        Akey,
+        foodname,
+        foodprice,
+        quantity: 1
+      })
+    } else {
+      record.quantity++
+    }
   }
 }
 
@@ -64,6 +90,14 @@ const actions = {
   },
   selectShop ({commit}, shop) {
     commit('setselectShop', shop)
+  },
+  AddCart ({commit}, payload) {
+    console.log(payload)
+    const Akey = payload.key
+    const foodname = payload.foodname
+    const foodprice = payload.foodprice
+    console.log(Akey, foodname, foodprice)
+    commit('ADD_TO_CART', {Akey, foodname, foodprice})
   }
 }
 export default {

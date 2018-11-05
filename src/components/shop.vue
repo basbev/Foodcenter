@@ -11,6 +11,7 @@
           <ul class="menu-list">
             <li class="is-right"><a href="#const" class="is-active"><i class=""></i> เมนูอาหารเเนะนำ</a></li>
             <li><a href="#let" class="is-active"><i class=""></i> เมนูอาหารทั่วไป</a></li>
+            <li><a href="#/foodcenter" class="is-active"><i class=""></i> หน้าร้านอาหาร</a></li>
           </ul>
             </aside>
           </div>
@@ -40,9 +41,9 @@
               </article>
               <div class="message-body">
                                     <div class="row" :key="key" v-for="(menu, key) in menus">
-                          <h1>name :{{menu.foodname}}</h1>
-                      <h1>Tel :{{menu.foodprice}}</h1>
-                      <button @click="AddCart" class="button is-danger">Add Cart</button>
+                          <h1>Menu :{{menu.foodname}}</h1>
+                      <h1>Price :{{menu.foodprice}}</h1>
+                      <button @click="Cart(menu.foodname, menu.foodprice, key)" class="button is-danger">Add Cart</button>
                           </div>
                 </div>
           </div>
@@ -53,6 +54,18 @@
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
       <input type="text" v-model="foodprice" placeholder="ราคาต่อจาน">
       <button @click="insertmenu(foodname, foodprice)">เพิ่มร้านอาหาร</button>
+        <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
+          <div class="field is-grouped">
+            <p class="control">
+              <router-link to='/cart' class="button is-info">
+                <span class="icon">
+                  <i class="fa fa-shopping-cart"></i>
+                </span>
+                <span>Checkout ({{itemsInCart}})</span>
+              </router-link>
+            </p>
+          </div>
+        </div>
     </div>
 </div>
 </section>
@@ -83,11 +96,23 @@ export default {
       foodcenterRef.child('menu').child(this.selectShop.name).push(data)
       this.foodname = ''
       this.foodprice = ''
+    },
+    Cart (foodname, foodprice, key) {
+      console.log(foodname, foodprice, key)
+      this.$store.dispatch('AddCart', {foodname, foodprice, key})
+      console.log(this.added)
     }
   },
   computed: {
     selectShop () {
       return this.$store.getters.selectShop
+    },
+    added () {
+      return this.$store.state.added
+    },
+    itemsInCart () {
+      let cart = this.$store.getters.cartProducts
+      return cart.reduce((accum, item) => accum + item.quantity, 0)
     }
   },
   mounted () {
@@ -95,6 +120,7 @@ export default {
     dbRefObject.on('value', snap => {
       this.menus = snap.val()
       console.log(this.menus)
+      console.log(this.added)
     })
   }
 }
