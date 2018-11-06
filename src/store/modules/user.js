@@ -68,22 +68,9 @@ const actions = {
       } else alert(`Username Or Password incorrect`)
     } else alert(`Username Or Password incorrect`)
   },
-  loginfacebook: ({commit}) => {
-    var provider = new firebase.auth.FacebookAuthProvider()
-    firebase
-      .auth()
-      .signInWithPopup(provider)
-      .then(
-        user => {
-          const userSet = firebase.auth().currentUser.displayName
-          const passSet = firebase.auth().currentUser.password
-          commit('setUser', userSet, passSet)
-          alert(`You are logged in as ${userSet}`)
-        },
-        err => {
-          alert(err.message)
-        }
-      )
+  loginfacebook: ({commit}, payload) => {
+    console.log(payload)
+    commit('setUser', payload)
   },
   autoSign ({commit}, payload) {
     commit('setUser', payload.displayName)

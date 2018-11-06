@@ -92,17 +92,21 @@ export default {
       }
     },
     loginFacebook: function (e) {
-      this.$store.dispatch('loginfacebook')
+      var provider = new firebase.auth.FacebookAuthProvider()
+      firebase
+        .auth()
+        .signInWithPopup(provider)
         .then(
           user => {
-            this.$router.go({ path: this.$router.path })
+            const userSet = firebase.auth().currentUser.displayName
+            this.$store.dispatch('loginfacebook', userSet)
             this.$router.push('/foodcenter')
+            alert(`You are logged in as ${userSet}`)
           },
           err => {
             alert(err.message)
           }
         )
-      e.preventDefault()
     }
   },
   mounted () {
