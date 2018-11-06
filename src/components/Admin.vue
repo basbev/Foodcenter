@@ -1,24 +1,22 @@
 <template>
     <div>
-        <h1 class="title">All Products</h1>
-        <p>{{length}} products</p>
-        <table class="table is-striped">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr :key="key" v-for="(user, key) in users">
-                <td>{{user}}</td>
-                <td>{{user}}</td>
-                <td>${{user}}</td>
-            </tr>
-            </tbody>
-        </table>
+        <h1 class="title">All Foodcenter</h1>
+    <div>
+      <p>Users: {{this.numberOfuser}}</p>
+      <div :key="key" v-for="(user, key) in users">
+      <div :key="key" v-for="(user, key) in user">
+        <h1>Username: {{user.username}} Password: {{user.password}} Permiision: {{user.permission}}</h1>
+      </div>
+      </div>
+    </div>
+    <div>
+      <p>shops: {{this.numberOfshop}}</p>
+      <div :key="key" v-for="(shop, key) in shops">
+        <div :key="key" v-for="(shop, key) in shop">
+        <h1>shop: {{shop.name}} tel: {{shop.tel}} Q: {{shop.q}}</h1>
+      </div>
+      </div>
+      </div>
     </div>
 </template>
 
@@ -28,16 +26,29 @@ export default {
   name: 'Admin',
   data: function () {
     return {
-      users: {}
+      users: {},
+      shops: {},
+      numberOfuser: 0,
+      numberOfshop: 0
     }
   },
   methods: {
   },
   mounted () {
-    const dbRefObject = firebase.database().ref().child('user')
-    dbRefObject.on('value', snap => {
+    const Refuser = firebase.database().ref().child('user')
+    const RefFoodcenter = firebase.database().ref().child('foodcenter').child('detail')
+    Refuser.on('value', snap => {
       this.users = snap.val()
+      this.numberOfuser = snap.numChildren()
       console.log(this.users)
+    })
+    RefFoodcenter.on('value', snap => {
+      this.shops = snap.val()
+      this.numberOfshop = snap.numChildren()
+      console.log(this.shops)
+    })
+    firebase.database().ref().child('foodcenter').child('detail').on('value', function (snapshot) {
+      console.log('There are ' + snapshot.numChildren() + 'messages')
     })
   },
   computed: {
