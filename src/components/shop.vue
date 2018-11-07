@@ -28,7 +28,8 @@
                   <div class="row" :key="key" v-for="(menushow, key) in menushow">
                           <h1>Menu :{{menushow.foodname}}</h1>
                       <h1>Price :{{menushow.foodprice}} บาท</h1>
-                      <button @click="Cart(menushow.foodname, menushow.foodprice, key)" class="button is-danger">Add Cart</button>
+                      <img v-bind:src="menushow.foodpic"><br>
+                      <button @click="Cart(menushow.foodname, menushow.foodprice, key)" class="button is-danger">เพิ่มลง Order</button>
                           </div>
                   </div>
                 </article>
@@ -36,7 +37,8 @@
             <div>
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
       <input type="text" v-model="foodprice" placeholder="ราคาต่อจาน">
-      <button @click="insertmenushow(foodname, foodprice)">เพิ่มเมนูแนะนำ</button>
+      <input type="text" v-model="foodpic" placeholder="linkรูป">
+      <button @click="insertmenushow(foodname, foodprice , foodpic)">เพิ่มเมนูแนะนำ</button>
         <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
           <div class="field is-grouped">
             <p class="control">
@@ -58,7 +60,8 @@
                                     <div class="row" :key="key" v-for="(menu, key) in menus">
                           <h1>Menu :{{menu.foodname}}</h1>
                       <h1>Price :{{menu.foodprice}} บาท</h1>
-                      <button @click="Cart(menu.foodname, menu.foodprice, key)" class="button is-danger">Add Cart</button>
+                    
+                      <button @click="Cart(menu.foodname, menu.foodprice, key)" class="button is-danger">เพิ่มลง Order</button>
                           </div>
                 </div>
           </div>
@@ -96,6 +99,7 @@ export default {
     return {
       foodname: '',
       foodprice: '',
+      foodpic: '',
       menu: '',
       menushow: '',
       menus: {}
@@ -113,14 +117,16 @@ export default {
       this.foodname = ''
       this.foodprice = ''
     },
-    insertmenushow (foodname, foodprice) {
+    insertmenushow (foodname, foodprice , foodpic) {
       let data = {
         foodname: foodname,
-        foodprice: foodprice
+        foodprice: foodprice,
+        foodpic: foodpic
       }
       foodcenterRef.child('menushow').child(this.selectShop.name).push(data)
       this.foodname = ''
       this.foodprice = ''
+      this.foodpic = ''
     },
     Cart (foodname, foodprice, key) {
       console.log(foodname, foodprice, key)
