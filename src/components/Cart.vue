@@ -1,32 +1,32 @@
 <template>
   <div class="cart">
-    <h1 class="title">Your Cart</h1>
+    <h1 class="title">Order ของคุณ</h1>
       <p v-show="!products.length">
-        <i>Your cart is empty!</i>
-        <router-link to="/">Go shopping</router-link>
+        <i>คุณยังไม่ได้เลือกเมนู!</i>
+        <router-link to="/shop">กลับไปหน้าเมนู</router-link>
       </p>
        <table class="table is-striped" v-show="products.length">
         <thead>
           <tr>
-            <td>Name</td>
-            <td>Price</td>
-            <td>Quantity</td>
+            <td>ชื่อเมนู</td>
+            <td>ราคา</td>
+            <td>จำนวน</td>
           </tr>
         </thead>
             <tbody>
               <tr :key="key" v-for="(p, key) in products">
                 <td>{{ p.name }}</td>
-                <td>${{ p.price }}</td>
-                <td>{{ p.quantity }}</td>
+                <td>{{ p.price }} บ.</td>
+                <td>{{ p.quantity }} จาน</td>
                 </tr>
                 <tr>
-                  <td><b>Total:</b></td>
+                  <td><b>ราคารวม:</b></td>
                   <td></td>
-                  <td><b>${{ total }}</b></td>
+                  <td><b>{{ total }} บ.</b></td>
               </tr>
             </tbody>
     </table>
-    <p><button v-show="products.length" class='button is-primary' @click='checkout'>Checkout</button></p>
+    <p><button v-show="products.length" class='button is-primary' @click='checkout'>ยืนยัน</button></p>
   </div>
 </template>
 
@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     checkout () {
-      alert('Pay us $' + this.total)
+      alert('ราคาทั้งหมด ' + this.total + ' บาท')
     }
   }
 }

@@ -25,10 +25,25 @@
                   <i class="fab fa-hot"></i>
                   </span>
                   <div class="message-body">
-                    ไม่มีเมนูเเนะนำ.
+                  <div class="row" :key="key" v-for="(menushow, key) in menushow">
+                          <h1>Menu :{{menushow.foodname}}</h1>
+                      <h1>Price :{{menushow.foodprice}} บาท</h1>
+                      <button @click="Cart(menushow.foodname, menushow.foodprice, key)" class="button is-danger">Add Cart</button>
+                          </div>
                   </div>
                 </article>
             </div>
+            <div>
+      <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
+      <input type="text" v-model="foodprice" placeholder="ราคาต่อจาน">
+      <button @click="insertmenushow(foodname, foodprice)">เพิ่มเมนูแนะนำ</button>
+        <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
+          <div class="field is-grouped">
+            <p class="control">
+            </p>
+          </div>
+        </div>
+    </div>
             <div class="box">
               <h4 id="let" class="title is-3">เมนูอาหารทั่วไป</h4>
               <article class="message is-primary">
@@ -42,7 +57,7 @@
               <div class="message-body">
                                     <div class="row" :key="key" v-for="(menu, key) in menus">
                           <h1>Menu :{{menu.foodname}}</h1>
-                      <h1>Price :{{menu.foodprice}}</h1>
+                      <h1>Price :{{menu.foodprice}} บาท</h1>
                       <button @click="Cart(menu.foodname, menu.foodprice, key)" class="button is-danger">Add Cart</button>
                           </div>
                 </div>
@@ -53,7 +68,7 @@
   <div>
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
       <input type="text" v-model="foodprice" placeholder="ราคาต่อจาน">
-      <button @click="insertmenu(foodname, foodprice)">เพิ่มร้านอาหาร</button>
+      <button @click="insertmenu(foodname, foodprice)">เพิ่มเมนู</button>
         <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
           <div class="field is-grouped">
             <p class="control">
@@ -82,6 +97,7 @@ export default {
       foodname: '',
       foodprice: '',
       menu: '',
+      menushow: '',
       menus: {}
     }
   },
@@ -94,6 +110,15 @@ export default {
         foodprice: foodprice
       }
       foodcenterRef.child('menu').child(this.selectShop.name).push(data)
+      this.foodname = ''
+      this.foodprice = ''
+    },
+    insertmenushow (foodname, foodprice) {
+      let data = {
+        foodname: foodname,
+        foodprice: foodprice
+      }
+      foodcenterRef.child('menushow').child(this.selectShop.name).push(data)
       this.foodname = ''
       this.foodprice = ''
     },
@@ -117,10 +142,17 @@ export default {
   },
   mounted () {
     const dbRefObject = foodcenterRef.child('menu').child(this.selectShop.name)
+    const dbRefObjectshow = foodcenterRef.child('menushow').child(this.selectShop.name)
     dbRefObject.on('value', snap => {
       this.menus = snap.val()
       console.log(this.menus)
       console.log(this.added)
+    })
+    dbRefObjectshow.on('value', snap => {
+      this.menushow = snap.val()
+      console.log(this.menushow)
+      console.log(this.added)
+      
     })
   }
 }

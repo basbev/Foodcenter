@@ -13,7 +13,7 @@
       <p>shops: {{this.numberOfshop}}</p>
       <div :key="key" v-for="(shop, key) in shops">
         <div :key="key" v-for="(shop, key) in shop">
-        <h1>shop: {{shop.name}} tel: {{shop.tel}} Q: {{shop.q}}</h1>
+        <h1>shop: {{shop.name}} tel: {{shop.tel}} q: {{shop.q}}</h1>
       </div>
       </div>
       </div>
