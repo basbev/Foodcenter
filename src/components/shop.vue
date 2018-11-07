@@ -60,7 +60,6 @@
                                     <div class="row" :key="key" v-for="(menu, key) in menus">
                           <h1>Menu :{{menu.foodname}}</h1>
                       <h1>Price :{{menu.foodprice}} บาท</h1>
-                    
                       <button @click="Cart(menu.foodname, menu.foodprice, key)" class="button is-danger">เพิ่มลง Order</button>
                           </div>
                 </div>
@@ -117,7 +116,7 @@ export default {
       this.foodname = ''
       this.foodprice = ''
     },
-    insertmenushow (foodname, foodprice , foodpic) {
+    insertmenushow (foodname, foodprice, foodpic) {
       let data = {
         foodname: foodname,
         foodprice: foodprice,
@@ -158,7 +157,6 @@ export default {
       this.menushow = snap.val()
       console.log(this.menushow)
       console.log(this.added)
-      
     })
   }
 }
