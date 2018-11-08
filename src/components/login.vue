@@ -89,6 +89,9 @@ export default {
         } if (this.isLoggedIn === true && this.permission === '1') {
           alert('Successfully sign in\nWelcome User Customer: ' + ' ' + this.user)
           this.$router.push('/foodcenter')
+        } if (this.isLoggedIn === true && this.permission === '2' && this.hasShop !== null) {
+          alert('Successfully sign in\nWelcome User Shop: ' + ' ' + this.user)
+          this.$router.push('/shop')
         }
       }
     },
@@ -126,6 +129,9 @@ export default {
     },
     permission () {
       return this.$store.getters.permission
+    },
+    hasShop () {
+      return this.$store.getters.hasShop
     }
   }
 }

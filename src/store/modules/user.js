@@ -7,7 +7,8 @@ const state = {
   getuser: null,
   selectShop: null,
   added: [],
-  permission: null
+  permission: null,
+  hasShop: null
 }
 
 const getters = {
@@ -25,17 +26,19 @@ const getters = {
       }
     })
   },
-  permission: state => state.permission
+  permission: state => state.permission,
+  hasShop: state => state.hasShop
 }
 
 const mutations = {
-  setUser: (state, {userSet, passSet, perSet}) => {
+  setUser: (state, {userSet, passSet, perSet, shopSet}) => {
     console.log(userSet)
     console.log(passSet)
     console.log(perSet)
     state.user = userSet
     state.password = passSet
     state.permission = perSet
+    state.hasShop = shopSet
   },
   setselectShop: (state, shop) => {
     state.selectShop = shop
@@ -70,8 +73,9 @@ const actions = {
         const userSet = state.profile.username
         const passSet = state.profile.password
         const perSet = state.profile.permission
+        const shopSet = state.profile.hasShop
         console.log(userSet, passSet, perSet)
-        commit('setUser', {userSet, passSet, perSet})
+        commit('setUser', {userSet, passSet, perSet, shopSet})
       } else alert(`Username Or Password incorrect`)
     } else alert(`Username Or Password incorrect`)
   },
