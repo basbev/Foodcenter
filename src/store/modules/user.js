@@ -6,7 +6,8 @@ const state = {
   profile: null,
   getuser: null,
   selectShop: null,
-  added: []
+  added: [],
+  permission: null
 }
 
 const getters = {
@@ -23,13 +24,18 @@ const getters = {
         quantity
       }
     })
-  }
+  },
+  permission: state => state.permission
 }
 
 const mutations = {
-  setUser: (state, userSet, passSet) => {
+  setUser: (state, {userSet, passSet, perSet}) => {
+    console.log(userSet)
+    console.log(passSet)
+    console.log(perSet)
     state.user = userSet
     state.password = passSet
+    state.permission = perSet
   },
   setselectShop: (state, shop) => {
     state.selectShop = shop
@@ -59,12 +65,13 @@ const actions = {
       console.log(state.profile)
     })
     if (state.profile != null) {
-      console.log(state.profile.username, state.profile.password)
+      console.log(state.profile.username, state.profile.password, state.profile.permission)
       if (state.profile.username === payload.username && state.profile.password === payload.password) {
         const userSet = state.profile.username
         const passSet = state.profile.password
-        commit('setUser', userSet, passSet)
-        alert('Successfully sign in')
+        const perSet = state.profile.permission
+        console.log(userSet, passSet, perSet)
+        commit('setUser', {userSet, passSet, perSet})
       } else alert(`Username Or Password incorrect`)
     } else alert(`Username Or Password incorrect`)
   },

@@ -67,7 +67,6 @@ export default {
   data: function () {
     return {
       email: '',
-      permission: '',
       getuser: {},
       users: {},
       username: '',
@@ -84,10 +83,12 @@ export default {
               alert(err)
             })
         } else alert(`No space information`)
-        if (this.isLoggedIn === true) {
+        if (this.isLoggedIn === true && this.permission === '3') {
+          alert('Successfully sign in\nWelcome User Admin: ' + ' ' + this.user)
+          this.$router.push('/Admin')
+        } if (this.isLoggedIn === true && this.permission === '1') {
+          alert('Successfully sign in\nWelcome User Customer: ' + ' ' + this.user)
           this.$router.push('/foodcenter')
-        } else {
-          this.$router.push('/')
         }
       }
     },
@@ -122,6 +123,9 @@ export default {
     },
     isLoggedIn () {
       return this.$store.getters.isLoggedIn
+    },
+    permission () {
+      return this.$store.getters.permission
     }
   }
 }
