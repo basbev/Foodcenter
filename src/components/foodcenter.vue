@@ -10,7 +10,7 @@
   <section class="section">
         <div class="container">
           <div class="columns is-multiline">
-            <div class="column is-one-third" :key="key" v-for="(details, key) in shops">
+            <div class="column is-one-third" :key="keys" v-for="(details, keys) in shops">
       <div class="" :key="key" v-for="(detail, key) in details">
               <article class="notification media has-background-white">
                 <figure class="media-left">
@@ -24,7 +24,7 @@
                     <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
-        <button @click="updatefoodcenter(updateTel, updateName)">Save</button>
+        <button @click="updatefoodcenter(updateTel, updateName, keys ,key)">Save</button>
       </div>
       <div v-else>
         <div class="row">
@@ -33,7 +33,7 @@
     <h1>Tel :{{detail.tel}}</h1>
     <h1>คิวต้องที่ต้องงรอ :{{detail.q}}</h1>
         <button @click="setUpdatefoodcenter(key, shop)">Update</button>
-        <button @click="deletefoodcenter(key)">Delete</button>
+        <button @click="deletefoodcenter(keys)">Delete</button>
         <button @click="SelectShop(detail.name)" class="button is-danger">Select</button>
         </div>
         </div>
@@ -46,11 +46,13 @@
           </div>
         </div>
       </section>
-      <div class="column is-one-third" :key="key" v-for="(details, key) in shops">
+      <div class="column is-one-third" :key="keys" v-for="(details, keys) in shops">
       <div class="" :key="key" v-for="(detail, key) in details">
     <h1>name :{{detail.name}}</h1>
     <h1>Tel :{{detail.tel}}</h1>
     <h1>Q :{{detail.q}}</h1>
+    <h1>key loop 2 :{{key}}</h1>
+    <h1>key loop 1 :{{keys}}</h1>
       </div>
     </div>
   </div>
@@ -90,8 +92,8 @@ export default {
       this.updateTel = foodcenter.tel
       this.updateName = foodcenter.name
     },
-    updatefoodcenter (tel, name) {
-      foodcenterRef.child(this.updateKey).update({
+    updatefoodcenter (tel, name, keys, key) {
+      foodcenterRef.child('detail').child(keys).child(key).update({
         tel: tel,
         name: name
       })
@@ -99,8 +101,8 @@ export default {
       this.updateTel = ''
       this.updateName = ''
     },
-    deletefoodcenter (key) {
-      foodcenterRef.child(key).remove()
+    deletefoodcenter (keys) {
+      foodcenterRef.child('detail').child(keys).remove()
     },
     SelectShop (name) {
       this.$store.dispatch('selectShop', {name})
