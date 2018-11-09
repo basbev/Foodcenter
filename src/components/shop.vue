@@ -64,6 +64,34 @@
                           </div>
                 </div>
           </div>
+           <div class="box">
+              <h4 id="let" class="title is-3">รีวิวจากลูกค้า</h4>
+              <article class="message is-primary">
+                <span class="icon has-text-primary">
+                  <i class="fas fa-info-circle"></i>
+                </span>
+                <div class="message-body">
+                  รีวิวการใช้บริการ
+                </div>
+              </article>
+              <div class="message-body">
+                                    <div class="row" :key="key" v-for="(review, key) in review">
+                      <h5>รายละเอียดรีวิว :{{review.view}}</h5>
+                      <h4>คะแนนร้านอาหาร :{{review.scorce}}</h4>
+                       <h7>ชื่อผู้ใช้ คุณ:{{review.namere}}</h7>
+                       <img v-bind:src="review.scorce"><br>
+                          </div>
+                </div>
+                <input type="text" v-model="view" placeholder="รีวิว">
+                <input type="radio" id="bad" value="https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.0-9/45660940_2012396278825644_1335758975362138112_n.jpg?_nc_cat=106&_nc_ht=scontent.fbkk21-1.fna&oh=7653eabaa7f02d02fea263441880642e&oe=5C81EF8F" v-model="scorce">
+<label for="bad">แย่</label>
+<input type="radio" id="ok" value="https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.0-9/45578328_2012396275492311_7949175370366844928_n.jpg?_nc_cat=100&_nc_ht=scontent.fbkk21-1.fna&oh=06d29933f8410766bc43a956487850b2&oe=5C4144E3" v-model="scorce">
+<label for="ok">ok</label>
+<input type="radio" id="good" value="https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.0-9/45640418_2012396288825643_4887231943109771264_n.jpg?_nc_cat=109&_nc_ht=scontent.fbkk21-1.fna&oh=14000d38405d4d8a28213d83543ef185&oe=5C3D8AD7" v-model="scorce">
+<label for="good">ดีมาก</label>
+      <input type="text" v-model="namere" placeholder="ชื่อผู้ใช้งาน">
+      <button @click="insertreview(view, scorce, namere)">เพิ่มรีวิว</button>
+          </div>
       </div>
     </div>
   </div>
@@ -101,6 +129,7 @@ export default {
       foodpic: '',
       menu: '',
       menushow: '',
+      review: '',
       menus: {}
     }
   },
@@ -127,6 +156,17 @@ export default {
       this.foodprice = ''
       this.foodpic = ''
     },
+    insertreview (view, scorce, namere) {
+      let data = {
+        view: view,
+        scorce: scorce,
+        namere: namere
+      }
+      foodcenterRef.child('review').child(this.selectShop.name).push(data)
+      this.view = ''
+      this.scorce = ''
+      this.namere = ''
+    },
     Cart (foodname, foodprice, key) {
       console.log(foodname, foodprice, key)
       this.$store.dispatch('AddCart', {foodname, foodprice, key})
@@ -143,11 +183,15 @@ export default {
     itemsInCart () {
       let cart = this.$store.getters.cartProducts
       return cart.reduce((accum, item) => accum + item.quantity, 0)
+    },
+    hasShop () {
+      return this.$store.state.hasShop
     }
   },
   mounted () {
     const dbRefObject = foodcenterRef.child('menu').child(this.selectShop.name)
     const dbRefObjectshow = foodcenterRef.child('menushow').child(this.selectShop.name)
+    const dbRefObjectreview = foodcenterRef.child('review').child(this.selectShop.name)
     dbRefObject.on('value', snap => {
       this.menus = snap.val()
       console.log(this.menus)
@@ -156,6 +200,11 @@ export default {
     dbRefObjectshow.on('value', snap => {
       this.menushow = snap.val()
       console.log(this.menushow)
+      console.log(this.added)
+    })
+    dbRefObjectreview.on('value', snap => {
+      this.review = snap.val()
+      console.log(this.review)
       console.log(this.added)
     })
   }
