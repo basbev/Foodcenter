@@ -26,17 +26,25 @@
               </tr>
             </tbody>
     </table>
-    <p><button v-show="products.length" class='button is-primary' @click='checkout'>ยืนยัน</button></p>
+    <p>ผู้สั่ง : {{this.users}}</p>
+    <p>ร้านค้า : {{this.SelectShops.name}}</p>
+    <hr>
+    <p><button v-show="products.length" class='button is-primary' @click='checkout'>เช็คราคา</button></p><br>
+    <p><button v-show="products.length" class='button is-primary' @click="order(products)">ยืนยัน</button></p>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-
+import firebase from 'firebase'
+var database = firebase.database()
+var foodcenterRef = database.ref('/foodcenter')
 export default {
   computed: {
     ...mapGetters({
-      products: 'cartProducts'
+      products: 'cartProducts',
+      users: 'user',
+      SelectShops: 'selectShop'
     }),
     total () {
       return this.products.reduce((total, p) => {
@@ -47,6 +55,17 @@ export default {
   methods: {
     checkout () {
       alert('ราคาทั้งหมด ' + this.total + ' บาท')
+    },
+    order (products) {
+      for (var i = 0; i < products.length; i++) {
+        let data = {
+          name: products[i].name,
+          price: products[i].price,
+          quantity: products[i].quantity,
+          customer: this.users
+        }
+        foodcenterRef.child('order').child(this.SelectShops.name).push(data)
+      }
     }
   }
 }
