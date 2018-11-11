@@ -8,6 +8,7 @@ import Profile from '@/components/Profile'
 import shop from '@/components/shop'
 import Cart from '@/components/Cart'
 import Admin from '@/components/Admin'
+import order from '@/components/order'
 
 Vue.use(Router)
 
@@ -52,6 +53,11 @@ export default new Router({
       path: '/Admin',
       name: 'Admin',
       component: Admin
+    },
+    {
+      path: '/order',
+      name: 'order',
+      component: order
     }
   ]
 })
