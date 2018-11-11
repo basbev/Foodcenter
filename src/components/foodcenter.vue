@@ -32,7 +32,7 @@
         <h1>name :{{detail.name}}</h1>
     <h1>Tel :{{detail.tel}}</h1>
     <h1>คิวต้องที่ต้องงรอ :{{detail.q}}</h1>
-        <button @click="setUpdatefoodcenter(key, shop)">Update</button>
+        <button @click="setUpdatefoodcenter(detail.tel, detail.name, keys, key)">Update</button>
         <button @click="deletefoodcenter(keys)">Delete</button>
         <button @click="SelectShop(detail.name)" class="button is-danger">Select</button>
         </div>
@@ -87,10 +87,10 @@ export default {
       this.tel = ''
       this.name = ''
     },
-    setUpdatefoodcenter (key, foodcenter) {
+    setUpdatefoodcenter (tel, name, keys, key) {
       this.updateKey = key
-      this.updateTel = foodcenter.tel
-      this.updateName = foodcenter.name
+      this.updateTel = tel
+      this.updateName = name
     },
     updatefoodcenter (tel, name, keys, key) {
       foodcenterRef.child('detail').child(keys).child(key).update({
