@@ -56,6 +56,10 @@ const mutations = {
     } else {
       record.quantity++
     }
+  },
+  setUserFacebook: (state, userSet) => {
+    console.log(userSet)
+    state.user = userSet
   }
 }
 
@@ -84,7 +88,7 @@ const actions = {
     commit('setUser', payload)
   },
   autoSign ({commit}, payload) {
-    commit('setUser', payload.displayName)
+    commit('setUserFacebook', payload.displayName)
   },
   selectShop ({commit}, shop) {
     commit('setselectShop', shop)
