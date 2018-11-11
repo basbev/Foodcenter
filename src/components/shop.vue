@@ -28,7 +28,7 @@
                   <div class="row" :key="key" v-for="(menushow, key) in menushow">
                           <h1>Menu :{{menushow.foodname}}</h1>
                       <h1>Price :{{menushow.foodprice}} บาท</h1>
-                      <img v-bind:src="menushow.foodpic"><br>
+                      <img v-bind:src="menushow.foodpic" width="300" height="350"><br>
                       <button @click="Cart(menushow.foodname, menushow.foodprice, key)" class="button is-danger">เพิ่มลง Order</button>
                           </div>
                   </div>
@@ -36,7 +36,7 @@
             </div>
             <div>
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
-      <input type="text" v-model="foodprice" placeholder="ราคาต่อจาน">
+      <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
       <input type="text" v-model="foodpic" placeholder="linkรูป">
       <button @click="insertmenushow(foodname, foodprice , foodpic)">เพิ่มเมนูแนะนำ</button>
         <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
@@ -64,6 +64,23 @@
                           </div>
                 </div>
           </div>
+          <div>
+      <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
+      <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
+      <button @click="insertmenu(foodname, foodprice)">เพิ่มเมนู</button>
+        <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
+          <div class="field is-grouped">
+            <p class="control">
+              <router-link to='/cart' class="button is-info">
+                <span class="icon">
+                  <i class="fa fa-shopping-cart"></i>
+                </span>
+                <span>สั่ง Order ({{itemsInCart}})</span>
+              </router-link>
+            </p>
+          </div>
+        </div>
+    </div>
            <div class="box">
               <h4 id="let" class="title is-3">รีวิวจากลูกค้า</h4>
               <article class="message is-primary">
@@ -74,44 +91,24 @@
                   รีวิวการใช้บริการ
                 </div>
               </article>
-              <div class="message-body">
                                     <div class="row" :key="key" v-for="(review, key) in review">
-                      <h5>รายละเอียดรีวิว :{{review.view}}</h5>
-                      <h4>คะแนนร้านอาหาร :{{review.scorce}}</h4>
-                       <h7>ชื่อผู้ใช้ คุณ:{{review.namere}}</h7>
-                       <img v-bind:src="review.scorce"><br>
+                      <div class="message-body"><h5>Review : </h5>{{review.view}}
+                      <img v-bind:src="review.scorce" width="48" height="48" ><br>
+                       <h5>โดย คุณ: {{review.namere}}</h5><br>
+                       ___________________________</div><br>
                           </div>
-                </div>
-                <input type="text" v-model="view" placeholder="รีวิว">
-                <input type="radio" id="bad" value="https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.0-9/45660940_2012396278825644_1335758975362138112_n.jpg?_nc_cat=106&_nc_ht=scontent.fbkk21-1.fna&oh=7653eabaa7f02d02fea263441880642e&oe=5C81EF8F" v-model="scorce">
+                <input type="text" v-model="view" placeholder="รีวิว" size="30">
+                <input  type="radio" id="bad" name="gender" value="https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.0-9/45660940_2012396278825644_1335758975362138112_n.jpg?_nc_cat=106&_nc_ht=scontent.fbkk21-1.fna&oh=7653eabaa7f02d02fea263441880642e&oe=5C81EF8F" v-model="scorce">
 <label for="bad">แย่</label>
-<input type="radio" id="ok" value="https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.0-9/45578328_2012396275492311_7949175370366844928_n.jpg?_nc_cat=100&_nc_ht=scontent.fbkk21-1.fna&oh=06d29933f8410766bc43a956487850b2&oe=5C4144E3" v-model="scorce">
+<input type="radio" id="ok" name="gender" value="https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.0-9/45578328_2012396275492311_7949175370366844928_n.jpg?_nc_cat=100&_nc_ht=scontent.fbkk21-1.fna&oh=06d29933f8410766bc43a956487850b2&oe=5C4144E3" v-model="scorce">
 <label for="ok">ok</label>
-<input type="radio" id="good" value="https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.0-9/45640418_2012396288825643_4887231943109771264_n.jpg?_nc_cat=109&_nc_ht=scontent.fbkk21-1.fna&oh=14000d38405d4d8a28213d83543ef185&oe=5C3D8AD7" v-model="scorce">
+<input type="radio" id="good" name="gender" value="https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.0-9/45640418_2012396288825643_4887231943109771264_n.jpg?_nc_cat=109&_nc_ht=scontent.fbkk21-1.fna&oh=14000d38405d4d8a28213d83543ef185&oe=5C3D8AD7" v-model="scorce">
 <label for="good">ดีมาก</label>
-      <input type="text" v-model="namere" placeholder="ชื่อผู้ใช้งาน">
-      <button @click="insertreview(view, scorce, namere)">เพิ่มรีวิว</button>
+      <button @click="insertreview(view, scorce)">เพิ่มรีวิว</button>
           </div>
       </div>
     </div>
   </div>
-  <div>
-      <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
-      <input type="text" v-model="foodprice" placeholder="ราคาต่อจาน">
-      <button @click="insertmenu(foodname, foodprice)">เพิ่มเมนู</button>
-        <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
-          <div class="field is-grouped">
-            <p class="control">
-              <router-link to='/cart' class="button is-info">
-                <span class="icon">
-                  <i class="fa fa-shopping-cart"></i>
-                </span>
-                <span>Checkout ({{itemsInCart}})</span>
-              </router-link>
-            </p>
-          </div>
-        </div>
-    </div>
 </div>
 </section>
     </div>
@@ -130,7 +127,10 @@ export default {
       menu: '',
       menushow: '',
       review: '',
-      menus: {}
+      menus: {},
+      // test
+      scorce: '',
+      view: ''
     }
   },
   created () {
@@ -156,11 +156,11 @@ export default {
       this.foodprice = ''
       this.foodpic = ''
     },
-    insertreview (view, scorce, namere) {
+    insertreview (view, scorce) {
       let data = {
         view: view,
         scorce: scorce,
-        namere: namere
+        namere: this.user
       }
       foodcenterRef.child('review').child(this.selectShop.name).push(data)
       this.view = ''
@@ -185,7 +185,10 @@ export default {
       return cart.reduce((accum, item) => accum + item.quantity, 0)
     },
     hasShop () {
-      return this.$store.state.hasShop
+      return this.$store.getters.hasShop
+    },
+    user () {
+      return this.$store.getters.user
     }
   },
   mounted () {
@@ -210,5 +213,5 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style>
 </style>
