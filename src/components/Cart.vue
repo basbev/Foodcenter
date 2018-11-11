@@ -64,7 +64,7 @@ export default {
           quantity: products[i].quantity,
           customer: this.users
         }
-        foodcenterRef.child('order').child(this.SelectShops.name).push(data)
+        foodcenterRef.child('order').child(this.SelectShops.name).child(this.users).push(data)
       }
     }
   }
