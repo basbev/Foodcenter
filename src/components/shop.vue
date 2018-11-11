@@ -29,7 +29,7 @@
                           <h1>Menu :{{menushow.foodname}}</h1>
                       <h1>Price :{{menushow.foodprice}} บาท</h1>
                       <img v-bind:src="menushow.foodpic" width="300" height="350"><br>
-                      <button @click="Cart(menushow.foodname, menushow.foodprice, key)" class="button is-danger">เพิ่มลง Order</button>
+                      <button @click="Cart(menushow.foodname, menushow.foodprice, key)" class="button button3">เพิ่มลง Order</button>
                           </div>
                   </div>
                 </article>
@@ -38,7 +38,7 @@
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
       <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
       <input type="text" v-model="foodpic" placeholder="linkรูป">
-      <button @click="insertmenushow(foodname, foodprice , foodpic)">เพิ่มเมนูแนะนำ</button>
+      <button class="button button1" @click="insertmenushow(foodname, foodprice , foodpic)">เพิ่มเมนูแนะนำ</button>
         <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
           <div class="field is-grouped">
             <p class="control">
@@ -60,18 +60,18 @@
                                     <div class="row" :key="key" v-for="(menu, key) in menus">
                           <h1>Menu :{{menu.foodname}}</h1>
                       <h1>Price :{{menu.foodprice}} บาท</h1>
-                      <button @click="Cart(menu.foodname, menu.foodprice, key)" class="button is-danger">เพิ่มลง Order</button>
+                      <button @click="Cart(menu.foodname, menu.foodprice, key)" class="button button3">เพิ่มลง Order</button>
                           </div>
                 </div>
           </div>
           <div>
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
       <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
-      <button @click="insertmenu(foodname, foodprice)">เพิ่มเมนู</button>
+      <button class="button button5" @click="insertmenu(foodname, foodprice)">เพิ่มเมนู</button>
         <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
           <div class="field is-grouped">
             <p class="control">
-              <router-link to='/cart' class="button is-info">
+              <router-link to='/cart' class="button button4">
                 <span class="icon">
                   <i class="fa fa-shopping-cart"></i>
                 </span>
@@ -92,19 +92,19 @@
                 </div>
               </article>
                                     <div class="row" :key="key" v-for="(review, key) in review">
-                      <div class="message-body"><h5>Review : </h5>{{review.view}}
-                      <img v-bind:src="review.scorce" width="48" height="48" ><br>
+                      <div class="message-body"><p><h5>Review : </h5>{{review.view}}
+                      <img v-bind:src="review.scorce" width="40" height="40" ><br>
                        <h5>โดย คุณ: {{review.namere}}</h5><br>
-                       ___________________________</div><br>
+                       </div><br>
                           </div>
                 <input type="text" v-model="view" placeholder="รีวิว" size="30">
-                <input  type="radio" id="bad" name="gender" value="https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.0-9/45660940_2012396278825644_1335758975362138112_n.jpg?_nc_cat=106&_nc_ht=scontent.fbkk21-1.fna&oh=7653eabaa7f02d02fea263441880642e&oe=5C81EF8F" v-model="scorce">
+                <input  type="radio" id="bad" name="gender" value="https://www.img.in.th/images/bd7e44b282baa7d06dfdf02f51bc915f.png" v-model="scorce">
 <label for="bad">แย่</label>
-<input type="radio" id="ok" name="gender" value="https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.0-9/45578328_2012396275492311_7949175370366844928_n.jpg?_nc_cat=100&_nc_ht=scontent.fbkk21-1.fna&oh=06d29933f8410766bc43a956487850b2&oe=5C4144E3" v-model="scorce">
+<input type="radio" id="ok" name="gender" value="https://www.img.in.th/images/a1f452362b9c5f26d9dfc720a424b989.png" v-model="scorce">
 <label for="ok">ok</label>
-<input type="radio" id="good" name="gender" value="https://scontent.fbkk21-1.fna.fbcdn.net/v/t1.0-9/45640418_2012396288825643_4887231943109771264_n.jpg?_nc_cat=109&_nc_ht=scontent.fbkk21-1.fna&oh=14000d38405d4d8a28213d83543ef185&oe=5C3D8AD7" v-model="scorce">
+<input type="radio" id="good" name="gender" value="https://www.img.in.th/images/2a8e04f7dd719a60eba986227acb5c0a.png" v-model="scorce">
 <label for="good">ดีมาก</label>
-      <button @click="insertreview(view, scorce)">เพิ่มรีวิว</button>
+      <button class="button button2" @click="insertreview(view, scorce)">เพิ่มรีวิว</button>
           </div>
       </div>
     </div>
@@ -128,7 +128,6 @@ export default {
       menushow: '',
       review: '',
       menus: {},
-      // test
       scorce: '',
       view: ''
     }
@@ -185,7 +184,7 @@ export default {
       return cart.reduce((accum, item) => accum + item.quantity, 0)
     },
     hasShop () {
-      return this.$store.getters.hasShop
+      return this.$store.state.hasShop
     },
     user () {
       return this.$store.getters.user
@@ -214,4 +213,70 @@ export default {
 }
 </script>
 <style>
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    text-align: center;
+    /*text-decoration: none;*/
+    /*font-size: 14px;*/
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.button1 {
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+
+.button1:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+.button2 {
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+}
+
+.button2:hover {
+    background-color: #008CBA;
+    color: white;
+}
+
+.button3 {
+    background-color: white;
+    color: black;
+    border: 2px solid #f44336;
+}
+.button3:hover {
+    background-color: #f44336;
+    color: white;
+}
+.button4 {
+    background-color: white;
+    color: black;
+    border: 2px solid #B8860B;
+}
+
+.button4:hover {background-color: #B8860B;}
+
+.button5 {
+    background-color: white;
+    color: black;
+    border: 2px solid #7FFF00;
+}
+
+.button5:hover {
+    background-color: #7FFF00;
+    color: white;
+}
+p {
+    border-left: 20px solid #DC143C;
+    border-radius: 12px;
+    border: 2px solid #F0E68C;
+    background-color: #F5DEB3;
+}
 </style>
