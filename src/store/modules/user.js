@@ -60,6 +60,9 @@ const mutations = {
   setUserFacebook: (state, userSet) => {
     console.log(userSet)
     state.user = userSet
+  },
+  DeleteCart: (state) => {
+    state.added = []
   }
 }
 
@@ -100,6 +103,9 @@ const actions = {
     const foodprice = payload.foodprice
     console.log(Akey, foodname, foodprice)
     commit('ADD_TO_CART', {Akey, foodname, foodprice})
+  },
+  CartCle ({commit}) {
+    commit('DeleteCart')
   }
 }
 export default {

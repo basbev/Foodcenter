@@ -86,6 +86,7 @@ export default {
       // this.updateTel = ''
       // this.updateName = ''
       // }
+      this.$store.dispatch('CartCle')
       this.$router.push('/foodcenter')
     }
   },
