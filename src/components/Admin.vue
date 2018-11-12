@@ -1,6 +1,24 @@
 <template>
     <div>
         <h1 class="title">All Foodcenter</h1>
+        <section class="hero is-info">
+      <div class="hero-body">
+        <div class="container">
+          <div class="card">
+            <div class="card-content">
+              <div class="content">
+                <div class="control has-icons-left has-icons-right search-field">
+                  <input class="input is-large" type="text" placeholder="" v-model="search" /><span class="icon is-medium is-left"><i class="fa fa-search"></i></span>
+                  <span class="icon is-medium is-right">
+                    <i class="delete is-medium clear-search" @click="clearSearchField()" v-if="search.length"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
     <div>
       <p>Users: {{this.numberOfuser}}</p>
       <div :key="key" v-for="(user, key) in users">
@@ -17,6 +35,14 @@
       </div>
       </div>
       </div>
+      <section class="container cards-container">
+        <div :key="key" v-for="(shop, key) in shops">
+      <div :key="key" class="column is-narrow" v-for="(shop, key ) in filteredshop">
+                <!-- Loop through the `items` array from the current season to show each item -->
+                <span>{{ shops }}</span>
+              </div>
+        </div>
+    </section>
     </div>
 </template>
 
@@ -29,7 +55,8 @@ export default {
       users: {},
       shops: {},
       numberOfuser: 0,
-      numberOfshop: 0
+      numberOfshop: 0,
+      search: ''
     }
   },
   methods: {
@@ -52,6 +79,17 @@ export default {
     })
   },
   computed: {
+    filteredshop (shop) {
+      var _this = this
+      if (this.search.length === 0) return this.shop
+      return this.shop.map(function (shop) {
+        return {
+          name: shop.name.filter(function (name) {
+            return name.includes(_this.search)
+          })
+        }
+      })
+    }
   }
 }
 </script>

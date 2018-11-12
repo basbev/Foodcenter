@@ -4,16 +4,21 @@
    <div class="card">
     <header class="card-header">
     <p class="card-header-title">
-      Order: {{key}}
+      Order Id: {{key}}<br>
     </p>
     </header>
     <div :key="key" v-for="(order, key) in order">
+      <div class="card-content">
+      ผู้สั่ง: {{key}} <br>
+    </div>
+      <div :key="key" v-for="(detail, key) in order">
   <div class="card-content">
     <div class="content">
-      เมนูอาหาร: {{order.name}} <br>
-      ราคา: {{order.price}} บาท <br>
-      จำนวน: {{order.quantity}} จาน
+      เมนูอาหาร: {{detail.name}} <br>
+      ราคา: {{detail.price}} บาท <br>
+      จำนวน: {{detail.quantity}} จาน
     </div>
+  </div>
   </div>
   </div>
   <footer class="card-footer">
@@ -34,7 +39,8 @@ export default {
   name: 'order',
   data () {
     return {
-      orders: []
+      orders: [],
+      datenow: new Date()
     }
   },
   methods: {
@@ -45,9 +51,11 @@ export default {
       this.orders = snap.val()
       console.log(this.orders)
     })
+    console.log(this.date)
   },
   computed: {
   }
+  // Date/Time: {{Date(key)}}
 }
 </script>
 <!-- Add 'scoped' attribute to limit CSS to this component only -->

@@ -29,8 +29,10 @@
     <p>ผู้สั่ง : {{this.users}}</p>
     <p>ร้านค้า : {{this.SelectShops.name}}</p>
     <hr>
+    <div :key="key" v-for="(shop, key) in shops"> จำนวนคิว ณ ขณะนี้ {{shop.q}}
     <p><button v-show="products.length" class='button is-primary' @click='checkout'>เช็คราคา</button></p><br>
-    <p><button v-show="products.length" class='button is-primary' @click="order(products)">ยืนยัน</button></p>
+    <p><button v-show="products.length" class='button is-primary' @click="order(products, shop.q, key)">ยืนยัน</button></p>
+  </div>
   </div>
 </template>
 
@@ -40,6 +42,13 @@ import firebase from 'firebase'
 var database = firebase.database()
 var foodcenterRef = database.ref('/foodcenter')
 export default {
+  data () {
+    return {
+      date: Date.now(),
+      shops: {},
+      updateQ: ''
+    }
+  },
   computed: {
     ...mapGetters({
       products: 'cartProducts',
@@ -56,7 +65,8 @@ export default {
     checkout () {
       alert('ราคาทั้งหมด ' + this.total + ' บาท')
     },
-    order (products) {
+    order (products, q, key) {
+      alert('สั่งOrderนี้เรียบร้อยแล้ว')
       for (var i = 0; i < products.length; i++) {
         let data = {
           name: products[i].name,
@@ -64,9 +74,27 @@ export default {
           quantity: products[i].quantity,
           customer: this.users
         }
-        foodcenterRef.child('order').child(this.SelectShops.name).child(this.users).push(data)
+        foodcenterRef.child('order').child(this.SelectShops.name).child(this.date).child(this.users).push(data)
       }
+      // rootRef.child("detail").child(this.SelectShops.name).child(key).setValue(["q":q])
+      // updatefoodcenter (tel, name, keys, key) {
+      this.updateQ = q
+      foodcenterRef.child('detail').child(this.SelectShops.name).child(key).update({
+        q: this.updateQ + 1
+      })
+      // this.updateKey = ''
+      // this.updateTel = ''
+      // this.updateName = ''
+      // }
+      this.$router.push('/foodcenter')
     }
+  },
+  mounted () {
+    const dbRefObject = foodcenterRef.child('detail').child(this.SelectShops.name)
+    dbRefObject.on('value', snap => {
+      this.shops = snap.val()
+      console.log(this.shops)
+    })
   }
 }
 </script>

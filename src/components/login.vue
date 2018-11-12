@@ -6,7 +6,7 @@
         <p class="subtitle has-text-grey">Please login to FoodCenter.</p>
         <div class="box">
           <figure class="avatar">
-            <img src="/static/page_2.jpg">
+            <img src="/static/logo1.png">
           </figure>
           <form>
             <div class="field">

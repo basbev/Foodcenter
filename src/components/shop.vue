@@ -42,6 +42,12 @@
         <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
           <div class="field is-grouped">
             <p class="control">
+              <router-link to='/cart' class="button button4">
+                <span class="icon">
+                  <i class="fa fa-shopping-cart"></i>
+                </span>
+                <span>สั่ง Order ({{itemsInCart}})</span>
+              </router-link>
             </p>
           </div>
         </div>
@@ -222,31 +228,31 @@ export default {
     /*font-size: 14px;*/
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
-    cursor: pointer;
+   /* cursor: pointer;*/
 }
-
 .button1 {
+    margin-top: 7px;
+    width: 10%;
     background-color: white;
     color: black;
     border: 2px solid #4CAF50;
 }
-
 .button1:hover {
     background-color: #4CAF50;
     color: white;
 }
 .button2 {
+    margin-top: 7px;
     background-color: white;
     color: black;
     border: 2px solid #008CBA;
 }
-
 .button2:hover {
     background-color: #008CBA;
     color: white;
 }
-
 .button3 {
+    margin-bottom: 7px;
     background-color: white;
     color: black;
     border: 2px solid #f44336;
@@ -256,27 +262,64 @@ export default {
     color: white;
 }
 .button4 {
+    margin-bottom: 7px;
     background-color: white;
     color: black;
     border: 2px solid #B8860B;
 }
-
-.button4:hover {background-color: #B8860B;}
-
+.button4:hover {background-color: #B8860B;
+}
 .button5 {
+    margin-top: 7px;
     background-color: white;
     color: black;
     border: 2px solid #7FFF00;
 }
-
 .button5:hover {
     background-color: #7FFF00;
     color: white;
+}
+.button6 {
+    margin-bottom: 7px;
+    background-color: white;
+    color: black;
+    border: 2px solid #FF00FF;
+}
+.button7 {
+    margin-top: 13px;
+    width: 10%;
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+.button7:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+.button6:hover {background-color: #FFB6C1;
 }
 p {
     border-left: 20px solid #DC143C;
     border-radius: 12px;
     border: 2px solid #F0E68C;
     background-color: #F5DEB3;
+}
+input[type=text], select {
+    width: 19%;
+    padding: 1% 1%;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+input[type=number], select {
+    width: 10%;
+    padding: 1% 1%;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 </style>
