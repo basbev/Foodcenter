@@ -21,11 +21,13 @@
   </div>
   </div>
   </div>
+  <div :key="keys" v-for="(shop, keys) in shops">
   <footer class="card-footer">
     <a href="#" class="card-footer-item">Save</a>
     <a href="#" class="card-footer-item">Edit</a>
-    <a href="#" class="card-footer-item">Delete</a>
+    <button @click='OrderComp(key, keys, shop.q)' class="card-footer-item">Delete</button>
     </footer>
+  </div>
    </div>
       </div>
   </div>
@@ -40,10 +42,19 @@ export default {
   data () {
     return {
       orders: [],
-      datenow: new Date()
+      datenow: new Date(),
+      shops: [],
+      updateQ: ''
     }
   },
   methods: {
+    OrderComp (key, keys, q) {
+      foodcenterRef.child('order').child('ป้าสมบูรณ์').child(key).remove()
+      this.updateQ = q
+      foodcenterRef.child('detail').child('ป้าสมบูรณ์').child(keys).update({
+        q: this.updateQ - 1
+      })
+    }
   },
   mounted () {
     const dbRefObject = foodcenterRef.child('order').child('ป้าสมบูรณ์')
@@ -52,6 +63,11 @@ export default {
       console.log(this.orders)
     })
     console.log(this.date)
+    const dbRefObject1 = foodcenterRef.child('detail').child('ป้าสมบูรณ์')
+    dbRefObject1.on('value', snap => {
+      this.shops = snap.val()
+      console.log(this.shops)
+    })
   },
   computed: {
   }

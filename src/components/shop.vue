@@ -1,5 +1,6 @@
 <template>
 <div>
+  <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
     <section class="section">
       <div class="container">
         <div class="columns">
@@ -26,8 +27,8 @@
                   </span>
                   <div class="message-body">
                   <div class="row" :key="key" v-for="(menushow, key) in menushow">
-                          <h1>Menu :{{menushow.foodname}}</h1>
-                      <h1>Price :{{menushow.foodprice}} บาท</h1>
+                          <h1>ชื่อเมนู :{{menushow.foodname}}</h1>
+                      <h1>ราคา :{{menushow.foodprice}} บาท</h1>
                       <img v-bind:src="menushow.foodpic" width="300" height="350"><br>
                       <button @click="Cart(menushow.foodname, menushow.foodprice, key)" class="button button3">เพิ่มลง Order</button>
                           </div>
@@ -64,8 +65,8 @@
               </article>
               <div class="message-body">
                                     <div class="row" :key="key" v-for="(menu, key) in menus">
-                          <h1>Menu :{{menu.foodname}}</h1>
-                      <h1>Price :{{menu.foodprice}} บาท</h1>
+                          <h1>ชื่อเมนู :{{menu.foodname}}</h1>
+                      <h1>ราคา :{{menu.foodprice}} บาท</h1>
                       <button @click="Cart(menu.foodname, menu.foodprice, key)" class="button button3">เพิ่มลง Order</button>
                           </div>
                 </div>
@@ -229,6 +230,7 @@ export default {
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
    /* cursor: pointer;*/
+    font-family: 'Prompt', sans-serif;
 }
 .button1 {
     margin-top: 7px;
@@ -236,26 +238,31 @@ export default {
     background-color: white;
     color: black;
     border: 2px solid #4CAF50;
+    font-family: 'Prompt', sans-serif;
 }
 .button1:hover {
     background-color: #4CAF50;
     color: white;
+    font-family: 'Prompt', sans-serif;
 }
 .button2 {
     margin-top: 7px;
     background-color: white;
     color: black;
     border: 2px solid #008CBA;
+    font-family: 'Prompt', sans-serif;
 }
 .button2:hover {
     background-color: #008CBA;
     color: white;
+    font-family: 'Prompt', sans-serif;
 }
 .button3 {
     margin-bottom: 7px;
     background-color: white;
     color: black;
     border: 2px solid #f44336;
+    font-family: 'Prompt', sans-serif;
 }
 .button3:hover {
     background-color: #f44336;
@@ -266,6 +273,7 @@ export default {
     background-color: white;
     color: black;
     border: 2px solid #B8860B;
+    font-family: 'Prompt', sans-serif;
 }
 .button4:hover {background-color: #B8860B;
 }
@@ -274,6 +282,7 @@ export default {
     background-color: white;
     color: black;
     border: 2px solid #7FFF00;
+    font-family: 'Prompt', sans-serif;
 }
 .button5:hover {
     background-color: #7FFF00;
@@ -312,14 +321,19 @@ input[type=text], select {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    font-family: 'Prompt', sans-serif;
 }
 input[type=number], select {
-    width: 10%;
+    width: 11%;
     padding: 1% 1%;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    font-family: 'Prompt', sans-serif;
+}
+div {
+  font-family: 'Prompt', sans-serif;
 }
 </style>

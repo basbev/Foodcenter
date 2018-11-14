@@ -1,5 +1,6 @@
 <template>
   <div class='hello'>
+    <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
     <img src = "/static/logo1.png" width="300">
     <div>
       <input type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
@@ -31,13 +32,6 @@
           <div class="column">
         <h1>name :{{detail.name}}</h1>
     <h3>Tel :{{detail.tel}}</h3>
-    <div :key="key" v-for="(order, key) in orders" v-if="key === detail.name">
-      <div :key="key" v-for="(order, key) in order">
-          <div :key="key" v-for="(shopee, key) in order">
-          TEST :
-    </div>
-    </div>
-    </div>
     <h1>คิวที่ต้องรอ :{{detail.q}}</h1>
         <button class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, keys, key)">Update</button>
         <button class="button button6" @click="deletefoodcenter(keys)">Delete</button>
@@ -144,6 +138,12 @@ export default {
     }
   }
 }
+// <div :key="key" v-for="(order, key) in orders" v-if="key === detail.name">
+//      <div :key="key" v-for="(order, key) in order">
+//         <div :key="key" v-for="(shopee, key) in order">
+//    </div>
+//    </div>
+//    </div>
 </script>
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
@@ -158,6 +158,7 @@ export default {
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
    /* cursor: pointer;*/
+   font-family: 'Prompt', sans-serif;
 }
 .button1 {
     margin-top: 7px;
@@ -250,5 +251,8 @@ input[type=number], select {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+div {
+  font-family: 'Prompt', sans-serif;
 }
 </style>
