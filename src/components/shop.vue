@@ -27,11 +27,12 @@
                   </span>
                   <div class="message-body">
                   <div class="row" :key="key" v-for="(menushow, key) in menushow">
+                    <hr>
                     <div v-if="updateKey === key">
-        <input type="text" v-model="updateName" placeholder="NAME">
-        <input type="text" v-model="updateTel" placeholder="TEL">
-        <input type="text" v-model="updateTel" placeholder="TEL">
-        <button class="button button2">Save</button>
+        <input type="text" v-model="updatefoodname" placeholder="ชื่อ">
+        <input type="text" v-model="updatefoodprice" placeholder="ราคา">
+        <input type="text" v-model="updatefoodpic" placeholder="ลิ้งรูปภาพ">
+        <button @click="UpdateMenuShow(key, updatefoodname, updatefoodprice, updatefoodpic)" class="button button2">บันทึกเมนูเเนะนำ</button>
         <hr>
       </div>
       <div v-else>
@@ -39,7 +40,7 @@
                       <h1>ราคา :{{menushow.foodprice}} บาท</h1>
                       <img v-bind:src="menushow.foodpic" width="300" height="350"><br>
                       <button @click="Cart(menushow.foodname, menushow.foodprice, key)" class="button button3">เพิ่มลง Order</button>
-                      <button @click="SetUpdateMenuShow(key)" class="button button3">อัพเดทเมนูเเนะนำ</button>
+                      <button @click="SetUpdateMenuShow(key, menushow.foodname, menushow.foodprice, menushow.foodpic)" class="button button3">เเก้ไขเมนูเเนะนำ</button>
                   </div>
                           </div>
                   </div>
@@ -147,7 +148,10 @@ export default {
       menus: {},
       scorce: '',
       view: '',
-      updateKey: ''
+      updateKey: '',
+      updatefoodname: '',
+      updatefoodprice: '',
+      updatefoodpic: ''
     }
   },
   created () {
@@ -189,8 +193,22 @@ export default {
       this.$store.dispatch('AddCart', {foodname, foodprice, key})
       console.log(this.added)
     },
-    SetUpdateMenuShow (key) {
+    SetUpdateMenuShow (key, foodname, foodprice, foodpic) {
       this.updateKey = key
+      this.updatefoodname = foodname
+      this.updatefoodprice = foodprice
+      this.updatefoodpic = foodpic
+    },
+    UpdateMenuShow (key, foodname, foodprice, foodpic) {
+      foodcenterRef.child('menushow').child(this.selectShop.name).child(key).update({
+        foodname: foodname,
+        foodprice: foodprice,
+        foodpic: foodpic
+      })
+      this.updateKey = ''
+      this.foodname = ''
+      this.foodprice = ''
+      this.foodpic = ''
     }
   },
   computed: {
