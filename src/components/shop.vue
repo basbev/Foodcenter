@@ -26,7 +26,15 @@
                   <i class="fab fa-hot"></i>
                   </span>
                   <div class="message-body">
-                  <div class="row" :key="key" v-for="(menushow, key) in menushow">
+                  <div class="container">
+                  <div class="columns is-multiline">
+                                    <div class="column is-5" :key="key" v-for="(menushow, key) in menushow">
+                          <h3>ชื่อเมนู:&nbsp;{{menushow.foodname}}</h3>
+                      <h3>ราคา:&nbsp;{{menushow.foodprice}}&nbsp;บาท</h3>
+                      <img v-bind:src="menushow.foodpic" width="300" height="350"><br>
+                      <button @click="Cart(menushow.foodname, menushow.foodprice, key)" class="button button3">เพิ่มลง Order</button>
+                      <button @click="SetUpdateMenuShow(key, menushow.foodname, menushow.foodprice, menushow.foodpic)" class="button button3">เเก้ไขเมนูเเนะนำ</button>
+                      <button class="button button3" @click="DeleteMenushow(key)">ลบ</button>
                     <hr>
                     <div v-if="updateKey === key">
         <input type="text" v-model="updatefoodname" placeholder="ชื่อ">
@@ -36,11 +44,8 @@
         <hr>
       </div>
       <div v-else>
-                          <h1>ชื่อเมนู :{{menushow.foodname}}</h1>
-                      <h1>ราคา :{{menushow.foodprice}} บาท</h1>
-                      <img v-bind:src="menushow.foodpic" width="300" height="350"><br>
-                      <button @click="Cart(menushow.foodname, menushow.foodprice, key)" class="button button3">เพิ่มลง Order</button>
-                      <button @click="SetUpdateMenuShow(key, menushow.foodname, menushow.foodprice, menushow.foodpic)" class="button button3">เเก้ไขเมนูเเนะนำ</button>
+                  </div>
+                  </div>
                   </div>
                           </div>
                   </div>
@@ -75,10 +80,25 @@
                 </div>
               </article>
               <div class="message-body">
-                                    <div class="row" :key="key" v-for="(menu, key) in menus">
-                          <h1>ชื่อเมนู :{{menu.foodname}}</h1>
-                      <h1>ราคา :{{menu.foodprice}} บาท</h1>
+                                    <div class="container">
+                  <div class="columns is-multiline">
+                                    <div class="column is-5" :key="key" v-for="(menu, key) in menus">
+                          <h3>ชื่อเมนู:&nbsp;{{menu.foodname}}</h3>
+                      <h3>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h3>
                       <button @click="Cart(menu.foodname, menu.foodprice, key)" class="button button3">เพิ่มลง Order</button>
+                      <button @click="SetUpdateMenu(key, menu.foodname, menu.foodprice)" class="button button3">เเก้ไขเมนูอาหาร</button>
+                      <button @click="DeleteMenu(key)" class="button button3">ลบ</button>
+                      <hr>
+                                      <div v-if="updateKey === key">
+        <input type="text" v-model="updateMenufood" placeholder="ชื่อเมนู">
+        <input type="text" v-model="updateMenuprice" placeholder="ราคา">
+        <button @click="UpdateMenu(key, updateMenufood, updateMenuprice)" class="button button2">บันทึกเมนูอาหาร</button>
+        <hr>
+      </div>
+      <div v-else>
+        </div>
+        </div>
+                                    </div>
                           </div>
                 </div>
           </div>
@@ -110,10 +130,11 @@
                 </div>
               </article>
                                     <div class="row" :key="key" v-for="(review, key) in review">
-                      <div class="message-body"><p><h5>Review : </h5>{{review.view}}
+                      <div class="message-body"><p><h5>Review:&nbsp;</h5>{{review.view}}
                       <img v-bind:src="review.scorce" width="40" height="40" ><br>
-                       <h5>โดย คุณ: {{review.namere}}</h5><br>
-                       </div><br>
+                       <h5>โดย คุณ:&nbsp;{{review.namere}}</h5><br>
+                       <button class="button button5" @click="DelReview(key)">ลบ</button>
+                       </div>
                           </div>
                 <input type="text" v-model="view" placeholder="รีวิว" size="30">
                 <input  type="radio" id="bad" name="gender" value="https://www.img.in.th/images/bd7e44b282baa7d06dfdf02f51bc915f.png" v-model="scorce">
@@ -151,7 +172,9 @@ export default {
       updateKey: '',
       updatefoodname: '',
       updatefoodprice: '',
-      updatefoodpic: ''
+      updatefoodpic: '',
+      updateMenufood: '',
+      updateMenuprice: ''
     }
   },
   created () {
@@ -209,6 +232,29 @@ export default {
       this.foodname = ''
       this.foodprice = ''
       this.foodpic = ''
+    },
+    SetUpdateMenu (key, menufood, menuprice) {
+      this.updateKey = key
+      this.updateMenufood = menufood
+      this.updateMenuprice = menuprice
+    },
+    UpdateMenu (key, updateMenufood, updateMenuprice) {
+      foodcenterRef.child('menu').child(this.selectShop.name).child(key).update({
+        foodname: updateMenufood,
+        foodprice: updateMenuprice
+      })
+      this.updateKey = ''
+      this.updateMenufood = ''
+      this.updateMenuprice = ''
+    },
+    DelReview (key) {
+      foodcenterRef.child('review').child(this.selectShop.name).child(key).remove()
+    },
+    DeleteMenu (key) {
+      foodcenterRef.child('menu').child(this.selectShop.name).child(key).remove()
+    },
+    DeleteMenushow (key) {
+      foodcenterRef.child('menushow').child(this.selectShop.name).child(key).remove()
     }
   },
   computed: {

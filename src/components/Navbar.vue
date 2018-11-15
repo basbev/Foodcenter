@@ -2,7 +2,7 @@
 <nav class="navbar is-black">
   <div class="navbar-brand">
     <a class="navbar-item" href="/">
-      <img src="/static/page_1.jpg" width="112" height="28">
+      <img src="/static/logo2.png" width="112" height="28">
     </a>
     <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
       <span aria-hidden="true"></span>

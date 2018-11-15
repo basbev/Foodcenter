@@ -1,12 +1,12 @@
 <template>
   <div class='hello'>
-    <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
+    <center><link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
     <img src = "/static/logo1.png" width="300">
     <div>
       <input type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
       <input type="text" v-model="tel" placeholder="เบอร์">
       <button class="button button7" @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
-    </div>
+    </div></center>
     <hr>
   <section class="section">
         <div class="container">
@@ -21,7 +21,7 @@
                 </figure>
                 <div class="media-content">
                   <div class="content">
-                    <h1 class="title is-size-4">ร้านอาหาร</h1>
+                    <h1 class="title is-size-4">ร้าน</h1>
                     <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
@@ -30,9 +30,9 @@
       <div v-else>
         <div class="row">
           <div class="column">
-        <h1>name :{{detail.name}}</h1>
-    <h3>Tel :{{detail.tel}}</h3>
-    <h1>คิวที่ต้องรอ :{{detail.q}}</h1>
+        <h1>&nbsp;&nbsp;{{detail.name}}</h1>
+    <h3>Tel:&nbsp;{{detail.tel}}</h3>
+     <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</hk></h1>
         <button class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, keys, key)">Update</button>
         <button class="button button6" @click="deletefoodcenter(keys)">Delete</button>
         <button @click="SelectShop(detail.name)" class="button button3">Select</button>
@@ -254,5 +254,9 @@ input[type=number], select {
 }
 div {
   font-family: 'Prompt', sans-serif;
+}
+hk {
+   font-size: 30px;
+    background-color: #F0E68C;
 }
 </style>
