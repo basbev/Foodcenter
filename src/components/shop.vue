@@ -27,10 +27,20 @@
                   </span>
                   <div class="message-body">
                   <div class="row" :key="key" v-for="(menushow, key) in menushow">
+                    <div v-if="updateKey === key">
+        <input type="text" v-model="updateName" placeholder="NAME">
+        <input type="text" v-model="updateTel" placeholder="TEL">
+        <input type="text" v-model="updateTel" placeholder="TEL">
+        <button class="button button2">Save</button>
+        <hr>
+      </div>
+      <div v-else>
                           <h1>ชื่อเมนู :{{menushow.foodname}}</h1>
                       <h1>ราคา :{{menushow.foodprice}} บาท</h1>
                       <img v-bind:src="menushow.foodpic" width="300" height="350"><br>
                       <button @click="Cart(menushow.foodname, menushow.foodprice, key)" class="button button3">เพิ่มลง Order</button>
+                      <button @click="SetUpdateMenuShow(key)" class="button button3">อัพเดทเมนูเเนะนำ</button>
+                  </div>
                           </div>
                   </div>
                 </article>
@@ -136,7 +146,8 @@ export default {
       review: '',
       menus: {},
       scorce: '',
-      view: ''
+      view: '',
+      updateKey: ''
     }
   },
   created () {
@@ -177,6 +188,9 @@ export default {
       console.log(foodname, foodprice, key)
       this.$store.dispatch('AddCart', {foodname, foodprice, key})
       console.log(this.added)
+    },
+    SetUpdateMenuShow (key) {
+      this.updateKey = key
     }
   },
   computed: {
