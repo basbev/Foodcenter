@@ -13,7 +13,7 @@
               <div class="control has-icons-left has-icons-right">
                 <input class="input is-large" type="text" placeholder="Username" autofocus="" id="user" v-model="username">
               <span class="icon is-small is-left">
-      <i class="fas fa-envelope"></i>
+      <i class="fas fa-user"></i>
     </span>
               </div>
             </div>
