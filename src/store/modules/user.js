@@ -63,6 +63,19 @@ const mutations = {
   },
   DeleteCart: (state) => {
     state.added = []
+  },
+  Cartremove: (state, index) => {
+    state.added.splice(index, 1)
+  },
+  incleseAmount: (state, index) => {
+    if (state.added[index].quantity < 10) {
+      state.added[index].quantity++
+    }
+  },
+  decleseAmount: (state, index) => {
+    if (state.added[index].quantity > 1) {
+      state.added[index].quantity--
+    }
   }
 }
 
@@ -106,6 +119,15 @@ const actions = {
   },
   CartCle ({commit}) {
     commit('DeleteCart')
+  },
+  Cartremove ({commit}, index) {
+    commit('Cartremove', index)
+  },
+  incleseAmount ({commit}, index) {
+    commit('incleseAmount', index)
+  },
+  decleseAmount ({commit}, index) {
+    commit('decleseAmount', index)
   }
 }
 export default {
