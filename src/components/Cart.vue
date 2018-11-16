@@ -11,6 +11,9 @@
             <td>ชื่อเมนู</td>
             <td>ราคา</td>
             <td>จำนวน</td>
+            <td>เพิ่ม</td>
+            <td>ลบ</td>
+            <td>ยกเลิก</td>
           </tr>
         </thead>
             <tbody>
@@ -18,6 +21,9 @@
                 <td>{{ p.name }}</td>
                 <td>{{ p.price }} บ.</td>
                 <td>{{ p.quantity }} จาน</td>
+                <td><div @click="inclese(key)"><a class="delete"></a></div></td>
+                <td><div @click="declese(key)"><a class="delete"></a></div></td>
+                <td><div @click="remove(key)"><a class="delete"></a></div></td>
                 </tr>
                 <tr>
                   <td><b>ราคารวม:</b></td>
@@ -37,7 +43,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
 var database = firebase.database()
 var foodcenterRef = database.ref('/foodcenter')
@@ -76,19 +82,18 @@ export default {
         }
         foodcenterRef.child('order').child(this.SelectShops.name).child(this.date).child(this.users).push(data)
       }
-      // rootRef.child("detail").child(this.SelectShops.name).child(key).setValue(["q":q])
-      // updatefoodcenter (tel, name, keys, key) {
       this.updateQ = q
       foodcenterRef.child('detail').child(this.SelectShops.name).child(key).update({
         q: this.updateQ + 1
       })
-      // this.updateKey = ''
-      // this.updateTel = ''
-      // this.updateName = ''
-      // }
       this.$store.dispatch('CartCle')
       this.$router.push('/foodcenter')
-    }
+    },
+    ...mapActions({
+      inclese: 'incleseAmount',
+      declese: 'decleseAmount',
+      remove: 'Cartremove'
+    })
   },
   mounted () {
     const dbRefObject = foodcenterRef.child('detail').child(this.SelectShops.name)
