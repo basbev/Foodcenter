@@ -11,7 +11,8 @@
   <section class="section">
         <div class="container">
           <div class="columns is-multiline">
-            <div class="column is-one-third" :key="key" v-for="(details, key) in shops">
+            <div class="column is-one-third" :key="keys" v-for="(details, keys) in shops">
+      <div class="" :key="key" v-for="(detail, key) in details">
               <article class="notification media has-background-white">
                 <figure class="media-left">
                   <span class="icon">
@@ -24,27 +25,37 @@
                     <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
-        <button class="button button2" @click="updatefoodcenter(updateTel, updateName, key)">Save</button>
+        <button class="button button2" @click="updatefoodcenter(updateTel, updateName, keys ,key)">Save</button>
       </div>
       <div v-else>
         <div class="row">
           <div class="column">
-        <h1>&nbsp;&nbsp;{{details.name}}</h1>
-    <h3>Tel:&nbsp;{{details.tel}}</h3>
-     <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{details.q}}&nbsp;&nbsp;</hk></h1>
-        <button class="button button4" @click="setUpdatefoodcenter(details.tel, details.name, key)">Update</button>
-        <button class="button button6" @click="deletefoodcenter(key)">Delete</button>
-        <button @click="SelectShop(details.name)" class="button button3">Select</button>
+        <h1>&nbsp;&nbsp;{{detail.name}}</h1>
+    <h3>Tel:&nbsp;{{detail.tel}}</h3>
+     <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</hk></h1>
+        <button class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, keys, key)">Update</button>
+        <button class="button button6" @click="deletefoodcenter(keys)">Delete</button>
+        <button @click="SelectShop(detail.name)" class="button button3">Select</button>
         </div>
         </div>
       </div>
                   </div>
                 </div>
               </article>
+              </div>
             </div>
           </div>
         </div>
       </section>
+      <div class="column is-one-third" :key="keys" v-for="(details, keys) in shops">
+      <div class="" :key="key" v-for="(detail, key) in details">
+    <h1>name :{{detail.name}}</h1>
+    <h1>Tel :{{detail.tel}}</h1>
+    <h1>Q :{{detail.q}}</h1>
+    <h1>key loop 2 :{{key}}</h1>
+    <h1>key loop 1 :{{keys}}</h1>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -75,17 +86,17 @@ export default {
         name: name,
         q: 0
       }
-      foodcenterRef.child('detail').push(data)
+      foodcenterRef.child('detail').child(this.name).push(data)
       this.tel = ''
       this.name = ''
     },
-    setUpdatefoodcenter (tel, name, key) {
+    setUpdatefoodcenter (tel, name, keys, key) {
       this.updateKey = key
       this.updateTel = tel
       this.updateName = name
     },
-    updatefoodcenter (tel, name, key) {
-      foodcenterRef.child('detail').child(key).update({
+    updatefoodcenter (tel, name, keys, key) {
+      foodcenterRef.child('detail').child(keys).child(key).update({
         tel: tel,
         name: name
       })
@@ -93,8 +104,8 @@ export default {
       this.updateTel = ''
       this.updateName = ''
     },
-    deletefoodcenter (key) {
-      foodcenterRef.child('detail').child(key).remove()
+    deletefoodcenter (keys) {
+      foodcenterRef.child('detail').child(keys).remove()
     },
     SelectShop (name) {
       this.$store.dispatch('selectShop', {name})
