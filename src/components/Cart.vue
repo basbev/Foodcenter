@@ -37,6 +37,7 @@
     <hr>
     <div :key="key" v-for="(shop, key) in shops"> จำนวนคิว ณ ขณะนี้ {{shop.q}}
     <p><button v-show="products.length" class='button is-primary' @click='checkout'>เช็คราคา</button></p><br>
+    <p><router-link to="/shop"><button v-show="products.length" class='button is-primary'>กลับไปเลือกเมนู</button></router-link></p><br>
     <p><button v-show="products.length" class='button is-primary' @click="order(products, shop.q, key)">ยืนยัน</button></p>
   </div>
   </div>
