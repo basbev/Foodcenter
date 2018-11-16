@@ -11,9 +11,9 @@
           <form>
             <div class="field">
               <div class="control has-icons-left has-icons-right">
-                <input class="input is-large" type="text" placeholder="Your Email" autofocus="" id="text" v-model="username">
+                <input class="input is-large" type="text" placeholder="Your Username" autofocus="" id="text" v-model="username">
                 <span class="icon is-small is-left">
-      <i class="fas fa-envelope"></i>
+      <i class="fas fa-user"></i>
     </span>
               </div>
             </div>
@@ -87,7 +87,11 @@ export default {
         let data = {
           username: this.username,
           password: this.password,
-          permission: '1'
+          permission: '1',
+          firstname: '',
+          lastname: '',
+          phonenumber: '',
+          address: ''
         }
         foodcenterRef.child(this.username).push(data)
         this.$router.push('/')
