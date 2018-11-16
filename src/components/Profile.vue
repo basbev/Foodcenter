@@ -2,12 +2,13 @@
 <div class="container">
   <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
   <center><h3>Profile</h3></center>
+    <div :key="key" v-for="(user, key) in user">
     <div class="row">
       <div class="col-25">
         <label for="fname">First Name</label>
       </div>
       <div class="col-75">
-        <input type="text" id="fname" name="firstname" placeholder="Your name..">
+        <input type="text" id="fname" name="firstname" placeholder="Your name.." v-model="user.firstname">
       </div>
     </div>
     <div class="row">
@@ -15,7 +16,7 @@
         <label for="lname">Last Name</label>
       </div>
       <div class="col-75">
-        <input type="text" id="lname" name="lastname" placeholder="Your last name..">
+        <input type="text" id="lname" name="lastname" placeholder="Your last name.." v-model="user.lastname">
       </div>
     </div>
     <div class="row">
@@ -23,7 +24,7 @@
         <label for="lname">Phone number</label>
       </div>
       <div class="col-75">
-        <input type="text" id="phone" name="phone" placeholder="Your Phone number..">
+        <input type="text" id="phone" name="phone" placeholder="Your Phone number.." v-model="user.phonenumber">
       </div>
     </div>
     <div class="row">
@@ -31,7 +32,7 @@
         <label for="subject">Address</label>
       </div>
       <div class="col-75">
-        <textarea id="address" name="address" placeholder="Your address.." style="height:200px"></textarea>
+        <textarea id="address" name="address" placeholder="Your address.." style="height:200px" v-model="user.address"></textarea>
       </div>
     </div><input type="submit" value="Submit">
     <div class="layout wrap">
@@ -57,51 +58,50 @@
         </li>
       </div>
       </div>
-      <button type="button" class="button button3" data-ripple="true">
+      <button type="button" class="button button3" data-ripple="true" @click="updateuser(user.firstname, user.lastname, user.phonenumber, user.address, key)">
       Update
     </button>
+</div>
 </div>
 </template>
 
 <script>
 import firebase from 'firebase'
-
+import {mapGetters} from 'vuex'
+var database = firebase.database()
+var userRef = database.ref('/user')
 export default {
   name: 'Profile',
   data: function () {
     return {
       email: '',
       password: '',
-      uid: ''
+      uid: '',
+      user: []
     }
   },
   methods: {
-    update: function (e) {
-      firebase
-        .auth()
-        .currentUser.updateEmail(this.email)
-        .then(
-          user => {
-          },
-          err => {
-            console.log(err.message)
-          }
-        )
-      firebase
-        .auth()
-        .currentUser.updatePassword(this.password)
-        .then(
-          user => {
-            alert('Account Update')
-            // this.$router.go({ path: '#/' })
-            this.router.next({ path: 'login' })
-          },
-          err => {
-            console.log(err.message)
-          }
-        )
-      e.preventDefault()
+    updateuser (firstname, lastname, phonenumber, address, key) {
+      userRef.child(this.users).child(key).update({
+        firstname: firstname,
+        lastname: lastname,
+        phonenumber: phonenumber,
+        address: address
+      })
+      this.$router.push('/foodcenter')
     }
+  },
+  computed: {
+    ...mapGetters({
+      users: 'user'
+    })
+  },
+  mounted () {
+    const dbRefObject = userRef.child(this.users)
+    dbRefObject.on('value', snap => {
+      this.user = snap.val()
+      console.log(this.user)
+    })
   }
 }
 </script>
