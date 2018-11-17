@@ -53,7 +53,9 @@ export default {
     return {
       date: Date.now(),
       shops: {},
-      updateQ: ''
+      updateQ: '',
+      updateCount: '',
+      search: ''
     }
   },
   computed: {
@@ -81,7 +83,22 @@ export default {
           quantity: products[i].quantity,
           customer: this.users
         }
+        let record = {
+          amount: products[i].quantity
+        }
         foodcenterRef.child('order').child(this.SelectShops.name).child(this.date).child(this.users).push(data)
+        const dbRefObject2 = foodcenterRef.child('record').child(this.SelectShops.name).child(products[i].name)
+        dbRefObject2.once('value', snap => {
+          this.search = snap.val()
+          console.log(this.search)
+        })
+        if (this.search === null) {
+          foodcenterRef.child('record').child(this.SelectShops.name).child(products[i].name).set(record)
+        } else {
+          console.log(this.search)
+          this.updateCount = this.search.amount + products[i].quantity
+          foodcenterRef.child('record').child(this.SelectShops.name).child(products[i].name).child('amount').set(this.updateCount)
+        }
       }
       this.updateQ = q
       foodcenterRef.child('detail').child(this.SelectShops.name).child(key).update({
