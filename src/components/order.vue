@@ -11,7 +11,7 @@
       <div class="card-content">
       ผู้สั่ง: {{key}} <br>
     </div>
-      <div :key="key" v-for="(detail, key) in order">
+      <div :key="key" v-for="(detail, key, index) in order">
   <div class="card-content">
     <div class="content">
       เมนูอาหาร: {{detail.name}} <br>
@@ -19,6 +19,7 @@
       จำนวน: {{detail.quantity}} จาน
     </div>
   </div>
+  <div v-if="index === detail.quantity">{{index}} :: {{key}}</div>
   </div>
   </div>
   <div :key="keys" v-for="(shop, keys) in shops">
