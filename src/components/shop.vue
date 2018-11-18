@@ -19,6 +19,9 @@
           <div class="column is-9">
             <div class="content is-medium">
           <h3 class="title is-3">ร้านอาหาร {{ this.selectShop.name }} </h3>
+          <div :key="key" v-for="(record, key) in records">
+          เมนูขายดี ** {{key}}
+          </div>
               <div class="box">
                 <h4 id="const" class="title is-3">เมนูอาหารเเนะนำ</h4>
                 <article class="message is-primary">
@@ -174,7 +177,8 @@ export default {
       updatefoodprice: '',
       updatefoodpic: '',
       updateMenufood: '',
-      updateMenuprice: ''
+      updateMenuprice: '',
+      records: ''
     }
   },
   created () {
@@ -214,7 +218,6 @@ export default {
     Cart (foodname, foodprice, key) {
       console.log(foodname, foodprice, key)
       this.$store.dispatch('AddCart', {foodname, foodprice, key})
-      console.log(this.added)
     },
     SetUpdateMenuShow (key, foodname, foodprice, foodpic) {
       this.updateKey = key
@@ -279,20 +282,22 @@ export default {
     const dbRefObject = foodcenterRef.child('menu').child(this.selectShop.name)
     const dbRefObjectshow = foodcenterRef.child('menushow').child(this.selectShop.name)
     const dbRefObjectreview = foodcenterRef.child('review').child(this.selectShop.name)
+    const dbRefObjectMenuhit = foodcenterRef.child('record').child(this.selectShop.name)
     dbRefObject.on('value', snap => {
       this.menus = snap.val()
       console.log(this.menus)
-      console.log(this.added)
     })
     dbRefObjectshow.on('value', snap => {
       this.menushow = snap.val()
       console.log(this.menushow)
-      console.log(this.added)
     })
     dbRefObjectreview.on('value', snap => {
       this.review = snap.val()
       console.log(this.review)
-      console.log(this.added)
+    })
+    dbRefObjectMenuhit.orderByChild('amount').limitToLast(3).on('value', snap => {
+      this.records = snap.val()
+      console.log(this.records)
     })
   }
 }
