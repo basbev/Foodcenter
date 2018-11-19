@@ -29,6 +29,14 @@
                 Manage
               </span>
       </a>
+      <a v-if="permission === '2'" class="navbar-item" href="#/order">
+        <span class="icon">
+                <i class="fas fa-home"></i>
+              </span>
+              <span>
+                Manage
+              </span>
+      </a>
     </div>
 
     <div class="navbar-end">
