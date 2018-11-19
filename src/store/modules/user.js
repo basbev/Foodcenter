@@ -96,6 +96,7 @@ const actions = {
         const shopSet = state.profile.hasShop
         console.log(userSet, passSet, perSet)
         commit('setUser', {userSet, passSet, perSet, shopSet})
+        commit('setselectShop', shopSet)
       } else alert(`Username Or Password incorrect`)
     } else alert(`Username Or Password incorrect`)
   },

@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import * as firebase from 'firebase'
 var database = firebase.database()
 var foodcenterRef = database.ref('/foodcenter')
@@ -50,27 +51,30 @@ export default {
   },
   methods: {
     OrderComp (key, keys, q) {
-      foodcenterRef.child('order').child('ป้าสมบูรณ์').child(key).remove()
+      foodcenterRef.child('order').child(this.selectShop).child(key).remove()
       this.updateQ = q
-      foodcenterRef.child('detail').child('ป้าสมบูรณ์').child(keys).update({
+      foodcenterRef.child('detail').child(this.selectShop).child(keys).update({
         q: this.updateQ - 1
       })
     }
   },
   mounted () {
-    const dbRefObject = foodcenterRef.child('order').child('ป้าสมบูรณ์')
+    const dbRefObject = foodcenterRef.child('order').child(this.selectShop)
     dbRefObject.on('value', snap => {
       this.orders = snap.val()
       console.log(this.orders)
     })
     console.log(this.date)
-    const dbRefObject1 = foodcenterRef.child('detail').child('ป้าสมบูรณ์')
+    const dbRefObject1 = foodcenterRef.child('detail').child(this.selectShop)
     dbRefObject1.on('value', snap => {
       this.shops = snap.val()
       console.log(this.shops)
     })
   },
   computed: {
+    ...mapGetters({
+      selectShop: 'selectShop'
+    })
   }
   // Date/Time: {{Date(key)}}
 }

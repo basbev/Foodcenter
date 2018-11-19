@@ -33,7 +33,7 @@
             </tbody>
     </table>
     <p>ผู้สั่ง : {{this.users}}</p>
-    <p>ร้านค้า : {{this.SelectShops.name}}</p>
+    <p>ร้านค้า : {{this.SelectShops}}</p>
     <hr>
     <div :key="key" v-for="(shop, key) in shops"> จำนวนคิว ณ ขณะนี้ {{shop.q}}
     <p><button v-show="products.length" class='button is-primary' @click='checkout'>เช็คราคา</button></p><br>
@@ -86,22 +86,22 @@ export default {
         let record = {
           amount: products[i].quantity
         }
-        foodcenterRef.child('order').child(this.SelectShops.name).child(this.date).child(this.users).push(data)
-        const dbRefObject2 = foodcenterRef.child('record').child(this.SelectShops.name).child(products[i].name)
-        dbRefObject2.once('value', snap => {
+        foodcenterRef.child('order').child(this.SelectShops).child(this.date).child(this.users).push(data)
+        const dbRefObject2 = foodcenterRef.child('record').child(this.SelectShops).child(products[i].name)
+        dbRefObject2.on('value', snap => {
           this.search = snap.val()
           console.log(this.search)
         })
         if (this.search === null) {
-          foodcenterRef.child('record').child(this.SelectShops.name).child(products[i].name).set(record)
+          foodcenterRef.child('record').child(this.SelectShops).child(products[i].name).set(record)
         } else {
           console.log(this.search)
           this.updateCount = this.search.amount + products[i].quantity
-          foodcenterRef.child('record').child(this.SelectShops.name).child(products[i].name).child('amount').set(this.updateCount)
+          foodcenterRef.child('record').child(this.SelectShops).child(products[i].name).child('amount').set(this.updateCount)
         }
       }
       this.updateQ = q
-      foodcenterRef.child('detail').child(this.SelectShops.name).child(key).update({
+      foodcenterRef.child('detail').child(this.SelectShops).child(key).update({
         q: this.updateQ + 1
       })
       this.$store.dispatch('CartCle')
@@ -114,7 +114,7 @@ export default {
     })
   },
   mounted () {
-    const dbRefObject = foodcenterRef.child('detail').child(this.SelectShops.name)
+    const dbRefObject = foodcenterRef.child('detail').child(this.SelectShops)
     dbRefObject.on('value', snap => {
       this.shops = snap.val()
       console.log(this.shops)

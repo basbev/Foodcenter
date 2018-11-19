@@ -35,7 +35,7 @@
      <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</hk></h1>
         <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, keys, key)">Update</button>
         <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(keys)">Delete</button>
-        <button @click="SelectShop(detail.name)" class="button button3">Select</button>
+        <button @click="SelectShop(keys)" class="button button3">Select</button>
         </div>
         </div>
       </div>
@@ -109,7 +109,7 @@ export default {
       foodcenterRef.child('detail').child(keys).remove()
     },
     SelectShop (name) {
-      this.$store.dispatch('selectShop', {name})
+      this.$store.dispatch('selectShop', name)
         .then(
           user => {
             this.$router.push('/shop')
@@ -134,11 +134,9 @@ export default {
     })
   },
   computed: {
-    selectShop () {
-      return this.$store.getters.selectShop
-    },
     ...mapGetters({
-      permission: 'permission'
+      permission: 'permission',
+      selectShop: 'selectShop'
     })
   }
 }

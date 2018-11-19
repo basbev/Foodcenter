@@ -18,7 +18,7 @@
           </div>
           <div class="column is-9">
             <div class="content is-medium">
-          <h3 class="title is-3">ร้าน&nbsp; {{ this.selectShop.name }} </h3>
+          <h3 class="title is-3">ร้าน&nbsp; {{ this.selectShop }} </h3>
           <img src="/static/hot.png" width="130" height="100" ><div :key="key" v-for="(record, key) in records">
           <h3>&nbsp;&nbsp;{{key}}</h3>
           </div>
@@ -212,7 +212,7 @@ export default {
         foodname: foodname,
         foodprice: foodprice
       }
-      foodcenterRef.child('menu').child(this.selectShop.name).push(data)
+      foodcenterRef.child('menu').child(this.selectShop).push(data)
       this.foodname = ''
       this.foodprice = ''
     },
@@ -222,7 +222,7 @@ export default {
         foodprice: foodprice,
         foodpic: foodpic
       }
-      foodcenterRef.child('menushow').child(this.selectShop.name).push(data)
+      foodcenterRef.child('menushow').child(this.selectShop).push(data)
       this.foodname = ''
       this.foodprice = ''
       this.foodpic = ''
@@ -233,7 +233,7 @@ export default {
         scorce: scorce,
         namere: this.user
       }
-      foodcenterRef.child('review').child(this.selectShop.name).push(data)
+      foodcenterRef.child('review').child(this.selectShop).push(data)
       this.view = ''
       this.scorce = ''
       this.namere = ''
@@ -242,7 +242,7 @@ export default {
       let data = {
         prodetail: prodetail
       }
-      foodcenterRef.child('promo').child(this.selectShop.name).push(data)
+      foodcenterRef.child('promo').child(this.selectShop).push(data)
       this.prodetail = ''
     },
     Cart (foodname, foodprice, key) {
@@ -256,7 +256,7 @@ export default {
       this.updatefoodpic = foodpic
     },
     UpdateMenuShow (key, foodname, foodprice, foodpic) {
-      foodcenterRef.child('menushow').child(this.selectShop.name).child(key).update({
+      foodcenterRef.child('menushow').child(this.selectShop).child(key).update({
         foodname: foodname,
         foodprice: foodprice,
         foodpic: foodpic
@@ -271,7 +271,7 @@ export default {
       this.updateProdetail = prodetail
     },
     UpdatePromo (key, prodetail) {
-      foodcenterRef.child('promo').child(this.selectShop.name).child(key).update({
+      foodcenterRef.child('promo').child(this.selectShop).child(key).update({
         prodetail: prodetail
       })
       this.updateKey = ''
@@ -283,7 +283,7 @@ export default {
       this.updateMenuprice = menuprice
     },
     UpdateMenu (key, updateMenufood, updateMenuprice) {
-      foodcenterRef.child('menu').child(this.selectShop.name).child(key).update({
+      foodcenterRef.child('menu').child(this.selectShop).child(key).update({
         foodname: updateMenufood,
         foodprice: updateMenuprice
       })
@@ -292,16 +292,16 @@ export default {
       this.updateMenuprice = ''
     },
     DelReview (key) {
-      foodcenterRef.child('review').child(this.selectShop.name).child(key).remove()
+      foodcenterRef.child('review').child(this.selectShop).child(key).remove()
     },
     DelPromo (key) {
-      foodcenterRef.child('promo').child(this.selectShop.name).child(key).remove()
+      foodcenterRef.child('promo').child(this.selectShop).child(key).remove()
     },
     DeleteMenu (key) {
-      foodcenterRef.child('menu').child(this.selectShop.name).child(key).remove()
+      foodcenterRef.child('menu').child(this.selectShop).child(key).remove()
     },
     DeleteMenushow (key) {
-      foodcenterRef.child('menushow').child(this.selectShop.name).child(key).remove()
+      foodcenterRef.child('menushow').child(this.selectShop).child(key).remove()
     }
   },
   computed: {
@@ -326,11 +326,11 @@ export default {
     })
   },
   mounted () {
-    const dbRefObject = foodcenterRef.child('menu').child(this.selectShop.name)
-    const dbRefObjectshow = foodcenterRef.child('menushow').child(this.selectShop.name)
-    const dbRefObjectreview = foodcenterRef.child('review').child(this.selectShop.name)
-    const dbRefObjectMenuhit = foodcenterRef.child('record').child(this.selectShop.name)
-    const dbRefObjectpromo = foodcenterRef.child('promo').child(this.selectShop.name)
+    const dbRefObject = foodcenterRef.child('menu').child(this.selectShop)
+    const dbRefObjectshow = foodcenterRef.child('menushow').child(this.selectShop)
+    const dbRefObjectreview = foodcenterRef.child('review').child(this.selectShop)
+    const dbRefObjectMenuhit = foodcenterRef.child('record').child(this.selectShop)
+    const dbRefObjectpromo = foodcenterRef.child('promo').child(this.selectShop)
     dbRefObject.on('value', snap => {
       this.menus = snap.val()
       console.log(this.menus)
