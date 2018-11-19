@@ -18,7 +18,17 @@
           </div>
           <div class="column is-9">
             <div class="content is-medium">
-          <h3 class="title is-3">ร้าน&nbsp; {{ this.selectShop }} </h3>
+              <div v-for="(detail, key) in detail" :key="key">
+                 <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}&nbsp; เบอร์&nbsp; {{ detail.tel }}&nbsp; สถานะ&nbsp; {{ detail.status }} </h3>
+                 <button class="button button3" @click="setprofile(key, detail.name, detail.tel, detail.status)">เเก้ไขโปรไฟล์</button>
+                 <div v-if="updateKey === key">
+                   <input type="text" v-model="updateName" placeholder="ชื่อร้าน">
+                   <input type="text" v-model="updatePhone" placeholder="เบอร์โทร">
+                   <input type="text" v-model="updateStatus" placeholder="สถานะ">
+                   <button class="button button2" @click="updateprofile(key, updateName, updatePhone, updateStatus)">บันทึกโปรไฟล์</button>
+                 </div>
+                </div>
+                <br>
           <img src="/static/hot.png" width="130" height="100" ><div :key="key" v-for="(record, key) in records">
           <h3>&nbsp;&nbsp;{{key}}</h3>
           </div>
@@ -201,7 +211,11 @@ export default {
       promo: '',
       prodetail: '',
       updateProdetail: '',
-      records: ''
+      records: '',
+      detail: '',
+      updateName: '',
+      updatePhone: '',
+      updateStatus: ''
     }
   },
   created () {
@@ -282,6 +296,23 @@ export default {
       this.updateMenufood = menufood
       this.updateMenuprice = menuprice
     },
+    setprofile (key, name, phone, status) {
+      this.updateKey = key
+      this.updateName = name
+      this.updatePhone = phone
+      this.updateStatus = status
+    },
+    updateprofile (key, name, phone, status) {
+      foodcenterRef.child('detail').child(this.selectShop).child(key).update({
+        name: name,
+        tel: phone,
+        status: status
+      })
+      this.updateKey = ''
+      this.updateName = ''
+      this.updatePhone = ''
+      this.updateStatus = ''
+    },
     UpdateMenu (key, updateMenufood, updateMenuprice) {
       foodcenterRef.child('menu').child(this.selectShop).child(key).update({
         foodname: updateMenufood,
@@ -326,6 +357,7 @@ export default {
     })
   },
   mounted () {
+    const dbRefObjectdetail = foodcenterRef.child('detail').child(this.selectShop)
     const dbRefObject = foodcenterRef.child('menu').child(this.selectShop)
     const dbRefObjectshow = foodcenterRef.child('menushow').child(this.selectShop)
     const dbRefObjectreview = foodcenterRef.child('review').child(this.selectShop)
@@ -350,6 +382,10 @@ export default {
     dbRefObjectpromo.on('value', snap => {
       this.promo = snap.val()
       console.log(this.promo)
+    })
+    dbRefObjectdetail.on('value', snap => {
+      this.detail = snap.val()
+      console.log(this.detail)
     })
   }
 }

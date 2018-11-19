@@ -30,7 +30,7 @@
       <div v-else>
         <div class="row">
           <div class="column">
-        <h1>&nbsp;&nbsp;{{detail.name}}</h1>
+        <h1>&nbsp;&nbsp;{{detail.name}} :: {{detail.status}}</h1>
     <h3>Tel:&nbsp;{{detail.tel}}</h3>
      <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</hk></h1>
         <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, keys, key)">Update</button>
@@ -85,7 +85,8 @@ export default {
       let data = {
         tel: tel,
         name: name,
-        q: 0
+        q: 0,
+        status: 'ปิดบริการ'
       }
       foodcenterRef.child('detail').child(this.name).push(data)
       this.tel = ''
