@@ -21,6 +21,14 @@
                 Home
               </span>
       </a>
+      <a v-if="permission === '3'" class="navbar-item" href="#/admin">
+        <span class="icon">
+                <i class="fas fa-home"></i>
+              </span>
+              <span>
+                Manage
+              </span>
+      </a>
     </div>
 
     <div class="navbar-end">
@@ -59,6 +67,7 @@
 </nav>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import firebase from 'firebase'
 import 'firebase/auth'
 var config = {
@@ -99,12 +108,11 @@ export default {
     }
   },
   computed: {
-    user () {
-      return this.$store.getters.user
-    },
-    isLoggedIn () {
-      return this.$store.getters.isLoggedIn
-    }
+    ...mapGetters({
+      permission: 'permission',
+      isLoggedIn: 'isLoggedIn',
+      user: 'user'
+    })
   }
 }
 </script>

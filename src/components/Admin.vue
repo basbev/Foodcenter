@@ -9,15 +9,33 @@
                   <i class="fas fa-info-circle"></i>
                 </span>
                 <div class="message-body">
-                  จำนวน Users:&nbsp;{{this.numberOfuser}}
+                  จำนวน Users:&nbsp;{{this.numberOfuser}} <br>
+                  Permission <br>
+                  1 ลูกค้า &nbsp;&nbsp;2 ร้านค้า &nbsp;&nbsp;3 ผู้ดูเเลระบบ
                 </div>
               </article>
               <div class="message-body">
                                     <div class="container">
                                       <div class="columns is-multiline">
- <div class="column is-5" :key="key" v-for="(user, key) in users">
+ <div class="column is-5" :key="keys" v-for="(user, keys) in users">
  <div :key="key" v-for="(user, key) in user">
-        <h1>Username:&nbsp;{{user.username}} Password:&nbsp;{{user.password}} Permiision:&nbsp;{{user.permission}}</h1>
+   <div v-if="updateKey === key">
+     <input type="text" v-model="user.username" placeholder="Username" disabled>
+     <input type="text" v-model="updatepassword" placeholder="password">
+     <input type="text" v-model="updatefirstname" placeholder="firstname">
+     <input type="text" v-model="updatelastname" placeholder="lastname">
+     <input type="text" v-model="updatephone" placeholder="phone">
+     <input type="text" v-model="updateaddress" placeholder="address">
+     <input type="text" v-model="updatepermission" placeholder="permission">
+     <button class="button button4" @click="updateUser(key, updatepassword, updatefirstname, updatelastname, updatephone, updateaddress, updatepermission, keys)">Save</button>
+   </div>
+   <div v-else>
+        <h1>Username:&nbsp;{{user.username}} Password:&nbsp;{{user.password}} firstname:&nbsp;{{user.firstname}}
+          lastname:&nbsp;{{user.lastname}} phone:&nbsp;{{user.phonenumber}} address:&nbsp;{{user.address}}
+          permission:&nbsp;{{user.permission}}
+        </h1>
+        <button class="button button4" @click="setUpdateUser(key, user.firstname, user.lastname, user.password, user.permission, user.phonenumber, user.address)">Update</button>
+   </div>
       </div>
       </div>
                           </div>
@@ -59,6 +77,8 @@
 
 <script>
 import * as firebase from 'firebase'
+var database = firebase.database()
+var userRef = database.ref('/user')
 export default {
   name: 'Admin',
   data: function () {
@@ -67,10 +87,44 @@ export default {
       shops: {},
       numberOfuser: 0,
       numberOfshop: 0,
-      search: ''
+      search: '',
+      updateKey: '',
+      updatefirstname: '',
+      updatelastname: '',
+      updatepassword: '',
+      updatepermission: '',
+      updatephone: '',
+      updateaddress: ''
     }
   },
   methods: {
+    setUpdateUser (key, firstname, lastname, password, permission, phone, address) {
+      this.updateKey = key
+      this.updatefirstname = firstname
+      this.updatelastname = lastname
+      this.updatepassword = password
+      this.updatepermission = permission
+      this.updatephone = phone
+      this.updateaddress = address
+    },
+    updateUser (key, updatepassword, updatefirstname, updatelastname, updatephone, updateaddress, updatepermission, keys) {
+      userRef.child(keys).child(key).update({
+        password: updatepassword,
+        firstname: updatefirstname,
+        lastname: updatelastname,
+        phonenumber: updatephone,
+        address: updateaddress,
+        permission: updatepermission
+      })
+      this.updateKey = ''
+      this.updatefirstname = ''
+      this.updatelastname = ''
+      this.updatepassword = ''
+      this.updatepermission = ''
+      this.updatephone = ''
+      this.updateaddress = ''
+      console.log(keys, key)
+    }
   },
   mounted () {
     const Refuser = firebase.database().ref().child('user')

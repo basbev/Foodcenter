@@ -86,6 +86,7 @@
       <input type="text" v-model="foodpic" placeholder="linkรูป">
       <button class="button button1" @click="insertmenushow(foodname, foodprice , foodpic)">เพิ่มเมนูแนะนำ</button>
               </div>
+              <div class="bucket" @click="isComponentModalActive = true">
         <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
           <div class="field is-grouped">
             <p class="control">
@@ -98,6 +99,7 @@
             </p>
           </div>
         </div>
+              </div>
     </div>
             <div class="box">
               <h4 id="let" class="title is-3">เมนูอาหารทั่วไป</h4>
@@ -138,18 +140,6 @@
       <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
       <button class="button button5" @click="insertmenu(foodname, foodprice)">เพิ่มเมนู</button>
             </div>
-        <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
-          <div class="field is-grouped">
-            <p class="control">
-              <router-link to='/cart' class="button button4">
-                <span class="icon">
-                  <i class="fa fa-shopping-cart"></i>
-                </span>
-                <span>สั่ง Order ({{itemsInCart}})</span>
-              </router-link>
-            </p>
-          </div>
-        </div>
     </div>
            <div class="box">
               <h4 id="let" class="title is-3">รีวิวจากลูกค้า</h4>
@@ -480,5 +470,11 @@ input[type=number], select {
 }
 div {
   font-family: 'Prompt', sans-serif;
+}
+.bucket {
+  position: fixed;
+  top: 45%;
+  right: 70%;
+  cursor: pointer;
 }
 </style>
