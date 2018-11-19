@@ -18,9 +18,34 @@
           </div>
           <div class="column is-9">
             <div class="content is-medium">
-          <h3 class="title is-3">ร้านอาหาร {{ this.selectShop.name }} </h3>
-          <div :key="key" v-for="(record, key) in records">
-          เมนูขายดี ** {{key}}
+          <h3 class="title is-3">ร้าน&nbsp; {{ this.selectShop.name }} </h3>
+          <img src="/static/hot.png" width="130" height="100" ><div :key="key" v-for="(record, key) in records">
+          <h3>&nbsp;&nbsp;{{key}}</h3>
+          </div>
+          <div class="box">
+              <article class="message is-primary">
+                <span class="icon has-text-primary">
+                  <i class="fas fa-info-circle"></i>
+                </span>
+                <div class="message-body">
+<img src="/static/pro.png" width="130" height="100" >
+                   <div class="row" :key="key" v-for="(promo, key) in promo">
+                      <h4>&nbsp; {{promo.prodetail}} </h4>
+                       <button v-if="permission === '3'" class="button button5" @click="DelPromo(key)">ลบ</button>
+                        <button v-if="permission === '3'" @click="SetUpdatePromo(key, promo.prodetail)" class="button button3">เเก้ไขโปรโมชั่น</button>
+                    <hr>
+                    <div v-if="updateKey === key">
+        <input type="text" v-model="updateprodetail" placeholder="รายละเอียดโปร">
+        <button @click="UpdatePromo(key, updateprodetail)" class="button button2">บันทึกโปรโมชั่น</button>
+        <hr>
+      </div>
+                          </div>
+                </div>
+              </article>
+              <div v-if="permission === '3'">
+                <input type="text" v-model="prodetail" placeholder="รายละเอียดโปรโมชั่น" size="30">
+      <button class="button button2" @click="insertpromo(prodetail)">เพิ่มโปรโมชั่น</button>
+              </div>
           </div>
               <div class="box">
                 <h4 id="const" class="title is-3">เมนูอาหารเเนะนำ</h4>
@@ -183,6 +208,9 @@ export default {
       updatefoodpic: '',
       updateMenufood: '',
       updateMenuprice: '',
+      promo: '',
+      prodetail: '',
+      updateProdetail: '',
       records: ''
     }
   },
@@ -220,6 +248,13 @@ export default {
       this.scorce = ''
       this.namere = ''
     },
+    insertpromo (prodetail) {
+      let data = {
+        prodetail: prodetail
+      }
+      foodcenterRef.child('promo').child(this.selectShop.name).push(data)
+      this.prodetail = ''
+    },
     Cart (foodname, foodprice, key) {
       console.log(foodname, foodprice, key)
       this.$store.dispatch('AddCart', {foodname, foodprice, key})
@@ -241,6 +276,17 @@ export default {
       this.foodprice = ''
       this.foodpic = ''
     },
+    SetUpdatePromo (key, prodetail) {
+      this.updateKey = key
+      this.updateProdetail = prodetail
+    },
+    UpdatePromo (key, prodetail) {
+      foodcenterRef.child('promo').child(this.selectShop.name).child(key).update({
+        prodetail: prodetail
+      })
+      this.updateKey = ''
+      this.prodetail = ''
+    },
     SetUpdateMenu (key, menufood, menuprice) {
       this.updateKey = key
       this.updateMenufood = menufood
@@ -257,6 +303,9 @@ export default {
     },
     DelReview (key) {
       foodcenterRef.child('review').child(this.selectShop.name).child(key).remove()
+    },
+    DelPromo (key) {
+      foodcenterRef.child('promo').child(this.selectShop.name).child(key).remove()
     },
     DeleteMenu (key) {
       foodcenterRef.child('menu').child(this.selectShop.name).child(key).remove()
@@ -291,6 +340,7 @@ export default {
     const dbRefObjectshow = foodcenterRef.child('menushow').child(this.selectShop.name)
     const dbRefObjectreview = foodcenterRef.child('review').child(this.selectShop.name)
     const dbRefObjectMenuhit = foodcenterRef.child('record').child(this.selectShop.name)
+    const dbRefObjectpromo = foodcenterRef.child('promo').child(this.selectShop.name)
     dbRefObject.on('value', snap => {
       this.menus = snap.val()
       console.log(this.menus)
@@ -306,6 +356,10 @@ export default {
     dbRefObjectMenuhit.orderByChild('amount').limitToLast(3).on('value', snap => {
       this.records = snap.val()
       console.log(this.records)
+    })
+    dbRefObjectpromo.on('value', snap => {
+      this.promo = snap.val()
+      console.log(this.promo)
     })
   }
 }

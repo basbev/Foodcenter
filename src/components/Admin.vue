@@ -1,41 +1,51 @@
 <template>
     <div>
-      <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
-        <h1 class="title">All Foodcenter</h1>
-        <section class="hero is-info">
-      <div class="hero-body">
-        <div class="container">
-          <div class="card">
-            <div class="card-content">
-              <div class="content">
-                <div class="control has-icons-left has-icons-right search-field">
-                  <input class="input is-large" type="text" placeholder="" v-model="search" /><span class="icon is-medium is-left"><i class="fa fa-search"></i></span>
-                  <span class="icon is-medium is-right">
-                    <i class="delete is-medium clear-search" @click="clearSearchField()" v-if="search.length"></i>
-                  </span>
+      <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet"><br>
+        <h1 class="title">&nbsp;&nbsp;ข้อมูล User และร้านค้าใน Food Center</h1>
+      <div class="box">
+              <h4 id="let" class="title is-3">User</h4>
+              <article class="message is-primary">
+                <span class="icon has-text-primary">
+                  <i class="fas fa-info-circle"></i>
+                </span>
+                <div class="message-body">
+                  จำนวน Users:&nbsp;{{this.numberOfuser}}
                 </div>
-              </div>
-            </div>
+              </article>
+              <div class="message-body">
+                                    <div class="container">
+                                      <div class="columns is-multiline">
+ <div class="column is-5" :key="key" v-for="(user, key) in users">
+ <div :key="key" v-for="(user, key) in user">
+        <h1>Username:&nbsp;{{user.username}} Password:&nbsp;{{user.password}} Permiision:&nbsp;{{user.permission}}</h1>
+      </div>
+      </div>
+                          </div>
+                </div>
+                </div>
           </div>
+          <div class="box">
+              <h4 id="let" class="title is-3">ร้านอาหาร</h4>
+              <article class="message is-primary">
+                <span class="icon has-text-primary">
+                  <i class="fas fa-info-circle"></i>
+                </span>
+                <div class="message-body">
+                  จำนวนร้านค้า:&nbsp;{{this.numberOfshop}}
+                </div>
+              </article>
+              <div class="message-body">
+                                    <div class="container">
+                  <div class="columns is-multiline">
+                                    <div class="column is-5" :key="key" v-for="(shop, key) in shops">
+                       <div :key="key" v-for="(shop, key) in shop">
+        <h1>ชื่อร้าน:&nbsp;{{shop.name}} เบอร์:&nbsp;{{shop.tel}} จำนวนคิว:&nbsp;{{shop.q}}</h1>
+      </div>
         </div>
-      </div>
-    </section>
-    <div>
-      <p>จำนวน Users: {{this.numberOfuser}}</p>
-      <div :key="key" v-for="(user, key) in users">
-      <div :key="key" v-for="(user, key) in user">
-        <h1>Username: {{user.username}} Password: {{user.password}} Permiision: {{user.permission}}</h1>
-      </div>
-      </div>
-    </div>
-    <div>
-      <p>จำนวนร้านค้า: {{this.numberOfshop}}</p>
-      <div :key="key" v-for="(shop, key) in shops">
-        <div :key="key" v-for="(shop, key) in shop">
-        <h1>shop: {{shop.name}} tel: {{shop.tel}} q: {{shop.q}}</h1>
-      </div>
-      </div>
-      </div>
+                                    </div>
+                          </div>
+                </div>
+          </div>
       <section class="container cards-container">
         <div :key="key" v-for="(shop, key) in shops">
       <div :key="key" class="column is-narrow" v-for="(shop, key ) in filteredshop">
