@@ -52,12 +52,22 @@
                   จำนวนร้านค้า:&nbsp;{{this.numberOfshop}}
                 </div>
               </article>
-              <div class="message-body">
-                                    <div class="container">
-                  <div class="columns is-multiline">
-                                    <div class="column is-5" :key="key" v-for="(shop, key) in shops">
-                       <div :key="key" v-for="(shop, key) in shop">
-        <h1>ชื่อร้าน:&nbsp;{{shop.name}} เบอร์:&nbsp;{{shop.tel}} จำนวนคิว:&nbsp;{{shop.q}}</h1>
+  <div class="message-body">
+    <div class="container">
+      <div class="columns is-multiline">
+        <div class="column is-5" :key="keys" v-for="(shop, keys) in shops">
+          <div :key="key" v-for="(shop, key) in shop">
+            <div v-if="updateKey === key">
+      <input type="text" v-model="updateName" placeholder="Name">
+     <input type="text" v-model="updateTel" placeholder="Phonenumber">
+     <input type="text" v-model="updateQ" placeholder="Q">
+     <input type="text" v-model="updateStatus" placeholder="Status">
+     <button class="button button4" @click="updateShop(keys, key, updateName, updateTel, updateQ, updateStatus)">Save</button>
+              </div>
+                <div v-else>
+                  <h1>ชื่อร้าน:&nbsp;{{shop.name}} เบอร์:&nbsp;{{shop.tel}} จำนวนคิว:&nbsp;{{shop.q}} สถานะ:&nbsp;{{shop.status}}</h1>
+                  <button class="button button4" @click="setUpdateshop(key, shop.name, shop.tel, shop.q, shop.status)">Update</button>
+                    </div>
       </div>
         </div>
                                     </div>
@@ -79,6 +89,7 @@
 import * as firebase from 'firebase'
 var database = firebase.database()
 var userRef = database.ref('/user')
+var shopRef = database.ref('/foodcenter').child('detail')
 export default {
   name: 'Admin',
   data: function () {
@@ -94,7 +105,11 @@ export default {
       updatepassword: '',
       updatepermission: '',
       updatephone: '',
-      updateaddress: ''
+      updateaddress: '',
+      updateName: '',
+      updateTel: '',
+      updateQ: '',
+      updateStatus: ''
     }
   },
   methods: {
@@ -106,6 +121,13 @@ export default {
       this.updatepermission = permission
       this.updatephone = phone
       this.updateaddress = address
+    },
+    setUpdateshop (key, name, tel, q, status) {
+      this.updateKey = key
+      this.updateName = name
+      this.updateTel = tel
+      this.updateQ = q
+      this.updateStatus = status
     },
     updateUser (key, updatepassword, updatefirstname, updatelastname, updatephone, updateaddress, updatepermission, keys) {
       userRef.child(keys).child(key).update({
@@ -124,6 +146,19 @@ export default {
       this.updatephone = ''
       this.updateaddress = ''
       console.log(keys, key)
+    },
+    updateShop (keys, key, name, tel, q, Status) {
+      shopRef.child(keys).child(key).update({
+        name: name,
+        q: q,
+        status: Status,
+        tel: tel
+      })
+      this.updateKey = ''
+      this.updateName = ''
+      this.updateTel = ''
+      this.updateQ = ''
+      this.updateStatus = ''
     }
   },
   mounted () {
