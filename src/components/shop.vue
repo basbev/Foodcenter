@@ -36,8 +36,8 @@
                       <h3>ราคา:&nbsp;{{menushow.foodprice}}&nbsp;บาท</h3>
                       <img v-bind:src="menushow.foodpic" width="300" height="350"><br>
                       <button @click="Cart(menushow.foodname, menushow.foodprice, key)" class="button button3">เพิ่มลง Order</button>
-                      <button @click="SetUpdateMenuShow(key, menushow.foodname, menushow.foodprice, menushow.foodpic)" class="button button3">เเก้ไขเมนูเเนะนำ</button>
-                      <button class="button button3" @click="DeleteMenushow(key)">ลบ</button>
+                      <button v-if="permission === '3'" @click="SetUpdateMenuShow(key, menushow.foodname, menushow.foodprice, menushow.foodpic)" class="button button3">เเก้ไขเมนูเเนะนำ</button>
+                      <button v-if="permission === '3'" class="button button3" @click="DeleteMenushow(key)">ลบ</button>
                     <hr>
                     <div v-if="updateKey === key">
         <input type="text" v-model="updatefoodname" placeholder="ชื่อ">
@@ -55,10 +55,12 @@
                 </article>
             </div>
             <div>
+              <div v-if="permission === '3'">
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
       <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
       <input type="text" v-model="foodpic" placeholder="linkรูป">
       <button class="button button1" @click="insertmenushow(foodname, foodprice , foodpic)">เพิ่มเมนูแนะนำ</button>
+              </div>
         <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
           <div class="field is-grouped">
             <p class="control">
@@ -89,8 +91,8 @@
                           <h3>ชื่อเมนู:&nbsp;{{menu.foodname}}</h3>
                       <h3>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h3>
                       <button @click="Cart(menu.foodname, menu.foodprice, key)" class="button button3">เพิ่มลง Order</button>
-                      <button @click="SetUpdateMenu(key, menu.foodname, menu.foodprice)" class="button button3">เเก้ไขเมนูอาหาร</button>
-                      <button @click="DeleteMenu(key)" class="button button3">ลบ</button>
+                      <button v-if="permission === '3'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice)" class="button button3">เเก้ไขเมนูอาหาร</button>
+                      <button v-if="permission === '3'" @click="DeleteMenu(key)" class="button button3">ลบ</button>
                       <hr>
                                       <div v-if="updateKey === key">
         <input type="text" v-model="updateMenufood" placeholder="ชื่อเมนู">
@@ -106,9 +108,11 @@
                 </div>
           </div>
           <div>
+            <div v-if="permission === '3'">
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
       <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
       <button class="button button5" @click="insertmenu(foodname, foodprice)">เพิ่มเมนู</button>
+            </div>
         <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
           <div class="field is-grouped">
             <p class="control">
@@ -156,6 +160,7 @@
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import * as firebase from 'firebase'
 var database = firebase.database()
 var foodcenterRef = database.ref('/foodcenter')
@@ -276,7 +281,10 @@ export default {
     },
     user () {
       return this.$store.getters.user
-    }
+    },
+    ...mapGetters({
+      permission: 'permission'
+    })
   },
   mounted () {
     const dbRefObject = foodcenterRef.child('menu').child(this.selectShop.name)

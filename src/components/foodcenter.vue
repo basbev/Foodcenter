@@ -2,7 +2,7 @@
   <div class='hello'>
     <center><link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
     <img src = "/static/logo1.png" width="300">
-    <div>
+    <div v-if="permission === '3'">
       <input type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
       <input type="text" v-model="tel" placeholder="เบอร์">
       <button class="button button7" @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import * as firebase from 'firebase'
 var database = firebase.database()
 var foodcenterRef = database.ref('/foodcenter')
@@ -135,7 +136,10 @@ export default {
   computed: {
     selectShop () {
       return this.$store.getters.selectShop
-    }
+    },
+    ...mapGetters({
+      permission: 'permission'
+    })
   }
 }
 // <div :key="key" v-for="(order, key) in orders" v-if="key === detail.name">
