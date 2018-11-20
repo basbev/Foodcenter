@@ -38,7 +38,7 @@
     <div :key="key" v-for="(shop, key) in shops"> จำนวนคิว ณ ขณะนี้ {{shop.q}}
     <p><button v-show="products.length" class='button is-primary' @click='checkout'>เช็คราคา</button></p><br>
     <p><router-link to="/shop"><button v-show="products.length" class='button is-primary'>กลับไปเลือกเมนู</button></router-link></p><br>
-    <p><button v-show="products.length" class='button is-primary' @click="order(products, shop.q, key)">ยืนยัน</button></p>
+    <p><button v-show="products.length" class='button is-primary' @click="order(products, shop.q, key, CountQuantity, total, shop.countdoing)">ยืนยัน</button></p>
   </div>
   </div>
 </template>
@@ -55,7 +55,8 @@ export default {
       shops: {},
       updateQ: '',
       updateCount: '',
-      search: ''
+      search: '',
+      updateDoingcount: ''
     }
   },
   computed: {
@@ -79,7 +80,7 @@ export default {
     checkout () {
       alert('ราคาทั้งหมด ' + this.total + ' บาท' + ' จานทั้งหมด ' + this.CountQuantity + ' จาน')
     },
-    order (products, q, key, CountQuantity, total) {
+    order (products, q, key, CountQuantity, total, countdoing) {
       alert('สั่งOrderนี้เรียบร้อยแล้ว')
       for (var i = 0; i < products.length; i++) {
         let data = {
@@ -109,8 +110,10 @@ export default {
         }
       }
       this.updateQ = q
+      this.updateDoingcount = countdoing
       foodcenterRef.child('detail').child(this.SelectShops).child(key).update({
-        q: this.updateQ + 1
+        q: this.updateQ + 1,
+        countdoing: this.updateDoingcount + 1
       })
       this.$store.dispatch('CartCle')
       this.$router.push('/foodcenter')

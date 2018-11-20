@@ -7,29 +7,33 @@
       Order Id: {{key}}<br>
     </p>
     </header>
-    <div :key="key" v-for="(order, key) in order">
+    <div :key="keyy" v-for="(order, keyy) in order">
       <div class="card-content">
-      ผู้สั่ง: {{key}} <br>
+      ผู้สั่ง: {{keyy}} <br>
     </div>
       <div :key="key" v-for="(detail, key, index) in order">
   <div class="card-content">
     <div class="content">
       เมนูอาหาร: {{detail.name}} <br>
       ราคา: {{detail.price}} บาท <br>
-      จำนวน: {{detail.quantity}} จาน
+      จำนวน: {{detail.quantity}} จาน<br>
     </div>
   </div>
   <div v-if="index === detail.index">
-    รวมทั้งหมด: {{detail.CountQuantity}} จาน :: ราคาทั้งหมด: {{detail.total}}
-  </div>
+    <div class="card-content">
+    <div class="content">
+      รวมทั้งหมด: {{detail.CountQuantity}} จาน :: ราคาทั้งหมด: {{detail.total}} <br>
+      <button v-if="detail.doing === 'กำลังทำ'" @click="updatemenunow(keyy, keyShop2)" class="button button3">กำลังทำ</button>
+      <button v-if="detail.doing === 'เสร็จเเล้ว'" class="button button3">ทำเสร็จเเล้ว</button>
+    </div>
+    </div>
   </div>
   </div>
   <div :key="keys" v-for="(shop, keys) in shops">
   <footer class="card-footer">
-    <a href="#" class="card-footer-item">Save</a>
-    <a href="#" class="card-footer-item">Edit</a>
-    <button @click='OrderComp(key, keys, shop.q)' class="card-footer-item">Delete</button>
+    <button @click='OrderComp(key, keys, shop.q, shop.countdoing)' class="card-footer-item">Delete</button>
     </footer>
+    </div>
   </div>
    </div>
       </div>
@@ -48,16 +52,26 @@ export default {
       orders: [],
       datenow: new Date(),
       shops: [],
-      updateQ: ''
+      updateQ: '',
+      keyShop2: '',
+      updatecount: ''
     }
   },
   methods: {
-    OrderComp (key, keys, q) {
+    OrderComp (key, keys, q, c) {
       foodcenterRef.child('order').child(this.selectShop).child(key).remove()
       this.updateQ = q
+      this.updatecount = c
       foodcenterRef.child('detail').child(this.selectShop).child(keys).update({
-        q: this.updateQ - 1
+        q: this.updateQ - 1,
+        countdoing: this.updatecount + 1
       })
+    },
+    updatemenunow (name, keys) {
+      foodcenterRef.child('detail').child(this.selectShop).child(keys).update({
+        doing: name
+      })
+      foodcenterRef.child('order').child(this.selectShop)
     }
   },
   mounted () {
@@ -70,7 +84,13 @@ export default {
     const dbRefObject1 = foodcenterRef.child('detail').child(this.selectShop)
     dbRefObject1.on('value', snap => {
       this.shops = snap.val()
+      this.keyShop = snap.key
       console.log(this.shops)
+    })
+    const dbRefObject2 = foodcenterRef.child('detail').child(this.selectShop)
+    dbRefObject2.on('child_added', snap => {
+      this.keyShop2 = snap.key
+      console.log(this.keyShop2)
     })
   },
   computed: {
