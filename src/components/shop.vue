@@ -173,7 +173,7 @@
                 </div>
           </div>
           <div>
-            <div v-if="permission === '1'">
+            <div v-if="permission !== '1'">
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
        <select name="status" v-model="foodtype">
   <option value="ผัด">ผัด</option>
