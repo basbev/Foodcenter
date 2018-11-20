@@ -30,12 +30,13 @@
       <div v-else>
         <div class="row">
           <div class="column">
-        <h1>&nbsp;&nbsp;{{detail.name}} :: {{detail.status}}</h1>
-    <h3>Tel:&nbsp;{{detail.tel}}</h3>
+        <h1>&nbsp;&nbsp;{{detail.name}}&nbsp;&nbsp;<img v-bind:src="detail.status" width="70" height="55" ></h1>
+    <h3><img src="https://www.img.live/images/2018/11/20/img_352451.png" width="25" height="20">&nbsp;{{detail.tel}}</h3>
      <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</hk></h1>
+     <h1>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h1>
         <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, keys, key)">Update</button>
         <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(keys)">Delete</button>
-        <button @click="SelectShop(keys)" class="button button3">Select</button>
+        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png'" @click="SelectShop(keys)" class="button button3">Select</button>
         </div>
         </div>
       </div>

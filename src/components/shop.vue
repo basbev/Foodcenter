@@ -19,12 +19,15 @@
           <div class="column is-9">
             <div class="content is-medium">
               <div v-for="(detail, key) in detail" :key="key">
-                 <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}&nbsp; เบอร์&nbsp; {{ detail.tel }}&nbsp; สถานะ&nbsp; {{ detail.status }} </h3>
+                 <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}&nbsp; เบอร์&nbsp; {{ detail.tel }}&nbsp;<img v-bind:src="detail.status" width="80" height="60" ></h3>
                  <button v-if="permission !== '1'" class="button button3" @click="setprofile(key, detail.name, detail.tel, detail.status)">เเก้ไขโปรไฟล์</button>
                  <div v-if="updateKey === key">
                    <input type="text" v-model="updateName" placeholder="ชื่อร้าน">
                    <input type="text" v-model="updatePhone" placeholder="เบอร์โทร">
-                   <input type="text" v-model="updateStatus" placeholder="สถานะ">
+                    <select name="status" v-model="updateStatus">
+  <option value="https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png">เปิด</option>
+  <option value="https://www.img.live/images/2018/11/20/d57b23a07352f87d.png">ปิด</option>
+</select>
                    <button v-if="permission !== '1'" class="button button2" @click="updateprofile(key, updateName, updatePhone, updateStatus)">บันทึกโปรไฟล์</button>
                  </div>
                 </div>
@@ -70,16 +73,25 @@
                           <h3>ชื่อเมนู:&nbsp;{{menushow.foodname}}</h3>
                       <h3>ราคา:&nbsp;{{menushow.foodprice}}&nbsp;บาท</h3>
                       <img v-bind:src="menushow.foodpic" width="300" height="350"><br>
-                      <button @click="Cart(menushow.foodname, menushow.foodprice, key)" class="button button3">เพิ่มลง Order</button>
-                      <button v-if="permission !== '1'" @click="SetUpdateMenuShow(key, menushow.foodname, menushow.foodprice, menushow.foodpic)" class="button button3">เเก้ไขเมนูเเนะนำ</button>
-                      <button v-if="permission !== '1'" class="button button3" @click="DeleteMenushow(key)">ลบ</button>
+                      <button @click="Cart(menushow.foodname, menushow.foodprice, menushow.foodtype, key)" class="button button3">เพิ่มลง Order</button>
+                      <button v-if="permission !== '1'" @click="SetUpdateMenuShow(key, menushow.foodname, menushow.foodprice, menushow.foodpic, menushow.foodtype)" class="button button3">เเก้ไขเมนูเเนะนำ</button>
+                      <button v-if="permission!== '1'" class="button button3" @click="DeleteMenushow(key)">ลบ</button>
                     <hr>
                     <div v-if="updateKey === key">
         <input type="text" v-model="updatefoodname" placeholder="ชื่อ">
+         <select name="status" v-model="updatefoodtype">
+  <option value="ผัด">ผัด</option>
+  <option value="ทอด">ทอด</option>
+  <option value="ต้ม">ต้ม</option>
+  <option value="แกง">แกง</option>
+  <option value="นึ่ง">นึ่ง</option>
+  <option value="ย่าง">ย่าง</option>
+</select>
         <input type="text" v-model="updatefoodprice" placeholder="ราคา">
         <input type="text" v-model="updatefoodpic" placeholder="ลิ้งรูปภาพ">
-        <button @click="UpdateMenuShow(key, updatefoodname, updatefoodprice, updatefoodpic)" class="button button2">บันทึกเมนูเเนะนำ</button>
+        <button @click="UpdateMenuShow(key, updatefoodname, updatefoodprice, updatefoodpic, updatefoodtype)" class="button button2">บันทึกเมนูเเนะนำ</button>
         <hr>
+
       </div>
       <div v-else>
                   </div>
@@ -92,9 +104,17 @@
             <div>
               <div v-if="permission !== '1'">
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
+       <select name="status" v-model="foodtype">
+  <option value="ผัด">ผัด</option>
+  <option value="ทอด">ทอด</option>
+  <option value="ต้ม">ต้ม</option>
+  <option value="แกง">แกง</option>
+  <option value="นึ่ง">นึ่ง</option>
+  <option value="ย่าง">ย่าง</option>
+</select>
       <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
       <input type="text" v-model="foodpic" placeholder="linkรูป">
-      <button class="button button1" @click="insertmenushow(foodname, foodprice , foodpic)">เพิ่มเมนูแนะนำ</button>
+      <button class="button button1" @click="insertmenushow(foodname, foodprice , foodpic, foodtype)">เพิ่มเมนูแนะนำ</button>
               </div>
               <div class="bucket" @click="isComponentModalActive = true">
         <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
@@ -127,14 +147,22 @@
                                     <div class="column is-5" :key="key" v-for="(menu, key) in menus">
                           <h3>ชื่อเมนู:&nbsp;{{menu.foodname}}</h3>
                       <h3>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h3>
-                      <button @click="Cart(menu.foodname, menu.foodprice, key)" class="button button3">เพิ่มลง Order</button>
-                      <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice)" class="button button3">เเก้ไขเมนูอาหาร</button>
+                      <button @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, key)" class="button button3">เพิ่มลง Order</button>
+                      <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype)" class="button button3">เเก้ไขเมนูอาหาร</button>
                       <button v-if="permission !== '1'" @click="DeleteMenu(key)" class="button button3">ลบ</button>
                       <hr>
                                       <div v-if="updateKey === key">
         <input type="text" v-model="updateMenufood" placeholder="ชื่อเมนู">
+        <select name="status" v-model="updateMenutype">
+  <option value="ผัด">ผัด</option>
+  <option value="ทอด">ทอด</option>
+  <option value="ต้ม">ต้ม</option>
+  <option value="แกง">แกง</option>
+  <option value="นึ่ง">นึ่ง</option>
+  <option value="ย่าง">ย่าง</option>
+</select>
         <input type="text" v-model="updateMenuprice" placeholder="ราคา">
-        <button @click="UpdateMenu(key, updateMenufood, updateMenuprice)" class="button button2">บันทึกเมนูอาหาร</button>
+        <button @click="UpdateMenu(key, updateMenufood, updateMenuprice, updateMenutype)" class="button button2">บันทึกเมนูอาหาร</button>
         <hr>
       </div>
       <div v-else>
@@ -145,10 +173,18 @@
                 </div>
           </div>
           <div>
-            <div v-if="permission !== '1'">
+            <div v-if="permission === '1'">
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
+       <select name="status" v-model="foodtype">
+  <option value="ผัด">ผัด</option>
+  <option value="ทอด">ทอด</option>
+  <option value="ต้ม">ต้ม</option>
+  <option value="แกง">แกง</option>
+  <option value="นึ่ง">นึ่ง</option>
+  <option value="ย่าง">ย่าง</option>
+</select>
       <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
-      <button class="button button5" @click="insertmenu(foodname, foodprice)">เพิ่มเมนู</button>
+      <button class="button button5" @click="insertmenu(foodname, foodprice, foodtype)">เพิ่มเมนู</button>
             </div>
     </div>
            <div class="box">
@@ -196,6 +232,7 @@ export default {
       foodname: '',
       foodprice: '',
       foodpic: '',
+      foodtype: '',
       menu: '',
       menushow: '',
       review: '',
@@ -204,10 +241,12 @@ export default {
       view: '',
       updateKey: '',
       updatefoodname: '',
+      updatefoodtype: '',
       updatefoodprice: '',
       updatefoodpic: '',
       updateMenufood: '',
       updateMenuprice: '',
+      updateMenutype: '',
       promo: '',
       prodetail: '',
       updateProdetail: '',
@@ -221,25 +260,29 @@ export default {
   created () {
   },
   methods: {
-    insertmenu (foodname, foodprice) {
+    insertmenu (foodname, foodprice, foodtype) {
       let data = {
         foodname: foodname,
+        foodtype: foodtype,
         foodprice: foodprice
       }
       foodcenterRef.child('menu').child(this.selectShop).push(data)
       this.foodname = ''
       this.foodprice = ''
+      this.foodtype = ''
     },
-    insertmenushow (foodname, foodprice, foodpic) {
+    insertmenushow (foodname, foodprice, foodpic, foodtype) {
       let data = {
         foodname: foodname,
         foodprice: foodprice,
+        foodtype: foodtype,
         foodpic: foodpic
       }
       foodcenterRef.child('menushow').child(this.selectShop).push(data)
       this.foodname = ''
       this.foodprice = ''
       this.foodpic = ''
+      this.foodtype = ''
     },
     insertreview (view, scorce) {
       let data = {
@@ -263,22 +306,25 @@ export default {
       console.log(foodname, foodprice, key)
       this.$store.dispatch('AddCart', {foodname, foodprice, key})
     },
-    SetUpdateMenuShow (key, foodname, foodprice, foodpic) {
+    SetUpdateMenuShow (key, foodname, foodprice, foodpic, foodtype) {
       this.updateKey = key
       this.updatefoodname = foodname
       this.updatefoodprice = foodprice
       this.updatefoodpic = foodpic
+      this.updatefoodtype = foodtype
     },
-    UpdateMenuShow (key, foodname, foodprice, foodpic) {
+    UpdateMenuShow (key, foodname, foodprice, foodpic, foodtype) {
       foodcenterRef.child('menushow').child(this.selectShop).child(key).update({
         foodname: foodname,
         foodprice: foodprice,
-        foodpic: foodpic
+        foodpic: foodpic,
+        foodtype: foodtype
       })
       this.updateKey = ''
       this.foodname = ''
       this.foodprice = ''
       this.foodpic = ''
+      this.foodtype = ''
     },
     SetUpdatePromo (key, prodetail) {
       this.updateKey = key
@@ -291,10 +337,11 @@ export default {
       this.updateKey = ''
       this.prodetail = ''
     },
-    SetUpdateMenu (key, menufood, menuprice) {
+    SetUpdateMenu (key, menufood, menuprice, menutype) {
       this.updateKey = key
       this.updateMenufood = menufood
       this.updateMenuprice = menuprice
+      this.updateMenutype = menutype
     },
     setprofile (key, name, phone, status) {
       this.updateKey = key
@@ -313,14 +360,16 @@ export default {
       this.updatePhone = ''
       this.updateStatus = ''
     },
-    UpdateMenu (key, updateMenufood, updateMenuprice) {
+    UpdateMenu (key, updateMenufood, updateMenuprice, updateMenutype) {
       foodcenterRef.child('menu').child(this.selectShop).child(key).update({
         foodname: updateMenufood,
+        foodtype: updateMenutype,
         foodprice: updateMenuprice
       })
       this.updateKey = ''
       this.updateMenufood = ''
       this.updateMenuprice = ''
+      this.updateMenutype = ''
     },
     DelReview (key) {
       foodcenterRef.child('review').child(this.selectShop).child(key).remove()
