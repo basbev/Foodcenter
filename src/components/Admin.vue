@@ -75,12 +75,15 @@
                 </div>
           </div>
       <section class="container cards-container">
+        <input type="text" v-model="search" placeholder="search">
         <div :key="key" v-for="(shop, key) in shops">
-      <div :key="key" class="column is-narrow" v-for="(shop, key ) in filteredshop">
+      <div :key="key" class="column is-narrow" v-for="(shop, key ) in shop">
+        <div :key="key" class="column is-narrow" v-for="(shop, key ) in filteredshop">
                 <!-- Loop through the `items` array from the current season to show each item -->
-                <span>{{ shops }}</span>
+                <span>{{ shop }}</span>
               </div>
-        </div>
+      </div>
+      </div>
     </section>
     </div>
 </template>
@@ -179,15 +182,9 @@ export default {
     })
   },
   computed: {
-    filteredshop (shop) {
-      var _this = this
-      if (this.search.length === 0) return this.shop
-      return this.shop.map(function (shop) {
-        return {
-          name: shop.name.filter(function (name) {
-            return name.includes(_this.search)
-          })
-        }
+    filteredshop: function (shop) {
+      return shop.filter(function (shop) {
+        return shop.name === this.search
       })
     }
   }

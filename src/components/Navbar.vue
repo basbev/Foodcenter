@@ -37,6 +37,14 @@
                 Manage
               </span>
       </a>
+      <a v-if="permission === '2'" class="navbar-item" href="#/shop">
+        <span class="icon">
+                <i class="fas fa-home"></i>
+              </span>
+              <span>
+                MyShop
+              </span>
+      </a>
     </div>
 
     <div class="navbar-end">

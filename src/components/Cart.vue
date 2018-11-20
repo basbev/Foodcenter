@@ -27,7 +27,7 @@
                 </tr>
                 <tr>
                   <td><b>ราคารวม:</b></td>
-                  <td></td>
+                  <td> {{CountQuantity}} จาน</td>
                   <td><b>{{ total }} บ.</b></td>
               </tr>
             </tbody>
@@ -68,20 +68,28 @@ export default {
       return this.products.reduce((total, p) => {
         return total + p.price * p.quantity
       }, 0)
+    },
+    CountQuantity () {
+      return this.products.reduce((CountQuantity, c) => {
+        return CountQuantity + c.quantity
+      }, 0)
     }
   },
   methods: {
     checkout () {
-      alert('ราคาทั้งหมด ' + this.total + ' บาท')
+      alert('ราคาทั้งหมด ' + this.total + ' บาท' + ' จานทั้งหมด ' + this.CountQuantity + ' จาน')
     },
-    order (products, q, key) {
+    order (products, q, key, CountQuantity, total) {
       alert('สั่งOrderนี้เรียบร้อยแล้ว')
       for (var i = 0; i < products.length; i++) {
         let data = {
           name: products[i].name,
           price: products[i].price,
           quantity: products[i].quantity,
-          customer: this.users
+          customer: this.users,
+          CountQuantity: this.CountQuantity,
+          total: this.total,
+          index: products.length - 1
         }
         let record = {
           amount: products[i].quantity

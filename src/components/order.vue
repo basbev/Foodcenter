@@ -19,7 +19,9 @@
       จำนวน: {{detail.quantity}} จาน
     </div>
   </div>
-  <div v-if="index === detail.quantity">{{index}} :: {{key}}</div>
+  <div v-if="index === detail.index">
+    รวมทั้งหมด: {{detail.CountQuantity}} จาน :: ราคาทั้งหมด: {{detail.total}}
+  </div>
   </div>
   </div>
   <div :key="keys" v-for="(shop, keys) in shops">
