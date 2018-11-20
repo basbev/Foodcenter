@@ -20,12 +20,12 @@
             <div class="content is-medium">
               <div v-for="(detail, key) in detail" :key="key">
                  <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}&nbsp; เบอร์&nbsp; {{ detail.tel }}&nbsp; สถานะ&nbsp; {{ detail.status }} </h3>
-                 <button class="button button3" @click="setprofile(key, detail.name, detail.tel, detail.status)">เเก้ไขโปรไฟล์</button>
+                 <button v-if="permission !== '1'" class="button button3" @click="setprofile(key, detail.name, detail.tel, detail.status)">เเก้ไขโปรไฟล์</button>
                  <div v-if="updateKey === key">
                    <input type="text" v-model="updateName" placeholder="ชื่อร้าน">
                    <input type="text" v-model="updatePhone" placeholder="เบอร์โทร">
                    <input type="text" v-model="updateStatus" placeholder="สถานะ">
-                   <button class="button button2" @click="updateprofile(key, updateName, updatePhone, updateStatus)">บันทึกโปรไฟล์</button>
+                   <button v-if="permission !== '1'" class="button button2" @click="updateprofile(key, updateName, updatePhone, updateStatus)">บันทึกโปรไฟล์</button>
                  </div>
                 </div>
                 <br>
@@ -41,8 +41,8 @@
 <img src="/static/pro.png" width="130" height="100" >
                    <div class="row" :key="key" v-for="(promo, key) in promo">
                       <h4>&nbsp; {{promo.prodetail}} </h4>
-                       <button v-if="permission === '3'" class="button button5" @click="DelPromo(key)">ลบ</button>
-                        <button v-if="permission === '3'" @click="SetUpdatePromo(key, promo.prodetail)" class="button button3">เเก้ไขโปรโมชั่น</button>
+                       <button v-if="permission !== '1'" class="button button5" @click="DelPromo(key)">ลบ</button>
+                        <button v-if="permission !== '1'" @click="SetUpdatePromo(key, promo.prodetail)" class="button button3">เเก้ไขโปรโมชั่น</button>
                     <hr>
                     <div v-if="updateKey === key">
         <input type="text" v-model="updateprodetail" placeholder="รายละเอียดโปร">
@@ -52,7 +52,7 @@
                           </div>
                 </div>
               </article>
-              <div v-if="permission === '3'">
+              <div v-if="permission !== '1'">
                 <input type="text" v-model="prodetail" placeholder="รายละเอียดโปรโมชั่น" size="30">
       <button class="button button2" @click="insertpromo(prodetail)">เพิ่มโปรโมชั่น</button>
               </div>
@@ -71,8 +71,8 @@
                       <h3>ราคา:&nbsp;{{menushow.foodprice}}&nbsp;บาท</h3>
                       <img v-bind:src="menushow.foodpic" width="300" height="350"><br>
                       <button @click="Cart(menushow.foodname, menushow.foodprice, key)" class="button button3">เพิ่มลง Order</button>
-                      <button v-if="permission === '3'" @click="SetUpdateMenuShow(key, menushow.foodname, menushow.foodprice, menushow.foodpic)" class="button button3">เเก้ไขเมนูเเนะนำ</button>
-                      <button v-if="permission === '3'" class="button button3" @click="DeleteMenushow(key)">ลบ</button>
+                      <button v-if="permission !== '1'" @click="SetUpdateMenuShow(key, menushow.foodname, menushow.foodprice, menushow.foodpic)" class="button button3">เเก้ไขเมนูเเนะนำ</button>
+                      <button v-if="permission !== '1'" class="button button3" @click="DeleteMenushow(key)">ลบ</button>
                     <hr>
                     <div v-if="updateKey === key">
         <input type="text" v-model="updatefoodname" placeholder="ชื่อ">
@@ -90,7 +90,7 @@
                 </article>
             </div>
             <div>
-              <div v-if="permission === '3'">
+              <div v-if="permission !== '1'">
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
       <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
       <input type="text" v-model="foodpic" placeholder="linkรูป">
@@ -128,8 +128,8 @@
                           <h3>ชื่อเมนู:&nbsp;{{menu.foodname}}</h3>
                       <h3>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h3>
                       <button @click="Cart(menu.foodname, menu.foodprice, key)" class="button button3">เพิ่มลง Order</button>
-                      <button v-if="permission === '3'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice)" class="button button3">เเก้ไขเมนูอาหาร</button>
-                      <button v-if="permission === '3'" @click="DeleteMenu(key)" class="button button3">ลบ</button>
+                      <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice)" class="button button3">เเก้ไขเมนูอาหาร</button>
+                      <button v-if="permission !== '1'" @click="DeleteMenu(key)" class="button button3">ลบ</button>
                       <hr>
                                       <div v-if="updateKey === key">
         <input type="text" v-model="updateMenufood" placeholder="ชื่อเมนู">
@@ -145,7 +145,7 @@
                 </div>
           </div>
           <div>
-            <div v-if="permission === '3'">
+            <div v-if="permission !== '1'">
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
       <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
       <button class="button button5" @click="insertmenu(foodname, foodprice)">เพิ่มเมนู</button>
