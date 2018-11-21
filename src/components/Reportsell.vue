@@ -1,7 +1,8 @@
 <template>
 <div class="report">
-  รายวัน
-        <button @click="getData(genFunction)">getData</button>
+  <h1>รายวัน</h1><br>
+    <button @click="exportPdf">exportPDF</button>
+        <button @click="getData(genFunction)">รายวัน</button>
     <div id="chart-container">
     </div>
 </div>
@@ -85,6 +86,9 @@ export default {
         }
       })
       firebaseChart.render()
+    },
+    exportPdf () {
+      window.print()
     }
   },
   mounted () {
