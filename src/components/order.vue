@@ -29,7 +29,7 @@
   </div>
   <div :key="keys" v-for="(shop, keys) in shops">
   <footer class="card-footer">
-    <button @click='OrderComp(key, keys, shop.q, shop.countdoing)' class="card-footer-item">Delete</button>
+    <button @click='OrderComp(key, keys, shop.q, shop.countdoing, order.order)' class="card-footer-item">Delete</button>
     </footer>
     </div>
   </div>
@@ -55,13 +55,14 @@ export default {
     }
   },
   methods: {
-    OrderComp (key, keys, q, c) {
-      foodcenterRef.child('order').child(this.selectShop).child(key).remove()
+    OrderComp (key, keys, q, c, order) {
+      // foodcenterRef.child('order').child(this.selectShop).child(key).remove()
       this.updateQ = q
       this.updatecount = c
       foodcenterRef.child('detail').child(this.selectShop).child(keys).update({
         q: this.updateQ - 1,
-        countdoing: this.updatecount + 1
+        countdoing: this.updatecount + 1,
+        count: order
       })
     },
     updatemenunow (name, keys) {
