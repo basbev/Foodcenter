@@ -15,7 +15,9 @@
       เมนูอาหาร: {{detail.name}} <br>
       ราคา: {{detail.price}} บาท <br>
       จำนวน: {{detail.quantity}} จาน<br>
-    </div>
+      เวลาคำนวณ : {{detail.minute}} นาที <br>
+      วันที่ : {{detail.date}}
+      </div>
   </div>
   <div v-if="index === detail.index">
     <div class="card-content">

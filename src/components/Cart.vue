@@ -37,10 +37,10 @@
     <p>ผู้สั่ง : {{this.users}}</p>
     <p>ร้านค้า : {{this.SelectShops}}</p>
     <hr>
-    <div :key="key" v-for="(shop, key) in shops"> จำนวนคิว ณ ขณะนี้ {{shop.q}}
+    <div :key="key" v-for="(shop, key) in shops"> จำนวนคิว ณ ขณะนี้ {{shop.q}} :: {{shop.SaveDate}}
     <p><button v-show="products.length" class='button is-primary' @click='checkout'>เช็คราคา</button></p><br>
     <p><router-link to="/shop"><button v-show="products.length" class='button is-primary'>กลับไปเลือกเมนู</button></router-link></p><br>
-    <p><button v-show="products.length" class='button is-primary' @click="order(products, shop.q, key, CountQuantity, total, shop.countdoing)">ยืนยัน</button></p>
+    <p><button v-show="products.length" class='button is-primary' @click="order(products, shop.q, key, CountQuantity, total, shop.countdoing, shop.SaveDate)">ยืนยัน</button></p>
   </div>
   </div>
 </template>
@@ -50,6 +50,7 @@ import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
 var database = firebase.database()
 var foodcenterRef = database.ref('/foodcenter')
+var moment = require('moment-timezone')
 export default {
   data () {
     return {
@@ -58,7 +59,8 @@ export default {
       updateQ: '',
       updateCount: '',
       search: '',
-      updateDoingcount: ''
+      updateDoingcount: '',
+      minutes: 0
     }
   },
   computed: {
@@ -82,9 +84,19 @@ export default {
     checkout () {
       alert('ราคาทั้งหมด ' + this.total + ' บาท' + ' จานทั้งหมด ' + this.CountQuantity + ' จาน')
     },
-    order (products, q, key, CountQuantity, total, countdoing) {
+    order (products, q, key, CountQuantity, total, countdoing, gettime) {
       alert('สั่งOrderนี้เรียบร้อยแล้ว')
       for (var i = 0; i < products.length; i++) {
+        let date = moment().tz('Asia/Bangkok').format()
+        let time = moment().tz('Asia/Bangkok').format().slice(0, 10)
+        let Addminute = ''
+        if (q === 0) {
+          this.minutes = this.minutes + 3
+          Addminute = moment().tz('Asia/Bangkok').add('minute', this.minutes).format().slice(11, 16)
+        } else {
+          this.minutes = this.minutes + 3
+          Addminute = moment(gettime).tz('Asia/Bangkok').add('minute', this.minutes).format().slice(11, 16)
+        }
         let data = {
           name: products[i].name,
           price: products[i].price,
@@ -92,7 +104,10 @@ export default {
           customer: this.users,
           CountQuantity: this.CountQuantity,
           total: this.total,
-          index: products.length - 1
+          index: products.length - 1,
+          date: date,
+          time: time,
+          minute: Addminute
         }
         let record = {
           amount: products[i].quantity
@@ -116,9 +131,16 @@ export default {
       foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('status').set('กำลังรอ')
       this.updateQ = q
       this.updateDoingcount = countdoing
+      let SaveDate = ''
+      if (q === 0) {
+        SaveDate = moment().tz('Asia/Bangkok').add('minute', this.minutes).format()
+      } else {
+        SaveDate = moment(gettime).tz('Asia/Bangkok').add('minute', this.minutes).format()
+      }
       foodcenterRef.child('detail').child(this.SelectShops).child(key).update({
         q: this.updateQ + 1,
-        countdoing: this.updateDoingcount + 1
+        countdoing: this.updateDoingcount + 1,
+        SaveDate: SaveDate
       })
       this.$store.dispatch('CartCle')
       this.$router.push('/foodcenter')
