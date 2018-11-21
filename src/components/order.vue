@@ -4,14 +4,12 @@
    <div class="card">
     <header class="card-header">
     <p class="card-header-title">
-      Order Id: {{key}}<br>
+      คิวที่: {{order.order}} <br>
+        ผู้ใช้: {{order.customer}} <br>
+        สถานะ: {{order.status}} <br>
     </p>
     </header>
-    <div :key="keyy" v-for="(order, keyy) in order">
-      <div class="card-content">
-      ผู้สั่ง: {{keyy}} <br>
-    </div>
-      <div :key="key" v-for="(detail, key, index) in order">
+    <div :key="keyy" v-for="(detail, keyy, index) in order.menu">
   <div class="card-content">
     <div class="content">
       เมนูอาหาร: {{detail.name}} <br>
@@ -37,7 +35,6 @@
   </div>
    </div>
       </div>
-  </div>
 </template>
 
 <script>

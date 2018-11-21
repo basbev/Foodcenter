@@ -11,6 +11,7 @@
             <td>ชื่อเมนู</td>
             <td>ราคา</td>
             <td>จำนวน</td>
+            <td>ประเภท</td>
             <td>เพิ่ม</td>
             <td>ลบ</td>
             <td>ยกเลิก</td>
@@ -21,6 +22,7 @@
                 <td>{{ p.name }}</td>
                 <td>{{ p.price }} บ.</td>
                 <td>{{ p.quantity }} จาน</td>
+                <td>{{ p.type }}</td>
                 <td><div @click="inclese(key)"><a class="delete"></a></div></td>
                 <td><div @click="declese(key)"><a class="delete"></a></div></td>
                 <td><div @click="remove(key)"><a class="delete"></a></div></td>
@@ -95,7 +97,7 @@ export default {
         let record = {
           amount: products[i].quantity
         }
-        foodcenterRef.child('order').child(this.SelectShops).child(this.date).child(this.users).push(data)
+        foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('menu').push(data)
         const dbRefObject2 = foodcenterRef.child('record').child(this.SelectShops).child(products[i].name)
         dbRefObject2.on('value', snap => {
           this.search = snap.val()
@@ -109,6 +111,9 @@ export default {
           foodcenterRef.child('record').child(this.SelectShops).child(products[i].name).child('amount').set(this.updateCount)
         }
       }
+      foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('customer').set(this.users)
+      foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('order').set(countdoing)
+      foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('status').set('กำลังรอ')
       this.updateQ = q
       this.updateDoingcount = countdoing
       foodcenterRef.child('detail').child(this.SelectShops).child(key).update({

@@ -22,7 +22,8 @@ const getters = {
       return {
         name: product.foodname,
         price: product.foodprice,
-        quantity
+        quantity,
+        type: product.type
       }
     })
   },
@@ -43,15 +44,16 @@ const mutations = {
   setselectShop: (state, shop) => {
     state.selectShop = shop
   },
-  ADD_TO_CART: (state, {Akey, foodname, foodprice}) => {
+  ADD_TO_CART: (state, {Akey, foodname, foodprice, type}) => {
     const record = state.added.find(p => p.Akey === Akey)
-    console.log(Akey, foodname, foodprice)
+    console.log(Akey, foodname, foodprice, type)
     if (!record) {
       state.added.push({
         Akey,
         foodname,
         foodprice,
-        quantity: 1
+        quantity: 1,
+        type
       })
     } else {
       record.quantity++
@@ -115,8 +117,9 @@ const actions = {
     const Akey = payload.key
     const foodname = payload.foodname
     const foodprice = payload.foodprice
-    console.log(Akey, foodname, foodprice)
-    commit('ADD_TO_CART', {Akey, foodname, foodprice})
+    const type = payload.type
+    console.log(Akey, foodname, foodprice, type)
+    commit('ADD_TO_CART', {Akey, foodname, foodprice, type})
   },
   CartCle ({commit}) {
     commit('DeleteCart')

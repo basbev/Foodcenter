@@ -302,9 +302,9 @@ export default {
       foodcenterRef.child('promo').child(this.selectShop).push(data)
       this.prodetail = ''
     },
-    Cart (foodname, foodprice, key) {
-      console.log(foodname, foodprice, key)
-      this.$store.dispatch('AddCart', {foodname, foodprice, key})
+    Cart (foodname, foodprice, type, key) {
+      console.log(foodname, foodprice, type, key)
+      this.$store.dispatch('AddCart', {foodname, foodprice, type, key})
     },
     SetUpdateMenuShow (key, foodname, foodprice, foodpic, foodtype) {
       this.updateKey = key
