@@ -182,11 +182,11 @@ export default {
     })
   },
   computed: {
-    filteredshop: function (shop) {
-      return shop.filter(function (shop) {
-        return shop.name === this.search
-      })
-    }
+    // filteredshop: function (shop) {
+    //   return shop.filter(function (shop) {
+    //     return shop.name === this.search
+    //   })
+    // }
   }
 }
 </script>

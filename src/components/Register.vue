@@ -91,7 +91,8 @@ export default {
           firstname: '',
           lastname: '',
           phonenumber: '',
-          address: ''
+          address: '',
+          hasShop: ''
         }
         foodcenterRef.child(this.username).push(data)
         this.$router.push('/')

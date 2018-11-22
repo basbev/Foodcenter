@@ -23,17 +23,15 @@
     <div class="card-content">
     <div class="content">
       รวมทั้งหมด: {{detail.CountQuantity}} จาน :: ราคาทั้งหมด: {{detail.total}} <br>
-      <button v-if="order.status === 'กำลังรอ'" @click="updatemenunow(order.customer, keyShop2)" class="button button3">กำลังทำ</button>
-      <button v-if="order.status === 'เสร็จเเล้ว'" class="button button3">ทำเสร็จเเล้ว</button>
+      <button v-if="order.status === 'กำลังรอ'" @click="updatemenunow(order.customer, keyShop2, order.order, key)" class="button button3">กำลังทำ</button>
+      <button v-if="order.status === 'กำลังทำ'" @click="complete(key)" class="button button3">ทำเสร็จเเล้ว</button>
     </div>
     </div>
   </div>
   </div>
-  <div :key="keys" v-for="(shop, keys) in shops">
   <footer class="card-footer">
-    <button @click='OrderComp(key, keys, shop.q, shop.countdoing, order.order)' class="card-footer-item">Delete</button>
+    <button @click='OrderComp(key, shops.q, shops.countdoing, order.order)' class="card-footer-item">Delete</button>
     </footer>
-    </div>
   </div>
    </div>
       </div>
@@ -57,21 +55,28 @@ export default {
     }
   },
   methods: {
-    OrderComp (key, keys, q, c, order) {
+    OrderComp (key, q, c, order) {
       // foodcenterRef.child('order').child(this.selectShop).child(key).remove()
       this.updateQ = q
       this.updatecount = c
-      foodcenterRef.child('detail').child(this.selectShop).child(keys).update({
+      foodcenterRef.child('detail').child(this.selectShop).update({
         q: this.updateQ - 1,
         countdoing: this.updatecount + 1,
         count: order
       })
     },
-    updatemenunow (name, keys) {
-      foodcenterRef.child('detail').child(this.selectShop).child(keys).update({
+    updatemenunow (name, keys, order, key) {
+      foodcenterRef.child('detail').child(this.selectShop).update({
         doing: name
       })
-      foodcenterRef.child('order').child(this.selectShop)
+      foodcenterRef.child('order').child(this.selectShop).child(key).update({
+        status: 'กำลังทำ'
+      })
+    },
+    complete (key) {
+      foodcenterRef.child('order').child(this.selectShop).child(key).update({
+        status: 'ทำเสร็จเเล้ว'
+      })
     }
   },
   mounted () {

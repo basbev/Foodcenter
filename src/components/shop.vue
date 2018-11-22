@@ -18,23 +18,44 @@
           </div>
           <div class="column is-9">
             <div class="content is-medium">
-              <div v-for="(detail, key) in detail" :key="key">
                  <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}&nbsp; เบอร์&nbsp; {{ detail.tel }}&nbsp;<img v-bind:src="detail.status" width="80" height="60" ></h3>
-                 <button v-if="permission !== '1'" class="button button3" @click="setprofile(key, detail.name, detail.tel, detail.status)">เเก้ไขโปรไฟล์</button>
-                 <div v-if="updateKey === key">
+                 <button v-if="permission !== '1'" class="button button3" @click="setprofile(detail.name, detail.tel, detail.status)">เเก้ไขโปรไฟล์</button>
+                 <div v-if="updateKey === true">
                    <input type="text" v-model="updateName" placeholder="ชื่อร้าน">
                    <input type="text" v-model="updatePhone" placeholder="เบอร์โทร">
                     <select name="status" v-model="updateStatus">
   <option value="https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png">เปิด</option>
   <option value="https://www.img.live/images/2018/11/20/d57b23a07352f87d.png">ปิด</option>
 </select>
-                   <button v-if="permission !== '1'" class="button button2" @click="updateprofile(key, updateName, updatePhone, updateStatus)">บันทึกโปรไฟล์</button>
+                   <button v-if="permission !== '1'" class="button button2" @click="updateprofile(updateName, updatePhone, updateStatus)">บันทึกโปรไฟล์</button>
                  </div>
-                </div>
                 <br>
           <img src="/static/hot.png" width="130" height="100" ><div :key="key" v-for="(record, key) in records">
           <h3>&nbsp;&nbsp;{{key}}</h3>
           </div>
+           <div class="box">
+              <article class="message is-primary">
+                <span class="icon has-text-primary">
+                  <i class="fas fa-info-circle"></i>
+                </span>
+                <div class="message-body">ค้นหา
+          <div>
+       <select name="status" v-model="Searchtype">
+  <option value="menushow">อาหารเเนะนำ</option>
+  <option value="menu">อาหารทั่วไป</option>
+</select>
+<input type="text" v-model="Search" placeholder="ค้นหาเมนู">
+      <button class="button button7" @click="Searchnow(Search, Searchtype)">ค้นหาอาหาร</button>
+    </div>
+    <div v-if="result !== ''">
+<h3>ชื่อเมนู:&nbsp;{{result.foodname}}</h3>
+                      <h3>ราคา:&nbsp;{{result.foodprice}}&nbsp;บาท</h3>
+                      <img v-bind:src="result.foodpic" width="300" height="350"><br>
+                      <button @click="Cart(result.foodname, result.foodprice, result.foodtype, key)" class="button button3">เพิ่มลง Order</button>
+    </div>
+    </div>
+              </article>
+              </div>
           <div class="box">
               <article class="message is-primary">
                 <span class="icon has-text-primary">
@@ -254,7 +275,10 @@ export default {
       detail: '',
       updateName: '',
       updatePhone: '',
-      updateStatus: ''
+      updateStatus: '',
+      result: '',
+      Searchtype: '',
+      Search: ''
     }
   },
   created () {
@@ -343,14 +367,14 @@ export default {
       this.updateMenuprice = menuprice
       this.updateMenutype = menutype
     },
-    setprofile (key, name, phone, status) {
-      this.updateKey = key
+    setprofile (name, phone, status) {
+      this.updateKey = true
       this.updateName = name
       this.updatePhone = phone
       this.updateStatus = status
     },
-    updateprofile (key, name, phone, status) {
-      foodcenterRef.child('detail').child(this.selectShop).child(key).update({
+    updateprofile (name, phone, status) {
+      foodcenterRef.child('detail').child(this.selectShop).update({
         name: name,
         tel: phone,
         status: status
@@ -382,6 +406,16 @@ export default {
     },
     DeleteMenushow (key) {
       foodcenterRef.child('menushow').child(this.selectShop).child(key).remove()
+    },
+    Searchnow (Search, Searchtype) {
+      this.result = ''
+      console.log(this.Searchtype, this.Search)
+      // const newsRef2 = foodcenterRef.child('detail').child('ป้าสมบูรณ์').orderByChild('name').equalTo('ป้าสมบูรณ์')
+      const newsRef2 = foodcenterRef.child(this.Searchtype).child(this.selectShop).orderByChild('foodname').equalTo(this.Search)
+      newsRef2.on('child_added', snap => {
+        this.result = snap.val()
+        console.log(this.result)
+      })
     }
   },
   computed: {

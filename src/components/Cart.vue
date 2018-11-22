@@ -37,11 +37,10 @@
     <p>ผู้สั่ง : {{this.users}}</p>
     <p>ร้านค้า : {{this.SelectShops}}</p>
     <hr>
-    <div :key="key" v-for="(shop, key) in shops"> จำนวนคิว ณ ขณะนี้ {{shop.q}} :: {{shop.SaveDate}}
+     จำนวนคิว ณ ขณะนี้ {{shops.q}} :: {{shops.SaveDate}}
     <p><button v-show="products.length" class='button is-primary' @click='checkout'>เช็คราคา</button></p><br>
     <p><router-link to="/shop"><button v-show="products.length" class='button is-primary'>กลับไปเลือกเมนู</button></router-link></p><br>
-    <p><button v-show="products.length" class='button is-primary' @click="order(products, shop.q, key, CountQuantity, total, shop.countdoing, shop.SaveDate)">ยืนยัน</button></p>
-  </div>
+    <p><button v-show="products.length" class='button is-primary' @click="order(products, shops.q, CountQuantity, total, shops.countdoing, shops.SaveDate)">ยืนยัน</button></p>
   </div>
 </template>
 
@@ -84,7 +83,7 @@ export default {
     checkout () {
       alert('ราคาทั้งหมด ' + this.total + ' บาท' + ' จานทั้งหมด ' + this.CountQuantity + ' จาน')
     },
-    order (products, q, key, CountQuantity, total, countdoing, gettime) {
+    order (products, q, CountQuantity, total, countdoing, gettime) {
       alert('สั่งOrderนี้เรียบร้อยแล้ว')
       for (var i = 0; i < products.length; i++) {
         let date = moment().tz('Asia/Bangkok').format()
@@ -137,7 +136,7 @@ export default {
       } else {
         SaveDate = moment(gettime).tz('Asia/Bangkok').add('minute', this.minutes).format()
       }
-      foodcenterRef.child('detail').child(this.SelectShops).child(key).update({
+      foodcenterRef.child('detail').child(this.SelectShops).update({
         q: this.updateQ + 1,
         countdoing: this.updateDoingcount + 1,
         SaveDate: SaveDate

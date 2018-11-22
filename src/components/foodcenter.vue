@@ -6,13 +6,44 @@
       <input type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
       <input type="text" v-model="tel" placeholder="เบอร์">
       <button class="button button7" @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
-    </div></center>
+    </div>
+    <div>
+      <input type="text" v-model="Search" placeholder="Search">
+      <button class="button button7" @click="Searchnow(Search)">ค้นหาร้านอาหาร</button>
+    </div>
+    <section class="section" v-if="result !== ''">
+        <div class="container">
+          <div class="columns is-multiline">
+            <article class="notification media">
+                <figure class="media-left">
+                  <span class="icon">
+                    <i class="has-text-warning fa fa-columns fa-lg"></i>
+                  </span>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                     <div class="row">
+          <div class="column">
+    <div>
+     <h1>&nbsp;&nbsp;{{result.name}}&nbsp;&nbsp;<img v-bind:src="result.status" width="70" height="55" ></h1>
+    <h3><img src="https://www.img.live/images/2018/11/20/img_352451.png" width="25" height="20">&nbsp;{{result.tel}}</h3>
+     <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{result.q}}&nbsp;&nbsp;</hk></h1>
+     <h1>กำลังทำของ:&nbsp;{{result.doing}}&nbsp;&nbsp;</h1>
+    </div>
+    </div>
+        </div>
+      </div>
+                  </div>
+              </article>
+          </div>
+        </div>
+      </section>
+    </center>
     <hr>
   <section class="section">
         <div class="container">
           <div class="columns is-multiline">
-            <div class="column is-one-third" :key="keys" v-for="(details, keys) in shops">
-      <div class="" :key="key" v-for="(detail, key) in details">
+            <div class="column is-one-third" :key="key" v-for="(detail, key) in shops">
               <article class="notification media has-background-white">
                 <figure class="media-left">
                   <span class="icon">
@@ -36,26 +67,22 @@
      <h1>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h1>
         <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, keys, key)">Update</button>
         <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(keys)">Delete</button>
-        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png'" @click="SelectShop(keys)" class="button button3">Select</button>
+        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png'" @click="SelectShop(key)" class="button button3">Select</button>
         </div>
         </div>
       </div>
                   </div>
                 </div>
               </article>
-              </div>
             </div>
           </div>
         </div>
       </section>
-      <div class="column is-one-third" :key="keys" v-for="(details, keys) in shops">
-      <div class="" :key="key" v-for="(detail, key) in details">
+      <div class="column is-one-third" :key="key" v-for="(detail, key) in shops">
     <h1>name :{{detail.name}}</h1>
     <h1>Tel :{{detail.tel}}</h1>
     <h1>Q :{{detail.q}}</h1>
-    <h1>key loop 2 :{{key}}</h1>
-    <h1>key loop 1 :{{keys}}</h1>
-      </div>
+    <h1>key loop 1 :{{key}}</h1>
     </div>
   </div>
 </template>
@@ -78,7 +105,9 @@ export default {
       q: '',
       shops: {},
       orders: {},
-      count: 0
+      count: 0,
+      result: '',
+      Search: ''
     }
   },
   methods: {
@@ -89,7 +118,7 @@ export default {
         q: 0,
         status: 'ปิดบริการ'
       }
-      foodcenterRef.child('detail').child(this.name).push(data)
+      foodcenterRef.child('detail').child(this.name).set(data)
       this.tel = ''
       this.name = ''
     },
@@ -99,7 +128,7 @@ export default {
       this.updateName = name
     },
     updatefoodcenter (tel, name, keys, key) {
-      foodcenterRef.child('detail').child(keys).child(key).update({
+      foodcenterRef.child('detail').child(keys).update({
         tel: tel,
         name: name
       })
@@ -120,6 +149,15 @@ export default {
             alert(err.message)
           }
         )
+    },
+    Searchnow (Search) {
+      this.result = ''
+      // const newsRef2 = foodcenterRef.child('detail').child('ป้าสมบูรณ์').orderByChild('name').equalTo('ป้าสมบูรณ์')
+      const newsRef2 = foodcenterRef.child('detail').orderByChild('name').equalTo(this.Search)
+      newsRef2.on('child_added', snap => {
+        this.result = snap.val()
+        console.log(this.result)
+      })
     }
   },
   mounted () {
