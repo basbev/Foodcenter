@@ -23,8 +23,8 @@
     <div class="card-content">
     <div class="content">
       รวมทั้งหมด: {{detail.CountQuantity}} จาน :: ราคาทั้งหมด: {{detail.total}} <br>
-      <button v-if="detail.doing === 'กำลังทำ'" @click="updatemenunow(keyy, keyShop2)" class="button button3">กำลังทำ</button>
-      <button v-if="detail.doing === 'เสร็จเเล้ว'" class="button button3">ทำเสร็จเเล้ว</button>
+      <button v-if="order.status === 'กำลังรอ'" @click="updatemenunow(order.customer, keyShop2)" class="button button3">กำลังทำ</button>
+      <button v-if="order.status === 'เสร็จเเล้ว'" class="button button3">ทำเสร็จเเล้ว</button>
     </div>
     </div>
   </div>

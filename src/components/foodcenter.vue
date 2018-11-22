@@ -127,7 +127,8 @@ export default {
     dbRefObject.on('value', snap => {
       this.shops = snap.val()
       console.log(this.shops)
-      console.log(this.selectShop)
+      JSON.stringify(this.shops)
+      console.log(JSON.stringify(this.shops))
     })
     const dbRefOrder = foodcenterRef.child('order')
     dbRefOrder.on('value', snap => {

@@ -1,13 +1,16 @@
 <template>
 <div class="report">
-  <h1>รายวัน</h1><br>
+  <h1>Reportsell {{this.selectShop}}</h1><br>
     <button @click="exportPdf">exportPDF</button>
-        <button @click="getData(genFunction)">รายวัน</button>
+        <button @click="getDataDay(genFunction)">รายวัน</button>
+        <button @click="getDataMonth(genFunction)">รายเดือน</button>
+        <button @click="getDataYear(genFunction)">รายปี</button>
     <div id="chart-container">
     </div>
 </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import firebase from 'firebase'
 import FusionCharts from 'FusionCharts'
 export default {
@@ -18,8 +21,20 @@ export default {
     }
   },
   methods: {
-    getData: function (genFunction) {
-      var ref = firebase.database().ref('foodcenter/data')
+    getDataDay: function (genFunction) {
+      var ref = firebase.database().ref('foodcenter/report/' + this.selectShop + '/day')
+      ref.once('value').then(function (snapshot) {
+        genFunction(snapshot.val())
+      })
+    },
+    getDataMonth: function (genFunction) {
+      var ref = firebase.database().ref('foodcenter/report/' + this.selectShop + '/month')
+      ref.once('value').then(function (snapshot) {
+        genFunction(snapshot.val())
+      })
+    },
+    getDataYear: function (genFunction) {
+      var ref = firebase.database().ref('foodcenter/report/' + this.selectShop + '/year')
       ref.once('value').then(function (snapshot) {
         genFunction(snapshot.val())
       })
@@ -92,6 +107,12 @@ export default {
     }
   },
   mounted () {
+  },
+  computed: {
+    ...mapGetters({
+      permission: 'permission',
+      selectShop: 'selectShop'
+    })
   }
 }
 </script>

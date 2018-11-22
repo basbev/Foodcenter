@@ -62,6 +62,7 @@ const mutations = {
   setUserFacebook: (state, userSet) => {
     console.log(userSet)
     state.user = userSet
+    state.permission = '1'
   },
   DeleteCart: (state) => {
     state.added = []

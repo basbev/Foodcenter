@@ -201,7 +201,7 @@
                       <div class="message-body"><p><h5>Review:&nbsp;</h5>{{review.view}}
                       <img v-bind:src="review.scorce" width="40" height="40" ><br>
                        <h5>โดย คุณ:&nbsp;{{review.namere}}</h5><br>
-                       <button class="button button5" @click="DelReview(key)">ลบ</button>
+                       <button v-if="permission !== '1'" class="button button5" @click="DelReview(key)">ลบ</button>
                        </div>
                           </div>
                 <input type="text" v-model="view" placeholder="รีวิว" size="30">
