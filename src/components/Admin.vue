@@ -11,7 +11,7 @@
                 <div class="message-body">
                   จำนวน Users:&nbsp;{{this.numberOfuser}} <br>
                   Permission <br>
-                  1 ลูกค้า &nbsp;&nbsp;2 ร้านค้า &nbsp;&nbsp;3 ผู้ดูเเลระบบ
+                  1 ลูกค้า &nbsp;&nbsp;2 ร้านค้า &nbsp;&nbsp;3 ผู้ดูเเลศูนย์อาหาร&nbsp;&nbsp;4. ผู้ดูเเลระบบ
                 </div>
               </article>
               <div class="message-body">
@@ -56,7 +56,6 @@
     <div class="container">
       <div class="columns is-multiline">
         <div class="column is-5" :key="keys" v-for="(shop, keys) in shops">
-          <div :key="key" v-for="(shop, key) in shop">
             <div v-if="updateKey === key">
       <input type="text" v-model="updateName" placeholder="Name">
      <input type="text" v-model="updateTel" placeholder="Phonenumber">
@@ -65,26 +64,14 @@
      <button class="button button4" @click="updateShop(keys, key, updateName, updateTel, updateQ, updateStatus)">Save</button>
               </div>
                 <div v-else>
-                  <h1>ชื่อร้าน:&nbsp;{{shop.name}} เบอร์:&nbsp;{{shop.tel}} จำนวนคิว:&nbsp;{{shop.q}} สถานะ:&nbsp;{{shop.status}}</h1>
+                  <h1>ชื่อร้าน:&nbsp;{{shop.name}} เบอร์:&nbsp;{{shop.tel}} จำนวนคิว:&nbsp;{{shop.q}} สถานะ:&nbsp;<img v-bind:src="shop.status" width="80" height="60"></h1>
                   <button class="button button4" @click="setUpdateshop(key, shop.name, shop.tel, shop.q, shop.status)">Update</button>
                     </div>
-      </div>
         </div>
                                     </div>
                           </div>
                 </div>
           </div>
-      <section class="container cards-container">
-        <input type="text" v-model="search" placeholder="search">
-        <div :key="key" v-for="(shop, key) in shops">
-      <div :key="key" class="column is-narrow" v-for="(shop, key ) in shop">
-        <div :key="key" class="column is-narrow" v-for="(shop, key ) in filteredshop">
-                <!-- Loop through the `items` array from the current season to show each item -->
-                <span>{{ shop }}</span>
-              </div>
-      </div>
-      </div>
-    </section>
     </div>
 </template>
 
@@ -182,11 +169,6 @@ export default {
     })
   },
   computed: {
-    // filteredshop: function (shop) {
-    //   return shop.filter(function (shop) {
-    //     return shop.name === this.search
-    //   })
-    // }
   }
 }
 </script>

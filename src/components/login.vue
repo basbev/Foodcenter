@@ -83,15 +83,18 @@ export default {
               alert(err)
             })
         } else alert(`No space information`)
-        if (this.isLoggedIn === true && this.permission === '3') {
-          alert('Successfully sign in\nWelcome User Admin: ' + ' ' + this.user)
+        if (this.isLoggedIn === true && this.permission === '4') {
+          alert('Successfully sign in\nWelcome User Administrator: ' + ' ' + this.user)
           this.$router.push('/Admin')
-        } if (this.isLoggedIn === true && this.permission === '1') {
-          alert('Successfully sign in\nWelcome User Customer: ' + ' ' + this.user)
+        } if (this.isLoggedIn === true && this.permission === '3') {
+          alert('Successfully sign in\nWelcome User Admin Foodcenter: ' + ' ' + this.user)
           this.$router.push('/foodcenter')
         } if (this.isLoggedIn === true && this.permission === '2' && this.hasShop !== null) {
           alert('Successfully sign in\nWelcome User Shop: ' + ' ' + this.user)
           this.$router.push('/shop')
+        } if (this.isLoggedIn === true && this.permission === '1') {
+          alert('Successfully sign in\nWelcome User Customer: ' + ' ' + this.user)
+          this.$router.push('/foodcenter')
         }
       }
     },

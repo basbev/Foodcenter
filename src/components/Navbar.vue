@@ -21,7 +21,7 @@
                 Home
               </span>
       </a>
-      <a v-if="permission === '3'" class="navbar-item" href="#/admin">
+      <a v-if="permission === '4'" class="navbar-item" href="#/admin">
         <span class="icon">
                 <i class="fas fa-home"></i>
               </span>
@@ -43,6 +43,14 @@
               </span>
               <span>
                 MyShop
+              </span>
+      </a>
+      <a v-if="permission === '2'" class="navbar-item" href="#/Reportsell">
+        <span class="icon">
+                <i class="fas fa-home"></i>
+              </span>
+              <span>
+                Report
               </span>
       </a>
     </div>
