@@ -10,9 +10,6 @@ import Cart from '@/components/Cart'
 import Admin from '@/components/Admin'
 import order from '@/components/order'
 import Reportsell from '@/components/Reportsell'
-import FusionCharts from 'fusioncharts/core'
-import Column2D from 'fusioncharts/viz/column2d'
-FusionCharts.addDep(Column2D)
 Vue.use(Router)
 
 export default new Router({
