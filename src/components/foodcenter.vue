@@ -8,7 +8,7 @@
       <button class="button button7" @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
     </div>
     <div>
-      <input type="text" v-model="Search" placeholder="Search">
+      <input type="text" v-model="Search" placeholder="Search" @input="filterShop(Search)">
       <button class="button button7" @click="Searchnow(Search)">ค้นหาร้านอาหาร</button>
     </div>
     <section class="section" v-if="result !== ''">
@@ -40,10 +40,11 @@
       </section>
     </center>
     <hr>
-  <section class="section">
+  <section class="section" v-if="!showData.length > 0">
+    <label>ร้านอาหารทั้งหมด {{this.numberOfShop}} ร้าน</label>
         <div class="container">
           <div class="columns is-multiline">
-            <div class="column is-one-third" :key="key" v-for="(detail, key) in shops">
+            <div class="column is-one-third" :key="detail.key" v-for="(detail, key) in shops">
               <article class="notification media has-background-white">
                 <figure class="media-left">
                   <span class="icon">
@@ -56,7 +57,7 @@
                     <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
-        <button class="button button2" @click="updatefoodcenter(updateTel, updateName, keys ,key)">Save</button>
+        <button class="button button2" @click="updatefoodcenter(updateTel, updateName, detail.key)">Save</button>
       </div>
       <div v-else>
         <div class="row">
@@ -65,9 +66,9 @@
     <h3><img src="https://www.img.live/images/2018/11/20/img_352451.png" width="25" height="20">&nbsp;{{detail.tel}}</h3>
      <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</hk></h1>
      <h1>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h1>
-        <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, keys, key)">Update</button>
-        <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(keys)">Delete</button>
-        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png'" @click="SelectShop(key)" class="button button3">Select</button>
+        <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, key)">Update</button>
+        <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button>
+        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png'" @click="SelectShop(detail.key)" class="button button3">Select</button>
         </div>
         </div>
       </div>
@@ -78,12 +79,45 @@
           </div>
         </div>
       </section>
-      <div class="column is-one-third" :key="key" v-for="(detail, key) in shops">
-    <h1>name :{{detail.name}}</h1>
-    <h1>Tel :{{detail.tel}}</h1>
-    <h1>Q :{{detail.q}}</h1>
-    <h1>key loop 1 :{{key}}</h1>
-    </div>
+      <section class="section" v-if="showData.length > 0">
+    <label>กำลังค้นหา : {{Search}}</label>
+        <div class="container">
+          <div class="columns is-multiline">
+            <div class="column is-one-third" :key="key" v-for="(detail, key) in showData">
+              <article class="notification media has-background-white">
+                <figure class="media-left">
+                  <span class="icon">
+                    <i class="has-text-warning fa fa-columns fa-lg"></i>
+                  </span>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <h1 class="title is-size-4">ร้าน</h1>
+                    <div v-if="updateKey === key">
+        <input type="text" v-model="updateName" placeholder="NAME">
+        <input type="text" v-model="updateTel" placeholder="TEL">
+        <button class="button button2" @click="updatefoodcenter(updateTel, updateName, detail.key)">Save</button>
+      </div>
+      <div v-else>
+        <div class="row">
+          <div class="column">
+        <h1>&nbsp;&nbsp;{{detail.name}}&nbsp;&nbsp;<img v-bind:src="detail.status" width="70" height="55" ></h1>
+    <h3><img src="https://www.img.live/images/2018/11/20/img_352451.png" width="25" height="20">&nbsp;{{detail.tel}}</h3>
+     <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</hk></h1>
+     <h1>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h1>
+        <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, key)">Update</button>
+        <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button>
+        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png'" @click="SelectShop(detail.key)" class="button button3">Select</button>
+        </div>
+        </div>
+      </div>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
   </div>
 </template>
 
@@ -107,7 +141,9 @@ export default {
       orders: {},
       count: 0,
       result: '',
-      Search: ''
+      Search: '',
+      showData: [],
+      numberOfShop: 0
     }
   },
   methods: {
@@ -122,13 +158,13 @@ export default {
       this.tel = ''
       this.name = ''
     },
-    setUpdatefoodcenter (tel, name, keys, key) {
+    setUpdatefoodcenter (tel, name, key) {
       this.updateKey = key
       this.updateTel = tel
       this.updateName = name
     },
-    updatefoodcenter (tel, name, keys, key) {
-      foodcenterRef.child('detail').child(keys).update({
+    updatefoodcenter (tel, name, key) {
+      foodcenterRef.child('detail').child(key).update({
         tel: tel,
         name: name
       })
@@ -136,8 +172,8 @@ export default {
       this.updateTel = ''
       this.updateName = ''
     },
-    deletefoodcenter (keys) {
-      foodcenterRef.child('detail').child(keys).remove()
+    deletefoodcenter (key) {
+      foodcenterRef.child('detail').child(key).remove()
     },
     SelectShop (name) {
       this.$store.dispatch('selectShop', name)
@@ -158,15 +194,37 @@ export default {
         this.result = snap.val()
         console.log(this.result)
       })
+    },
+    filterShop (Search) {
+      if (Search.length > 0) {
+        this.showData = this.shops.filter(
+          (shop) => {
+            if (shop.name.toString().indexOf(Search) >= 0 ||
+              shop.tel.toString().indexOf(Search) >= 0 ||
+              shop.q.toString().indexOf(Search) >= 0) {
+              return shop
+            }
+          }
+        )
+      } else {
+        this.showData = []
+      }
     }
   },
   mounted () {
     const dbRefObject = foodcenterRef.child('detail')
     dbRefObject.on('value', snap => {
-      this.shops = snap.val()
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+        this.numberOfShop = snap.numChildren()
+      })
+      this.shops = data
       console.log(this.shops)
       JSON.stringify(this.shops)
-      console.log(JSON.stringify(this.shops))
+      // console.log(JSON.stringify(this.shops))
     })
     const dbRefOrder = foodcenterRef.child('order')
     dbRefOrder.on('value', snap => {
