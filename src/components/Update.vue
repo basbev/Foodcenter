@@ -1,44 +1,47 @@
 <template>
-  <div class="hero-body">
-    <div class="container has-text-centered">
-      <div class="column is-4 is-offset-4">
-        <h3 class="title has-text-grey">Update Profile</h3>
-        <p class="subtitle has-text-grey">Rest Email and Password.</p>
-        <div class="box">
-          <figure class="avatar">
-            <img src="/static/page_2.jpg">
-          </figure>
-          <form>
-            <div class="field">
-              <div class="control has-icons-left has-icons-right">
-                <input class="input is-large" type="email" placeholder="Your Email" autofocus="" id="email" v-model="email">
-                <span class="icon is-small is-left">
-      <i class="fas fa-envelope"></i>
-    </span>
-              </div>
-            </div>
-
-            <div class="field">
-              <div class="control has-icons-left">
-                <input class="input is-large" type="password" placeholder="Your Password" id="password" v-model="password">
-                <span class="icon is-small is-left">
-      <i class="fas fa-lock"></i>
-    </span>
-              </div>
-            </div>
-            <hr>
-            <div class="buttons is-centered">
-              <a class="bd-tw-button button" v-on:click="update">
-                <span class="icon">
-                  <i class="fas fa-check-square"></i>
-                </span>
-                <span>
-                  Update
-                </span>
-              </a>
-            </div>
-          </form>
-        </div>
+  <div class="hello">
+    <div class="container">
+      <div v-for="(foodStoreName, key) in foodCenter.menu" :key="key">
+        <label>{{key}}</label>
+        <input type="radio" v-model="storeName" :value="key">
+      </div>
+      <input type="text" v-model="keyWord" @input="filterAll(keyWord)">
+      <br><br>
+      <div v-if="!showData.length > 0">
+        <label>show all</label>
+        <div v-for="(allMenu, name) in foodCenter.menu" :key="name">
+          <label>{{name}}</label>
+          <div v-for="(menu, index) in allMenu" :key="index">
+            <p>{{menu.foodName}}{{menu.foodPrice}}{{menu.foodType}}</p>
+          </div>
+       </div>
+      </div>
+      <div v-if="showData.length > 0">
+      <label>show filter</label>
+      <br>
+      <label>{{storeName}}</label>
+       <div v-for="(data) in showData" :key="data['.key']">
+        <p>{{data.foodName}}{{data.foodPrice}}{{data.foodType}}</p>
+       </div>
+      </div>
+    </div>
+    <div>
+      <br><br>
+      foodcenter
+      <input type="text" v-model="keyWord1" @input="filterShop(keyWord1)">
+      <br><br>
+      <div v-if="!showData1.length > 0">
+        <label>show all</label>
+          <div v-for="(shop) in shops" :key="shop['key']">
+            <p>{{shop.name}}{{shop.tel}}{{shop.q}}</p>
+          </div>
+      </div>
+      <div v-if="showData1.length > 0">
+      <label>show filter</label>
+      <br>
+       <div v-for="(data) in showData1" :key="data['key']">
+        <p>{{data.name}}{{data.tel}}{{data.q}}</p>
+       </div>
       </div>
     </div>
   </div>
@@ -46,91 +49,113 @@
 
 <script>
 import firebase from 'firebase'
-
+var database = firebase.database()
+var foodcenterRef = database.ref('/foodcenter')
 export default {
-  name: 'Register',
-  data: function () {
+  name: 'HelloWorld',
+  data () {
     return {
-      email: '',
-      password: '',
-      uid: ''
+      keyWord: '',
+      keyWord1: '',
+      storeName: 'somBool',
+      showData: [],
+      showData1: [],
+      shops: '',
+      foodCenter: {
+        menu: {
+          somBool: [
+            {
+              '.key': 'key1',
+              foodName: 'กระเพราหมู',
+              foodPrice: '35',
+              foodType: 'ผัด'
+            },
+            {
+              '.key': 'key2',
+              foodName: 'ต้มยำกุ้ง',
+              foodPrice: '40',
+              foodType: 'ต้ม'
+            },
+            {
+              '.key': 'key3',
+              foodName: 'ปลาทอด',
+              foodPrice: '45',
+              foodType: 'ทอด'
+            }
+          ],
+          fatuncle: [
+            {
+              '.key': 'key1',
+              foodName: 'กระเพราเนื้อ',
+              foodPrice: '45',
+              foodType: 'ผัด'
+            },
+            {
+              '.key': 'key2',
+              foodName: 'ต้มยำหมู',
+              foodPrice: '55',
+              foodType: 'ต้ม'
+            },
+            {
+              '.key': 'key3',
+              foodName: 'หมูทอด',
+              foodPrice: '60',
+              foodType: 'ทอด'
+            }
+          ]
+        }
+      }
     }
   },
   methods: {
-    update: function (e) {
-      firebase
-        .auth()
-        .currentUser.updateEmail(this.email)
-        .then(
-          user => {
-          },
-          err => {
-            console.log(err.message)
+    filterAll (keyWord) {
+      if (keyWord.length > 0) {
+        this.showData = this.foodCenter.menu[this.storeName].filter(
+          (allMenu) => {
+            if (allMenu.foodName.toString().indexOf(keyWord) >= 0 ||
+              allMenu.foodPrice.toString().indexOf(keyWord) >= 0 ||
+              allMenu.foodType.toString().indexOf(keyWord) >= 0) {
+              return allMenu
+            }
           }
         )
-      firebase
-        .auth()
-        .currentUser.updatePassword(this.password)
-        .then(
-          user => {
-            alert('Account Update')
-            // this.$router.go({ path: '#/' })
-            this.router.next({ path: 'login' })
-          },
-          err => {
-            console.log(err.message)
+      } else {
+        this.showData = []
+      }
+    },
+    filterShop (keyWord1) {
+      if (keyWord1.length > 0) {
+        this.showData1 = this.shops.filter(
+          (allMenu) => {
+            if (allMenu.name.toString().indexOf(keyWord1) >= 0 ||
+              allMenu.tel.toString().indexOf(keyWord1) >= 0 ||
+              allMenu.q.toString().indexOf(keyWord1) >= 0) {
+              return allMenu
+            }
           }
         )
-      e.preventDefault()
+      } else {
+        this.showData1 = []
+      }
     }
+  },
+  mounted () {
+    const dbRefObject = foodcenterRef.child('detail')
+    dbRefObject.on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.shops = data
+      console.log(this.shops)
+      console.log(this.foodCenter)
+    })
   }
 }
 </script>
-<style>
-  html,
-  body {
-    font-family: 'Open Sans', serif;
-    font-size: 14px;
-    font-weight: 300;
-    background: #F2F6FA;
-  }
 
-  .hero.is-success {
-    background: #F2F6FA;
-  }
-
-  .hero .nav,
-  .hero.is-success .nav {
-    -webkit-box-shadow: none;
-    box-shadow: none;
-  }
-
-  .box {
-    margin-top: 5rem;
-  }
-
-  .avatar {
-    margin-top: -70px;
-    padding-bottom: 20px;
-  }
-
-  .avatar img {
-    padding: 5px;
-    background: #fff;
-    border-radius: 50%;
-    -webkit-box-shadow: 0 2px 3px rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .1);
-    box-shadow: 0 2px 3px rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .1);
-  }
-
-  input {
-    font-weight: 300;
-  }
-
-  p {
-    font-weight: 700;
-  }
-
-  p.subtitle {
-    padding-top: 1rem;
-  }
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
 </style>
