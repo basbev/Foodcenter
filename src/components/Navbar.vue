@@ -91,7 +91,7 @@
 </nav>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
 import 'firebase/auth'
 var config = {
@@ -119,6 +119,7 @@ export default {
         this.currentUser = firebase.auth().currentUser.displayName
       }
     }
+    this.load()
   },
   methods: {
     logout: function () {
@@ -129,7 +130,10 @@ export default {
           this.$router.go({ path: this.$router.path })
           this.$router.push('/')
         })
-    }
+    },
+    ...mapActions({
+      load: 'load'
+    })
   },
   computed: {
     ...mapGetters({
