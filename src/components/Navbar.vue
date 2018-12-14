@@ -130,9 +130,12 @@ export default {
           this.$router.go({ path: this.$router.path })
           this.$router.push('/')
         })
+      this.clearlogin()
+      this.$router.push('/')
     },
     ...mapActions({
-      load: 'load'
+      load: 'load',
+      clearlogin: 'clearlogin'
     })
   },
   computed: {

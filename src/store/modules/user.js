@@ -79,11 +79,19 @@ const mutations = {
     if (state.added[index].quantity > 1) {
       state.added[index].quantity--
     }
+  },
+  LOAD (state, {user, permission}) {
+    state.user = user
+    state.permission = permission
+  },
+  logout: (state) => {
+    state.user = null
+    state.permission = null
   }
 }
 
 const actions = {
-  signIn: ({commit}, payload) => {
+  signIn: ({commit, dispatch}, payload) => {
     const dbRefObject = firebase.database().ref().child('user')
     const dbReflist = dbRefObject.child(payload.username)
     dbReflist.on('child_added', snap => {
@@ -100,6 +108,7 @@ const actions = {
         console.log(userSet, passSet, perSet)
         commit('setUser', {userSet, passSet, perSet, shopSet})
         commit('setselectShop', shopSet)
+        dispatch('save')
       } else alert(`Username Or Password incorrect`)
     } else alert(`Username Or Password incorrect`)
   },
@@ -133,6 +142,23 @@ const actions = {
   },
   decleseAmount ({commit}, index) {
     commit('decleseAmount', index)
+  },
+  load ({commit}) {
+    let Getuser = localStorage.getItem('user')
+    let Getpermission = localStorage.getItem('permission')
+    let user = JSON.parse(Getuser)
+    let permission = JSON.parse(Getpermission)
+    if (user != null) {
+      commit('LOAD', {user, permission})
+    }
+  },
+  save ({state}) {
+    localStorage.setItem('user', JSON.stringify(state.user))
+    localStorage.setItem('permission', JSON.stringify(state.permission))
+  },
+  clearlogin ({commit, dispatch}) {
+    commit('logout')
+    dispatch('save')
   }
 }
 export default {
