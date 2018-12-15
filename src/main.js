@@ -6,6 +6,13 @@ import router from './router'
 import firebase from 'firebase'
 import { store } from './store/store'
 
+let storageRef = firebase.storage().ref()
+Vue.directive('url', {
+  async bind (el, binding) {
+    let url = await storageRef.child(binding.value.filename).getDownloadURL()
+    el.src = url
+  }
+})
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
