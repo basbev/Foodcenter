@@ -80,9 +80,10 @@ const mutations = {
       state.added[index].quantity--
     }
   },
-  LOAD (state, {user, permission}) {
+  LOAD (state, {user, permission, selectShop}) {
     state.user = user
     state.permission = permission
+    state.selectShop = selectShop
   },
   logout: (state) => {
     state.user = null
@@ -119,8 +120,9 @@ const actions = {
   autoSign ({commit}, payload) {
     commit('setUserFacebook', payload.displayName)
   },
-  selectShop ({commit}, shop) {
+  selectShop ({commit, dispatch}, shop) {
     commit('setselectShop', shop)
+    dispatch('save')
   },
   AddCart ({commit}, payload) {
     console.log(payload)
@@ -146,15 +148,18 @@ const actions = {
   load ({commit}) {
     let Getuser = localStorage.getItem('user')
     let Getpermission = localStorage.getItem('permission')
+    let GetselectShop = localStorage.getItem('selectShop')
     let user = JSON.parse(Getuser)
     let permission = JSON.parse(Getpermission)
+    let selectShop = JSON.parse(GetselectShop)
     if (user != null) {
-      commit('LOAD', {user, permission})
+      commit('LOAD', {user, permission, selectShop})
     }
   },
   save ({state}) {
     localStorage.setItem('user', JSON.stringify(state.user))
     localStorage.setItem('permission', JSON.stringify(state.permission))
+    localStorage.setItem('selectShop', JSON.stringify(state.selectShop))
   },
   clearlogin ({commit, dispatch}) {
     commit('logout')
