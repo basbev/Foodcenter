@@ -93,7 +93,7 @@
                                     <div class="column is-5" :key="key" v-for="(menushow, key) in menushow">
                           <h3>ชื่อเมนู:&nbsp;{{menushow.foodname}}</h3>
                       <h3>ราคา:&nbsp;{{menushow.foodprice}}&nbsp;บาท</h3>
-                      <img v-bind:src="menushow.foodpic" width="300" height="350"><br>
+                      <img v-url={filename:menushow.foodpic} width="300" height="350"/><br>
                       <button @click="Cart(menushow.foodname, menushow.foodprice, menushow.foodtype, key)" class="button button3">เพิ่มลง Order</button>
                       <button v-if="permission !== '1'" @click="SetUpdateMenuShow(key, menushow.foodname, menushow.foodprice, menushow.foodpic, menushow.foodtype)" class="button button3">เเก้ไขเมนูเเนะนำ</button>
                       <button v-if="permission!== '1'" class="button button3" @click="DeleteMenushow(key)">ลบ</button>
@@ -109,10 +109,22 @@
   <option value="ย่าง">ย่าง</option>
 </select>
         <input type="text" v-model="updatefoodprice" placeholder="ราคา">
-        <input type="text" v-model="updatefoodpic" placeholder="ลิ้งรูปภาพ">
+        <label class="file-label">
+      <input class="file-input" type="file" name="resume" @change="onFileChangeupdate($event.target.files[0])">
+      <span class="file-cta">
+        <span class="file-icon">
+          <i class="fas fa-upload"></i>
+        </span>
+        <span class="file-label">
+          Info file…
+        </span>
+      </span>
+    </label>
+    <span class="file-name" v-if="dataImg1">
+        {{dataImg1.name}}
+      </span>
         <button @click="UpdateMenuShow(key, updatefoodname, updatefoodprice, updatefoodpic, updatefoodtype)" class="button button2">บันทึกเมนูเเนะนำ</button>
         <hr>
-
       </div>
       <div v-else>
                   </div>
@@ -134,8 +146,22 @@
   <option value="ย่าง">ย่าง</option>
 </select>
       <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
-      <input type="text" v-model="foodpic" placeholder="linkรูป">
+    <label class="file-label">
+      <input class="file-input" type="file" name="resume" @change="onFileChange($event.target.files[0])">
+      <span class="file-cta">
+        <span class="file-icon">
+          <i class="fas fa-upload"></i>
+        </span>
+        <span class="file-label">
+          Info file…
+        </span>
+      </span>
+    </label>
       <button class="button button1" @click="insertmenushow(foodname, foodprice , foodpic, foodtype)">เพิ่มเมนูแนะนำ</button>
+              <span class="file-name" v-if="dataImg">
+        {{this.dataImg.name}}
+      </span>
+      <br>
               </div>
               <div class="bucket" @click="isComponentModalActive = true">
         <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
@@ -246,6 +272,7 @@ import { mapGetters } from 'vuex'
 import * as firebase from 'firebase'
 var database = firebase.database()
 var foodcenterRef = database.ref('/foodcenter')
+var storageRef = firebase.storage().ref()
 export default {
   name: 'shop',
   data () {
@@ -278,12 +305,22 @@ export default {
       updateStatus: '',
       result: '',
       Searchtype: '',
-      Search: ''
+      Search: '',
+      dataImg: '',
+      dataImg1: ''
     }
   },
   created () {
   },
   methods: {
+    onFileChange (fileImg) {
+      this.dataImg = fileImg
+      console.log(this.dataImg)
+    },
+    onFileChangeupdate (fileImg) {
+      this.dataImg1 = fileImg
+      console.log(this.dataImg1)
+    },
     insertmenu (foodname, foodprice, foodtype) {
       let data = {
         foodname: foodname,
@@ -295,18 +332,20 @@ export default {
       this.foodprice = ''
       this.foodtype = ''
     },
-    insertmenushow (foodname, foodprice, foodpic, foodtype) {
+    async insertmenushow (foodname, foodprice, foodpic, foodtype) {
+      await storageRef.child(this.dataImg.name).put(this.dataImg)
       let data = {
         foodname: foodname,
         foodprice: foodprice,
         foodtype: foodtype,
-        foodpic: foodpic
+        foodpic: this.dataImg.name
       }
-      foodcenterRef.child('menushow').child(this.selectShop).push(data)
+      await foodcenterRef.child('menushow').child(this.selectShop).push(data)
       this.foodname = ''
       this.foodprice = ''
       this.foodpic = ''
       this.foodtype = ''
+      this.dataImg = ''
     },
     insertreview (view, scorce) {
       let data = {
@@ -337,11 +376,12 @@ export default {
       this.updatefoodpic = foodpic
       this.updatefoodtype = foodtype
     },
-    UpdateMenuShow (key, foodname, foodprice, foodpic, foodtype) {
-      foodcenterRef.child('menushow').child(this.selectShop).child(key).update({
+    async UpdateMenuShow (key, foodname, foodprice, foodpic, foodtype) {
+      await storageRef.child(this.dataImg1.name).put(this.dataImg1)
+      await foodcenterRef.child('menushow').child(this.selectShop).child(key).update({
         foodname: foodname,
         foodprice: foodprice,
-        foodpic: foodpic,
+        foodpic: this.dataImg1.name,
         foodtype: foodtype
       })
       this.updateKey = ''
@@ -349,6 +389,7 @@ export default {
       this.foodprice = ''
       this.foodpic = ''
       this.foodtype = ''
+      this.dataImg1 = ''
     },
     SetUpdatePromo (key, prodetail) {
       this.updateKey = key
@@ -595,5 +636,13 @@ div {
   top: 45%;
   right: 70%;
   cursor: pointer;
+}
+.file-label {
+  display: unset;
+}
+.file-cta {
+    background-color: #209cee;
+    border-color: transparent;
+    color: #fff;
 }
 </style>
