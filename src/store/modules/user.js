@@ -149,17 +149,25 @@ const actions = {
     let Getuser = localStorage.getItem('user')
     let Getpermission = localStorage.getItem('permission')
     let GetselectShop = localStorage.getItem('selectShop')
-    let user = JSON.parse(Getuser)
-    let permission = JSON.parse(Getpermission)
-    let selectShop = JSON.parse(GetselectShop)
-    if (user != null) {
+    if (Getuser !== 'null' && GetselectShop !== 'undefined') {
+      let user = JSON.parse(Getuser)
+      let permission = JSON.parse(Getpermission)
+      let selectShop = JSON.parse(GetselectShop)
       commit('LOAD', {user, permission, selectShop})
+      console.log('show1')
+    }
+    if (Getuser !== 'null' && GetselectShop === 'undefined') {
+      let user = JSON.parse(Getuser)
+      let permission = JSON.parse(Getpermission)
+      commit('LOAD', {user, permission})
+      console.log('show2')
     }
   },
   save ({state}) {
     localStorage.setItem('user', JSON.stringify(state.user))
     localStorage.setItem('permission', JSON.stringify(state.permission))
     localStorage.setItem('selectShop', JSON.stringify(state.selectShop))
+    console.log(state.selectShop, state.permission)
   },
   clearlogin ({commit, dispatch}) {
     commit('logout')
