@@ -96,7 +96,7 @@
                       <img v-url={filename:menushow.foodpic} width="300" height="350"/><br>
                       <button @click="Cart(menushow.foodname, menushow.foodprice, menushow.foodtype, key)" class="button button3">เพิ่มลง Order</button>
                       <button v-if="permission !== '1'" @click="SetUpdateMenuShow(key, menushow.foodname, menushow.foodprice, menushow.foodpic, menushow.foodtype)" class="button button3">เเก้ไขเมนูเเนะนำ</button>
-                      <button v-if="permission!== '1'" class="button button3" @click="DeleteMenushow(key)">ลบ</button>
+                      <button v-if="permission!== '1'" class="button button3" @click="DeleteMenushow(menushow.key)">ลบ</button>
                     <hr>
                     <div v-if="updateKey === key">
         <input type="text" v-model="updatefoodname" placeholder="ชื่อ">
@@ -123,7 +123,7 @@
     <span class="file-name" v-if="dataImg1">
         {{dataImg1.name}}
       </span>
-        <button @click="UpdateMenuShow(key, updatefoodname, updatefoodprice, updatefoodpic, updatefoodtype)" class="button button2">บันทึกเมนูเเนะนำ</button>
+        <button @click="UpdateMenuShow(menushow.key, updatefoodname, updatefoodprice, updatefoodpic, updatefoodtype)" class="button button2">บันทึกเมนูเเนะนำ</button>
         <hr>
       </div>
       <div v-else>
@@ -196,7 +196,7 @@
                       <h3>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h3>
                       <button @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, key)" class="button button3">เพิ่มลง Order</button>
                       <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype)" class="button button3">เเก้ไขเมนูอาหาร</button>
-                      <button v-if="permission !== '1'" @click="DeleteMenu(key)" class="button button3">ลบ</button>
+                      <button v-if="permission !== '1'" @click="DeleteMenu(menu.key)" class="button button3">ลบ</button>
                       <hr>
                                       <div v-if="updateKey === key">
         <input type="text" v-model="updateMenufood" placeholder="ชื่อเมนู">
@@ -209,7 +209,7 @@
   <option value="ย่าง">ย่าง</option>
 </select>
         <input type="text" v-model="updateMenuprice" placeholder="ราคา">
-        <button @click="UpdateMenu(key, updateMenufood, updateMenuprice, updateMenutype)" class="button button2">บันทึกเมนูอาหาร</button>
+        <button @click="UpdateMenu(menu.key, updateMenufood, updateMenuprice, updateMenutype)" class="button button2">บันทึกเมนูอาหาร</button>
         <hr>
       </div>
       <div v-else>
@@ -488,28 +488,40 @@ export default {
     const dbRefObjectMenuhit = foodcenterRef.child('record').child(this.selectShop)
     const dbRefObjectpromo = foodcenterRef.child('promo').child(this.selectShop)
     dbRefObject.on('value', snap => {
-      this.menus = snap.val()
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.menus = data
       console.log(this.menus)
     })
     dbRefObjectshow.on('value', snap => {
-      this.menushow = snap.val()
-      console.log(this.menushow)
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.menushow = data
+      // console.log(this.menushow)
     })
     dbRefObjectreview.on('value', snap => {
       this.review = snap.val()
-      console.log(this.review)
+      // console.log(this.review)
     })
     dbRefObjectMenuhit.orderByChild('amount').limitToLast(3).on('value', snap => {
       this.records = snap.val()
-      console.log(this.records)
+      // console.log(this.records)
     })
     dbRefObjectpromo.on('value', snap => {
       this.promo = snap.val()
-      console.log(this.promo)
+      // console.log(this.promo)
     })
     dbRefObjectdetail.on('value', snap => {
       this.detail = snap.val()
-      console.log(this.detail)
+      // console.log(this.detail)
     })
   }
 }
