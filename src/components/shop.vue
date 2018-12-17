@@ -44,7 +44,9 @@
   <option value="menushow">อาหารเเนะนำ</option>
   <option value="menu">อาหารทั่วไป</option>
 </select>
-<input type="text" v-model="Search" placeholder="ค้นหาเมนู">
+<input type="text" v-model="Search" placeholder="ค้นหาเมนู" v-if="Searchtype === ''" disabled>
+<input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" v-if="Searchtype === 'menushow'">
+<input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop2(Search)" v-if="Searchtype === 'menu'">
       <button class="button button7" @click="Searchnow(Search, Searchtype)">ค้นหาอาหาร</button>
     </div>
     <div v-if="result !== ''">
@@ -52,6 +54,14 @@
                       <h3>ราคา:&nbsp;{{result.foodprice}}&nbsp;บาท</h3>
                       <img v-bind:src="result.foodpic" width="300" height="350"><br>
                       <button @click="Cart(result.foodname, result.foodprice, result.foodtype, key)" class="button button3">เพิ่มลง Order</button>
+    </div>
+    <div v-if="showData.length > 0">
+      <label>กำลังค้นหา : {{Search}}</label>
+      <div v-for="(menu, key) in showData" :key="key">
+        <h3>ชื่อเมนู:&nbsp;{{menu.foodname}}</h3>
+        <h3>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h3>
+        <img v-url={filename:menu.foodpic} width="300" height="350"/><br>
+      </div>
     </div>
     </div>
               </article>
@@ -307,7 +317,8 @@ export default {
       Searchtype: '',
       Search: '',
       dataImg: '',
-      dataImg1: ''
+      dataImg1: '',
+      showData: []
     }
   },
   created () {
@@ -457,6 +468,36 @@ export default {
         this.result = snap.val()
         console.log(this.result)
       })
+    },
+    filterShop (Search) {
+      if (Search.length > 0) {
+        this.showData = this.menushow.filter(
+          (shop) => {
+            if (shop.foodname.toString().indexOf(Search) >= 0 ||
+              shop.foodprice.toString().indexOf(Search) >= 0 ||
+              shop.foodtype.toString().indexOf(Search) >= 0) {
+              return shop
+            }
+          }
+        )
+      } else {
+        this.showData = []
+      }
+    },
+    filterShop2 (Search) {
+      if (Search.length > 0) {
+        this.showData = this.menus.filter(
+          (shop) => {
+            if (shop.foodname.toString().indexOf(Search) >= 0 ||
+              shop.foodprice.toString().indexOf(Search) >= 0 ||
+              shop.foodtype.toString().indexOf(Search) >= 0) {
+              return shop
+            }
+          }
+        )
+      } else {
+        this.showData = []
+      }
     }
   },
   computed: {
@@ -495,7 +536,7 @@ export default {
         data.push(item)
       })
       this.menus = data
-      console.log(this.menus)
+      // console.log(this.menus)
     })
     dbRefObjectshow.on('value', snap => {
       var data = []
@@ -505,7 +546,7 @@ export default {
         data.push(item)
       })
       this.menushow = data
-      // console.log(this.menushow)
+      console.log(this.menushow)
     })
     dbRefObjectreview.on('value', snap => {
       this.review = snap.val()
