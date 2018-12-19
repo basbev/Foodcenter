@@ -138,7 +138,6 @@ export default {
       updateKey: '',
       q: '',
       shops: {},
-      orders: {},
       count: 0,
       result: '',
       Search: '',
@@ -226,11 +225,6 @@ export default {
       JSON.stringify(this.shops)
       // console.log(JSON.stringify(this.shops))
     })
-    const dbRefOrder = foodcenterRef.child('order')
-    dbRefOrder.on('value', snap => {
-      this.orders = snap.val()
-      console.log(this.orders)
-    })
   },
   computed: {
     ...mapGetters({
@@ -239,12 +233,6 @@ export default {
     })
   }
 }
-// <div :key="key" v-for="(order, key) in orders" v-if="key === detail.name">
-//      <div :key="key" v-for="(order, key) in order">
-//         <div :key="key" v-for="(shopee, key) in order">
-//    </div>
-//    </div>
-//    </div>
 </script>
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
