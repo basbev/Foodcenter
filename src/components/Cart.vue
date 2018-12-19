@@ -83,7 +83,7 @@ export default {
     checkout () {
       alert('ราคาทั้งหมด ' + this.total + ' บาท' + ' จานทั้งหมด ' + this.CountQuantity + ' จาน')
     },
-    order (products, q, CountQuantity, total, countdoing, gettime) {
+    async order (products, q, CountQuantity, total, countdoing, gettime) {
       alert('สั่งOrderนี้เรียบร้อยแล้ว')
       for (var i = 0; i < products.length; i++) {
         let date = moment().tz('Asia/Bangkok').format()
@@ -111,7 +111,7 @@ export default {
         let record = {
           amount: products[i].quantity
         }
-        foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('menu').push(data)
+        await foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('menu').push(data)
         const dbRefObject2 = foodcenterRef.child('record').child(this.SelectShops).child(products[i].name)
         dbRefObject2.on('value', snap => {
           this.search = snap.val()
@@ -125,9 +125,9 @@ export default {
           foodcenterRef.child('record').child(this.SelectShops).child(products[i].name).child('amount').set(this.updateCount)
         }
       }
-      foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('customer').set(this.users)
-      foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('order').set(countdoing)
-      foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('status').set('กำลังรอ')
+      await foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('customer').set(this.users)
+      await foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('order').set(countdoing)
+      await foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('status').set('กำลังรอ')
       this.updateQ = q
       this.updateDoingcount = countdoing
       let SaveDate = ''
@@ -141,8 +141,27 @@ export default {
         countdoing: this.updateDoingcount + 1,
         SaveDate: SaveDate
       })
+      await this.report()
       this.$store.dispatch('CartCle')
       this.$router.push('/foodcenter')
+    },
+    report () {
+      let foundday = ''
+      let day = moment().tz('Asia/Bangkok').format().slice(0, 10)
+      const reportday = foodcenterRef.child('report').child(this.SelectShops).child('day').orderByChild('label').equalTo(day)
+      reportday.on('child_added', snap => {
+        foundday = snap.val()
+      })
+      if (foundday === '') {
+        let data = {
+          label: day,
+          value: this.total
+        }
+        foodcenterRef.child('report').child(this.SelectShops).child('day').child(day).set(data)
+      } else {
+        let updatavalue = foundday.value + this.total
+        foodcenterRef.child('report').child(this.SelectShops).child('day').child(day).child('value').set(updatavalue)
+      }
     },
     ...mapActions({
       inclese: 'incleseAmount',
