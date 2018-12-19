@@ -142,6 +142,8 @@ export default {
         SaveDate: SaveDate
       })
       await this.report()
+      await this.reportmonth()
+      await this.reportyear()
       this.$store.dispatch('CartCle')
       this.$router.push('/foodcenter')
     },
@@ -161,6 +163,42 @@ export default {
       } else {
         let updatavalue = foundday.value + this.total
         foodcenterRef.child('report').child(this.SelectShops).child('day').child(day).child('value').set(updatavalue)
+      }
+    },
+    reportmonth () {
+      let foundmonth = ''
+      let month = moment().tz('Asia/Bangkok').format().slice(0, 7)
+      const reportmonth = foodcenterRef.child('report').child(this.SelectShops).child('month').orderByChild('label').equalTo(month)
+      reportmonth.on('child_added', snap => {
+        foundmonth = snap.val()
+      })
+      if (foundmonth === '') {
+        let data = {
+          label: month,
+          value: this.total
+        }
+        foodcenterRef.child('report').child(this.SelectShops).child('month').child(month).set(data)
+      } else {
+        let updatavalue = foundmonth.value + this.total
+        foodcenterRef.child('report').child(this.SelectShops).child('month').child(month).child('value').set(updatavalue)
+      }
+    },
+    reportyear () {
+      let foundyear = ''
+      let year = moment().tz('Asia/Bangkok').format().slice(0, 4)
+      const reportyear = foodcenterRef.child('report').child(this.SelectShops).child('year').orderByChild('label').equalTo(year)
+      reportyear.on('child_added', snap => {
+        foundyear = snap.val()
+      })
+      if (foundyear === '') {
+        let data = {
+          label: year,
+          value: this.total
+        }
+        foodcenterRef.child('report').child(this.SelectShops).child('year').child(year).set(data)
+      } else {
+        let updatavalue = foundyear.value + this.total
+        foodcenterRef.child('report').child(this.SelectShops).child('year').child(year).child('value').set(updatavalue)
       }
     },
     ...mapActions({
