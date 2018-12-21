@@ -1,7 +1,7 @@
 <template>
     <div>
       <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet"><br>
-        <h1 class="title">&nbsp;&nbsp;ข้อมูล User และร้านค้าใน Food Center</h1>
+        <h1 class="title">&nbsp;&nbsp;ข้อมูลผู้ใช้ และ ร้านอาหารใน Food Center</h1>
       <div class="box">
               <h4 id="let" class="title is-3">User</h4>
               <article class="message is-primary">
@@ -17,8 +17,7 @@
               <div class="message-body">
                                     <div class="container">
                                       <div class="columns is-multiline">
- <div class="column is-5" :key="keys" v-for="(user, keys) in users">
- <div :key="key" v-for="(user, key) in user">
+ <div class="column is-5" :key="key" v-for="(user, key) in users">
    <div v-if="updateKey === key">
      <input type="text" v-model="user.username" placeholder="Username" disabled>
      <input type="text" v-model="updatepassword" placeholder="password">
@@ -27,7 +26,7 @@
      <input type="text" v-model="updatephone" placeholder="phone">
      <input type="text" v-model="updateaddress" placeholder="address">
      <input type="text" v-model="updatepermission" placeholder="permission">
-     <button class="button button4" @click="updateUser(key, updatepassword, updatefirstname, updatelastname, updatephone, updateaddress, updatepermission, keys)">Save</button>
+     <button class="button button4" @click="updateUser(key, updatepassword, updatefirstname, updatelastname, updatephone, updateaddress, updatepermission)">Save</button>
    </div>
    <div v-else>
         <h1>Username:&nbsp;{{user.username}} Password:&nbsp;{{user.password}} firstname:&nbsp;{{user.firstname}}
@@ -36,7 +35,6 @@
         </h1>
         <button class="button button4" @click="setUpdateUser(key, user.firstname, user.lastname, user.password, user.permission, user.phonenumber, user.address)">Update</button>
    </div>
-      </div>
       </div>
                           </div>
                 </div>
@@ -55,13 +53,13 @@
   <div class="message-body">
     <div class="container">
       <div class="columns is-multiline">
-        <div class="column is-5" :key="keys" v-for="(shop, keys) in shops">
+        <div class="column is-5" :key="key" v-for="(shop, key) in shops">
             <div v-if="updateKey === key">
       <input type="text" v-model="updateName" placeholder="Name">
      <input type="text" v-model="updateTel" placeholder="Phonenumber">
      <input type="text" v-model="updateQ" placeholder="Q">
      <input type="text" v-model="updateStatus" placeholder="Status">
-     <button class="button button4" @click="updateShop(keys, key, updateName, updateTel, updateQ, updateStatus)">Save</button>
+     <button class="button button4" @click="updateShop(key, updateName, updateTel, updateQ, updateStatus)">Save</button>
               </div>
                 <div v-else>
                   <h1>ชื่อร้าน:&nbsp;{{shop.name}} เบอร์:&nbsp;{{shop.tel}} จำนวนคิว:&nbsp;{{shop.q}} สถานะ:&nbsp;<img v-bind:src="shop.status" width="80" height="60"></h1>
@@ -119,8 +117,8 @@ export default {
       this.updateQ = q
       this.updateStatus = status
     },
-    updateUser (key, updatepassword, updatefirstname, updatelastname, updatephone, updateaddress, updatepermission, keys) {
-      userRef.child(keys).child(key).update({
+    updateUser (key, updatepassword, updatefirstname, updatelastname, updatephone, updateaddress, updatepermission) {
+      userRef.child(key).update({
         password: updatepassword,
         firstname: updatefirstname,
         lastname: updatelastname,
@@ -135,10 +133,10 @@ export default {
       this.updatepermission = ''
       this.updatephone = ''
       this.updateaddress = ''
-      console.log(keys, key)
+      console.log(key)
     },
-    updateShop (keys, key, name, tel, q, Status) {
-      shopRef.child(keys).child(key).update({
+    updateShop (key, name, tel, q, Status) {
+      shopRef.child(key).update({
         name: name,
         q: q,
         status: Status,
@@ -163,9 +161,6 @@ export default {
       this.shops = snap.val()
       this.numberOfshop = snap.numChildren()
       console.log(this.shops)
-    })
-    firebase.database().ref().child('foodcenter').child('detail').on('value', function (snapshot) {
-      console.log('There are ' + snapshot.numChildren() + 'messages')
     })
   },
   computed: {
