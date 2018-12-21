@@ -78,7 +78,7 @@ export default {
       e.preventDefault()
     },
     registerW: function () {
-      const dbReflist = foodcenterRef.child(this.username)
+      const dbReflist = foodcenterRef.orderByChild('username').equalTo(this.username)
       dbReflist.on('child_added', snap => {
         this.hasUser = snap.val()
         console.log(this.hasUser)
@@ -94,7 +94,7 @@ export default {
           address: '',
           hasShop: ''
         }
-        foodcenterRef.child(this.username).push(data)
+        foodcenterRef.push(data)
         this.$router.push('/')
       } else {
         alert('UnSuccessfully sign Up')

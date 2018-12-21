@@ -94,7 +94,7 @@ const mutations = {
 const actions = {
   signIn: ({commit, dispatch}, payload) => {
     const dbRefObject = firebase.database().ref().child('user')
-    const dbReflist = dbRefObject.child(payload.username)
+    const dbReflist = dbRefObject.orderByChild('username').equalTo(payload.username)
     dbReflist.on('child_added', snap => {
       state.profile = snap.val()
       console.log(state.profile)
