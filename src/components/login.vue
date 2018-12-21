@@ -51,16 +51,15 @@
       </div>
     </div>
     <div class="column is-one-third" :key="key" v-for="(user, key) in users">
-      <div class="" :key="key" v-for="(user, key) in user">
     <h1>Username :{{user.username}}</h1>
     <h1>password :{{user.password}}</h1>
     <h1>permission :{{user.permission}}</h1>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import firebase from 'firebase'
 export default {
   name: 'login',
@@ -124,18 +123,13 @@ export default {
     })
   },
   computed: {
-    user () {
-      return this.$store.getters.user
-    },
-    isLoggedIn () {
-      return this.$store.getters.isLoggedIn
-    },
-    permission () {
-      return this.$store.getters.permission
-    },
-    hasShop () {
-      return this.$store.getters.hasShop
-    }
+    ...mapGetters({
+      permission: 'permission',
+      selectShop: 'selectShop',
+      user: 'user',
+      isLoggedIn: 'isLoggedIn',
+      hasShop: 'hasShop'
+    })
   }
 }
 </script>
