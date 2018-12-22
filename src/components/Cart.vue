@@ -59,7 +59,8 @@ export default {
       updateCount: '',
       search: '',
       updateDoingcount: '',
-      minutes: 0
+      minutes: 0,
+      reports: {}
     }
   },
   computed: {
@@ -212,6 +213,11 @@ export default {
     dbRefObject.on('value', snap => {
       this.shops = snap.val()
       console.log(this.shops)
+    })
+    const dbRefObject1 = foodcenterRef.child('report').child(this.SelectShops)
+    dbRefObject1.on('value', snap => {
+      this.reports = snap.val()
+      console.log(this.reports)
     })
   }
 }
