@@ -1,9 +1,6 @@
 <template>
 <nav class="navbar is-black">
   <div class="navbar-brand">
-    <a class="navbar-item" href="/">
-      <img src="/static/logo2.png" width="112" height="28">
-    </a>
     <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
       <span aria-hidden="true"></span>
       <span aria-hidden="true"></span>
@@ -18,7 +15,7 @@
                 <i class="fas fa-home"></i>
               </span>
               <span>
-                Home
+                ร้านอาหารทั้งหมด
               </span>
       </a>
       <a v-if="permission === '4'" class="navbar-item" href="#/admin">
@@ -26,7 +23,7 @@
                 <i class="fas fa-home"></i>
               </span>
               <span>
-                Manage
+                จัดการผู้ใช้
               </span>
       </a>
       <a v-if="permission === '2'" class="navbar-item" href="#/order">
@@ -34,7 +31,7 @@
                 <i class="fas fa-home"></i>
               </span>
               <span>
-                Manage
+                จัดการ Order
               </span>
       </a>
       <a v-if="permission === '2'" class="navbar-item" href="#/shop">
@@ -42,7 +39,7 @@
                 <i class="fas fa-home"></i>
               </span>
               <span>
-                MyShop
+                ร้านของฉัน
               </span>
       </a>
       <a v-if="permission === '2'" class="navbar-item" href="#/Reportsell">
@@ -50,7 +47,7 @@
                 <i class="fas fa-home"></i>
               </span>
               <span>
-                Report
+                สรุปยอดขาย
               </span>
       </a>
     </div>
@@ -68,7 +65,7 @@
           <p class="control" v-if="isLoggedIn" v-on:click="logout">
             <a class="bd-tw-button button" href="/">
               <span>
-                Logout
+                ออกจากระบบ
               </span>
             </a>
           </p>

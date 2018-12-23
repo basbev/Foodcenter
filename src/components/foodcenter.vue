@@ -8,8 +8,7 @@
       <button class="button button7" @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
     </div>
     <div>
-      <input type="text" v-model="Search" placeholder="Search" @input="filterShop(Search)">
-      <button class="button button7" @click="Searchnow(Search)">ค้นหาร้านอาหาร</button>
+      <input type="text" v-model="Search" placeholder="ค้นหาร้านอาหาร" @input="filterShop(Search)">
     </div>
     <section class="section" v-if="result !== ''">
         <div class="container">
@@ -237,6 +236,9 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style>
+.report {
+  text-align: center;
+}
 .button {
     background-color: #4CAF50; /* Green */
     border: none;
@@ -248,13 +250,6 @@ export default {
     transition-duration: 0.4s;
    /* cursor: pointer;*/
    font-family: 'Prompt', sans-serif;
-}
-.button1 {
-    margin-top: 7px;
-    width: 10%;
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
 }
 .button1:hover {
     background-color: #4CAF50;
@@ -305,7 +300,7 @@ export default {
     border: 2px solid #FF00FF;
 }
 .button7 {
-    margin-top: 13px;
+    margin-top: 7px;
     width: 10%;
     background-color: white;
     color: black;
@@ -316,6 +311,17 @@ export default {
     color: white;
 }
 .button6:hover {background-color: #FFB6C1;
+}
+.button8 {
+    margin-top: 7px;
+    width: 12%;
+    background-color: white;
+    color: black;
+    border: 2px solid #f44336;
+}
+.button8:hover {
+    background-color: #f42136;
+    color: white;
 }
 p {
     border-left: 20px solid #DC143C;

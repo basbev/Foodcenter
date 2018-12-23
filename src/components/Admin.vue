@@ -220,7 +220,7 @@ export default {
     font-family: 'Prompt', sans-serif;
 }
 .button3 {
-    margin-bottom: 7px;
+    margin-top: 7px;
     background-color: white;
     color: black;
     border: 2px solid #f44336;
@@ -231,7 +231,7 @@ export default {
     color: white;
 }
 .button4 {
-    margin-bottom: 7px;
+    margin-top: 7px;
     background-color: white;
     color: black;
     border: 2px solid #B8860B;
@@ -251,7 +251,7 @@ export default {
     color: white;
 }
 .button6 {
-    margin-bottom: 7px;
+    margin-top: 7px;
     background-color: white;
     color: black;
     border: 2px solid #FF00FF;

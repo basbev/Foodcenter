@@ -1,5 +1,6 @@
 <template>
   <div>
+    <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
       <div :key="key" v-for="(order, key) in orders">
    <div class="card">
     <header class="card-header">
@@ -23,16 +24,19 @@
     <div class="card-content">
     <div class="content">
       รวมทั้งหมด: {{detail.CountQuantity}} จาน :: ราคาทั้งหมด: {{detail.total}} <br>
-      <button v-if="order.status === 'กำลังรอ'" @click="updatemenunow(order.customer, keyShop2, order.order, key)" class="button button3">กำลังทำ</button>
-      <button v-if="order.status === 'กำลังทำ'" @click="complete(key)" class="button button3">ทำเสร็จเเล้ว</button>
+      <button v-if="order.status === 'กำลังรอ'" @click="updatemenunow(order.customer, order.order, key)" class="button button7">กำลังทำ</button>
+      <button v-if="order.status === 'กำลังทำ'" @click="complete(key)" class="button button7">ทำเสร็จเเล้ว</button>
     </div>
     </div>
   </div>
   </div>
   <footer class="card-footer">
-    <button @click='OrderComp(key, shops.q, shops.countdoing, order.order)' class="card-footer-item">Delete</button>
+    <button class="button button8" @click='OrderComp(key, shops.q, shops.countdoing, order.order)'>Delete</button>
     </footer>
   </div>
+   </div><br>
+   <div>
+     <button class="button button8" @click="group()">กรุ๊ปรวมเมนูอาหาร</button>
    </div>
       </div>
 </template>
@@ -50,7 +54,6 @@ export default {
       datenow: new Date(),
       shops: [],
       updateQ: '',
-      keyShop2: '',
       updatecount: ''
     }
   },
@@ -65,7 +68,7 @@ export default {
         count: order
       })
     },
-    updatemenunow (name, keys, order, key) {
+    updatemenunow (name, order, key) {
       foodcenterRef.child('detail').child(this.selectShop).update({
         doing: name
       })
@@ -77,6 +80,9 @@ export default {
       foodcenterRef.child('order').child(this.selectShop).child(key).update({
         status: 'ทำเสร็จเเล้ว'
       })
+    },
+    group () {
+      alert(`Pls Wait`)
     }
   },
   mounted () {
@@ -85,17 +91,10 @@ export default {
       this.orders = snap.val()
       console.log(this.orders)
     })
-    console.log(this.date)
     const dbRefObject1 = foodcenterRef.child('detail').child(this.selectShop)
     dbRefObject1.on('value', snap => {
       this.shops = snap.val()
-      this.keyShop = snap.key
       console.log(this.shops)
-    })
-    const dbRefObject2 = foodcenterRef.child('detail').child(this.selectShop)
-    dbRefObject2.on('child_added', snap => {
-      this.keyShop2 = snap.key
-      console.log(this.keyShop2)
     })
   },
   computed: {
@@ -107,5 +106,127 @@ export default {
 }
 </script>
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
-<style scoped>
+<style>
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    text-align: center;
+    /*text-decoration: none;*/
+    /*font-size: 14px;*/
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+   /* cursor: pointer;*/
+   font-family: 'Prompt', sans-serif;
+}
+.button1 {
+    margin-top: 7px;
+    width: 10%;
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+.button1:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+.button2 {
+    margin-top: 7px;
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+}
+.button2:hover {
+    background-color: #008CBA;
+    color: white;
+}
+.button3 {
+    margin-bottom: 7px;
+    background-color: white;
+    color: black;
+    border: 2px solid #f44336;
+}
+.button3:hover {
+    background-color: #f44336;
+    color: white;
+}
+.button4 {
+    margin-bottom: 7px;
+    background-color: white;
+    color: black;
+    border: 2px solid #B8860B;
+}
+.button4:hover {background-color: #B8860B;
+}
+.button5 {
+    margin-top: 7px;
+    background-color: white;
+    color: black;
+    border: 2px solid #7FFF00;
+}
+.button5:hover {
+    background-color: #7FFF00;
+    color: white;
+}
+.button6 {
+    margin-bottom: 7px;
+    background-color: white;
+    color: black;
+    border: 2px solid #FF00FF;
+}
+.button7 {
+    margin-top: 7px;
+    width: 10%;
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+.button7:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+.button6:hover {background-color: #FFB6C1;
+}
+.button8 {
+    margin-top: 7px;
+    width: 12%;
+    background-color: white;
+    color: black;
+    border: 2px solid #f44336;
+}
+.button8:hover {
+    background-color: #f42136;
+    color: white;
+}
+p {
+    border-left: 20px solid #DC143C;
+    border-radius: 12px;
+    border: 2px solid #F0E68C;
+    background-color: #F5DEB3;
+}
+input[type=text], select {
+    width: 19%;
+    padding: 1% 1%;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+input[type=number], select {
+    width: 10%;
+    padding: 1% 1%;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+div {
+  font-family: 'Prompt', sans-serif;
+}
+hk {
+   font-size: 30px;
+    background-color: #F0E68C;
+}
 </style>

@@ -18,8 +18,11 @@
           </div>
           <div class="column is-9">
             <div class="content is-medium">
+              <div class="content">
+              <img v-url={filename:detail.banner}>
+              <div :key="key" v-if="(shop, key) in detail"></div>
                  <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}&nbsp; เบอร์&nbsp; {{ detail.tel }}&nbsp;<img v-bind:src="detail.status" width="80" height="60" ></h3>
-                 <button v-if="permission !== '1'" class="button button3" @click="setprofile(detail.name, detail.tel, detail.status)">เเก้ไขโปรไฟล์</button>
+                 <button v-if="permission !== '1'" class="button button3" @click="setprofile(detail.name, detail.tel, detail.status, detail.banner)">เเก้ไขโปรไฟล์</button>
                  <div v-if="updateKey === true">
                    <input type="text" v-model="updateName" placeholder="ชื่อร้าน">
                    <input type="text" v-model="updatePhone" placeholder="เบอร์โทร">
@@ -27,8 +30,23 @@
   <option value="https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png">เปิด</option>
   <option value="https://www.img.live/images/2018/11/20/d57b23a07352f87d.png">ปิด</option>
 </select>
-                   <button v-if="permission !== '1'" class="button button2" @click="updateprofile(updateName, updatePhone, updateStatus)">บันทึกโปรไฟล์</button>
+<label class="file-label">
+      <input class="file-input" type="file" name="banner" @change="onFileChangebanner($event.target.files[0])">
+      <span class="file-cta">
+        <span class="file-icon">
+          <i class="fas fa-upload"></i>
+        </span>
+        <span class="file-label">
+          Info file…
+        </span>
+      </span>
+    </label>
+      <span class="file-name" v-if="dataImg2">
+        {{this.dataImg2.name}}
+      </span>
+                   <button v-if="permission !== '1'" class="button button2" @click="updateprofile(updateName, updatePhone, updateStatus, updateBanner )">บันทึกโปรไฟล์</button>
                  </div>
+              </div>
                 <br>
           <img src="/static/hot.png" width="130" height="100" ><div :key="key" v-for="(record, key) in records">
           <h3>&nbsp;&nbsp;{{key}}</h3>
@@ -176,14 +194,12 @@
               <div class="bucket" @click="isComponentModalActive = true">
         <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
           <div class="field is-grouped">
-            <p class="control">
-              <router-link to='/cart' class="button button4">
+              <router-link to='/cart' class="button button9">
                 <span class="icon">
                   <i class="fa fa-shopping-cart"></i>
                 </span>
                 <span>สั่ง Order ({{itemsInCart}})</span>
               </router-link>
-            </p>
           </div>
         </div>
               </div>
@@ -204,8 +220,9 @@
                                     <div class="column is-5" :key="key" v-for="(menu, key) in menus">
                           <h3>ชื่อเมนู:&nbsp;{{menu.foodname}}</h3>
                       <h3>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h3>
+                      <img v-url={filename:menu.foodpic} width="300" height="350"/><br>
                       <button @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, key)" class="button button3">เพิ่มลง Order</button>
-                      <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype)" class="button button3">เเก้ไขเมนูอาหาร</button>
+                      <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic)" class="button button3">เเก้ไขเมนูอาหาร</button>
                       <button v-if="permission !== '1'" @click="DeleteMenu(menu.key)" class="button button3">ลบ</button>
                       <hr>
                                       <div v-if="updateKey === key">
@@ -219,7 +236,21 @@
   <option value="ย่าง">ย่าง</option>
 </select>
         <input type="text" v-model="updateMenuprice" placeholder="ราคา">
-        <button @click="UpdateMenu(menu.key, updateMenufood, updateMenuprice, updateMenutype)" class="button button2">บันทึกเมนูอาหาร</button>
+        <label class="file-label">
+      <input class="file-input" type="file" name="resume" @change="onFileChangefoodupdate($event.target.files[0])">
+      <span class="file-cta">
+        <span class="file-icon">
+          <i class="fas fa-upload"></i>
+        </span>
+        <span class="file-label">
+          Info file…
+        </span>
+      </span>
+    </label>
+    <span class="file-name" v-if="dataImg4">
+        {{dataImg4.name}}
+      </span>
+        <button @click="UpdateMenu(menu.key, updateMenufood, updateMenuprice, updateMenutype, updateMenupic)" class="button button2">บันทึกเมนูอาหาร</button>
         <hr>
       </div>
       <div v-else>
@@ -241,7 +272,21 @@
   <option value="ย่าง">ย่าง</option>
 </select>
       <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
-      <button class="button button5" @click="insertmenu(foodname, foodprice, foodtype)">เพิ่มเมนู</button>
+      <label class="file-label">
+      <input class="file-input" type="file" name="resume" @change="onFileChangefood($event.target.files[0])">
+      <span class="file-cta">
+        <span class="file-icon">
+          <i class="fas fa-upload"></i>
+        </span>
+        <span class="file-label">
+          Info file…
+        </span>
+      </span>
+    </label>
+      <button class="button button5" @click="insertmenu(foodname, foodprice, foodtype, foodpic)">เพิ่มเมนู</button>
+      <span class="file-name" v-if="dataImg3">
+        {{this.dataImg3.name}}
+      </span>
             </div>
     </div>
            <div class="box">
@@ -305,6 +350,7 @@ export default {
       updateMenufood: '',
       updateMenuprice: '',
       updateMenutype: '',
+      updateMenupic: '',
       promo: '',
       prodetail: '',
       updateProdetail: '',
@@ -318,6 +364,10 @@ export default {
       Search: '',
       dataImg: '',
       dataImg1: '',
+      dataImg3: '',
+      dataImg4: '',
+      dataImg2: '',
+      banner: '',
       showData: []
     }
   },
@@ -332,16 +382,32 @@ export default {
       this.dataImg1 = fileImg
       console.log(this.dataImg1)
     },
-    insertmenu (foodname, foodprice, foodtype) {
+    onFileChangefood (fileImg) {
+      this.dataImg3 = fileImg
+      console.log(this.dataImg3)
+    },
+    onFileChangefoodupdate (fileImg) {
+      this.dataImg4 = fileImg
+      console.log(this.dataImg4)
+    },
+    onFileChangebanner (fileImg) {
+      this.dataImg2 = fileImg
+      console.log(this.dataImg2)
+    },
+    async insertmenu (foodname, foodprice, foodtype, foodpic) {
+      await storageRef.child(this.dataImg3.name).put(this.dataImg3)
       let data = {
         foodname: foodname,
         foodtype: foodtype,
-        foodprice: foodprice
+        foodprice: foodprice,
+        foodpic: this.dataImg3.name
       }
-      foodcenterRef.child('menu').child(this.selectShop).push(data)
+      await foodcenterRef.child('menu').child(this.selectShop).push(data)
       this.foodname = ''
       this.foodprice = ''
       this.foodtype = ''
+      this.foodpic = ''
+      this.dataImg3 = ''
     },
     async insertmenushow (foodname, foodprice, foodpic, foodtype) {
       await storageRef.child(this.dataImg.name).put(this.dataImg)
@@ -413,39 +479,48 @@ export default {
       this.updateKey = ''
       this.prodetail = ''
     },
-    SetUpdateMenu (key, menufood, menuprice, menutype) {
+    SetUpdateMenu (key, menufood, menuprice, menutype, menupic) {
       this.updateKey = key
       this.updateMenufood = menufood
       this.updateMenuprice = menuprice
       this.updateMenutype = menutype
+      this.updateMenupic = menupic
     },
-    setprofile (name, phone, status) {
+    async UpdateMenu (key, updateMenufood, updateMenuprice, updateMenutype, updateMenupic) {
+      foodcenterRef.child('menu').child(this.selectShop).child(key).update({
+        foodname: updateMenufood,
+        foodtype: updateMenutype,
+        foodprice: updateMenuprice,
+        foodpic: this.dataImg4.name
+      })
+      this.updateKey = ''
+      this.updateMenufood = ''
+      this.updateMenuprice = ''
+      this.updateMenutype = ''
+      this.updateMenupic = ''
+      this.dataImg4 = ''
+    },
+    setprofile (name, phone, status, banner) {
       this.updateKey = true
       this.updateName = name
       this.updatePhone = phone
       this.updateStatus = status
+      this.updateBanner = banner
     },
-    updateprofile (name, phone, status) {
-      foodcenterRef.child('detail').child(this.selectShop).update({
+    async updateprofile (name, phone, status, banner) {
+      await storageRef.child(this.dataImg2.name).put(this.dataImg2)
+      await foodcenterRef.child('detail').child(this.selectShop).update({
         name: name,
         tel: phone,
+        banner: this.dataImg2.name,
         status: status
       })
       this.updateKey = ''
       this.updateName = ''
       this.updatePhone = ''
       this.updateStatus = ''
-    },
-    UpdateMenu (key, updateMenufood, updateMenuprice, updateMenutype) {
-      foodcenterRef.child('menu').child(this.selectShop).child(key).update({
-        foodname: updateMenufood,
-        foodtype: updateMenutype,
-        foodprice: updateMenuprice
-      })
-      this.updateKey = ''
-      this.updateMenufood = ''
-      this.updateMenuprice = ''
-      this.updateMenutype = ''
+      this.updateBanner = ''
+      this.dataImg2 = ''
     },
     DelReview (key) {
       foodcenterRef.child('review').child(this.selectShop).child(key).remove()
@@ -562,12 +637,15 @@ export default {
     })
     dbRefObjectdetail.on('value', snap => {
       this.detail = snap.val()
-      // console.log(this.detail)
+      console.log(this.detail)
     })
   }
 }
 </script>
 <style>
+.report {
+  text-align: center;
+}
 .button {
     background-color: #4CAF50; /* Green */
     border: none;
@@ -578,50 +656,44 @@ export default {
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
    /* cursor: pointer;*/
-    font-family: 'Prompt', sans-serif;
+   font-family: 'Prompt', sans-serif;
 }
 .button1 {
     margin-top: 7px;
-    width: 10%;
+    width: 20%;
     background-color: white;
     color: black;
     border: 2px solid #4CAF50;
-    font-family: 'Prompt', sans-serif;
 }
 .button1:hover {
     background-color: #4CAF50;
     color: white;
-    font-family: 'Prompt', sans-serif;
 }
 .button2 {
     margin-top: 7px;
     background-color: white;
     color: black;
     border: 2px solid #008CBA;
-    font-family: 'Prompt', sans-serif;
 }
 .button2:hover {
     background-color: #008CBA;
     color: white;
-    font-family: 'Prompt', sans-serif;
 }
 .button3 {
-    margin-bottom: 7px;
+    margin-top: 7px;
     background-color: white;
     color: black;
     border: 2px solid #f44336;
-    font-family: 'Prompt', sans-serif;
 }
 .button3:hover {
     background-color: #f44336;
     color: white;
 }
 .button4 {
-    margin-bottom: 7px;
+    margin-top: 7px;
     background-color: white;
     color: black;
     border: 2px solid #B8860B;
-    font-family: 'Prompt', sans-serif;
 }
 .button4:hover {background-color: #B8860B;
 }
@@ -630,20 +702,21 @@ export default {
     background-color: white;
     color: black;
     border: 2px solid #7FFF00;
-    font-family: 'Prompt', sans-serif;
 }
 .button5:hover {
     background-color: #7FFF00;
     color: white;
 }
 .button6 {
-    margin-bottom: 7px;
+    margin-top: 7px;
     background-color: white;
     color: black;
     border: 2px solid #FF00FF;
 }
+.button6:hover {background-color: #FFB6C1;
+}
 .button7 {
-    margin-top: 13px;
+    margin-top: 7px;
     width: 10%;
     background-color: white;
     color: black;
@@ -653,7 +726,25 @@ export default {
     background-color: #4CAF50;
     color: white;
 }
-.button6:hover {background-color: #FFB6C1;
+.button8 {
+    margin-top: 7px;
+    width: 12%;
+    background-color: white;
+    color: black;
+    border: 2px solid #f44336;
+}
+.button8:hover {
+    background-color: #f42136;
+    color: white;
+}
+.button9 {
+    font-size: 20px;
+    margin-right: 20px;
+    background-color: white;
+    color: black;
+    border: 2px solid #B8860B;
+}
+.button9:hover {background-color: #B8860B;
 }
 p {
     border-left: 20px solid #DC143C;
@@ -669,25 +760,27 @@ input[type=text], select {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    font-family: 'Prompt', sans-serif;
 }
 input[type=number], select {
-    width: 11%;
+    width: 13%;
     padding: 1% 1%;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    font-family: 'Prompt', sans-serif;
 }
 div {
   font-family: 'Prompt', sans-serif;
 }
+hk {
+   font-size: 30px;
+    background-color: #F0E68C;
+}
 .bucket {
   position: fixed;
-  top: 45%;
-  right: 70%;
+  top: 65%;
+  right: 72%;
   cursor: pointer;
 }
 .file-label {

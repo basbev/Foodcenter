@@ -1,10 +1,11 @@
 <template>
 <div class="report">
+  <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
   <h1>Report :: {{this.selectShop}}</h1><br>
-    <button @click="exportPdf">exportPDF</button>
-        <button @click="getDataFirebase(getvalue, day)">รายวัน</button>
-        <button @click="getDataFirebase(getvalue, month)">รายเดือน</button>
-        <button @click="getDataFirebase(getvalue, year)">รายปี</button>
+    <button class="button button2" @click="exportPdf">exportPDF</button>
+        <button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button>
+        <button class="button button4" @click="getDataFirebase(getvalue, month)">รายเดือน</button>
+        <button class="button button5" @click="getDataFirebase(getvalue, year)">รายปี</button>
     <div id="chart-container">
     </div>
 </div>
@@ -110,5 +111,116 @@ export default {
 <style>
 .report {
   text-align: center;
+}
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    text-align: center;
+    /*text-decoration: none;*/
+    /*font-size: 14px;*/
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+   /* cursor: pointer;*/
+   font-family: 'Prompt', sans-serif;
+}
+.button1 {
+    margin-top: 7px;
+    width: 10%;
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+.button1:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+.button2 {
+    margin-top: 7px;
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+}
+.button2:hover {
+    background-color: #008CBA;
+    color: white;
+}
+.button3 {
+    margin-top: 7px;
+    background-color: white;
+    color: black;
+    border: 2px solid #f44336;
+}
+.button3:hover {
+    background-color: #f44336;
+    color: white;
+}
+.button4 {
+    margin-top: 7px;
+    background-color: white;
+    color: black;
+    border: 2px solid #B8860B;
+}
+.button4:hover {background-color: #B8860B;
+}
+.button5 {
+    margin-top: 7px;
+    background-color: white;
+    color: black;
+    border: 2px solid #7FFF00;
+}
+.button5:hover {
+    background-color: #7FFF00;
+    color: white;
+}
+.button6 {
+    margin-top: 7px;
+    background-color: white;
+    color: black;
+    border: 2px solid #FF00FF;
+}
+.button7 {
+    margin-top: 13px;
+    width: 10%;
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+.button7:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+.button6:hover {background-color: #FFB6C1;
+}
+p {
+    border-left: 20px solid #DC143C;
+    border-radius: 12px;
+    border: 2px solid #F0E68C;
+    background-color: #F5DEB3;
+}
+input[type=text], select {
+    width: 19%;
+    padding: 1% 1%;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+input[type=number], select {
+    width: 10%;
+    padding: 1% 1%;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+div {
+  font-family: 'Prompt', sans-serif;
+}
+hk {
+   font-size: 30px;
+    background-color: #F0E68C;
 }
 </style>
