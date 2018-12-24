@@ -1,11 +1,12 @@
 <template>
   <div class='hello'>
     <center><link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
+    <br><br><br>
     <img src = "/static/logo1.png" width="300">
     <div v-if="permission !== '1'">
-      <input type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
-      <input type="text" v-model="tel" placeholder="เบอร์">
-      <button class="button button7" @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
+      <input class="putname" type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
+      <input class="putphone" type="text" v-model="tel" placeholder="เบอร์">
+      <button class="button button10" @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
     </div>
     <div>
       <input type="text" v-model="Search" placeholder="ค้นหาร้านอาหาร" @input="filterShop(Search)">
@@ -40,7 +41,9 @@
     </center>
     <hr>
   <section class="section" v-if="!showData.length > 0">
+     <div class="allshop">
     <label>ร้านอาหารทั้งหมด {{this.numberOfShop}} ร้าน</label>
+    </div>
         <div class="container">
           <div class="columns is-multiline">
             <div class="column is-one-third" :key="detail.key" v-for="(detail, key) in shops">
@@ -240,7 +243,7 @@ export default {
   text-align: center;
 }
 .button {
-    background-color: #4CAF50; /* Green */
+    background-color: rgb(37, 108, 175);
     border: none;
     color: white;
     text-align: center;
@@ -266,6 +269,7 @@ export default {
     color: white;
 }
 .button3 {
+    font-size: 15px;
     margin-bottom: 7px;
     background-color: white;
     color: black;
@@ -323,6 +327,18 @@ export default {
     background-color: #f42136;
     color: white;
 }
+.button10 {
+    font-size: 20px;
+    margin-top: 7px;
+    width: 10%;
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+.button10:hover {
+    background-color: #4CAF50;
+    color: white;
+}
 p {
     border-left: 20px solid #DC143C;
     border-radius: 12px;
@@ -338,6 +354,9 @@ input[type=text], select {
     border-radius: 4px;
     box-sizing: border-box;
 }
+.putname{
+  width: 15%;
+}
 input[type=number], select {
     width: 10%;
     padding: 1% 1%;
@@ -349,6 +368,9 @@ input[type=number], select {
 }
 div {
   font-family: 'Prompt', sans-serif;
+}
+.allshop {
+  font-size: 18px;
 }
 hk {
    font-size: 30px;

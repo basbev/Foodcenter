@@ -2,17 +2,14 @@
 <div>
   <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
     <section class="section">
-      <div class="container">
+      <div class="container"><br>
         <div class="columns">
           <div class="column is-3">
             <aside class="is-medium menu">
-          <p class="menu-label">
-            categories
-          </p>
           <ul class="menu-list">
-            <li class="is-right"><a href="#const" class="is-active"><i class=""></i> เมนูอาหารเเนะนำ</a></li>
-            <li><a href="#let" class="is-active"><i class=""></i> เมนูอาหารทั่วไป</a></li>
-            <li><a href="#/foodcenter" class="is-active"><i class=""></i> หน้าร้านอาหาร</a></li>
+            <li class="is-right"><a href="#const" class="is-active"><i class=""></i> เมนูเเนะนำ</a></li>
+            <li><a href="#let" class="is-active"><i class=""></i> เมนูทั่วไป</a></li>
+            <li><a href="#let2" class="is-active"><i class=""></i> ความเห็นจากลูกค้า</a></li>
           </ul>
             </aside>
           </div>
@@ -21,8 +18,8 @@
               <div class="content">
               <img v-url={filename:detail.banner}>
               <div :key="key" v-if="(shop, key) in detail"></div>
-                 <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}&nbsp; เบอร์&nbsp; {{ detail.tel }}&nbsp;<img v-bind:src="detail.status" width="80" height="60" ></h3>
-                 <button v-if="permission !== '1'" class="button button3" @click="setprofile(detail.name, detail.tel, detail.status, detail.banner)">เเก้ไขโปรไฟล์</button>
+                 <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}&nbsp; เบอร์&nbsp; {{ detail.tel }}&nbsp;<img v-bind:src="detail.status" width="90" height="70" ></h3>
+                 <button v-if="permission !== '1'" class="button button11" @click="setprofile(detail.name, detail.tel, detail.status, detail.banner)">เเก้ไขโปรไฟล์</button>
                  <div v-if="updateKey === true">
                    <input type="text" v-model="updateName" placeholder="ชื่อร้าน">
                    <input type="text" v-model="updatePhone" placeholder="เบอร์โทร">
@@ -37,18 +34,18 @@
           <i class="fas fa-upload"></i>
         </span>
         <span class="file-label">
-          Info file…
+          อัพโหลดรูป
         </span>
       </span>
     </label>
       <span class="file-name" v-if="dataImg2">
         {{this.dataImg2.name}}
       </span>
-                   <button v-if="permission !== '1'" class="button button2" @click="updateprofile(updateName, updatePhone, updateStatus, updateBanner )">บันทึกโปรไฟล์</button>
+                   <button v-if="permission !== '1'" class="button button12" @click="updateprofile(updateName, updatePhone, updateStatus, updateBanner )">บันทึกโปรไฟล์</button>
                  </div>
               </div>
                 <br>
-          <img src="/static/hot.png" width="130" height="100" ><div :key="key" v-for="(record, key) in records">
+          <img src="/static/hotsale.png"><div :key="key" v-for="(record, key) in records">
           <h3>&nbsp;&nbsp;{{key}}</h3>
           </div>
            <div class="box">
@@ -65,7 +62,7 @@
 <input type="text" v-model="Search" placeholder="ค้นหาเมนู" v-if="Searchtype === ''" disabled>
 <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" v-if="Searchtype === 'menushow'">
 <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop2(Search)" v-if="Searchtype === 'menu'">
-      <button class="button button7" @click="Searchnow(Search, Searchtype)">ค้นหาอาหาร</button>
+      <button class="button button11" @click="Searchnow(Search, Searchtype)">ค้นหาอาหาร</button>
     </div>
     <div v-if="result !== ''">
 <h3>ชื่อเมนู:&nbsp;{{result.foodname}}</h3>
@@ -90,10 +87,10 @@
                   <i class="fas fa-info-circle"></i>
                 </span>
                 <div class="message-body">
-<img src="/static/pro.png" width="130" height="100" >
+<img src="/static/pro.png">
                    <div class="row" :key="key" v-for="(promo, key) in promo">
                       <h4>&nbsp; {{promo.prodetail}} </h4>
-                       <button v-if="permission !== '1'" class="button button5" @click="DelPromo(key)">ลบ</button>
+                       <button v-if="permission !== '1'" class="button button3" @click="DelPromo(key)">ลบ</button>
                         <button v-if="permission !== '1'" @click="SetUpdatePromo(key, promo.prodetail)" class="button button3">เเก้ไขโปรโมชั่น</button>
                     <hr>
                     <div v-if="updateKey === key">
@@ -106,11 +103,11 @@
               </article>
               <div v-if="permission !== '1'">
                 <input type="text" v-model="prodetail" placeholder="รายละเอียดโปรโมชั่น" size="30">
-      <button class="button button2" @click="insertpromo(prodetail)">เพิ่มโปรโมชั่น</button>
+      <button class="button button12" @click="insertpromo(prodetail)">เพิ่มโปรโมชั่น</button>
               </div>
           </div>
               <div class="box">
-                <h4 id="const" class="title is-3">เมนูอาหารเเนะนำ</h4>
+                <h4 id="const" class="title is-3">เมนูเเนะนำ</h4>
                 <article class="message is-primary">
                   <span class="icon has-text-primary">
                   <i class="fab fa-hot"></i>
@@ -144,7 +141,7 @@
           <i class="fas fa-upload"></i>
         </span>
         <span class="file-label">
-          Info file…
+          อัพโหลดรูป
         </span>
       </span>
     </label>
@@ -181,11 +178,11 @@
           <i class="fas fa-upload"></i>
         </span>
         <span class="file-label">
-          Info file…
+          อัพโหลดรูป
         </span>
       </span>
     </label>
-      <button class="button button1" @click="insertmenushow(foodname, foodprice , foodpic, foodtype)">เพิ่มเมนูแนะนำ</button>
+      <button class="button button11" @click="insertmenushow(foodname, foodprice , foodpic, foodtype)">เพิ่มเมนูแนะนำ</button>
               <span class="file-name" v-if="dataImg">
         {{this.dataImg.name}}
       </span>
@@ -205,7 +202,7 @@
               </div>
     </div>
             <div class="box">
-              <h4 id="let" class="title is-3">เมนูอาหารทั่วไป</h4>
+              <h4 id="let" class="title is-3">เมนูทั่วไป</h4>
               <article class="message is-primary">
                 <span class="icon has-text-primary">
                   <i class="fas fa-info-circle"></i>
@@ -243,7 +240,7 @@
           <i class="fas fa-upload"></i>
         </span>
         <span class="file-label">
-          Info file…
+          อัพโหลดรูป
         </span>
       </span>
     </label>
@@ -279,31 +276,23 @@
           <i class="fas fa-upload"></i>
         </span>
         <span class="file-label">
-          Info file…
+          อัพโหลดรูป
         </span>
       </span>
     </label>
-      <button class="button button5" @click="insertmenu(foodname, foodprice, foodtype, foodpic)">เพิ่มเมนู</button>
+      <button class="button button11" @click="insertmenu(foodname, foodprice, foodtype, foodpic)">เพิ่มเมนู</button>
       <span class="file-name" v-if="dataImg3">
         {{this.dataImg3.name}}
       </span>
             </div>
     </div>
            <div class="box">
-              <h4 id="let" class="title is-3">รีวิวจากลูกค้า</h4>
-              <article class="message is-primary">
-                <span class="icon has-text-primary">
-                  <i class="fas fa-info-circle"></i>
-                </span>
-                <div class="message-body">
-                  รีวิวการใช้บริการ
-                </div>
-              </article>
+              <h4 id="let2" class="title is-3">ความเห็นจากลูกค้า</h4>
                                     <div class="row" :key="key" v-for="(review, key) in review">
                       <div class="message-body"><p><h5>Review:&nbsp;</h5>{{review.view}}
                       <img v-bind:src="review.scorce" width="40" height="40" ><br>
                        <h5>โดย คุณ:&nbsp;{{review.namere}}</h5><br>
-                       <button v-if="permission !== '1'" class="button button5" @click="DelReview(key)">ลบ</button>
+                       <button v-if="permission !== '1'" class="button button3" @click="DelReview(key)">ลบความเห็น</button>
                        </div>
                           </div>
                 <input type="text" v-model="view" placeholder="รีวิว" size="30">
@@ -313,7 +302,7 @@
 <label for="ok">ok</label>
 <input type="radio" id="good" name="gender" value="https://www.img.in.th/images/2a8e04f7dd719a60eba986227acb5c0a.png" v-model="scorce">
 <label for="good">ดีมาก</label>
-      <button class="button button2" @click="insertreview(view, scorce)">เพิ่มรีวิว</button>
+      <button class="button button12" @click="insertreview(view, scorce)">เพิ่มรีวิว</button>
           </div>
       </div>
     </div>
@@ -454,13 +443,21 @@ export default {
       this.updatefoodtype = foodtype
     },
     async UpdateMenuShow (key, foodname, foodprice, foodpic, foodtype) {
-      await storageRef.child(this.dataImg1.name).put(this.dataImg1)
-      await foodcenterRef.child('menushow').child(this.selectShop).child(key).update({
-        foodname: foodname,
-        foodprice: foodprice,
-        foodpic: this.dataImg1.name,
-        foodtype: foodtype
-      })
+      if (this.dataImg1 !== '') {
+        await storageRef.child(this.dataImg1.name).put(this.dataImg1)
+        await foodcenterRef.child('menushow').child(this.selectShop).child(key).update({
+          foodname: foodname,
+          foodprice: foodprice,
+          foodpic: this.dataImg1.name,
+          foodtype: foodtype
+        })
+      } else {
+        await foodcenterRef.child('menushow').child(this.selectShop).child(key).update({
+          foodname: foodname,
+          foodprice: foodprice,
+          foodtype: foodtype
+        })
+      }
       this.updateKey = ''
       this.foodname = ''
       this.foodprice = ''
@@ -487,12 +484,21 @@ export default {
       this.updateMenupic = menupic
     },
     async UpdateMenu (key, updateMenufood, updateMenuprice, updateMenutype, updateMenupic) {
-      foodcenterRef.child('menu').child(this.selectShop).child(key).update({
-        foodname: updateMenufood,
-        foodtype: updateMenutype,
-        foodprice: updateMenuprice,
-        foodpic: this.dataImg4.name
-      })
+      if (this.dataImg4 !== '') {
+        await storageRef.child(this.dataImg4.name).put(this.dataImg4)
+        foodcenterRef.child('menu').child(this.selectShop).child(key).update({
+          foodname: updateMenufood,
+          foodtype: updateMenutype,
+          foodprice: updateMenuprice,
+          foodpic: this.dataImg4.name
+        })
+      } else {
+        foodcenterRef.child('menu').child(this.selectShop).child(key).update({
+          foodname: updateMenufood,
+          foodtype: updateMenutype,
+          foodprice: updateMenuprice
+        })
+      }
       this.updateKey = ''
       this.updateMenufood = ''
       this.updateMenuprice = ''
@@ -508,13 +514,21 @@ export default {
       this.updateBanner = banner
     },
     async updateprofile (name, phone, status, banner) {
-      await storageRef.child(this.dataImg2.name).put(this.dataImg2)
-      await foodcenterRef.child('detail').child(this.selectShop).update({
-        name: name,
-        tel: phone,
-        banner: this.dataImg2.name,
-        status: status
-      })
+      if (this.dataImg2 !== '') {
+        await storageRef.child(this.dataImg2.name).put(this.dataImg2)
+        await foodcenterRef.child('detail').child(this.selectShop).update({
+          name: name,
+          tel: phone,
+          banner: this.dataImg2.name,
+          status: status
+        })
+      } else {
+        await foodcenterRef.child('detail').child(this.selectShop).update({
+          name: name,
+          tel: phone,
+          status: status
+        })
+      }
       this.updateKey = ''
       this.updateName = ''
       this.updatePhone = ''
@@ -647,7 +661,7 @@ export default {
   text-align: center;
 }
 .button {
-    background-color: #4CAF50; /* Green */
+    background-color: rgb(37, 108, 175);
     border: none;
     color: white;
     text-align: center;
@@ -670,6 +684,7 @@ export default {
     color: white;
 }
 .button2 {
+    font-size: 15px;
     margin-top: 7px;
     background-color: white;
     color: black;
@@ -690,6 +705,7 @@ export default {
     color: white;
 }
 .button4 {
+    font-size: 15px;
     margin-top: 7px;
     background-color: white;
     color: black;
@@ -698,6 +714,7 @@ export default {
 .button4:hover {background-color: #B8860B;
 }
 .button5 {
+    font-size: 15px;
     margin-top: 7px;
     background-color: white;
     color: black;
@@ -752,7 +769,43 @@ p {
     border: 2px solid #F0E68C;
     background-color: #F5DEB3;
 }
+.button10 {
+    font-size: 20px;
+    margin-top: 7px;
+    width: 10%;
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+.button10:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+.button11 {
+    font-size: 18px;
+    margin-top: 8px;
+    width: 12%;
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+.button11:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+.button12 {
+    font-size: 18px;
+    margin-top: 8px;
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+}
+.button12:hover {
+    background-color: #008CBA;
+    color: white;
+}
 input[type=text], select {
+    font-size: 17px;
     width: 19%;
     padding: 1% 1%;
     margin: 8px 0;
@@ -763,6 +816,7 @@ input[type=text], select {
 }
 input[type=number], select {
     width: 13%;
+    font-size: 17px;
     padding: 1% 1%;
     margin: 8px 0;
     display: inline-block;
@@ -784,9 +838,13 @@ hk {
   cursor: pointer;
 }
 .file-label {
+  font-size: 18px;
   display: unset;
 }
 .file-cta {
+    font-size: 18px;
+    padding: 1% 1%;
+    margin: 8px 0;
     background-color: #209cee;
     border-color: transparent;
     color: #fff;

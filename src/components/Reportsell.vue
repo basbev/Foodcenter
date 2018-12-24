@@ -1,6 +1,7 @@
 <template>
 <div class="report">
   <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
+  <br>
   <h1>Report :: {{this.selectShop}}</h1><br>
     <button class="button button2" @click="exportPdf">exportPDF</button>
         <button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button>
@@ -113,7 +114,7 @@ export default {
   text-align: center;
 }
 .button {
-    background-color: #4CAF50; /* Green */
+    background-color: rgb(37, 108, 175);
     border: none;
     color: white;
     text-align: center;

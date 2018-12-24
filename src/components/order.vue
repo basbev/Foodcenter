@@ -17,7 +17,7 @@
       ราคา: {{detail.price}} บาท <br>
       จำนวน: {{detail.quantity}} จาน<br>
       เวลาคำนวณ : {{detail.minute}} นาที <br>
-      วันที่ : {{detail.date}}
+      <!--วันที่ : {{detail.date}}-->
       </div>
   </div>
   <div v-if="index === detail.index">
@@ -37,6 +37,9 @@
    </div><br>
    <div>
      <button class="button button8" @click="group()">กรุ๊ปรวมเมนูอาหาร</button>
+     <div v-for="(menu, key) in groupmenu" :key="key">
+       {{menu.foodname}} :: {{menu.quantity}}
+     </div>
    </div>
       </div>
 </template>
@@ -54,7 +57,9 @@ export default {
       datenow: new Date(),
       shops: [],
       updateQ: '',
-      updatecount: ''
+      updatecount: '',
+      groupmenu: [],
+      getmenuall: []
     }
   },
   methods: {
@@ -82,13 +87,52 @@ export default {
       })
     },
     group () {
-      alert(`Pls Wait`)
+      // this.getmenu()
+      alert(`ทำการกรุ๊ปเมนู`)
+      for (var i = 0; i < this.orders.length; i++) {
+        // alert(`กรุ๊ปเมนู one: ` + i)
+        for (var y = 0; y < this.orders[i].menu.length; y++) {
+        // alert(`กรุ๊ปเมนู two: ` + y)
+          const record = this.groupmenu.find(p => p.foodname === this.orders[i].menu[y].name)
+          if (!record) {
+            this.groupmenu.push({
+              foodname: this.orders[i].menu[y].name,
+              quantity: 1
+            })
+          } else {
+            record.quantity += this.orders[i].menu[y].quantity
+          }
+        }
+      }
+      console.log(this.groupmenu)
+    },
+    getmenu () {
+      const menuRef = foodcenterRef.child('order').child(this.selectShop)
+      menuRef.once('value', snap => {
+        var data = []
+        // var data1 = []
+        snap.forEach(ss => {
+          // var item = ss.val().menu
+          // data1 = ss.val().menu
+          // data.push(data1)
+          // this.getmenuall = data
+          // console.log(data)
+        })
+        this.getmenuall = data
+        // console.log(data)
+      })
     }
   },
   mounted () {
     const dbRefObject = foodcenterRef.child('order').child(this.selectShop)
     dbRefObject.on('value', snap => {
-      this.orders = snap.val()
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.orders = data
       console.log(this.orders)
     })
     const dbRefObject1 = foodcenterRef.child('detail').child(this.selectShop)

@@ -1,12 +1,14 @@
 <template>
   <div class="cart">
-    <h1 class="title">Order ของคุณ</h1>
+    <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
+     &nbsp;<h1 class="title"> &nbsp;Order ของคุณ</h1>
+    <div class="box">
       <p v-show="!products.length">
-        <i>คุณยังไม่ได้เลือกเมนู!</i>
-        <router-link to="/shop">กลับไปหน้าเมนู</router-link>
+        &nbsp;<i>คุณยังไม่ได้เลือกเมนู!</i>
+        &nbsp;<router-link to="/shop">กลับไปหน้าเมนู</router-link>
       </p>
        <table class="table is-striped" v-show="products.length">
-        <thead>
+        <thead>&nbsp;
           <tr>
             <td>ชื่อเมนู</td>
             <td>ราคา</td>
@@ -34,13 +36,14 @@
               </tr>
             </tbody>
     </table>
-    <p>ผู้สั่ง : {{this.users}}</p>
-    <p>ร้านค้า : {{this.SelectShops}}</p>
+    &nbsp;ผู้สั่ง : {{this.users}} <br>
+    &nbsp;ร้านค้า : {{this.SelectShops}}
     <hr>
-     จำนวนคิว ณ ขณะนี้ {{shops.q}} :: {{shops.SaveDate}}
-    <p><button v-show="products.length" class='button is-primary' @click='checkout'>เช็คราคา</button></p><br>
-    <p><router-link to="/shop"><button v-show="products.length" class='button is-primary'>กลับไปเลือกเมนู</button></router-link></p><br>
-    <p><button v-show="products.length" class='button is-primary' @click="order(products, shops.q, CountQuantity, total, shops.countdoing, shops.SaveDate)">ยืนยัน</button></p>
+    &nbsp;จำนวนคิว ณ ขณะนี้ {{shops.q}} คิว  <br>
+    &nbsp;เวลา&nbsp;{{shops.SaveDate}}<br>
+    <router-link to="/shop"><button v-show="products.length" class='button button13'>กลับไปเลือกเมนู</button></router-link>
+    <button v-show="products.length" class='button button14' @click="order(products, shops.q, CountQuantity, total, shops.SaveDate)">ยืนยันการสั่ง</button>
+  </div>
   </div>
 </template>
 
@@ -60,7 +63,8 @@ export default {
       search: '',
       updateDoingcount: '',
       minutes: 0,
-      reports: {}
+      reports: {},
+      recordshop: {}
     }
   },
   computed: {
@@ -84,7 +88,7 @@ export default {
     checkout () {
       alert('ราคาทั้งหมด ' + this.total + ' บาท' + ' จานทั้งหมด ' + this.CountQuantity + ' จาน')
     },
-    async order (products, q, CountQuantity, total, countdoing, gettime) {
+    async order (products, q, CountQuantity, total, gettime) {
       alert('สั่งOrderนี้เรียบร้อยแล้ว')
       await this.report()
       await this.reportmonth()
@@ -115,7 +119,7 @@ export default {
         let record = {
           amount: products[i].quantity
         }
-        await foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('menu').push(data)
+        await foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('menu').child(i).set(data)
         const dbRefObject2 = foodcenterRef.child('record').child(this.SelectShops).child(products[i].name)
         dbRefObject2.on('value', snap => {
           this.search = snap.val()
@@ -130,10 +134,10 @@ export default {
         }
       }
       await foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('customer').set(this.users)
-      await foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('order').set(countdoing)
+      await foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('order').set(this.shops.countdoing)
       await foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('status').set('กำลังรอ')
       this.updateQ = q
-      this.updateDoingcount = countdoing
+      this.updateDoingcount = this.shops.countdoing
       let SaveDate = ''
       if (q === 0) {
         SaveDate = moment().tz('Asia/Bangkok').add('minute', this.minutes).format()
@@ -220,6 +224,11 @@ export default {
       this.reports = snap.val()
       console.log(this.reports)
     })
+    const dbRefObject2 = foodcenterRef.child('record').child(this.SelectShops)
+    dbRefObject2.on('value', snap => {
+      this.recordshop = snap.val()
+      console.log(this.recordshop)
+    })
   }
 }
 </script>
@@ -228,22 +237,28 @@ export default {
   text-align: center;
 }
 .button {
-    background-color: #4CAF50; /* Green */
+    background-color: rgb(37, 108, 175);
     border: none;
     color: white;
     text-align: center;
-    /*text-decoration: none;*/
-    /*font-size: 14px;*/
+    font-size: 14px;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
-   /* cursor: pointer;*/
    font-family: 'Prompt', sans-serif;
+}
+.button1 {
+    margin-top: 7px;
+    width: 20%;
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
 }
 .button1:hover {
     background-color: #4CAF50;
     color: white;
 }
 .button2 {
+    font-size: 15px;
     margin-top: 7px;
     background-color: white;
     color: black;
@@ -254,7 +269,7 @@ export default {
     color: white;
 }
 .button3 {
-    margin-bottom: 7px;
+    margin-top: 7px;
     background-color: white;
     color: black;
     border: 2px solid #f44336;
@@ -264,7 +279,8 @@ export default {
     color: white;
 }
 .button4 {
-    margin-bottom: 7px;
+    font-size: 15px;
+    margin-top: 7px;
     background-color: white;
     color: black;
     border: 2px solid #B8860B;
@@ -272,6 +288,7 @@ export default {
 .button4:hover {background-color: #B8860B;
 }
 .button5 {
+    font-size: 15px;
     margin-top: 7px;
     background-color: white;
     color: black;
@@ -282,10 +299,12 @@ export default {
     color: white;
 }
 .button6 {
-    margin-bottom: 7px;
+    margin-top: 7px;
     background-color: white;
     color: black;
     border: 2px solid #FF00FF;
+}
+.button6:hover {background-color: #FFB6C1;
 }
 .button7 {
     margin-top: 7px;
@@ -298,8 +317,6 @@ export default {
     background-color: #4CAF50;
     color: white;
 }
-.button6:hover {background-color: #FFB6C1;
-}
 .button8 {
     margin-top: 7px;
     width: 12%;
@@ -311,13 +328,82 @@ export default {
     background-color: #f42136;
     color: white;
 }
+.button9 {
+    font-size: 20px;
+    margin-right: 20px;
+    background-color: white;
+    color: black;
+    border: 2px solid #B8860B;
+}
+.button9:hover {background-color: #B8860B;
+}
 p {
     border-left: 20px solid #DC143C;
     border-radius: 12px;
     border: 2px solid #F0E68C;
     background-color: #F5DEB3;
 }
+.button10 {
+    font-size: 20px;
+    margin-top: 7px;
+    width: 10%;
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+.button10:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+.button11 {
+    font-size: 18px;
+    margin-top: 8px;
+    width: 12%;
+    background-color: white;
+    color: black;
+    border: 2px solid #4CAF50;
+}
+.button11:hover {
+    background-color: #4CAF50;
+    color: white;
+}
+.button12 {
+    font-size: 18px;
+    margin-top: 8px;
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+}
+.button12:hover {
+    background-color: #008CBA;
+    color: white;
+}
+.button13 {
+    font-size: 18px;
+    margin-left: 8px;
+    margin-top: 3px;
+    background-color: white;
+    color: black;
+    border: 2px solid #008CBA;
+}
+.button13:hover {
+    background-color: #008CBA;
+    color: white;
+}
+.button14 {
+    margin-top: 3px;
+    font-size: 18px;
+    margin-left: 8px;
+    background-color: white;
+    color: black;
+    border: 2px solid #DC143C;
+}
+.button14:hover {
+    background-color: #DC543C;
+    color: white;
+}
 input[type=text], select {
+    font-size: 17px;
     width: 19%;
     padding: 1% 1%;
     margin: 8px 0;
@@ -327,7 +413,8 @@ input[type=text], select {
     box-sizing: border-box;
 }
 input[type=number], select {
-    width: 10%;
+    width: 13%;
+    font-size: 17px;
     padding: 1% 1%;
     margin: 8px 0;
     display: inline-block;
@@ -335,11 +422,30 @@ input[type=number], select {
     border-radius: 4px;
     box-sizing: border-box;
 }
-div {
+.cart {
+  font-size: 19px;
   font-family: 'Prompt', sans-serif;
 }
 hk {
    font-size: 30px;
     background-color: #F0E68C;
+}
+.bucket {
+  position: fixed;
+  top: 65%;
+  right: 72%;
+  cursor: pointer;
+}
+.file-label {
+  font-size: 18px;
+  display: unset;
+}
+.file-cta {
+    font-size: 18px;
+    padding: 1% 1%;
+    margin: 8px 0;
+    background-color: #209cee;
+    border-color: transparent;
+    color: #fff;
 }
 </style>
