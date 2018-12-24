@@ -98,10 +98,22 @@ export default {
         let time = moment().tz('Asia/Bangkok').format().slice(0, 10)
         let Addminute = ''
         if (q === 0) {
-          this.minutes = this.minutes + 3
+          // this.minutes = this.minutes + 3
+          if (products[i].type === 'ผัด') { this.minutes = this.minutes + 4 }
+          if (products[i].type === 'ทอด') { this.minutes = this.minutes + 4 }
+          if (products[i].type === 'ต้ม') { this.minutes = this.minutes + 6 }
+          if (products[i].type === 'เเกง') { this.minutes = this.minutes + 6 }
+          if (products[i].type === 'นึ่ง') { this.minutes = this.minutes + 5 }
+          if (products[i].type === 'ย่าง') { this.minutes = this.minutes + 5 }
           Addminute = moment().tz('Asia/Bangkok').add('minute', this.minutes).format().slice(11, 16)
         } else {
-          this.minutes = this.minutes + 3
+          // this.minutes = this.minutes + 3
+          if (products[i].type === 'ผัด') { this.minutes = this.minutes + 4 }
+          if (products[i].type === 'ทอด') { this.minutes = this.minutes + 4 }
+          if (products[i].type === 'ต้ม') { this.minutes = this.minutes + 6 }
+          if (products[i].type === 'เเกง') { this.minutes = this.minutes + 6 }
+          if (products[i].type === 'นึ่ง') { this.minutes = this.minutes + 5 }
+          if (products[i].type === 'ย่าง') { this.minutes = this.minutes + 5 }
           Addminute = moment(gettime).tz('Asia/Bangkok').add('minute', this.minutes).format().slice(11, 16)
         }
         let data = {
