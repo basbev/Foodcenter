@@ -62,7 +62,7 @@
 <input type="text" v-model="Search" placeholder="ค้นหาเมนู" v-if="Searchtype === ''" disabled>
 <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" v-if="Searchtype === 'menushow'">
 <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop2(Search)" v-if="Searchtype === 'menu'">
-      <button class="button button11" @click="Searchnow(Search, Searchtype)">ค้นหาอาหาร</button>
+      <!--<button class="button button11" @click="Searchnow(Search, Searchtype)">ค้นหาอาหาร</button>-->
     </div>
     <div v-if="result !== ''">
 <h3>ชื่อเมนู:&nbsp;{{result.foodname}}</h3>
@@ -72,10 +72,13 @@
     </div>
     <div v-if="showData.length > 0">
       <label>กำลังค้นหา : {{Search}}</label>
-      <div v-for="(menu, key) in showData" :key="key">
+      <div class="columns is-multiline">
+      <div class="column is-5" v-for="(menu, key) in showData" :key="key">
         <h3>ชื่อเมนู:&nbsp;{{menu.foodname}}</h3>
         <h3>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h3>
         <img v-url={filename:menu.foodpic} width="300" height="350"/><br>
+        <button @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, key)" class="button button3">เพิ่มลง Order</button>
+      </div>
       </div>
     </div>
     </div>
