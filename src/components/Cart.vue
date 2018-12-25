@@ -40,7 +40,7 @@
     &nbsp;ร้านค้า : {{this.SelectShops}}
     <hr>
     &nbsp;จำนวนคิว ณ ขณะนี้ {{shops.q}} คิว  <br>
-    &nbsp;เวลา&nbsp;{{shops.SaveDate}}<br>
+    &nbsp;เวลารายการอาหารล่าสุด&nbsp;{{shops.SaveDate.slice(11,16)}}<br>
     <router-link to="/shop"><button v-show="products.length" class='button button13'>กลับไปเลือกเมนู</button></router-link>
     <button v-show="products.length" class='button button14' @click="order(products, shops.q, CountQuantity, total, shops.SaveDate)">ยืนยันการสั่ง</button>
   </div>

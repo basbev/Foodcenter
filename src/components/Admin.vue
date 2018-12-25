@@ -70,6 +70,26 @@
                           </div>
                 </div>
           </div>
+          <div class="box">
+              <h4 id="let" class="title is-3">Facebook</h4>
+              <article class="message is-primary">
+                <span class="icon has-text-primary">
+                  <i class="fas fa-info-circle"></i>
+                </span>
+                <div class="message-body">
+                  จำนวน ID :&nbsp;{{this.numberOffacebook}}
+                </div>
+              </article>
+  <div class="message-body">
+    <div class="container">
+      <div class="columns is-multiline">
+        <div class="column is-5" :key="key" v-for="(shop, key) in facebooks">
+                  <h1>Email: &nbsp;{{shop.email}} Username: &nbsp;{{shop.username}} </h1>
+        </div>
+                                    </div>
+                          </div>
+                </div>
+          </div>
     </div>
 </template>
 
@@ -97,7 +117,9 @@ export default {
       updateName: '',
       updateTel: '',
       updateQ: '',
-      updateStatus: ''
+      updateStatus: '',
+      numberOffacebook: '',
+      facebooks: ''
     }
   },
   methods: {
@@ -151,6 +173,7 @@ export default {
   },
   mounted () {
     const Refuser = firebase.database().ref().child('user')
+    const Reffacebook = firebase.database().ref().child('facebook')
     const RefFoodcenter = firebase.database().ref().child('foodcenter').child('detail')
     Refuser.on('value', snap => {
       this.users = snap.val()
@@ -161,6 +184,11 @@ export default {
       this.shops = snap.val()
       this.numberOfshop = snap.numChildren()
       console.log(this.shops)
+    })
+    Reffacebook.on('value', snap => {
+      this.facebooks = snap.val()
+      this.numberOffacebook = snap.numChildren()
+      console.log(this.facebooks)
     })
   },
   computed: {

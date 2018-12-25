@@ -11,13 +11,14 @@
             <div class="field">
               <div class="control has-icons-left has-icons-right">
                 <input class="input is-large" type="text" placeholder="name" autofocus="" id="user" v-model="name">
+                <input class="input is-large" type="text" placeholder="name" autofocus="" id="user" v-model="tel">
               <span class="icon is-small is-left">
       <i class="fas fa-utensils"></i>
     </span>
               </div>
             </div>
             <div class="buttons is-centered">
-              <span class="button is-success" v-on:click="Addshop(name)">เพิ่มร้านอาหาร</span>
+              <span class="button is-success" v-on:click="Addshop(name, tel)">เพิ่มร้านอาหาร</span>
             </div>
           </form>
         </div>
@@ -37,7 +38,8 @@ export default {
   data () {
     return {
       name: '',
-      useradd: ''
+      useradd: '',
+      tel: ''
     }
   },
   computed: {
@@ -48,13 +50,37 @@ export default {
     })
   },
   methods: {
-    async Addshop (name) {
-      UserRef.child(this.user).child(this.useradd).child('hasShop').set(name)
-      ShopRef.child('detail').child(name).set(name)
+    async Addshop (name, tel) {
+      await UserRef.child(this.useradd).child('hasShop').set(name)
+      let data = {
+        SaveData: '',
+        banner: '',
+        count: '',
+        countdoing: '',
+        doing: '',
+        name: name,
+        q: '',
+        status: '',
+        tel: tel
+      }
+      await ShopRef.child('detail').child(name).set(data)
+      await this.SelectShop(name)
+      this.$router.push('/shop')
+    },
+    SelectShop (name) {
+      this.$store.dispatch('selectShop', name)
+        .then(
+          user => {
+            this.$router.push('/shop')
+          },
+          err => {
+            alert(err.message)
+          }
+        )
     }
   },
   mounted () {
-    const getuser = UserRef.child(this.user).orderByChild('username').equalTo(this.user)
+    const getuser = UserRef.orderByChild('username').equalTo(this.user)
     getuser.on('child_added', snap => {
       this.useradd = snap.key
       console.log(this.useradd)

@@ -2,6 +2,7 @@
 <div class="container">
   <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
   <center><h3>Profile</h3></center>
+  <!-- TEST -->
     <div :key="key" v-for="(user, key) in user">
     <div class="row">
       <div class="col-25">
@@ -34,33 +35,29 @@
       <div class="col-75">
         <textarea id="address" name="address" placeholder="Your address.." style="height:200px" v-model="user.address"></textarea>
       </div>
-    </div><input type="submit" value="Submit">
-    <div class="layout wrap">
-      <div class="flex xs2">
-        <li class="subheader">Status: </li>
-      </div>
-      <div class="flex xs10">
-        <div><span tabindex="0" class="chip chip--outline green green--text">Pending Member</span></div>
-      </div>
     </div>
-    <div class="layout wrap">
-      <div class="flex xs2">
-        <li class="subheader">Receipt: </li>
-      </div>
-      <div class="flex xs10">
-        <div><span tabindex="0" class="chip chip--outline green green--text">No</span></div>
-      </div>
-    </div>
-    <div class="layout wrap">
-      <div class="flex">
-        <li class="subheader">
-          <p>Point: 0</p>
-        </li>
-      </div>
-      </div>
       <button type="button" class="button button3" data-ripple="true" @click="updateuser(user.firstname, user.lastname, user.phonenumber, user.address, key)">
       Update
     </button>
+</div>
+<!-- TEST -->
+<div :key="key" v-for="(user, key) in facebook">
+    <div class="row">
+      <div class="col-25">
+        <label for="fname">email</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="fname" name="firstname" placeholder="Your name.." v-model="user.email" disabled>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-25">
+        <label for="lname">username</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="lname" name="lastname" placeholder="Your last name.." v-model="user.username" disabled>
+      </div>
+    </div>
 </div>
 </div>
 </template>
@@ -70,6 +67,7 @@ import firebase from 'firebase'
 import {mapGetters} from 'vuex'
 var database = firebase.database()
 var userRef = database.ref('/user')
+var userRef1 = database.ref('/facebook')
 export default {
   name: 'Profile',
   data: function () {
@@ -97,10 +95,16 @@ export default {
     })
   },
   mounted () {
-    const dbRefObject = userRef.child(this.users)
+    // const dbRefObject = userRef.child(this.users)
+    const dbRefObject = userRef.orderByChild('username').equalTo(this.users)
     dbRefObject.on('value', snap => {
       this.user = snap.val()
       console.log(this.user)
+    })
+    const dbRefObject1 = userRef1.orderByChild('username').equalTo(this.users)
+    dbRefObject1.on('value', snap => {
+      this.facebook = snap.val()
+      console.log(this.facebook)
     })
   }
 }

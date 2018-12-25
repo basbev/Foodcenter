@@ -3,7 +3,7 @@
     <center><link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
     <br><br><br>
     <img src = "/static/logo1.png" width="300">
-    <div v-if="permission !== '1'">
+    <div v-if="permission !== '1' & permission !== null">
       <input class="putname" type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
       <input class="putphone" type="text" v-model="tel" placeholder="เบอร์">
       <button class="button button10" @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
@@ -70,7 +70,7 @@
      <h1>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h1>
         <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, key)">Update</button>
         <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button>
-        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png'" @click="SelectShop(detail.key)" class="button button3">Select</button>
+        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' & permission !== null" @click="SelectShop(detail.key)" class="button button3">Select</button>
         </div>
         </div>
       </div>

@@ -31,17 +31,21 @@
   </div>
   </div>
   <footer class="card-footer">
-    <button class="button button8" @click='OrderComp(key, shops.q, shops.countdoing, order.order)'>Delete</button>
+    <button class="button button8" @click='OrderComp(order.key, shops.q, shops.countdoing, order.order)'>จ่ายเเล้ว</button>
     </footer>
   </div>
    </div><br>
    <div>
-     <button class="button button8" @click="group()">กรุ๊ปรวมเมนูอาหาร</button>
+     <button v-if="groupmenu == ''" class="button button8" @click="group()">กรุ๊ปรวมเมนูอาหาร</button>
+     <button v-if="groupmenu != ''" class="button button8">กรุ๊ปรวมเมนูอาหารเเล้ว</button>
      <div v-for="(menu, key) in groupmenu" :key="key">
        {{menu.foodname}} :: {{menu.quantity}}
      </div>
-   </div>
+     <!-- <div v-for="(groups, key) in grouporder" :key="key">
+   </div> -->
+   จำนวนรายการทั้งหมด : {{grouporder}}
       </div>
+  </div>
 </template>
 
 <script>
@@ -59,19 +63,21 @@ export default {
       updateQ: '',
       updatecount: '',
       groupmenu: [],
-      getmenuall: []
+      getmenuall: [],
+      grouporder: []
     }
   },
   methods: {
     OrderComp (key, q, c, order) {
-      // foodcenterRef.child('order').child(this.selectShop).child(key).remove()
       this.updateQ = q
       this.updatecount = c
       foodcenterRef.child('detail').child(this.selectShop).update({
-        q: this.updateQ - 1,
-        countdoing: this.updatecount + 1,
-        count: order
+        q: this.updateQ - 1
+        // countdoing: this.updatecount + 1,
+        // count: order
       })
+      foodcenterRef.child('order').child(this.selectShop).child(key).remove()
+      console.log(key)
     },
     updatemenunow (name, order, key) {
       foodcenterRef.child('detail').child(this.selectShop).update({
@@ -90,6 +96,7 @@ export default {
       // this.getmenu()
       alert(`ทำการกรุ๊ปเมนู`)
       for (var i = 0; i < this.orders.length; i++) {
+        this.grouporder.push(this.orders[i].order)
         // alert(`กรุ๊ปเมนู one: ` + i)
         for (var y = 0; y < this.orders[i].menu.length; y++) {
         // alert(`กรุ๊ปเมนู two: ` + y)

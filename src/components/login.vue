@@ -27,12 +27,12 @@
     </span>
               </div>
             </div>
-            <div class="field">
+            <!-- <div class="field">
               <label class="checkbox">
                 <input type="checkbox">
                 Remember me
               </label>
-            </div>
+            </div> -->
             <div class="buttons is-centered">
               <span class="button is-success" v-on:click="loginWeb">Login</span>
                 <a class="bd-tw-button button" v-on:click="loginFacebook">
@@ -51,11 +51,11 @@
         </div>
       </div>
     </div>
-    <div class="column is-one-third" :key="key" v-for="(user, key) in users">
+    <!-- <div class="column is-one-third" :key="key" v-for="(user, key) in users">
     <h1>Username :{{user.username}}</h1>
     <h1>password :{{user.password}}</h1>
     <h1>permission :{{user.permission}}</h1>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -89,12 +89,15 @@ export default {
         } if (this.isLoggedIn === true && this.permission === '3') {
           alert('Successfully sign in\nWelcome User Admin Foodcenter: ' + ' ' + this.user)
           this.$router.push('/foodcenter')
-        } if (this.isLoggedIn === true && this.permission === '2' && this.hasShop !== null) {
+        } if (this.isLoggedIn === true && this.permission === '2' && this.selectShop !== '') {
           alert('Successfully sign in\nWelcome User Shop: ' + ' ' + this.user)
           this.$router.push('/shop')
         } if (this.isLoggedIn === true && this.permission === '1') {
           alert('Successfully sign in\nWelcome User Customer: ' + ' ' + this.user)
           this.$router.push('/foodcenter')
+        } if (this.isLoggedIn === true && this.permission === '2' && this.selectShop === '') {
+          alert('Successfully sign in\nWelcome User Shop: ' + ' ' + this.user)
+          this.$router.push('/Addshop')
         }
       }
     },
@@ -121,6 +124,11 @@ export default {
     dbRefObject.on('value', snap => {
       this.users = snap.val()
       console.log(this.users)
+    })
+    const dbRefObject3 = firebase.database().ref().child('facebook')
+    dbRefObject3.on('value', snap => {
+      this.facebook = snap.val()
+      console.log(this.facebook)
     })
   },
   computed: {

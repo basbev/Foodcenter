@@ -114,6 +114,20 @@ const actions = {
     } else alert(`Username Or Password incorrect`)
   },
   loginfacebook: ({commit}, payload) => {
+    const dbRefObject = firebase.database().ref().child('facebook')
+    const dbReflist = dbRefObject.orderByChild('username').equalTo(payload)
+    dbReflist.once('child_added', snap => {
+      state.profile = snap.val()
+      console.log(state.profile)
+    })
+    if (state.profile == null) {
+      var dbRefObject1 = firebase.database().ref().child('facebook')
+      let data = {
+        username: firebase.auth().currentUser.displayName,
+        email: firebase.auth().currentUser.email
+      }
+      dbRefObject1.push(data)
+    }
     console.log(payload)
     commit('setUser', payload)
   },
