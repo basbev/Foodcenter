@@ -71,6 +71,7 @@
         <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, key)">Update</button>
         <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button>
         <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' & permission !== null" @click="SelectShop(detail.key)" class="button button3">Select</button>
+        <button class="button button6" @click="GoSee(detail.key)">Order</button>
         </div>
         </div>
       </div>
@@ -110,6 +111,7 @@
         <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, key)">Update</button>
         <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button>
         <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png'" @click="SelectShop(detail.key)" class="button button3">Select</button>
+        <button class="button button6" @click="GoSee(detail.key)">Order</button>
         </div>
         </div>
       </div>
@@ -210,6 +212,17 @@ export default {
       } else {
         this.showData = []
       }
+    },
+    GoSee (name) {
+      this.$store.dispatch('selectShop', name)
+        .then(
+          user => {
+            this.$router.push('/order')
+          },
+          err => {
+            alert(err.message)
+          }
+        )
     }
   },
   mounted () {

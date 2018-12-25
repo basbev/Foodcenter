@@ -10,7 +10,7 @@
         สถานะ: {{order.status}} <br>
     </p>
     </header>
-    <div :key="keyy" v-for="(detail, keyy, index) in order.menu">
+    <div :key="keyy" v-for="(detail, keyy) in order.menu">
   <div class="card-content">
     <div class="content">
       เมนูอาหาร: {{detail.name}} <br>
@@ -20,30 +20,30 @@
       <!--วันที่ : {{detail.date}}-->
       </div>
   </div>
-  <div v-if="index === detail.index">
+  <div v-if="keyy === detail.index">
     <div class="card-content">
     <div class="content">
       รวมทั้งหมด: {{detail.CountQuantity}} จาน :: ราคาทั้งหมด: {{detail.total}} <br>
-      <button v-if="order.status === 'กำลังรอ'" @click="updatemenunow(order.customer, order.order, key)" class="button button7">กำลังทำ</button>
-      <button v-if="order.status === 'กำลังทำ'" @click="complete(key)" class="button button7">ทำเสร็จเเล้ว</button>
+      <button v-if="order.status === 'กำลังรอ' & permission == '2'" @click="updatemenunow(order.customer, order.order, order.key)" class="button button7">กำลังทำ</button>
+      <button v-if="order.status === 'กำลังทำ' & permission == '2'" @click="complete(order.key)" class="button button7">ทำเสร็จเเล้ว</button>
     </div>
     </div>
   </div>
   </div>
   <footer class="card-footer">
-    <button class="button button8" @click='OrderComp(order.key, shops.q, shops.countdoing, order.order)'>จ่ายเเล้ว</button>
+    <button v-if="permission == '2'" class="button button8" @click='OrderComp(order.key, shops.q, shops.countdoing, order.order)'>จ่ายเเล้ว</button>
     </footer>
   </div>
    </div><br>
    <div>
-     <button v-if="groupmenu == ''" class="button button8" @click="group()">กรุ๊ปรวมเมนูอาหาร</button>
-     <button v-if="groupmenu != ''" class="button button8">กรุ๊ปรวมเมนูอาหารเเล้ว</button>
+     <button v-if="groupmenu == '' & permission == '2'" class="button button8" @click="group()">กรุ๊ปรวมเมนูอาหาร</button>
+     <button v-if="groupmenu != '' & permission == '2'" class="button button8">กรุ๊ปรวมเมนูอาหารเเล้ว</button>
      <div v-for="(menu, key) in groupmenu" :key="key">
        {{menu.foodname}} :: {{menu.quantity}}
      </div>
      <!-- <div v-for="(groups, key) in grouporder" :key="key">
-   </div> -->
-   จำนวนรายการทั้งหมด : {{grouporder}}
+   </div> --><div v-if="groupmenu != ''">
+   จำนวนรายการทั้งหมด : {{grouporder}} </div>
       </div>
   </div>
 </template>
@@ -150,7 +150,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      selectShop: 'selectShop'
+      selectShop: 'selectShop',
+      permission: 'permission'
     })
   }
   // Date/Time: {{Date(key)}}
