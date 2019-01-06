@@ -1,6 +1,5 @@
 <template>
 <div>
-  <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
     <section class="section">
       <div class="container"><br>
         <div class="columns">
@@ -18,7 +17,7 @@
               <div class="content">
               <img v-url={filename:detail.banner}>
               <div :key="key" v-if="(shop, key) in detail"></div>
-                 <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}&nbsp; เบอร์&nbsp; {{ detail.tel }}&nbsp;<img v-bind:src="detail.status" width="90" height="70" ></h3>
+                 <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}<br>เบอร์&nbsp; {{ detail.tel }}&nbsp;<img v-bind:src="detail.status" width="90" height="70" ></h3>
                  <button v-if="permission !== '1'" class="button button11" @click="setprofile(detail.name, detail.tel, detail.status, detail.banner)">เเก้ไขโปรไฟล์</button>
                  <div v-if="updateKey === true">
                    <input type="text" v-model="updateName" placeholder="ชื่อร้าน">
@@ -55,30 +54,37 @@
                 </span>
                 <div class="message-body">ค้นหา
           <div>
-       <select name="status" v-model="Searchtype">
-  <option value="menushow">อาหารเเนะนำ</option>
-  <option value="menu">อาหารทั่วไป</option>
-</select>
-<input type="text" v-model="Search" placeholder="ค้นหาเมนู" v-if="Searchtype === ''" disabled>
-<input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" v-if="Searchtype === 'menushow'">
-<input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop2(Search)" v-if="Searchtype === 'menu'">
+          <div class="columns">
+            <div class="column">
+              <select name="status" class="selectType" v-model="Searchtype">
+                <option value="menushow">อาหารเเนะนำ</option>
+                <option value="menu">อาหารทั่วไป</option>
+              </select>
+            </div>
+            <div class="column">
+              <input type="text" v-model="Search" placeholder="ค้นหาเมนู" v-if="Searchtype === ''" disabled>
+          <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" v-if="Searchtype === 'menushow'">
+          <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop2(Search)" v-if="Searchtype === 'menu'">
+            </div>
+          </div>
       <!--<button class="button button11" @click="Searchnow(Search, Searchtype)">ค้นหาอาหาร</button>-->
     </div>
     <div v-if="result !== ''">
-<h3>ชื่อเมนู:&nbsp;{{result.foodname}}</h3>
+<h3>{{result.foodname}}</h3>
                       <h3>ราคา:&nbsp;{{result.foodprice}}&nbsp;บาท</h3>
                       <img v-bind:src="result.foodpic" width="300" height="350"><br>
-                      <button @click="Cart(result.foodname, result.foodprice, result.foodtype, key)" class="button button3">เพิ่มลง Order</button>
+                      <button @click="Cart(result.foodname, result.foodprice, result.foodtype, result.key)" class="button button3">เพิ่มลง Order</button>
     </div>
     <div v-if="showData.length > 0">
-      <label>กำลังค้นหา : {{Search}}</label>
       <div class="columns is-multiline">
-      <div class="column is-5" v-for="(menu, key) in showData" :key="key">
-        <h3>ชื่อเมนู:&nbsp;{{menu.foodname}}</h3>
-        <h3>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h3>
-        <img v-url={filename:menu.foodpic} width="300" height="350"/><br>
-        <button @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, key)" class="button button3">เพิ่มลง Order</button>
-      </div>
+        <div class="column is-6" v-for="(menu, key) in showData" :key="key">
+          <div class="foodList">
+            <h3>{{menu.foodname}}</h3>
+            <h6>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h6>
+            <img v-url={filename:menu.foodpic} width="300" height="350"/><br>
+            <button @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key)" class="button button3">เพิ่มลง Order</button>
+          </div>
+        </div>
       </div>
     </div>
     </div>
@@ -105,7 +111,7 @@
                 </div>
               </article>
               <div v-if="permission !== '1'">
-                <input type="text" v-model="prodetail" placeholder="รายละเอียดโปรโมชั่น" size="30">
+                <input type="text" v-model="prodetail" placeholder="รายละเอียดโปรโมชั่น" size="30" required>
       <button class="button button12" @click="insertpromo(prodetail)">เพิ่มโปรโมชั่น</button>
               </div>
           </div>
@@ -119,16 +125,16 @@
                   <div class="container">
                   <div class="columns is-multiline">
                                     <div class="column is-5" :key="key" v-for="(menushow, key) in menushow">
-                          <h3>ชื่อเมนู:&nbsp;{{menushow.foodname}}</h3>
-                      <h3>ราคา:&nbsp;{{menushow.foodprice}}&nbsp;บาท</h3>
+                          <h3>{{menushow.foodname}}</h3>
+                      <h6>ราคา:&nbsp;{{menushow.foodprice}}&nbsp;บาท</h6>
                       <img v-url={filename:menushow.foodpic} width="300" height="350"/><br>
-                      <button @click="Cart(menushow.foodname, menushow.foodprice, menushow.foodtype, key)" class="button button3">เพิ่มลง Order</button>
+                      <button @click="Cart(menushow.foodname, menushow.foodprice, menushow.foodtype, menushow.key)" class="button button3">เพิ่มลง Order</button>
                       <button v-if="permission !== '1'" @click="SetUpdateMenuShow(key, menushow.foodname, menushow.foodprice, menushow.foodpic, menushow.foodtype)" class="button button3">เเก้ไขเมนูเเนะนำ</button>
                       <button v-if="permission!== '1'" class="button button3" @click="DeleteMenushow(menushow.key)">ลบ</button>
                     <hr>
                     <div v-if="updateKey === key">
         <input type="text" v-model="updatefoodname" placeholder="ชื่อ">
-         <select name="status" v-model="updatefoodtype">
+         <select name="status" v-model="updatefoodtype" required>
   <option value="ผัด">ผัด</option>
   <option value="ทอด">ทอด</option>
   <option value="ต้ม">ต้ม</option>
@@ -165,7 +171,7 @@
             <div>
               <div v-if="permission !== '1'">
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
-       <select name="status" v-model="foodtype">
+       <select name="status" v-model="foodtype" required>
   <option value="ผัด">ผัด</option>
   <option value="ทอด">ทอด</option>
   <option value="ต้ม">ต้ม</option>
@@ -218,10 +224,10 @@
                                     <div class="container">
                   <div class="columns is-multiline">
                                     <div class="column is-5" :key="key" v-for="(menu, key) in menus">
-                          <h3>ชื่อเมนู:&nbsp;{{menu.foodname}}</h3>
-                      <h3>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h3>
+                      <h3>{{menu.foodname}}</h3>
+                      <h6>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h6>
                       <img v-url={filename:menu.foodpic} width="300" height="350"/><br>
-                      <button @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, key)" class="button button3">เพิ่มลง Order</button>
+                      <button @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key)" class="button button3">เพิ่มลง Order</button>
                       <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic)" class="button button3">เเก้ไขเมนูอาหาร</button>
                       <button v-if="permission !== '1'" @click="DeleteMenu(menu.key)" class="button button3">ลบ</button>
                       <hr>
@@ -660,185 +666,17 @@ export default {
 }
 </script>
 <style>
+
 .report {
   text-align: center;
 }
-.button {
-    background-color: rgb(37, 108, 175);
-    border: none;
-    color: white;
-    text-align: center;
-    /*text-decoration: none;*/
-    /*font-size: 14px;*/
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-   /* cursor: pointer;*/
-   font-family: 'Prompt', sans-serif;
-}
-.button1 {
-    margin-top: 7px;
-    width: 20%;
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
-}
-.button1:hover {
-    background-color: #4CAF50;
-    color: white;
-}
-.button2 {
-    font-size: 15px;
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #008CBA;
-}
-.button2:hover {
-    background-color: #008CBA;
-    color: white;
-}
-.button3 {
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #f44336;
-}
-.button3:hover {
-    background-color: #f44336;
-    color: white;
-}
-.button4 {
-    font-size: 15px;
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #B8860B;
-}
-.button4:hover {background-color: #B8860B;
-}
-.button5 {
-    font-size: 15px;
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #7FFF00;
-}
-.button5:hover {
-    background-color: #7FFF00;
-    color: white;
-}
-.button6 {
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #FF00FF;
-}
-.button6:hover {background-color: #FFB6C1;
-}
-.button7 {
-    margin-top: 7px;
-    width: 10%;
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
-}
-.button7:hover {
-    background-color: #4CAF50;
-    color: white;
-}
-.button8 {
-    margin-top: 7px;
-    width: 12%;
-    background-color: white;
-    color: black;
-    border: 2px solid #f44336;
-}
-.button8:hover {
-    background-color: #f42136;
-    color: white;
-}
-.button9 {
-    font-size: 20px;
-    margin-right: 20px;
-    background-color: white;
-    color: black;
-    border: 2px solid #B8860B;
-}
-.button9:hover {background-color: #B8860B;
-}
-p {
-    border-left: 20px solid #DC143C;
-    border-radius: 12px;
-    border: 2px solid #F0E68C;
-    background-color: #F5DEB3;
-}
-.button10 {
-    font-size: 20px;
-    margin-top: 7px;
-    width: 10%;
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
-}
-.button10:hover {
-    background-color: #4CAF50;
-    color: white;
-}
-.button11 {
-    font-size: 18px;
-    margin-top: 8px;
-    width: 12%;
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
-}
-.button11:hover {
-    background-color: #4CAF50;
-    color: white;
-}
-.button12 {
-    font-size: 18px;
-    margin-top: 8px;
-    background-color: white;
-    color: black;
-    border: 2px solid #008CBA;
-}
-.button12:hover {
-    background-color: #008CBA;
-    color: white;
-}
-input[type=text], select {
-    font-size: 17px;
-    width: 19%;
-    padding: 1% 1%;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-input[type=number], select {
-    width: 13%;
-    font-size: 17px;
-    padding: 1% 1%;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-div {
-  font-family: 'Prompt', sans-serif;
-}
-hk {
-   font-size: 30px;
-    background-color: #F0E68C;
-}
+
 .bucket {
   position: fixed;
-  top: 65%;
-  right: 72%;
+  bottom: 5vh;
+  left: 5vw;
   cursor: pointer;
+  z-index: 100;
 }
 .file-label {
   font-size: 18px;
@@ -851,5 +689,10 @@ hk {
     background-color: #209cee;
     border-color: transparent;
     color: #fff;
+}
+.foodList {
+  border-radius: 10px;
+  border: 2px solid #efefef;
+  padding: 20px;
 }
 </style>

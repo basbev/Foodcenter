@@ -1,15 +1,26 @@
 <template>
   <div class='hello'>
-    <center><link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
+    <center>
     <br><br><br>
     <img src = "/static/logo1.png" width="300">
-    <div v-if="permission !== '1' & permission !== null">
-      <input class="putname" type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
-      <input class="putphone" type="text" v-model="tel" placeholder="เบอร์">
-      <button class="button button10" @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
+    <div class="columns">
+      <div class="column">
+        <input type="text" v-model="Search" class="inputSearch" placeholder="ค้นหาร้านอาหาร" @input="filterShop(Search)">
+      </div>
     </div>
-    <div>
-      <input type="text" v-model="Search" placeholder="ค้นหาร้านอาหาร" @input="filterShop(Search)">
+    <div v-if="permission !== '1' & permission !== null" class="formAddRes">
+      <h3>เพิ่มร้านอาหาร</h3>
+      <div class="columns">
+        <div class="column">
+          <input class="putname" type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
+        </div>
+        <div class="column">
+          <input class="putphone" type="text" v-model="tel" placeholder="เบอร์">
+        </div>
+        <div class="column is-3">
+          <button class="button button1" @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
+        </div>
+      </div>
     </div>
     <section class="section" v-if="result !== ''">
         <div class="container">
@@ -25,10 +36,10 @@
                      <div class="row">
           <div class="column">
     <div>
-     <h1>&nbsp;&nbsp;{{result.name}}&nbsp;&nbsp;<img v-bind:src="result.status" width="70" height="55" ></h1>
-    <h3><img src="https://www.img.live/images/2018/11/20/img_352451.png" width="25" height="20">&nbsp;{{result.tel}}</h3>
-     <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{result.q}}&nbsp;&nbsp;</hk></h1>
-     <h1>กำลังทำของ:&nbsp;{{result.doing}}&nbsp;&nbsp;</h1>
+      <h1>&nbsp;&nbsp;{{result.name}}&nbsp;&nbsp;<img v-bind:src="result.status" width="70" height="55" ></h1>
+      <img src="https://www.img.live/images/2018/11/20/img_352451.png" height="15">&nbsp;{{result.tel}}
+      <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{result.q}}&nbsp;&nbsp;</hk></h1>
+      <h1>กำลังทำของ:&nbsp;{{result.doing}}&nbsp;&nbsp;</h1>
     </div>
     </div>
         </div>
@@ -55,23 +66,25 @@
                 </figure>
                 <div class="media-content">
                   <div class="content">
-                    <h1 class="title is-size-4">ร้าน</h1>
+                    <h1 class="title is-size-4">ร้าน {{detail.name}}</h1>
                     <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
-        <button class="button button2" @click="updatefoodcenter(updateTel, updateName, detail.key)">Save</button>
+        <button class="button button1" @click="updatefoodcenter(updateTel, updateName, detail.key)">Save</button>
       </div>
       <div v-else>
         <div class="row">
           <div class="column">
-        <h1>&nbsp;&nbsp;{{detail.name}}&nbsp;&nbsp;<img v-bind:src="detail.status" width="70" height="55" ></h1>
-    <h3><img src="https://www.img.live/images/2018/11/20/img_352451.png" width="25" height="20">&nbsp;{{detail.tel}}</h3>
-     <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</hk></h1>
-     <h1>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h1>
+        <img v-bind:src="detail.status" width="70" height="55"><br>
+    <img src="https://www.img.live/images/2018/11/20/img_352451.png" class="imageTel">&nbsp;{{detail.tel}}
+     <h1>คิวที่รอ :&nbsp;<span class="number">&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</span></h1>
+     <h5>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h5>
         <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, key)">Update</button>
-        <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button>
-        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' & permission !== null" @click="SelectShop(detail.key)" class="button button3">Select</button>
-        <button class="button button6" @click="GoSee(detail.key)">Order</button>
+        <!-- <button v-if="permission === '3'" class="button button4" @click="setUpdatefood(detail.tel, detail.name, key)">Update1</button> -->
+        <!-- <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button> -->
+        <button v-if="permission === '3'" class="button button3" @click="DelFood(detail.key)">Delete</button>
+        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' & permission !== null" @click="SelectShop(detail.key)" class="button button6">Select</button>
+        <button class="button button2" @click="GoSee(detail.key)">Order</button>
         </div>
         </div>
       </div>
@@ -99,19 +112,20 @@
                     <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
-        <button class="button button2" @click="updatefoodcenter(updateTel, updateName, detail.key)">Save</button>
+        <button class="button button1" @click="updatefoodcenter(updateTel, updateName, detail.key)">Save</button>
       </div>
       <div v-else>
         <div class="row">
           <div class="column">
         <h1>&nbsp;&nbsp;{{detail.name}}&nbsp;&nbsp;<img v-bind:src="detail.status" width="70" height="55" ></h1>
-    <h3><img src="https://www.img.live/images/2018/11/20/img_352451.png" width="25" height="20">&nbsp;{{detail.tel}}</h3>
-     <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</hk></h1>
-     <h1>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h1>
+    <h5><img src="https://www.img.live/images/2018/11/20/img_352451.png" width="25" height="20">&nbsp;{{detail.tel}}</h5>
+     <h2>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</hk></h2>
+     <h5>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h5>
         <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, key)">Update</button>
-        <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button>
+        <!-- <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button> -->
+        <button v-if="permission === '3'" class="button button6" @click="DelFood(detail.key)">Delete</button>
         <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png'" @click="SelectShop(detail.key)" class="button button3">Select</button>
-        <button class="button button6" @click="GoSee(detail.key)">Order</button>
+        <button class="button button2" @click="GoSee(detail.key)">Order</button>
         </div>
         </div>
       </div>
@@ -122,6 +136,74 @@
           </div>
         </div>
       </section>
+        <div class="modal is-active" v-show="showModal" @close="showModal = false">
+          <div class="modal-background"></div>
+          <div class="modal-content">
+            <div class="box">
+              <h3>Update</h3>
+              <form action>
+          <div>
+              <div class="columns">
+                <div class="column is-2">
+                  ชื่อ :
+                </div>
+                <div class="column">
+                  <input
+                    class="form-control mb-2"
+                    type="text"
+                    v-model="updateName"
+                    placeholder="ชื่อ"
+                  >
+                </div>
+                <div class="column is-2">
+                  นามสกุล :
+                </div>
+                <div class="column">
+                  <input
+                    class="form-control mb-2"
+                    type="text"
+                    v-model="updatesurName"
+                    placeholder="นามสุกล"
+                  >
+                </div>
+              </div>
+              <div class="columns">
+                <div class="column is-4">
+                  รหัสบัตรประชาชน :
+                </div>
+                <div class="column">
+                  <input
+                    class="form-control mb-2"
+                    type="text"
+                    v-model="updateid"
+                    placeholder="รหัสบัตรประชาชน"
+                  >
+                </div>
+              </div>
+              <div class="columns">
+                <div class="column is-4">
+                  กรุ๊ปเลือด :
+                </div>
+                <div class="column">
+                  <input
+                    class="form-control mb-2"
+                    type="text"
+                    v-model="updatebloodtype"
+                    placeholder="กรุ๊ปเลือด"
+                  >
+                </div>
+              </div>
+              <button
+                    class="button button1"
+                    @click="Update(updateDisease, updateMedical, updateNumberphone, updateAddress, updatebloodtype, updateHeight, updateWeight, updateday, updategen, updateid, updatesurName, updateName, updateKey, Manage)"
+                  >save</button>
+
+          </div>
+        </form>
+            </div>
+          </div>
+          <button class="modal-close" @click="showModal = false"></button>
+        </div>
   </div>
 </template>
 
@@ -146,7 +228,8 @@ export default {
       result: '',
       Search: '',
       showData: [],
-      numberOfShop: 0
+      numberOfShop: 0,
+      showModal: false
     }
   },
   methods: {
@@ -155,7 +238,7 @@ export default {
         tel: tel,
         name: name,
         q: 0,
-        status: 'ปิดบริการ'
+        status: 'https://www.img.live/images/2018/11/20/d57b23a07352f87d.png'
       }
       foodcenterRef.child('detail').child(this.name).set(data)
       this.tel = ''
@@ -165,6 +248,7 @@ export default {
       this.updateKey = key
       this.updateTel = tel
       this.updateName = name
+      this.showModal = true
     },
     updatefoodcenter (tel, name, key) {
       foodcenterRef.child('detail').child(key).update({
@@ -223,7 +307,78 @@ export default {
             alert(err.message)
           }
         )
+    },
+    DelFood (key) {
+      this.$swal({
+        title: 'คุณกำลังลบร้านค้า?',
+        // text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยืนยัน!',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.value) {
+          this.deletefoodcenter(key)
+          this.$swal(
+            'ลบเเล้ว!',
+            'ร้านค้าโดนลบเรียบร้อยเเล้ว.',
+            'success'
+          )
+        }
+      })
+    },
+    async setUpdatefood1 (tel, name, key) {
+      const inputValue = name
+      const {
+        value: Text
+      } = await this.$swal({
+        title: 'Input Text address',
+        input: 'text',
+        inputValue: inputValue,
+        inputPlaceholder: 'ชื่อร้านอาหาร'
+      })
+      if (Text) {
+        this.$swal('Entered Text: ' + Text)
+      }
     }
+    // async setUpdatefood (tel, name, key) {
+    //   // document.getElementById('swal-input1').value = name
+    //   const {value: formValues} = await this.$swal({
+    //     title: 'เเก้ไขร้านค้า',
+    //     html:
+    //       'ชื่อร้านค้า' +
+    //       '<input id="swal-input1" class="swal2-input" placeholder="ชื่อร้านอาหาร" value=' + name + '>' +
+    //       'เบอร์โทรร้านค้า' +
+    //       '<input id="swal-input2" class="swal2-input" placeholder="ชื่อร้านอาหาร" value=' + tel + '>',
+    //     focusConfirm: false,
+    //     inputValidator: () => {
+    //       return new Promise((resolve) => {
+    //         if (document.getElementById('swal-input1').value === '') {
+    //           resolve('You need to select oranges :)')
+    //         } else {
+    //           resolve('You need to select oranges :)')
+    //         }
+    //         // document.getElementById('swal-input1').value,
+    //         // document.getElementById('swal-input2').value
+    //       })
+    //     }
+    //     // inputValidator: (value) => {
+    //     //   return new Promise((resolve) => {
+    //     //     if (formValues[0] === 'oranges') {
+    //     //       resolve()
+    //     //     } else {
+    //     //       // resolve('You need to select oranges :)')
+    //     //     }
+    //     //   })
+    //     // }
+    //   })
+    //   if (formValues) {
+    //     this.$swal(JSON.stringify(formValues))
+    //     // this.updatefoodcenter()
+    //   }
+    // }
   },
   mounted () {
     const dbRefObject = foodcenterRef.child('detail')
@@ -252,141 +407,40 @@ export default {
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style>
+.imageTel {
+  width: 15px;
+  height: 15px;
+}
+input[type=text], select {
+    padding: 1% 1%;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.inputSearch {
+  width: 30%!important;
+}
+.formAddRes {
+  background:#ffffff;
+  width: 80%;
+  padding: 20px;
+  border-radius: 10px;
+}
 .report {
   text-align: center;
 }
-.button {
-    background-color: rgb(37, 108, 175);
-    border: none;
-    color: white;
-    text-align: center;
-    /*text-decoration: none;*/
-    /*font-size: 14px;*/
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-   /* cursor: pointer;*/
-   font-family: 'Prompt', sans-serif;
-}
-.button1:hover {
-    background-color: #4CAF50;
-    color: white;
-}
-.button2 {
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #008CBA;
-}
-.button2:hover {
-    background-color: #008CBA;
-    color: white;
-}
-.button3 {
-    font-size: 15px;
-    margin-bottom: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #f44336;
-}
-.button3:hover {
-    background-color: #f44336;
-    color: white;
-}
-.button4 {
-    margin-bottom: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #B8860B;
-}
-.button4:hover {background-color: #B8860B;
-}
-.button5 {
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #7FFF00;
-}
-.button5:hover {
-    background-color: #7FFF00;
-    color: white;
-}
-.button6 {
-    margin-bottom: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #FF00FF;
-}
-.button7 {
-    margin-top: 7px;
-    width: 10%;
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
-}
-.button7:hover {
-    background-color: #4CAF50;
-    color: white;
-}
-.button6:hover {background-color: #FFB6C1;
-}
-.button8 {
-    margin-top: 7px;
-    width: 12%;
-    background-color: white;
-    color: black;
-    border: 2px solid #f44336;
-}
-.button8:hover {
-    background-color: #f42136;
-    color: white;
-}
-.button10 {
-    font-size: 20px;
-    margin-top: 7px;
-    width: 10%;
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
-}
-.button10:hover {
-    background-color: #4CAF50;
-    color: white;
-}
-p {
-    border-left: 20px solid #DC143C;
-    border-radius: 12px;
-    border: 2px solid #F0E68C;
-    background-color: #F5DEB3;
-}
-input[type=text], select {
-    width: 19%;
-    padding: 1% 1%;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-.putname{
-  width: 15%;
-}
-input[type=number], select {
-    width: 10%;
-    padding: 1% 1%;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-div {
-  font-family: 'Prompt', sans-serif;
-}
+
 .allshop {
   font-size: 18px;
 }
-hk {
-   font-size: 30px;
-    background-color: #F0E68C;
+.number {
+  font-size: 30px;
+  background-color: #ffdd57;
+  border-radius: 50%;
+}
+.swal2-popup #swal2-content {
+    text-align: left;
 }
 </style>

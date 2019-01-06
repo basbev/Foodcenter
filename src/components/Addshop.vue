@@ -90,14 +90,6 @@ export default {
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-html,
-  body {
-    font-family: 'Open Sans', serif;
-    font-size: 14px;
-    font-weight: 300;
-    background: #F2F6FA;
-  }
-
   .hero.is-success {
     background: #F2F6FA;
   }

@@ -31,7 +31,7 @@ export default {
     },
     getDataFirebase (getvalue, scale) {
       alert(`Pls Wait`)
-      var ref = firebase.database().ref('foodcenter/report/ป้าสมบูรณ์/' + scale)
+      var ref = firebase.database().ref('foodcenter/report/' + this.selectShop + '/' + scale)
       ref.once('value', snap => {
         var data = []
         snap.forEach(ss => {
@@ -113,91 +113,7 @@ export default {
 .report {
   text-align: center;
 }
-.button {
-    background-color: rgb(37, 108, 175);
-    border: none;
-    color: white;
-    text-align: center;
-    /*text-decoration: none;*/
-    /*font-size: 14px;*/
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-   /* cursor: pointer;*/
-   font-family: 'Prompt', sans-serif;
-}
-.button1 {
-    margin-top: 7px;
-    width: 10%;
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
-}
-.button1:hover {
-    background-color: #4CAF50;
-    color: white;
-}
-.button2 {
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #008CBA;
-}
-.button2:hover {
-    background-color: #008CBA;
-    color: white;
-}
-.button3 {
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #f44336;
-}
-.button3:hover {
-    background-color: #f44336;
-    color: white;
-}
-.button4 {
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #B8860B;
-}
-.button4:hover {background-color: #B8860B;
-}
-.button5 {
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #7FFF00;
-}
-.button5:hover {
-    background-color: #7FFF00;
-    color: white;
-}
-.button6 {
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #FF00FF;
-}
-.button7 {
-    margin-top: 13px;
-    width: 10%;
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
-}
-.button7:hover {
-    background-color: #4CAF50;
-    color: white;
-}
 .button6:hover {background-color: #FFB6C1;
-}
-p {
-    border-left: 20px solid #DC143C;
-    border-radius: 12px;
-    border: 2px solid #F0E68C;
-    background-color: #F5DEB3;
 }
 input[type=text], select {
     width: 19%;
@@ -216,12 +132,5 @@ input[type=number], select {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-}
-div {
-  font-family: 'Prompt', sans-serif;
-}
-hk {
-   font-size: 30px;
-    background-color: #F0E68C;
 }
 </style>

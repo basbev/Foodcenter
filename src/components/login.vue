@@ -143,14 +143,6 @@ export default {
 }
 </script>
 <style>
-  html,
-  body {
-    font-family: 'Open Sans', serif;
-    font-size: 14px;
-    font-weight: 300;
-    background: #F2F6FA;
-  }
-
   .hero.is-success {
     background: #F2F6FA;
   }
@@ -191,5 +183,19 @@ export default {
   }
   div {
   font-family: 'Prompt', sans-serif;
+}
+.input2 {
+    font-size: 20px;
+    width: 100%;
+    padding: 1% 1%;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+  .large1 {
+    font-size: 1.5rem;
 }
 </style>

@@ -1,51 +1,92 @@
 <template>
-  <div>
-    <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
-      <div :key="key" v-for="(order, key) in orders">
-   <div class="card">
-    <header class="card-header">
-    <p class="card-header-title">
-      คิวที่: {{order.order}} <br>
-        ผู้ใช้: {{order.customer}} <br>
-        สถานะ: {{order.status}} <br>
-    </p>
-    </header>
-    <div :key="keyy" v-for="(detail, keyy) in order.menu">
-  <div class="card-content">
-    <div class="content">
-      เมนูอาหาร: {{detail.name}} <br>
-      ราคา: {{detail.price}} บาท <br>
-      จำนวน: {{detail.quantity}} จาน<br>
-      เวลาคำนวณ : {{detail.minute}} นาที <br>
-      <!--วันที่ : {{detail.date}}-->
+  <section class='section'>
+    <div class='container'>
+      <div class='columns is-multiline'>
+        <div class='column is-4' :key='key' v-for='(order, key) in orders'>
+        <div class='card'>
+          <header class='card-header'>
+            <p class="card-header-title">
+              คิวที่: {{order.order}}
+              <br>
+              ผู้ใช้: {{order.customer}}
+              <br>
+              สถานะ: {{order.status}}
+              <br>
+            </p>
+          </header>
+          <div :key="keyy" v-for="(detail, keyy) in order.menu">
+            <div class="card-content">
+              <div class="content">
+                <strong>เมนูอาหาร: {{detail.name}}</strong>
+                <br>
+                <strong>จำนวน: {{detail.quantity}} จาน</strong>
+                <br>
+                ราคา: {{detail.price}} บาท
+                <br>
+                เวลาคำนวณ : {{detail.minute}} นาที
+                <br>
+                <!--วันที่ : {{detail.date}}-->
+              </div>
+            </div>
+            <div v-if="keyy === detail.index">
+              <div class="card-content">
+                <div class="content">
+                  รวมทั้งหมด {{detail.CountQuantity}} จาน : ราคาทั้งหมด: {{detail.total}}
+                  <br>
+                </div>
+              </div>
+            </div>
+          </div>
+          <footer class="card-footer">
+            <button
+              v-if="order.status === 'กำลังรอ' & permission == '2'"
+              @click="updatemenunow(order.customer, order.order, order.key)"
+              class="button button7 card-footer-item"
+            >กำลังทำ</button>
+            <button
+              v-if="order.status === 'กำลังทำ' & permission == '2'"
+              @click="complete(order.key)"
+              class="button button7 card-footer-item"
+            >ทำเสร็จเเล้ว</button>
+            <button
+              v-if="permission == '2'"
+              class="button button8 card-footer-item"
+              @click="OrderComp(order.key, shops.q, shops.countdoing, order.order)"
+            >จ่ายเเล้ว</button>
+          </footer>
+        </div>
       </div>
-  </div>
-  <div v-if="keyy === detail.index">
-    <div class="card-content">
-    <div class="content">
-      รวมทั้งหมด: {{detail.CountQuantity}} จาน :: ราคาทั้งหมด: {{detail.total}} <br>
-      <button v-if="order.status === 'กำลังรอ' & permission == '2'" @click="updatemenunow(order.customer, order.order, order.key)" class="button button7">กำลังทำ</button>
-      <button v-if="order.status === 'กำลังทำ' & permission == '2'" @click="complete(order.key)" class="button button7">ทำเสร็จเเล้ว</button>
-    </div>
-    </div>
-  </div>
-  </div>
-  <footer class="card-footer">
-    <button v-if="permission == '2'" class="button button8" @click='OrderComp(order.key, shops.q, shops.countdoing, order.order)'>จ่ายเเล้ว</button>
-    </footer>
-  </div>
-   </div><br>
-   <div>
-     <button v-if="groupmenu == '' & permission == '2'" class="button button8" @click="group()">กรุ๊ปรวมเมนูอาหาร</button>
-     <button v-if="groupmenu != '' & permission == '2'" class="button button8">กรุ๊ปรวมเมนูอาหารเเล้ว</button>
-     <div v-for="(menu, key) in groupmenu" :key="key">
-       {{menu.foodname}} :: {{menu.quantity}}
-     </div>
-     <!-- <div v-for="(groups, key) in grouporder" :key="key">
-   </div> --><div v-if="groupmenu != ''">
-   จำนวนรายการทั้งหมด : {{grouporder}} </div>
       </div>
-  </div>
+      <br>
+      <div class="columns groupPanal">
+        <div class="column">
+          <button
+            v-if="groupmenu == '' & permission == '2'"
+            class="button button8"
+            @click="group()"
+          >กรุ๊ปรวมเมนูอาหาร</button>
+          <button
+            v-if="groupmenu != '' & permission == '2'"
+            class="button button8"
+          >กรุ๊ปรวมเมนูอาหารเเล้ว</button>
+          <button
+            v-if="groupmenu != '' & permission == '2'"
+            class="button button8"
+            @click="completedgroup()"
+          >ทำเสร็จเเล้ว</button>
+        </div>
+        <div class="column is-8">
+          <div v-for="(menu, key) in groupmenu" :key="key">
+            <strong>{{menu.foodname}} : {{menu.quantity}}</strong>
+          </div>
+          <!-- <div v-for="(groups, key) in grouporder" :key="key">
+          </div>-->
+          <div v-if="groupmenu != ''">จำนวนรายการทั้งหมด : {{grouporder}}</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -64,52 +105,85 @@ export default {
       updatecount: '',
       groupmenu: [],
       getmenuall: [],
-      grouporder: []
+      grouporder: [],
+      keygrouporder: []
     }
   },
   methods: {
     OrderComp (key, q, c, order) {
       this.updateQ = q
       this.updatecount = c
-      foodcenterRef.child('detail').child(this.selectShop).update({
-        q: this.updateQ - 1
-        // countdoing: this.updatecount + 1,
-        // count: order
-      })
-      foodcenterRef.child('order').child(this.selectShop).child(key).remove()
+      foodcenterRef
+        .child('detail')
+        .child(this.selectShop)
+        .update({
+          q: this.updateQ - 1
+          // countdoing: this.updatecount + 1,
+          // count: order
+        })
+      foodcenterRef
+        .child('order')
+        .child(this.selectShop)
+        .child(key)
+        .remove()
       console.log(key)
     },
     updatemenunow (name, order, key) {
-      foodcenterRef.child('detail').child(this.selectShop).update({
-        doing: name
-      })
-      foodcenterRef.child('order').child(this.selectShop).child(key).update({
-        status: 'กำลังทำ'
-      })
+      foodcenterRef
+        .child('detail')
+        .child(this.selectShop)
+        .update({
+          doing: name
+        })
+      foodcenterRef
+        .child('order')
+        .child(this.selectShop)
+        .child(key)
+        .update({
+          status: 'กำลังทำ'
+        })
     },
     complete (key) {
-      foodcenterRef.child('order').child(this.selectShop).child(key).update({
-        status: 'ทำเสร็จเเล้ว'
-      })
+      foodcenterRef
+        .child('order')
+        .child(this.selectShop)
+        .child(key)
+        .update({
+          status: 'ทำเสร็จเเล้ว'
+        })
+      foodcenterRef
+        .child('detail')
+        .child(this.selectShop)
+        .update({
+          doing: 'ว่าง'
+        })
     },
     group () {
       // this.getmenu()
       alert(`ทำการกรุ๊ปเมนู`)
       for (var i = 0; i < this.orders.length; i++) {
-        this.grouporder.push(this.orders[i].order)
-        // alert(`กรุ๊ปเมนู one: ` + i)
-        for (var y = 0; y < this.orders[i].menu.length; y++) {
-        // alert(`กรุ๊ปเมนู two: ` + y)
-          const record = this.groupmenu.find(p => p.foodname === this.orders[i].menu[y].name)
-          if (!record) {
-            this.groupmenu.push({
-              foodname: this.orders[i].menu[y].name,
-              quantity: 1
-            })
-          } else {
-            record.quantity += this.orders[i].menu[y].quantity
+        if (this.orders[i].status === 'กำลังรอ') {
+          this.grouporder.push(this.orders[i].order)
+          this.keygrouporder.push(this.orders[i].key)
+          // alert(`กรุ๊ปเมนู one: ` + i)
+          for (var y = 0; y < this.orders[i].menu.length; y++) {
+            // alert(`กรุ๊ปเมนู two: ` + y)
+            const record = this.groupmenu.find(
+              p => p.foodname === this.orders[i].menu[y].name
+            )
+            if (!record) {
+              this.groupmenu.push({
+                foodname: this.orders[i].menu[y].name,
+                quantity: this.orders[i].menu[y].quantity
+              })
+            } else {
+              record.quantity += this.orders[i].menu[y].quantity
+            }
           }
-        }
+        } else {}
+      }
+      if (this.groupmenu.length === 0) {
+        alert(`ไม่มีเมนูที่สามารถกรุ๊ปได้`)
       }
       console.log(this.groupmenu)
     },
@@ -128,6 +202,13 @@ export default {
         this.getmenuall = data
         // console.log(data)
       })
+    },
+    completedgroup () {
+      for (var i = 0; i < this.keygrouporder.length; i++) {
+        // alert(`Key in as` + this.keygrouporder[i])
+        this.complete(this.keygrouporder[i])
+      }
+      this.groupmenu = []
     }
   },
   mounted () {
@@ -159,126 +240,14 @@ export default {
 </script>
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style>
-.button {
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    text-align: center;
-    /*text-decoration: none;*/
-    /*font-size: 14px;*/
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-   /* cursor: pointer;*/
-   font-family: 'Prompt', sans-serif;
+.card {
+  border-radius: 10px;
+  border: none;
+  margin: 10px;
 }
-.button1 {
-    margin-top: 7px;
-    width: 10%;
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
-}
-.button1:hover {
-    background-color: #4CAF50;
-    color: white;
-}
-.button2 {
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #008CBA;
-}
-.button2:hover {
-    background-color: #008CBA;
-    color: white;
-}
-.button3 {
-    margin-bottom: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #f44336;
-}
-.button3:hover {
-    background-color: #f44336;
-    color: white;
-}
-.button4 {
-    margin-bottom: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #B8860B;
-}
-.button4:hover {background-color: #B8860B;
-}
-.button5 {
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #7FFF00;
-}
-.button5:hover {
-    background-color: #7FFF00;
-    color: white;
-}
-.button6 {
-    margin-bottom: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #FF00FF;
-}
-.button7 {
-    margin-top: 7px;
-    width: 10%;
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
-}
-.button7:hover {
-    background-color: #4CAF50;
-    color: white;
-}
-.button6:hover {background-color: #FFB6C1;
-}
-.button8 {
-    margin-top: 7px;
-    width: 12%;
-    background-color: white;
-    color: black;
-    border: 2px solid #f44336;
-}
-.button8:hover {
-    background-color: #f42136;
-    color: white;
-}
-p {
-    border-left: 20px solid #DC143C;
-    border-radius: 12px;
-    border: 2px solid #F0E68C;
-    background-color: #F5DEB3;
-}
-input[type=text], select {
-    width: 19%;
-    padding: 1% 1%;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-input[type=number], select {
-    width: 10%;
-    padding: 1% 1%;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-div {
-  font-family: 'Prompt', sans-serif;
-}
-hk {
-   font-size: 30px;
-    background-color: #F0E68C;
+.groupPanal {
+  background: white;
+  border-radius: 10px;
+  padding: 30px
 }
 </style>

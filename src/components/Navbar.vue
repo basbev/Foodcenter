@@ -63,7 +63,7 @@
             </a>
           </p>
           <p class="control" v-if="isLoggedIn" v-on:click="logout">
-            <a class="bd-tw-button button" href="/">
+            <a class="bd-tw-button button is-danger" href="/">
               <span>
                 ออกจากระบบ
               </span>

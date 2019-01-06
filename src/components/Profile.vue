@@ -1,7 +1,7 @@
 <template>
 <div class="container">
   <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
-  <center><h3>Profile</h3></center>
+  <center><h2>Profile</h2></center>
   <!-- TEST -->
     <div :key="key" v-for="(user, key) in user">
     <div class="row">
@@ -36,7 +36,7 @@
         <textarea id="address" name="address" placeholder="Your address.." style="height:200px" v-model="user.address"></textarea>
       </div>
     </div>
-      <button type="button" class="button button3" data-ripple="true" @click="updateuser(user.firstname, user.lastname, user.phonenumber, user.address, key)">
+      <button type="button" class="button button2" data-ripple="true" @click="updateuser(user.firstname, user.lastname, user.phonenumber, user.address, key)">
       Update
     </button>
 </div>
@@ -110,102 +110,6 @@ export default {
 }
 </script>
 <style>
-.button {
-    background-color: #4CAF50; /* Green */
-    border: none;
-    color: white;
-    text-align: center;
-    /*text-decoration: none;*/
-    /*font-size: 14px;*/
-    -webkit-transition-duration: 0.4s; /* Safari */
-    transition-duration: 0.4s;
-   /* cursor: pointer;*/
-    font-family: 'Prompt', sans-serif;
-}
-.button1 {
-    margin-top: 7px;
-    width: 10%;
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
-    font-family: 'Prompt', sans-serif;
-}
-.button1:hover {
-    background-color: #4CAF50;
-    color: white;
-    font-family: 'Prompt', sans-serif;
-}
-.button2 {
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #008CBA;
-    font-family: 'Prompt', sans-serif;
-}
-.button2:hover {
-    background-color: #008CBA;
-    color: white;
-    font-family: 'Prompt', sans-serif;
-}
-.button3 {
-    margin-bottom: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #f44336;
-    font-family: 'Prompt', sans-serif;
-}
-.button3:hover {
-    background-color: #f44336;
-    color: white;
-}
-.button4 {
-    margin-bottom: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #B8860B;
-    font-family: 'Prompt', sans-serif;
-}
-.button4:hover {background-color: #B8860B;
-}
-.button5 {
-    margin-top: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #7FFF00;
-    font-family: 'Prompt', sans-serif;
-}
-.button5:hover {
-    background-color: #7FFF00;
-    color: white;
-}
-.button6 {
-    margin-bottom: 7px;
-    background-color: white;
-    color: black;
-    border: 2px solid #FF00FF;
-}
-.button7 {
-    margin-top: 13px;
-    width: 10%;
-    background-color: white;
-    color: black;
-    border: 2px solid #4CAF50;
-}
-.button7:hover {
-    background-color: #4CAF50;
-    color: white;
-}
-.button6:hover {background-color: #FFB6C1;
-}
-p {
-    border-left: 20px solid #DC143C;
-    border-radius: 12px;
-    border: 2px solid #F0E68C;
-    background-color: #F5DEB3;
-}
-div {
-  font-family: 'Prompt', sans-serif;
-}
 * {
     box-sizing: border-box;
 }
