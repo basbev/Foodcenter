@@ -57,7 +57,7 @@
     </div>
         <div class="container">
           <div class="columns is-multiline">
-            <div class="column is-one-third" :key="detail.key" v-for="(detail, key) in shops">
+            <div class="column is-one-third" :key="detail.key" v-for="(detail) in shops">
               <article class="notification media has-background-white">
                 <figure class="media-left">
                   <span class="icon">
@@ -67,19 +67,19 @@
                 <div class="media-content">
                   <div class="content">
                     <h1 class="title is-size-4">ร้าน {{detail.name}}</h1>
-                    <div v-if="updateKey === key">
+                    <!-- <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
         <button class="button button1" @click="updatefoodcenter(updateTel, updateName, detail.key)">Save</button>
-      </div>
-      <div v-else>
+      </div> -->
+      <div>
         <div class="row">
           <div class="column">
         <img v-bind:src="detail.status" width="70" height="55"><br>
     <img src="https://www.img.live/images/2018/11/20/img_352451.png" class="imageTel">&nbsp;{{detail.tel}}
      <h1>คิวที่รอ :&nbsp;<span class="number">&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</span></h1>
      <h5>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h5>
-        <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, key)">Update</button>
+        <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, detail.key)">Update</button>
         <!-- <button v-if="permission === '3'" class="button button4" @click="setUpdatefood(detail.tel, detail.name, key)">Update1</button> -->
         <!-- <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button> -->
         <button v-if="permission === '3'" class="button button3" @click="DelFood(detail.key)">Delete</button>
@@ -99,7 +99,7 @@
     <label>กำลังค้นหา : {{Search}}</label>
         <div class="container">
           <div class="columns is-multiline">
-            <div class="column is-one-third" :key="key" v-for="(detail, key) in showData">
+            <div class="column is-one-third" :key="detail.key" v-for="(detail) in showData">
               <article class="notification media has-background-white">
                 <figure class="media-left">
                   <span class="icon">
@@ -109,19 +109,19 @@
                 <div class="media-content">
                   <div class="content">
                     <h1 class="title is-size-4">ร้าน</h1>
-                    <div v-if="updateKey === key">
+                    <!-- <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
         <button class="button button1" @click="updatefoodcenter(updateTel, updateName, detail.key)">Save</button>
-      </div>
-      <div v-else>
+      </div> -->
+      <div>
         <div class="row">
           <div class="column">
         <h1>&nbsp;&nbsp;{{detail.name}}&nbsp;&nbsp;<img v-bind:src="detail.status" width="70" height="55" ></h1>
     <h5><img src="https://www.img.live/images/2018/11/20/img_352451.png" width="25" height="20">&nbsp;{{detail.tel}}</h5>
      <h2>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</hk></h2>
      <h5>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h5>
-        <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, key)">Update</button>
+        <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, detail.key)">Update</button>
         <!-- <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button> -->
         <button v-if="permission === '3'" class="button button6" @click="DelFood(detail.key)">Delete</button>
         <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png'" @click="SelectShop(detail.key)" class="button button3">Select</button>
@@ -136,14 +136,20 @@
           </div>
         </div>
       </section>
-        <div class="modal is-active" v-show="showModal" @close="showModal = false">
+        <div id="modal-ter" class="modal is-active" v-show="showModal" @close="showModal = false">
           <div class="modal-background"></div>
           <div class="modal-content">
             <div class="box">
-              <h3>Update</h3>
+              <!-- <center><button class="delete" aria-label="close" @click="showModal = false"></button></center>
+              <h3><center>Update {{updateName}}</center></h3><br> -->
+              <header class="modal-card-head">
+                <p class="modal-card-title">เเก้ไขร้านอาหาร {{tmp}}</p>
+                <button class="delete" aria-label="close" @click="showModal = false">></button>
+              </header>
               <form action>
-          <div>
-              <div class="columns">
+                <br>
+             <div>
+              <!-- <div class="columns">
                 <div class="column is-2">
                   ชื่อ :
                 </div>
@@ -162,47 +168,47 @@
                   <input
                     class="form-control mb-2"
                     type="text"
-                    v-model="updatesurName"
+                    v-model="updateTel"
                     placeholder="นามสุกล"
                   >
                 </div>
-              </div>
+              </div> -->
               <div class="columns">
-                <div class="column is-4">
-                  รหัสบัตรประชาชน :
+                <div class="column is-3">
+                  ชื่อร้านอาหาร :
                 </div>
                 <div class="column">
                   <input
                     class="form-control mb-2"
                     type="text"
-                    v-model="updateid"
-                    placeholder="รหัสบัตรประชาชน"
+                    v-model="updateName"
+                    placeholder="ชื่อร้านอาหาร"
                   >
                 </div>
               </div>
               <div class="columns">
-                <div class="column is-4">
-                  กรุ๊ปเลือด :
+                <div class="column is-3">
+                  เบอร์ติดต่อร้านอาหาร :
                 </div>
                 <div class="column">
                   <input
                     class="form-control mb-2"
                     type="text"
-                    v-model="updatebloodtype"
-                    placeholder="กรุ๊ปเลือด"
+                    v-model="updateTel"
+                    placeholder="เบอร์ติดต่อร้านอาหาร"
                   >
                 </div>
               </div>
               <button
                     class="button button1"
-                    @click="Update(updateDisease, updateMedical, updateNumberphone, updateAddress, updatebloodtype, updateHeight, updateWeight, updateday, updategen, updateid, updatesurName, updateName, updateKey, Manage)"
+                    @click="updatefoodcenter(updateTel, updateName, updateKey)"
                   >save</button>
 
           </div>
         </form>
             </div>
           </div>
-          <button class="modal-close" @click="showModal = false"></button>
+          <!-- <button class="modal-close" @click="showModal = false"></button> -->
         </div>
   </div>
 </template>
@@ -229,7 +235,8 @@ export default {
       Search: '',
       showData: [],
       numberOfShop: 0,
-      showModal: false
+      showModal: false,
+      tmp: ''
     }
   },
   methods: {
@@ -249,6 +256,7 @@ export default {
       this.updateTel = tel
       this.updateName = name
       this.showModal = true
+      this.tmp = name
     },
     updatefoodcenter (tel, name, key) {
       foodcenterRef.child('detail').child(key).update({
@@ -258,6 +266,7 @@ export default {
       this.updateKey = ''
       this.updateTel = ''
       this.updateName = ''
+      this.showModal = false
     },
     deletefoodcenter (key) {
       foodcenterRef.child('detail').child(key).remove()
