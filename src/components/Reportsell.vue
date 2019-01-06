@@ -48,8 +48,8 @@ export default {
       var firebaseChart = new FusionCharts({
         type: 'column2d',
         renderAt: 'chart-container',
-        width: '650',
-        height: '400',
+        width: '850',
+        height: '600',
         dataFormat: 'json',
         dataSource: {
           'chart': {
@@ -60,7 +60,7 @@ export default {
             'subCaptionFontSize': '17',
             'captionPadding': '15',
             'captionFontColor': '#8C8C8C',
-            'baseFontSize': '14',
+            'baseFontSize': '22',
             'baseFont': 'Barlow',
             'canvasBgAlpha': '0',
             'bgColor': '#FFFFFF',
@@ -71,7 +71,7 @@ export default {
             'showAlternateHGridColor': '0',
             'usePlotGradientColor': '0',
             'paletteColors': '#6AC1A5',
-            'showValues': '0',
+            'showValues': '1',
             'divLineAlpha': '5',
             'showAxisLines': '1',
             'drawAnchors': '0',
