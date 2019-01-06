@@ -45,7 +45,7 @@
             >กำลังทำ</button>
             <button
               v-if="order.status === 'กำลังทำ' & permission == '2'"
-              @click="complete(order.key)"
+              @click="complete(order.key, shops.q)"
               class="button button7 card-footer-item"
             >ทำเสร็จเเล้ว</button>
             <button
@@ -113,14 +113,14 @@ export default {
     OrderComp (key, q, c, order) {
       this.updateQ = q
       this.updatecount = c
-      foodcenterRef
-        .child('detail')
-        .child(this.selectShop)
-        .update({
-          q: this.updateQ - 1
-          // countdoing: this.updatecount + 1,
-          // count: order
-        })
+      // foodcenterRef
+      //   .child('detail')
+      //   .child(this.selectShop)
+      //   .update({
+      //     q: this.updateQ - 1
+      //     // countdoing: this.updatecount + 1,
+      //     // count: order
+      //   })
       foodcenterRef
         .child('order')
         .child(this.selectShop)
@@ -143,7 +143,7 @@ export default {
           status: 'กำลังทำ'
         })
     },
-    complete (key) {
+    complete (key, q) {
       foodcenterRef
         .child('order')
         .child(this.selectShop)
@@ -156,6 +156,14 @@ export default {
         .child(this.selectShop)
         .update({
           doing: 'ว่าง'
+        })
+      foodcenterRef
+        .child('detail')
+        .child(this.selectShop)
+        .update({
+          q: q - 1
+          // countdoing: this.updatecount + 1,
+          // count: order
         })
     },
     group () {
@@ -206,7 +214,7 @@ export default {
     completedgroup () {
       for (var i = 0; i < this.keygrouporder.length; i++) {
         // alert(`Key in as` + this.keygrouporder[i])
-        this.complete(this.keygrouporder[i])
+        this.complete(this.keygrouporder[i], this.shops.q)
       }
       this.groupmenu = []
     }

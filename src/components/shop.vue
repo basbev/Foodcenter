@@ -99,7 +99,7 @@
 <img src="/static/pro.png">
                    <div class="row" :key="key" v-for="(promo, key) in promo">
                       <h4>&nbsp; {{promo.prodetail}} </h4>
-                       <button v-if="permission !== '1'" class="button button3" @click="DelPromo(key)">ลบ</button>
+                       <button v-if="permission !== '1'" class="button button3" @click="DelPro(key)">ลบ</button>
                         <button v-if="permission !== '1'" @click="SetUpdatePromo(key, promo.prodetail)" class="button button3">เเก้ไขโปรโมชั่น</button>
                     <hr>
                     <div v-if="updateKey === key">
@@ -130,7 +130,7 @@
                       <img v-url={filename:menushow.foodpic} width="300" height="350"/><br>
                       <button @click="Cart(menushow.foodname, menushow.foodprice, menushow.foodtype, menushow.key)" class="button button3">เพิ่มลง Order</button>
                       <button v-if="permission !== '1'" @click="SetUpdateMenuShow(key, menushow.foodname, menushow.foodprice, menushow.foodpic, menushow.foodtype)" class="button button3">เเก้ไขเมนูเเนะนำ</button>
-                      <button v-if="permission!== '1'" class="button button3" @click="DeleteMenushow(menushow.key)">ลบ</button>
+                      <button v-if="permission!== '1'" class="button button3" @click="DelFoodhot(menushow.key)">ลบ</button>
                     <hr>
                     <div v-if="updateKey === key">
         <input type="text" v-model="updatefoodname" placeholder="ชื่อ">
@@ -229,7 +229,7 @@
                       <img v-url={filename:menu.foodpic} width="300" height="350"/><br>
                       <button @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key)" class="button button3">เพิ่มลง Order</button>
                       <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic)" class="button button3">เเก้ไขเมนูอาหาร</button>
-                      <button v-if="permission !== '1'" @click="DeleteMenu(menu.key)" class="button button3">ลบ</button>
+                      <button v-if="permission !== '1'" @click="DelFood(menu.key)" class="button button3">ลบ</button>
                       <hr>
                                       <div v-if="updateKey === key">
         <input type="text" v-model="updateMenufood" placeholder="ชื่อเมนู">
@@ -301,7 +301,7 @@
                       <div class="message-body"><p><h5>Review:&nbsp;</h5>{{review.view}}
                       <img v-bind:src="review.scorce" width="40" height="40" ><br>
                        <h5>โดย คุณ:&nbsp;{{review.namere}}</h5><br>
-                       <button v-if="permission !== '1'" class="button button3" @click="DelReview(key)">ลบความเห็น</button>
+                       <button v-if="permission !== '1'" class="button button3" @click="DelRe(key)">ลบความเห็น</button>
                        </div>
                           </div>
                 <input type="text" v-model="view" placeholder="รีวิว" size="30">
@@ -596,6 +596,90 @@ export default {
       } else {
         this.showData = []
       }
+    },
+    DelFood (key) {
+      this.$swal({
+        title: 'คุณกำลังลบเมนูอาหาร?',
+        // text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยืนยัน!',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.value) {
+          this.DeleteMenu(key)
+          this.$swal(
+            'ลบเเล้ว!',
+            'เมนูอาหารโดนลบเรียบร้อยเเล้ว.',
+            'success'
+          )
+        }
+      })
+    },
+    DelFoodhot (key) {
+      this.$swal({
+        title: 'คุณกำลังลบเมนูอาหารเเนะนำ?',
+        // text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยืนยัน!',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.value) {
+          this.DeleteMenushow(key)
+          this.$swal(
+            'ลบเเล้ว!',
+            'เมนูอาหารเเนะนำโดนลบเรียบร้อยเเล้ว.',
+            'success'
+          )
+        }
+      })
+    },
+    DelPro (key) {
+      this.$swal({
+        title: 'คุณกำลังลบโปรโมชั่นนี้?',
+        // text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยืนยัน!',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.value) {
+          this.DelPromo(key)
+          this.$swal(
+            'ลบเเล้ว!',
+            'โปรโมชั่นนี้โดนลบเรียบร้อยเเล้ว.',
+            'success'
+          )
+        }
+      })
+    },
+    DelRe (key) {
+      this.$swal({
+        title: 'คุณกำลังลบความคิดเห็นนี้?',
+        // text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยืนยัน!',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.value) {
+          this.DelReview(key)
+          this.$swal(
+            'ลบเเล้ว!',
+            'ความคิดเห็นนี้โดนลบเรียบร้อยเเล้ว.',
+            'success'
+          )
+        }
+      })
     }
   },
   computed: {

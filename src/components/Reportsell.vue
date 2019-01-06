@@ -27,7 +27,10 @@ export default {
   },
   methods: {
     exportPdf () {
+      var tempTitle = document.title
+      document.title = 'Report.pdf'
       window.print()
+      document.title = tempTitle
     },
     getDataFirebase (getvalue, scale) {
       alert(`Pls Wait`)
