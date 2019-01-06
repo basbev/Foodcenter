@@ -24,10 +24,10 @@
                 <td>{{ p.name }}</td>
                 <td>{{ p.price }} บ.</td>
                 <td>{{ p.quantity }} จาน</td>
-                <td>{{ p.type }}</td>
-                <td><div @click="inclese(key)"><a class="delete"></a></div></td>
-                <td><div @click="declese(key)"><a class="delete"></a></div></td>
-                <td><div @click="remove(key)"><a class="delete"></a></div></td>
+                <td><center>{{ p.type }}</center></td>
+                <td><center><div @click="inclese(key)"><i class="fas fa-plus"></i></div></center></td>
+                <td><center><div @click="declese(key)"><i class="fas fa-minus"></i></div></center></td>
+                <td><center><div @click="remove(key)"><i class="fas fa-times"></i></div></center></td>
                 </tr>
                 <tr>
                   <td><b>ราคารวม:</b></td>
