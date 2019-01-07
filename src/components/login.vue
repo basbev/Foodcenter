@@ -198,4 +198,10 @@ export default {
   .large1 {
     font-size: 1.5rem;
 }
+  .input[type=text], select {
+    width: 100%;
+}
+  .input.is-large, .textarea.is-large {
+    font-size: 1.5rem;
+  }
 </style>

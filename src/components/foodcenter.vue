@@ -12,10 +12,10 @@
       <h3>เพิ่มร้านอาหาร</h3>
       <div class="columns">
         <div class="column">
-          <input class="putname" type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
+          <input class="input is-large" type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
         </div>
         <div class="column">
-          <input class="putphone" type="text" v-model="tel" placeholder="เบอร์">
+          <input class="input is-large" type="number" v-model="tel" placeholder="เบอร์">
         </div>
         <div class="column is-3">
           <button class="button button1" @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
@@ -83,8 +83,8 @@
         <!-- <button v-if="permission === '3'" class="button button4" @click="setUpdatefood(detail.tel, detail.name, key)">Update1</button> -->
         <!-- <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button> -->
         <button v-if="permission === '3'" class="button button3" @click="DelFood(detail.key)">Delete</button>
-        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' & permission !== null" @click="SelectShop(detail.key)" class="button button6">Select</button>
-        <button class="button button2" @click="GoSee(detail.key)">Order</button>
+        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' & permission !== null" @click="SelectShop(detail.key)" class="button button6">Select&nbsp;</button>
+        <button class="button button2" @click="GoSee(detail.key)">Order&nbsp;</button>
         </div>
         </div>
       </div>
@@ -247,9 +247,18 @@ export default {
         q: 0,
         status: 'https://www.img.live/images/2018/11/20/d57b23a07352f87d.png'
       }
-      foodcenterRef.child('detail').child(this.name).set(data)
-      this.tel = ''
-      this.name = ''
+      if (tel === '' || name === '') {
+        this.$swal({
+          type: 'error',
+          title: 'Oops...',
+          text: 'กรุณากรอกข้อมูลให้ครบ'
+          // footer: '<a href>Why do I have this issue?</a>'
+        })
+      } else {
+        foodcenterRef.child('detail').child(this.name).set(data)
+        this.tel = ''
+        this.name = ''
+      }
     },
     setUpdatefoodcenter (tel, name, key) {
       this.updateKey = key
@@ -452,4 +461,13 @@ input[type=text], select {
 .swal2-popup #swal2-content {
     text-align: left;
 }
+  .input[type=text], select {
+    width: 100%;
+  }
+  .input[type=number], select {
+    width: 100%;
+  }
+  .input.is-large, .textarea.is-large {
+  font-size: 1.0rem;
+  }
 </style>

@@ -21,7 +21,7 @@
                  <button v-if="permission !== '1'" class="button button11" @click="setprofile(detail.name, detail.tel, detail.status, detail.banner)">เเก้ไขโปรไฟล์</button>
                  <div v-if="updateKey === true">
                    <input type="text" v-model="updateName" placeholder="ชื่อร้าน">
-                   <input type="text" v-model="updatePhone" placeholder="เบอร์โทร">
+                   <input type="number" v-model="updatePhone" placeholder="เบอร์โทร">
                     <select name="status" v-model="updateStatus">
   <option value="https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png">เปิด</option>
   <option value="https://www.img.live/images/2018/11/20/d57b23a07352f87d.png">ปิด</option>
@@ -393,34 +393,52 @@ export default {
       console.log(this.dataImg2)
     },
     async insertmenu (foodname, foodprice, foodtype, foodpic) {
-      await storageRef.child(this.dataImg3.name).put(this.dataImg3)
       let data = {
         foodname: foodname,
         foodtype: foodtype,
         foodprice: foodprice,
         foodpic: this.dataImg3.name
       }
-      await foodcenterRef.child('menu').child(this.selectShop).push(data)
-      this.foodname = ''
-      this.foodprice = ''
-      this.foodtype = ''
-      this.foodpic = ''
-      this.dataImg3 = ''
+      if (foodname === '' || foodprice === '' || this.dataImg3 === '' || foodtype === '') {
+        this.$swal({
+          type: 'error',
+          title: 'Oops...',
+          text: 'กรุณากรอกข้อมูลให้ครบ'
+          // footer: '<a href>Why do I have this issue?</a>'
+        })
+      } else {
+        await foodcenterRef.child('menu').child(this.selectShop).push(data)
+        await storageRef.child(this.dataImg3.name).put(this.dataImg3)
+        this.foodname = ''
+        this.foodprice = ''
+        this.foodtype = ''
+        this.foodpic = ''
+        this.dataImg3 = ''
+      }
     },
     async insertmenushow (foodname, foodprice, foodpic, foodtype) {
-      await storageRef.child(this.dataImg.name).put(this.dataImg)
       let data = {
         foodname: foodname,
         foodprice: foodprice,
         foodtype: foodtype,
         foodpic: this.dataImg.name
       }
-      await foodcenterRef.child('menushow').child(this.selectShop).push(data)
-      this.foodname = ''
-      this.foodprice = ''
-      this.foodpic = ''
-      this.foodtype = ''
-      this.dataImg = ''
+      if (foodname === '' || foodprice === '' || this.dataImg === '' || foodtype === '') {
+        this.$swal({
+          type: 'error',
+          title: 'Oops...',
+          text: 'กรุณากรอกข้อมูลให้ครบ'
+          // footer: '<a href>Why do I have this issue?</a>'
+        })
+      } else {
+        await storageRef.child(this.dataImg.name).put(this.dataImg)
+        await foodcenterRef.child('menushow').child(this.selectShop).push(data)
+        this.foodname = ''
+        this.foodprice = ''
+        this.foodpic = ''
+        this.foodtype = ''
+        this.dataImg = ''
+      }
     },
     insertreview (view, scorce) {
       let data = {
@@ -428,17 +446,35 @@ export default {
         scorce: scorce,
         namere: this.user
       }
-      foodcenterRef.child('review').child(this.selectShop).push(data)
-      this.view = ''
-      this.scorce = ''
-      this.namere = ''
+      if (view === '' || scorce === '') {
+        this.$swal({
+          type: 'error',
+          title: 'Oops...',
+          text: 'กรุณากรอกข้อมูลให้ครบ'
+          // footer: '<a href>Why do I have this issue?</a>'
+        })
+      } else {
+        foodcenterRef.child('review').child(this.selectShop).push(data)
+        this.view = ''
+        this.scorce = ''
+        this.namere = ''
+      }
     },
     insertpromo (prodetail) {
       let data = {
         prodetail: prodetail
       }
-      foodcenterRef.child('promo').child(this.selectShop).push(data)
-      this.prodetail = ''
+      if (prodetail === '') {
+        this.$swal({
+          type: 'error',
+          title: 'Oops...',
+          text: 'กรุณากรอกข้อมูลให้ครบ'
+          // footer: '<a href>Why do I have this issue?</a>'
+        })
+      } else {
+        foodcenterRef.child('promo').child(this.selectShop).push(data)
+        this.prodetail = ''
+      }
     },
     Cart (foodname, foodprice, type, key) {
       console.log(foodname, foodprice, type, key)
@@ -779,4 +815,10 @@ export default {
   border: 2px solid #efefef;
   padding: 20px;
 }
+  .input[type=text], select {
+    width: 100%;
+  }
+  .input[type=number], select {
+    width: 100%;
+  }
 </style>
