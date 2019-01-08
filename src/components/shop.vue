@@ -56,15 +56,15 @@
           <div>
           <div class="columns">
             <div class="column">
-              <select name="status" class="selectType" v-model="Searchtype">
+              <select name="status" class="input is-large" v-model="Searchtype">
                 <option value="menushow">อาหารเเนะนำ</option>
                 <option value="menu">อาหารทั่วไป</option>
               </select>
             </div>
             <div class="column">
-              <input type="text" v-model="Search" placeholder="ค้นหาเมนู" v-if="Searchtype === ''" disabled>
-          <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" v-if="Searchtype === 'menushow'">
-          <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop2(Search)" v-if="Searchtype === 'menu'">
+              <input type="text" v-model="Search" placeholder="ค้นหาเมนู" v-if="Searchtype === ''" disabled class="input is-large">
+          <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" v-if="Searchtype === 'menushow'" class="input is-large">
+          <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop2(Search)" v-if="Searchtype === 'menu'" class="input is-large">
             </div>
           </div>
       <!--<button class="button button11" @click="Searchnow(Search, Searchtype)">ค้นหาอาหาร</button>-->
@@ -111,7 +111,7 @@
                 </div>
               </article>
               <div v-if="permission !== '1'">
-                <input type="text" v-model="prodetail" placeholder="รายละเอียดโปรโมชั่น" size="30" required>
+                <input type="text" v-model="prodetail" placeholder="รายละเอียดโปรโมชั่น" size="30" required class="input is-large">
       <button class="button button12" @click="insertpromo(prodetail)">เพิ่มโปรโมชั่น</button>
               </div>
           </div>
@@ -304,7 +304,7 @@
                        <button v-if="permission !== '1'" class="button button3" @click="DelRe(key)">ลบความเห็น</button>
                        </div>
                           </div>
-                <input type="text" v-model="view" placeholder="รีวิว" size="30">
+                <input type="text" v-model="view" placeholder="รีวิว" size="30" class="input is-large">
                 <input  type="radio" id="bad" name="gender" value="https://www.img.in.th/images/bd7e44b282baa7d06dfdf02f51bc915f.png" v-model="scorce">
 <label for="bad">แย่</label>
 <input type="radio" id="ok" name="gender" value="https://www.img.in.th/images/a1f452362b9c5f26d9dfc720a424b989.png" v-model="scorce">
@@ -820,5 +820,8 @@ export default {
   }
   .input[type=number], select {
     width: 100%;
+  }
+  .input.is-large, .textarea.is-large {
+  font-size: 1.0rem;
   }
 </style>

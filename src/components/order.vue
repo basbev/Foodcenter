@@ -81,7 +81,7 @@
           </div>
           <!-- <div v-for="(groups, key) in grouporder" :key="key">
           </div>-->
-          <div v-if="groupmenu != ''">จำนวนรายการทั้งหมด : {{grouporder}}</div>
+          <div v-if="groupmenu != ''">จากคิวที่ : {{grouporder}}</div>
         </div>
 
       </div>
@@ -216,7 +216,9 @@ export default {
         // alert(`Key in as` + this.keygrouporder[i])
         this.complete(this.keygrouporder[i], this.shops.q)
       }
+      this.keygrouporder = []
       this.groupmenu = []
+      this.grouporder = []
     }
   },
   mounted () {
