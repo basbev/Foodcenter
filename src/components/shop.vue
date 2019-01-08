@@ -17,7 +17,7 @@
               <div class="content">
               <img v-url={filename:detail.banner}>
               <div :key="key" v-if="(shop, key) in detail"></div>
-                 <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}<br>เบอร์&nbsp; {{ detail.tel }}&nbsp;<img v-bind:src="detail.status" width="90" height="70" ></h3>
+                 <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}<br><img src="https://www.img.live/images/2018/11/20/img_352451.png" height="15">&nbsp;{{ detail.tel }}&nbsp;<img v-bind:src="detail.status" width="90" height="70" ></h3>
                  <button v-if="permission !== '1'" class="button button11" @click="setprofile(detail.name, detail.tel, detail.status, detail.banner)">เเก้ไขโปรไฟล์</button>
                  <div v-if="updateKey === true">
                    <input type="text" v-model="updateName" placeholder="ชื่อร้าน">
@@ -45,7 +45,7 @@
               </div>
                 <br>
           <img src="/static/hotsale.png"><div :key="key" v-for="(record, key) in records">
-          <h3>&nbsp;&nbsp;{{key}}</h3>
+          <h3>&nbsp;&nbsp;{{key}}<img src="https://sv1.picz.in.th/images/2019/01/09/9uitK9.png" height="30" width="30"></h3>
           </div>
            <div class="box">
               <article class="message is-primary">
@@ -55,16 +55,16 @@
                 <div class="message-body">ค้นหา
           <div>
           <div class="columns">
-            <div class="column">
+            <!-- <div class="column">
               <select name="status" class="input is-large" v-model="Searchtype">
                 <option value="menushow">อาหารเเนะนำ</option>
                 <option value="menu">อาหารทั่วไป</option>
               </select>
-            </div>
+            </div> -->
             <div class="column">
-              <input type="text" v-model="Search" placeholder="ค้นหาเมนู" v-if="Searchtype === ''" disabled class="input is-large">
-          <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" v-if="Searchtype === 'menushow'" class="input is-large">
-          <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop2(Search)" v-if="Searchtype === 'menu'" class="input is-large">
+              <!-- <input type="text" v-model="Search" placeholder="ค้นหาเมนู" v-if="Searchtype === ''" disabled class="input is-large">
+          <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" v-if="Searchtype === 'menushow'" class="input is-large"> -->
+          <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop2(Search)" class="input is-large">
             </div>
           </div>
       <!--<button class="button button11" @click="Searchnow(Search, Searchtype)">ค้นหาอาหาร</button>-->
@@ -98,7 +98,7 @@
                 <div class="message-body">
 <img src="/static/pro.png">
                    <div class="row" :key="key" v-for="(promo, key) in promo">
-                      <h4>&nbsp; {{promo.prodetail}} </h4>
+                      <h4>&nbsp; {{promo.prodetail}}<img src="https://sv1.picz.in.th/images/2019/01/09/9uitK9.png" height="30" width="30"></h4>
                        <button v-if="permission !== '1'" class="button button3" @click="DelPro(key)">ลบ</button>
                         <button v-if="permission !== '1'" @click="SetUpdatePromo(key, promo.prodetail)" class="button button3">เเก้ไขโปรโมชั่น</button>
                     <hr>
@@ -110,93 +110,6 @@
                           </div>
                 </div>
               </article>
-              <div v-if="permission !== '1'">
-                <input type="text" v-model="prodetail" placeholder="รายละเอียดโปรโมชั่น" size="30" required class="input is-large">
-      <button class="button button12" @click="insertpromo(prodetail)">เพิ่มโปรโมชั่น</button>
-              </div>
-          </div>
-              <div class="box">
-                <h4 id="const" class="title is-3">เมนูเเนะนำ</h4>
-                <article class="message is-primary">
-                  <span class="icon has-text-primary">
-                  <i class="fab fa-hot"></i>
-                  </span>
-                  <div class="message-body">
-                  <div class="container">
-                  <div class="columns is-multiline">
-                                    <div class="column is-5" :key="key" v-for="(menushow, key) in menushow">
-                          <h3>{{menushow.foodname}}</h3>
-                      <h6>ราคา:&nbsp;{{menushow.foodprice}}&nbsp;บาท</h6>
-                      <img v-url={filename:menushow.foodpic} width="300" height="350"/><br>
-                      <button @click="Cart(menushow.foodname, menushow.foodprice, menushow.foodtype, menushow.key)" class="button button3">เพิ่มลง Order</button>
-                      <button v-if="permission !== '1'" @click="SetUpdateMenuShow(key, menushow.foodname, menushow.foodprice, menushow.foodpic, menushow.foodtype)" class="button button3">เเก้ไขเมนูเเนะนำ</button>
-                      <button v-if="permission!== '1'" class="button button3" @click="DelFoodhot(menushow.key)">ลบ</button>
-                    <hr>
-                    <div v-if="updateKey === key">
-        <input type="text" v-model="updatefoodname" placeholder="ชื่อ">
-         <select name="status" v-model="updatefoodtype" required>
-  <option value="ผัด">ผัด</option>
-  <option value="ทอด">ทอด</option>
-  <option value="ต้ม">ต้ม</option>
-  <option value="แกง">แกง</option>
-  <option value="นึ่ง">นึ่ง</option>
-  <option value="ย่าง">ย่าง</option>
-</select>
-        <input type="text" v-model="updatefoodprice" placeholder="ราคา">
-        <label class="file-label">
-      <input class="file-input" type="file" name="resume" @change="onFileChangeupdate($event.target.files[0])">
-      <span class="file-cta">
-        <span class="file-icon">
-          <i class="fas fa-upload"></i>
-        </span>
-        <span class="file-label">
-          อัพโหลดรูป
-        </span>
-      </span>
-    </label>
-    <span class="file-name" v-if="dataImg1">
-        {{dataImg1.name}}
-      </span>
-        <button @click="UpdateMenuShow(menushow.key, updatefoodname, updatefoodprice, updatefoodpic, updatefoodtype)" class="button button2">บันทึกเมนูเเนะนำ</button>
-        <hr>
-      </div>
-      <div v-else>
-                  </div>
-                  </div>
-                  </div>
-                          </div>
-                  </div>
-                </article>
-            </div>
-            <div>
-              <div v-if="permission !== '1'">
-      <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
-       <select name="status" v-model="foodtype" required>
-  <option value="ผัด">ผัด</option>
-  <option value="ทอด">ทอด</option>
-  <option value="ต้ม">ต้ม</option>
-  <option value="แกง">แกง</option>
-  <option value="นึ่ง">นึ่ง</option>
-  <option value="ย่าง">ย่าง</option>
-</select>
-      <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
-    <label class="file-label">
-      <input class="file-input" type="file" name="resume" @change="onFileChange($event.target.files[0])">
-      <span class="file-cta">
-        <span class="file-icon">
-          <i class="fas fa-upload"></i>
-        </span>
-        <span class="file-label">
-          อัพโหลดรูป
-        </span>
-      </span>
-    </label>
-      <button class="button button11" @click="insertmenushow(foodname, foodprice , foodpic, foodtype)">เพิ่มเมนูแนะนำ</button>
-              <span class="file-name" v-if="dataImg">
-        {{this.dataImg.name}}
-      </span>
-      <br>
-              </div>
               <div class="bucket" @click="isComponentModalActive = true">
         <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
           <div class="field is-grouped">
@@ -209,9 +122,12 @@
           </div>
         </div>
               </div>
-    </div>
+              <div v-if="permission !== '1'">
+                <input type="text" v-model="prodetail" placeholder="รายละเอียดโปรโมชั่น" size="30" required class="input is-large">
+      <button class="button button12" @click="insertpromo(prodetail)">เพิ่มโปรโมชั่น</button>
+              </div>
+          </div>
             <div class="box">
-              <h4 id="let" class="title is-3">เมนูทั่วไป</h4>
               <article class="message is-primary">
                 <span class="icon has-text-primary">
                   <i class="fas fa-info-circle"></i>
@@ -228,13 +144,13 @@
                       <h6>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h6>
                       <img v-url={filename:menu.foodpic} width="300" height="350"/><br>
                       <button @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key)" class="button button3">เพิ่มลง Order</button>
-                      <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic)" class="button button3">เเก้ไขเมนูอาหาร</button>
+                      <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.menupre)" class="button button3">เเก้ไขเมนูอาหาร</button>
                       <button v-if="permission !== '1'" @click="DelFood(menu.key)" class="button button3">ลบ</button>
                       <hr>
                                       <div v-if="updateKey === key">
         <input type="text" v-model="updateMenufood" placeholder="ชื่อเมนู">
         <select name="status" v-model="updateMenutype">
-  <option value="ผัด">ผัด</option>
+  <option value="ผัด" selected>ผัด</option>
   <option value="ทอด">ทอด</option>
   <option value="ต้ม">ต้ม</option>
   <option value="แกง">แกง</option>
@@ -242,6 +158,10 @@
   <option value="ย่าง">ย่าง</option>
 </select>
         <input type="text" v-model="updateMenuprice" placeholder="ราคา">
+         <select name="menupre" v-model="menupre">
+  <option value="เมนูทั่วไป" selected>เมนูทั่วไป</option>
+  <option value="เมนูแนะนำ">เมนูแนะนำ</option>
+</select>
         <label class="file-label">
       <input class="file-input" type="file" name="resume" @change="onFileChangefoodupdate($event.target.files[0])">
       <span class="file-cta">
@@ -256,7 +176,7 @@
     <span class="file-name" v-if="dataImg4">
         {{dataImg4.name}}
       </span>
-        <button @click="UpdateMenu(menu.key, updateMenufood, updateMenuprice, updateMenutype, updateMenupic)" class="button button2">บันทึกเมนูอาหาร</button>
+        <button @click="UpdateMenu(menu.key, updateMenufood, updateMenuprice, updateMenutype, updateMenupic, updateMenumenupre)" class="button button2">บันทึกเมนูอาหาร</button>
         <hr>
       </div>
       <div v-else>
@@ -270,7 +190,7 @@
             <div v-if="permission !== '1'">
       <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
        <select name="status" v-model="foodtype">
-  <option value="ผัด">ผัด</option>
+  <option value="ผัด" selected>ผัด</option>
   <option value="ทอด">ทอด</option>
   <option value="ต้ม">ต้ม</option>
   <option value="แกง">แกง</option>
@@ -278,6 +198,10 @@
   <option value="ย่าง">ย่าง</option>
 </select>
       <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
+       <select name="menupre" v-model="menupre" placeholder="รีวิว">
+  <option value="เมนูทั่วไป" selected>เมนูทั่วไป</option>
+  <option value="เมนูแนะนำ">เมนูแนะนำ</option>
+</select>
       <label class="file-label">
       <input class="file-input" type="file" name="resume" @change="onFileChangefood($event.target.files[0])">
       <span class="file-cta">
@@ -289,7 +213,7 @@
         </span>
       </span>
     </label>
-      <button class="button button11" @click="insertmenu(foodname, foodprice, foodtype, foodpic)">เพิ่มเมนู</button>
+      <button class="button button11" @click="insertmenu(foodname, foodprice, foodtype, foodpic, menupre)">เพิ่มเมนู</button>
       <span class="file-name" v-if="dataImg3">
         {{this.dataImg3.name}}
       </span>
@@ -334,7 +258,9 @@ export default {
       foodprice: '',
       foodpic: '',
       foodtype: '',
+      menupre: '',
       menu: '',
+      menumenupre: '',
       menushow: '',
       review: '',
       menus: {},
@@ -345,6 +271,7 @@ export default {
       updatefoodtype: '',
       updatefoodprice: '',
       updatefoodpic: '',
+      updateMenupre: '',
       updateMenufood: '',
       updateMenuprice: '',
       updateMenutype: '',
@@ -392,14 +319,15 @@ export default {
       this.dataImg2 = fileImg
       console.log(this.dataImg2)
     },
-    async insertmenu (foodname, foodprice, foodtype, foodpic) {
+    async insertmenu (foodname, foodprice, foodtype, foodpic, menupre) {
       let data = {
         foodname: foodname,
         foodtype: foodtype,
         foodprice: foodprice,
+        menupre: menupre,
         foodpic: this.dataImg3.name
       }
-      if (foodname === '' || foodprice === '' || this.dataImg3 === '' || foodtype === '') {
+      if (foodname === '' || foodprice === '' || this.dataImg3 === '' || foodtype === '' || menupre === '') {
         this.$swal({
           type: 'error',
           title: 'Oops...',
@@ -413,6 +341,7 @@ export default {
         this.foodprice = ''
         this.foodtype = ''
         this.foodpic = ''
+        this.menupre = ''
         this.dataImg3 = ''
       }
     },
@@ -521,12 +450,13 @@ export default {
       this.updateKey = ''
       this.prodetail = ''
     },
-    SetUpdateMenu (key, menufood, menuprice, menutype, menupic) {
+    SetUpdateMenu (key, menufood, menuprice, menutype, menupic, menumenupre) {
       this.updateKey = key
       this.updateMenufood = menufood
       this.updateMenuprice = menuprice
       this.updateMenutype = menutype
       this.updateMenupic = menupic
+      this.updateMenumenupre = menumenupre
     },
     async UpdateMenu (key, updateMenufood, updateMenuprice, updateMenutype, updateMenupic) {
       if (this.dataImg4 !== '') {
