@@ -20,10 +20,12 @@ const getters = {
       const product = state.added.find(p => p.Akey === Akey)
 
       return {
+        key: product.Akey,
         name: product.foodname,
         price: product.foodprice,
         quantity,
-        type: product.type
+        type: product.type,
+        lastamount: product.amount
       }
     })
   },
@@ -44,7 +46,7 @@ const mutations = {
   setselectShop: (state, shop) => {
     state.selectShop = shop
   },
-  ADD_TO_CART: (state, {Akey, foodname, foodprice, type}) => {
+  ADD_TO_CART: (state, {Akey, foodname, foodprice, type, amount}) => {
     const record = state.added.find(p => p.Akey === Akey)
     console.log(Akey, foodname, foodprice, type)
     if (!record) {
@@ -53,10 +55,15 @@ const mutations = {
         foodname,
         foodprice,
         quantity: 1,
-        type
+        type,
+        amount
       })
     } else {
-      record.quantity++
+      if (record.quantity < amount) {
+        record.quantity++
+      } else {
+        console.log('เกินไปนะ')
+      }
     }
   },
   setUserFacebook: (state, userSet) => {
@@ -71,7 +78,7 @@ const mutations = {
     state.added.splice(index, 1)
   },
   incleseAmount: (state, index) => {
-    if (state.added[index].quantity < 10) {
+    if (state.added[index].quantity < state.added[index].amount) {
       state.added[index].quantity++
     }
   },
@@ -144,8 +151,9 @@ const actions = {
     const foodname = payload.foodname
     const foodprice = payload.foodprice
     const type = payload.type
-    console.log(Akey, foodname, foodprice, type)
-    commit('ADD_TO_CART', {Akey, foodname, foodprice, type})
+    const amount = payload.amount
+    console.log(Akey, foodname, foodprice, type, amount)
+    commit('ADD_TO_CART', {Akey, foodname, foodprice, type, amount})
   },
   CartCle ({commit}) {
     commit('DeleteCart')
@@ -153,7 +161,7 @@ const actions = {
   Cartremove ({commit}, index) {
     commit('Cartremove', index)
   },
-  incleseAmount ({commit}, index) {
+  incleseAmount ({commit, dispatch}, index) {
     commit('incleseAmount', index)
   },
   decleseAmount ({commit}, index) {

@@ -8,7 +8,6 @@ import { store } from './store/store'
 import VueSweetalert2 from 'vue-sweetalert2'
 
 Vue.use(VueSweetalert2)
-
 let storageRef = firebase.storage().ref()
 Vue.directive('url', {
   async bind (el, binding) {
