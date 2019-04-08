@@ -142,8 +142,9 @@
                                     <div class="column is-5" :key="key" v-for="(menu, key) in menus">
                       <h3>{{menu.foodname}}</h3>
                       <h6>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h6>
+                      <h6>จำนวน:&nbsp;{{menu.amount}}&nbsp;ชิ้น</h6>
                       <img v-url={filename:menu.foodpic} width="300" height="350"/><br>
-                      <button @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key)" class="button button3">เพิ่มลง Order</button>
+                      <button @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.amount)" class="button button3">เพิ่มลง Order</button>
                       <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.menupre)" class="button button3">เเก้ไขเมนูอาหาร</button>
                       <button v-if="permission !== '1'" @click="DelFood(menu.key)" class="button button3">ลบ</button>
                       <hr>
@@ -293,7 +294,8 @@ export default {
       dataImg4: '',
       dataImg2: '',
       banner: '',
-      showData: []
+      showData: [],
+      tmp: ''
     }
   },
   created () {
@@ -337,6 +339,7 @@ export default {
       } else {
         await foodcenterRef.child('menu').child(this.selectShop).push(data)
         await storageRef.child(this.dataImg3.name).put(this.dataImg3)
+        // this.tmp = await storageRef.child(this.dataImg3.name).getDownloadURL()
         this.foodname = ''
         this.foodprice = ''
         this.foodtype = ''
@@ -344,6 +347,7 @@ export default {
         this.menupre = ''
         this.dataImg3 = ''
       }
+      // console.log(this.tmp)
     },
     async insertmenushow (foodname, foodprice, foodpic, foodtype) {
       let data = {
@@ -405,9 +409,16 @@ export default {
         this.prodetail = ''
       }
     },
-    Cart (foodname, foodprice, type, key) {
-      console.log(foodname, foodprice, type, key)
-      this.$store.dispatch('AddCart', {foodname, foodprice, type, key})
+    Cart (foodname, foodprice, type, key, amount) {
+      if (amount > 0) {
+        this.$store.dispatch('AddCart', {foodname, foodprice, type, key, amount})
+      } else {
+        this.$swal.fire({
+          type: 'warning',
+          title: 'ของหมด!'
+        })
+      }
+      console.log()
     },
     SetUpdateMenuShow (key, foodname, foodprice, foodpic, foodtype) {
       this.updateKey = key
@@ -666,7 +677,8 @@ export default {
       return this.$store.getters.user
     },
     ...mapGetters({
-      permission: 'permission'
+      permission: 'permission',
+      cartProducts: 'cartProducts'
     })
   },
   mounted () {

@@ -93,6 +93,7 @@ export default {
       await this.report()
       await this.reportmonth()
       await this.reportyear()
+      await this.Cutstock(products)
       for (var i = 0; i < products.length; i++) {
         let date = moment().tz('Asia/Bangkok').format()
         let time = moment().tz('Asia/Bangkok').format().slice(0, 10)
@@ -219,6 +220,17 @@ export default {
         foodcenterRef.child('report').child(this.SelectShops).child('year').child(year).child('value').set(updatavalue)
       }
     },
+    Cutstock (products) {
+      let stock = null
+      for (var i = 0; i < products.length; i++) {
+        const checkstock = foodcenterRef.child('menu').child(this.SelectShops).child(products[i].key)
+        checkstock.on('value', snap => {
+          stock = snap.val() // ดึงข้อมูลอาหาร
+        })
+        stock.amount = stock.amount - products[i].quantity
+        foodcenterRef.child('menu').child(this.SelectShops).child(products[i].key).child('amount').set(stock.amount)
+      }
+    },
     ...mapActions({
       inclese: 'incleseAmount',
       declese: 'decleseAmount',
@@ -241,6 +253,7 @@ export default {
       this.recordshop = snap.val()
       console.log(this.recordshop)
     })
+    // ดึงข้อมูลมาซึ้งกัน
   }
 }
 </script>
