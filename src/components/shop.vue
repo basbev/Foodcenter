@@ -1,13 +1,13 @@
 <template>
 <div>
+  <link href="https://fonts.googleapis.com/css?family=Sriracha" rel="stylesheet">
     <section class="section">
       <div class="container"><br>
         <div class="columns">
           <div class="column is-3">
             <aside class="is-medium menu">
           <ul class="menu-list">
-            <li class="is-right"><a href="#const" class="is-active"><i class=""></i> เมนูเเนะนำ</a></li>
-            <li><a href="#let" class="is-active"><i class=""></i> เมนูทั่วไป</a></li>
+            <li><a href="#let1" class="is-active"><i class=""></i> เมนูทั่วไป</a></li>
             <li><a href="#let2" class="is-active"><i class=""></i> ความเห็นจากลูกค้า</a></li>
           </ul>
             </aside>
@@ -15,9 +15,10 @@
           <div class="column is-9">
             <div class="content is-medium">
               <div class="content">
+                <div class="box">
               <img v-url={filename:detail.banner}>
               <div :key="key" v-if="(shop, key) in detail"></div>
-                 <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}<br><img src="https://www.img.live/images/2018/11/20/img_352451.png" height="15">&nbsp;{{ detail.tel }}&nbsp;<img v-bind:src="detail.status" width="90" height="70" ></h3>
+                 <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}&nbsp;&nbsp;<img src="https://www.img.live/images/2018/11/20/img_352451.png" height="15">&nbsp;{{ detail.tel }}&nbsp;<img v-bind:src="detail.status" width="90" height="70" ></h3>
                  <button v-if="permission !== '1'" class="button button11" @click="setprofile(detail.name, detail.tel, detail.status, detail.banner)">เเก้ไขโปรไฟล์</button>
                  <div v-if="updateKey === true">
                    <input type="text" v-model="updateName" placeholder="ชื่อร้าน">
@@ -43,6 +44,7 @@
                    <button v-if="permission !== '1'" class="button button12" @click="updateprofile(updateName, updatePhone, updateStatus, updateBanner )">บันทึกโปรไฟล์</button>
                  </div>
               </div>
+              </div>
                 <br>
           <img src="/static/hotsale.png"><div :key="key" v-for="(record, key) in records">
           <h3>&nbsp;&nbsp;{{key}}<img src="https://sv1.picz.in.th/images/2019/01/09/9uitK9.png" height="30" width="30"></h3>
@@ -64,7 +66,17 @@
             <div class="column">
               <!-- <input type="text" v-model="Search" placeholder="ค้นหาเมนู" v-if="Searchtype === ''" disabled class="input is-large">
           <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" v-if="Searchtype === 'menushow'" class="input is-large"> -->
-          <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop2(Search)" class="input is-large">
+          <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" class="input is-large">
+          <br>ค้นหาแบบประเภทอาหาร
+          <select v-model="Searchtype" placeholder="ค้นหาตามประเภท">
+            <option value="ผัด">ผัด</option>
+            <option value="ทอด">ทอด</option>
+            <option value="ต้ม">ต้ม</option>
+            <option value="แกง">แกง</option>
+            <option value="นึ่ง">นึ่ง</option>
+            <option value="ย่าง">ย่าง</option>
+          </select>
+          <button @click="filterShop2(Searchtype)">ค้นหาตามประเภท</button>
             </div>
           </div>
       <!--<button class="button button11" @click="Searchnow(Search, Searchtype)">ค้นหาอาหาร</button>-->
@@ -77,7 +89,7 @@
     </div>
     <div v-if="showData.length > 0">
       <div class="columns is-multiline">
-        <div class="column is-6" v-for="(menu, key) in showData" :key="key">
+        <div class="column is-6" v-for="(menu) in showData" :key="menu.Key">
           <div class="foodList">
             <h3>{{menu.foodname}}</h3>
             <h6>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h6>
@@ -132,9 +144,7 @@
                 <span class="icon has-text-primary">
                   <i class="fas fa-info-circle"></i>
                 </span>
-                <div class="message-body">
-                  เมนูประจำร้าน
-                </div>
+                <h4 id="let1" class="title is-3">เมนูประจำร้าน</h4>
               </article>
               <div class="message-body">
                                     <div class="container">
@@ -144,7 +154,8 @@
                       <h6>ราคา:&nbsp;{{menu.foodprice}}&nbsp;บาท</h6>
                       <h6>จำนวน:&nbsp;{{menu.amount}}&nbsp;ชิ้น</h6>
                       <img v-url={filename:menu.foodpic} width="300" height="350"/><br>
-                      <button @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.amount)" class="button button3">เพิ่มลง Order</button>
+                      <button v-if="checkstock[key] === 1" class="button is-danger" disabled>เพิ่มลง Order</button>
+                      <button v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.amount)" class="button button3">เพิ่มลง Order</button>
                       <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.menupre)" class="button button3">เเก้ไขเมนูอาหาร</button>
                       <button v-if="permission !== '1'" @click="DelFood(menu.key)" class="button button3">ลบ</button>
                       <hr>
@@ -199,10 +210,74 @@
   <option value="ย่าง">ย่าง</option>
 </select>
       <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
-       <select name="menupre" v-model="menupre" placeholder="รีวิว">
-  <option value="เมนูทั่วไป" selected>เมนูทั่วไป</option>
-  <option value="เมนูแนะนำ">เมนูแนะนำ</option>
-</select>
+<div class="field is-horizontal" v-for="ameter in meters" :key="ameter.id">
+  <div class="field-label is-normal">
+    <label class="label">วัตถุดิบ</label>
+  </div>
+  <div class="field-body">
+    <div class="field">
+      <p class="control is-expanded">
+        <select name="main meter" v-model="ameter.name" aria-readonly="">
+          <!-- <option value="ข้าว">ข้าว</option>
+          <option value="ไข่">ไข่</option>
+          <option value="หมู">หมู</option>
+          <option value="ไก่">ไก่</option>
+          <option value="ปลา">ปลา</option>
+          <option value="หมึก">หมึก</option>
+          <option value="กุ้ง">กุ้ง</option> -->
+          <option
+              :key="key"
+              v-for="(dep, key) in datastock"
+              :value="dep.stockname"
+              >{{dep.stockname}}</option>
+        </select>
+      </p>
+    </div>
+    <div class="field">
+      <p class="control is-expanded">
+        <input class="input is-success" type="number" placeholder="จำนวน" v-model="ameter.qty">
+      </p>
+    </div>
+  </div>
+</div>
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <label class="label">วัตถุดิบ</label>
+  </div>
+  <div class="field-body">
+    <div class="field">
+      <p class="control is-expanded">
+        <select name="main meter" v-model="meter.name">
+          <!-- <option value="ข้าว">ข้าว</option>
+          <option value="ไข่">ไข่</option>
+          <option value="หมู">หมู</option>
+          <option value="ไก่">ไก่</option>
+          <option value="ปลา">ปลา</option>
+          <option value="หมึก">หมึก</option>
+          <option value="กุ้ง">กุ้ง</option> -->
+          <option
+              :key="key"
+              v-for="(dep, key) in datastock"
+              :value="dep"
+              >{{dep.stockname}}</option>
+        </select>
+      </p>
+    </div>
+    <div class="field">
+      <p class="control is-expanded">
+        <input class="input is-success" type="number" placeholder="จำนวน" v-model="meter.qty" value="1">
+      </p>
+    </div>
+    <div class="field">
+      <div class="control">
+        <button class="button is-primary" @click="addMeter()">
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
       <label class="file-label">
       <input class="file-input" type="file" name="resume" @change="onFileChangefood($event.target.files[0])">
       <span class="file-cta">
@@ -214,7 +289,7 @@
         </span>
       </span>
     </label>
-      <button class="button button11" @click="insertmenu(foodname, foodprice, foodtype, foodpic, menupre)">เพิ่มเมนู</button>
+      <button class="button button11" @click="insertmenu(foodname, foodprice, foodtype, foodpic,meters)">เพิ่มเมนู</button>
       <span class="file-name" v-if="dataImg3">
         {{this.dataImg3.name}}
       </span>
@@ -224,19 +299,35 @@
               <h4 id="let2" class="title is-3">ความเห็นจากลูกค้า</h4>
                                     <div class="row" :key="key" v-for="(review, key) in review">
                       <div class="message-body"><p><h5>Review:&nbsp;</h5>{{review.view}}
-                      <img v-bind:src="review.scorce" width="40" height="40" ><br>
+                      <br>
                        <h5>โดย คุณ:&nbsp;{{review.namere}}</h5><br>
                        <button v-if="permission !== '1'" class="button button3" @click="DelRe(key)">ลบความเห็น</button>
                        </div>
                           </div>
                 <input type="text" v-model="view" placeholder="รีวิว" size="30" class="input is-large">
-                <input  type="radio" id="bad" name="gender" value="https://www.img.in.th/images/bd7e44b282baa7d06dfdf02f51bc915f.png" v-model="scorce">
-<label for="bad">แย่</label>
-<input type="radio" id="ok" name="gender" value="https://www.img.in.th/images/a1f452362b9c5f26d9dfc720a424b989.png" v-model="scorce">
-<label for="ok">ok</label>
-<input type="radio" id="good" name="gender" value="https://www.img.in.th/images/2a8e04f7dd719a60eba986227acb5c0a.png" v-model="scorce">
-<label for="good">ดีมาก</label>
-      <button class="button button12" @click="insertreview(view, scorce)">เพิ่มรีวิว</button>
+                <button class="button button12" @click="insertreview(view)">เพิ่มรีวิว</button><br>
+                 คะแนนความพอใจ&nbsp;
+               <label>
+  <input type="radio" name="gender" value="1" v-model="scorce" checked>
+  <img src="https://www.img.in.th/images/486b6b89ed3a3edf208dff6e23fbafe0.png" width="50" height="50">&nbsp;
+</label>
+<label>
+  <input type="radio" name="gender" value="2" v-model="scorce" checked>
+  <img src="https://www.img.in.th/images/cd14adea49489f944878fcc639e8a57e.png" width="50" height="50">&nbsp;
+</label>
+<label>
+  <input type="radio" name="gender" value="3" v-model="scorce" checked>
+  <img src="https://www.img.in.th/images/510e0be800bc068fd916dab1d805b191.png" width="50" height="50">&nbsp;
+</label>
+<label>
+  <input type="radio" name="gender" value="4" v-model="scorce" checked>
+  <img src="https://www.img.in.th/images/5bf2ec6b8f18634def9581978db43b47.png" width="50" height="50">&nbsp;
+</label>
+<label>
+  <input type="radio" name="gender" value="5" v-model="scorce" checked>
+  <img src="https://www.img.in.th/images/8256a389f0bd4eea53824c49a6e54752.png" width="50" height="50">&nbsp;
+</label>
+      <button class="button button12" @click="insertreviewpoint(scorce)">เพิ่มคะแนนร้านค้า</button>
           </div>
       </div>
     </div>
@@ -295,7 +386,16 @@ export default {
       dataImg2: '',
       banner: '',
       showData: [],
-      tmp: ''
+      tmp: '',
+      vote: '',
+      meter: {
+        name: '',
+        qty: 1
+      },
+      meters: [],
+      datastock: [],
+      checkstock: [],
+      tmp1: ''
     }
   },
   created () {
@@ -321,15 +421,15 @@ export default {
       this.dataImg2 = fileImg
       console.log(this.dataImg2)
     },
-    async insertmenu (foodname, foodprice, foodtype, foodpic, menupre) {
+    async insertmenu (foodname, foodprice, foodtype, foodpic, meters) {
       let data = {
         foodname: foodname,
         foodtype: foodtype,
         foodprice: foodprice,
-        menupre: menupre,
+        meters: meters,
         foodpic: this.dataImg3.name
       }
-      if (foodname === '' || foodprice === '' || this.dataImg3 === '' || foodtype === '' || menupre === '') {
+      if (foodname === '' || foodprice === '' || this.dataImg3 === '' || foodtype === '' || meters === '') {
         this.$swal({
           type: 'error',
           title: 'Oops...',
@@ -346,6 +446,11 @@ export default {
         this.foodpic = ''
         this.menupre = ''
         this.dataImg3 = ''
+        this.meters = []
+        this.meter = {
+          name: '',
+          qty: 1
+        }
       }
       // console.log(this.tmp)
     },
@@ -393,6 +498,36 @@ export default {
         this.namere = ''
       }
     },
+    insertreviewpoint (scorce) {
+      scorce = parseInt(scorce, 10)
+      console.log(scorce)
+      let data = {
+        scorce: scorce,
+        count: 1,
+        shop: this.selectShop
+      }
+      if (isNaN(scorce)) {
+        this.$swal({
+          type: 'error',
+          title: 'Oops...',
+          text: 'กรุณาเลือกคะแนนร้านค้า'
+          // footer: '<a href>Why do I have this issue?</a>'
+        })
+      } else {
+        if (this.vote.length !== 0) {
+          console.log(this.vote)
+          let Refcount = this.vote[0].count + 1
+          let Refscorce = this.vote[0].scorce + scorce
+          foodcenterRef.child('shoppoint').child(this.vote[0].key).child('count').set(Refcount)
+          foodcenterRef.child('shoppoint').child(this.vote[0].key).child('scorce').set(Refscorce)
+        } else {
+          console.log('else')
+          foodcenterRef.child('shoppoint').child(this.selectShop).set(data)
+        }
+        this.scorce = ''
+        alert('ให้คะแนนร้านค้าเรียบร้อยแล้ว')
+      }
+    },
     insertpromo (prodetail) {
       let data = {
         prodetail: prodetail
@@ -410,15 +545,15 @@ export default {
       }
     },
     Cart (foodname, foodprice, type, key, amount) {
-      if (amount > 0) {
-        this.$store.dispatch('AddCart', {foodname, foodprice, type, key, amount})
-      } else {
-        this.$swal.fire({
-          type: 'warning',
-          title: 'ของหมด!'
-        })
-      }
-      console.log()
+      // if (amount > 0) {
+      this.$store.dispatch('AddCart', {foodname, foodprice, type, key, amount})
+      // } else {
+      //   this.$swal.fire({
+      //     type: 'warning',
+      //     title: 'ของหมด!'
+      //   })
+      // }
+      // console.log()
     },
     SetUpdateMenuShow (key, foodname, foodprice, foodpic, foodtype) {
       this.updateKey = key
@@ -546,7 +681,7 @@ export default {
     },
     filterShop (Search) {
       if (Search.length > 0) {
-        this.showData = this.menushow.filter(
+        this.showData = this.menus.filter(
           (shop) => {
             if (shop.foodname.toString().indexOf(Search) >= 0 ||
               shop.foodprice.toString().indexOf(Search) >= 0 ||
@@ -559,13 +694,12 @@ export default {
         this.showData = []
       }
     },
-    filterShop2 (Search) {
-      if (Search.length > 0) {
+    filterShop2 (Searchtype) {
+      console.log('ทำ')
+      if (Searchtype.length > 0) {
         this.showData = this.menus.filter(
           (shop) => {
-            if (shop.foodname.toString().indexOf(Search) >= 0 ||
-              shop.foodprice.toString().indexOf(Search) >= 0 ||
-              shop.foodtype.toString().indexOf(Search) >= 0) {
+            if (shop.foodtype === Searchtype) {
               return shop
             }
           }
@@ -637,6 +771,16 @@ export default {
         }
       })
     },
+    addMeter () {
+      this.meter.keystock = this.meter.name.key
+      this.meter.name = this.meter.name.stockname
+      this.meters.push(this.meter)
+      this.meter = {
+        name: '',
+        qty: 1
+      }
+      console.log(this.meters)
+    },
     DelRe (key) {
       this.$swal({
         title: 'คุณกำลังลบความคิดเห็นนี้?',
@@ -657,6 +801,20 @@ export default {
           )
         }
       })
+    },
+    async checkstocklist () {
+      var stock = ''
+      for (var x = 0; x < this.menus.length; x++) {
+        var tmp = 0
+        for (var y = 0; y < this.menus[x].meters.length; y++) {
+          const checked = foodcenterRef.child('stock').child(this.selectShop).child(this.menus[x].meters[y].keystock)
+          await checked.on('value', snap => {
+            stock = snap.val()
+          })
+          if (this.menus[x].meters[y].qty <= stock.stockamount && tmp !== 1) { tmp = 0 } else { tmp = 1 }
+        }
+        this.checkstock.push(tmp)
+      }
     }
   },
   computed: {
@@ -688,6 +846,8 @@ export default {
     const dbRefObjectreview = foodcenterRef.child('review').child(this.selectShop)
     const dbRefObjectMenuhit = foodcenterRef.child('record').child(this.selectShop)
     const dbRefObjectpromo = foodcenterRef.child('promo').child(this.selectShop)
+    const dbRefObjectvote = foodcenterRef.child('shoppoint').orderByChild('shop').equalTo(this.selectShop)
+    const dbRefObjectstock = foodcenterRef.child('stock').child(this.selectShop)
     dbRefObject.on('value', snap => {
       var data = []
       snap.forEach(ss => {
@@ -696,7 +856,6 @@ export default {
         data.push(item)
       })
       this.menus = data
-      // console.log(this.menus)
     })
     dbRefObjectshow.on('value', snap => {
       var data = []
@@ -710,19 +869,36 @@ export default {
     })
     dbRefObjectreview.on('value', snap => {
       this.review = snap.val()
-      // console.log(this.review)
     })
     dbRefObjectMenuhit.orderByChild('amount').limitToLast(3).on('value', snap => {
       this.records = snap.val()
-      // console.log(this.records)
     })
     dbRefObjectpromo.on('value', snap => {
       this.promo = snap.val()
-      // console.log(this.promo)
     })
     dbRefObjectdetail.on('value', snap => {
       this.detail = snap.val()
-      console.log(this.detail)
+      console.log(this.detail.banner)
+    })
+    dbRefObjectvote.on('value', snap => {
+      var datavote = []
+      snap.forEach(ss => {
+        var itemvote = ss.val()
+        itemvote.key = ss.key
+        datavote.push(itemvote)
+      })
+      this.vote = datavote
+      console.log(this.vote)
+    })
+    dbRefObjectstock.on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.datastock = data
+      this.checkstocklist()
     })
   }
 }
@@ -766,4 +942,7 @@ export default {
   .input.is-large, .textarea.is-large {
   font-size: 1.0rem;
   }
+  div {
+  font-family: 'Sriracha', cursive;
+}
 </style>
