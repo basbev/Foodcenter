@@ -51,7 +51,6 @@ export default {
   },
   methods: {
     async Addshop (name, tel) {
-      await UserRef.child(this.useradd).child('hasShop').set(name)
       let data = {
         SaveData: '',
         banner: '',
@@ -63,8 +62,13 @@ export default {
         status: '',
         tel: tel
       }
-      await ShopRef.child('detail').child(name).set(data)
-      await this.SelectShop(name)
+      await ShopRef.child('detail').push(data)
+      let key
+      await ShopRef.child('detail').orderByChild('name').equalTo(name).once('child_added', snap => {
+        key = snap.key
+      })
+      await UserRef.child(this.useradd).child('hasShop').set(key)
+      await this.SelectShop(key)
       this.$router.push('/shop')
     },
     SelectShop (name) {
