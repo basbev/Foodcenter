@@ -110,7 +110,7 @@
                     <td>{{stock.stockname}}</td>
                     <td>{{stock.stockamount}}</td>
                     <td class="is-icon">
-                      <button class="btn" @click="setEditstock(stock.key, stock.stockname, stock.stockamount)"><i class="fa fa-pencil-square-o"></i></button>
+                      <button class="btn" @click="setEditstock(stock.key, stock.stockname, stock.stockamount)"><i class="fas fa-edit"></i></button>
                     </td>
                     <td class="is-icon">
                       <button class="btn" @click="Delstock(stock.key)"><i class="fa fa-trash"></i></button>
