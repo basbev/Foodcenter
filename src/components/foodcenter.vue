@@ -66,7 +66,7 @@
                 </figure>
                 <div class="media-content">
                   <div class="content">
-                    <h1 class="title is-size-4">ร้าน {{detail.name}}</h1>
+                    <h1 class="title is-size-4">ร้าน {{detail.name}}<img src="https://www.img.in.th/images/8c44fe4d804dca493a0e04341aa9e06f.png" width="30" height="30">&nbsp;{{(shoppoints[detail.name].scorce/shoppoints[detail.name].count).toFixed(2)}}</h1>
                     <!-- <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
@@ -236,7 +236,8 @@ export default {
       showData: [],
       numberOfShop: 0,
       showModal: false,
-      tmp: ''
+      tmp: '',
+      shoppoints: ''
     }
   },
   methods: {
@@ -400,6 +401,7 @@ export default {
   },
   mounted () {
     const dbRefObject = foodcenterRef.child('detail')
+    const shoppoint = foodcenterRef.child('shoppoint')
     dbRefObject.on('value', snap => {
       var data = []
       snap.forEach(ss => {
@@ -412,6 +414,10 @@ export default {
       console.log(this.shops)
       JSON.stringify(this.shops)
       // console.log(JSON.stringify(this.shops))
+    })
+    shoppoint.on('value', snap => {
+      this.shoppoints = snap.val()
+      console.log(this.shoppoints.ป้าสมบูรณ์)
     })
   },
   computed: {
