@@ -774,6 +774,7 @@ export default {
     addMeter () {
       this.meter.keystock = this.meter.name.key
       this.meter.name = this.meter.name.stockname
+      this.meter.qty = parseInt(this.meter.qty, 10)
       this.meters.push(this.meter)
       this.meter = {
         name: '',

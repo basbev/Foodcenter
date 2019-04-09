@@ -260,7 +260,7 @@ export default {
     Insertstock (stockname, stockamount) {
       let data = {
         stockname: stockname,
-        stockamount: stockamount
+        stockamount: parseInt(stockamount, 10)
       }
       if (stockname === '' || stockamount === '') {
         this.$swal({
