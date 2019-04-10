@@ -210,6 +210,7 @@
   <option value="ย่าง">ย่าง</option>
 </select>
       <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
+      <input type="number" v-model="Cost" min="5" max="50" placeholder="ราคาทุนจาน">
 <div class="field is-horizontal" v-for="ameter in meters" :key="ameter.id">
   <div class="field-label is-normal">
     <label class="label">วัตถุดิบ</label>
@@ -289,7 +290,7 @@
         </span>
       </span>
     </label>
-      <button class="button button11" @click="insertmenu(foodname, foodprice, foodtype, foodpic,meters)">เพิ่มเมนู</button>
+      <button class="button button11" @click="insertmenu(foodname, foodprice, foodtype, foodpic,meters, Cost)">เพิ่มเมนู</button>
       <span class="file-name" v-if="dataImg3">
         {{this.dataImg3.name}}
       </span>
@@ -348,6 +349,7 @@ export default {
     return {
       foodname: '',
       foodprice: '',
+      Cost: '',
       foodpic: '',
       foodtype: '',
       menupre: '',
@@ -421,15 +423,16 @@ export default {
       this.dataImg2 = fileImg
       console.log(this.dataImg2)
     },
-    async insertmenu (foodname, foodprice, foodtype, foodpic, meters) {
+    async insertmenu (foodname, foodprice, foodtype, foodpic, meters, Cost) {
       let data = {
         foodname: foodname,
         foodtype: foodtype,
         foodprice: foodprice,
         meters: meters,
-        foodpic: this.dataImg3.name
+        foodpic: this.dataImg3.name,
+        Cost: parseInt(Cost, 10)
       }
-      if (foodname === '' || foodprice === '' || this.dataImg3 === '' || foodtype === '' || meters === '') {
+      if (foodname === '' || foodprice === '' || this.dataImg3 === '' || foodtype === '' || meters === '' || Cost === '') {
         this.$swal({
           type: 'error',
           title: 'Oops...',
@@ -451,6 +454,7 @@ export default {
           name: '',
           qty: 1
         }
+        this.Cost = ''
       }
       // console.log(this.tmp)
     },
