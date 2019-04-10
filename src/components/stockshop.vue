@@ -198,6 +198,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import firebase from 'firebase'
 export default {
   name: 'stockshop',
@@ -219,7 +220,7 @@ export default {
     }
   },
   mounted () {
-    const dbRefObject = firebase.database().ref().child('foodcenter/stock/ป้าสมบูรณ์')
+    const dbRefObject = firebase.database().ref().child('foodcenter/stock/' + this.selectShop)
     dbRefObject.on('value', snap => {
       var data = []
       this.Countstock = snap.numChildren()
@@ -230,6 +231,13 @@ export default {
       })
       this.datastock = data
       this.updateTable()
+    })
+  },
+  computed: {
+    ...mapGetters({
+      permission: 'permission',
+      cartProducts: 'cartProducts',
+      selectShop: 'selectShop'
     })
   },
   methods: {
@@ -270,7 +278,7 @@ export default {
           // footer: '<a href>Why do I have this issue?</a>'
         })
       } else {
-        firebase.database().ref().child('foodcenter/stock/ป้าสมบูรณ์').push(data)
+        firebase.database().ref().child('foodcenter/stock/' + this.selectShop).push(data)
         this.stockname = ''
         this.stockamount = ''
         this.showModal = false
@@ -284,7 +292,7 @@ export default {
       this.updatekey = key
     },
     Editstock (key, stockname, stockamount) {
-      firebase.database().ref().child('foodcenter/stock/ป้าสมบูรณ์').child(key).update({
+      firebase.database().ref().child('foodcenter/stock/' + this.selectShop).child(key).update({
         stockname: stockname,
         stockamount: stockamount
       })
@@ -299,7 +307,7 @@ export default {
       this.statusEdit = false
     },
     Deletestock (key) {
-      firebase.database().ref().child('foodcenter/stock/ป้าสมบูรณ์').child(key).remove()
+      firebase.database().ref().child('foodcenter/stock/' + this.selectShop).child(key).remove()
     },
     filter (Search) {
       if (Search.length > 0) {
