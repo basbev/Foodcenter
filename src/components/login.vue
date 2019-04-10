@@ -98,9 +98,9 @@ export default {
         } if (this.isLoggedIn === true && this.permission === '2' && this.selectShop === '') {
           alert('Successfully sign in\nWelcome User Shop: ' + ' ' + this.user)
           this.$router.push('/Addshop')
-        } if (this.isLoggedIn === true && this.permission === '5' && this.selectShop === '') {
+        } if (this.isLoggedIn === true && this.permission === '5' && this.selectShop !== '') {
           alert('Successfully sign in\nWelcome User Shopmeter: ' + ' ' + this.user)
-          this.$router.push('/shopmeter')
+          this.$router.push('/meter')
         }
       }
     },
