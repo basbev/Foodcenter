@@ -8,7 +8,8 @@ const state = {
   selectShop: null,
   added: [],
   permission: null,
-  hasShop: null
+  hasShop: null,
+  stocklist: null
 }
 
 const getters = {
@@ -46,25 +47,36 @@ const mutations = {
   setselectShop: (state, shop) => {
     state.selectShop = shop
   },
-  ADD_TO_CART: (state, {Akey, foodname, foodprice, type, amount}) => {
-    const record = state.added.find(p => p.Akey === Akey)
-    console.log(Akey, foodname, foodprice, type)
-    if (!record) {
-      state.added.push({
-        Akey,
-        foodname,
-        foodprice,
-        quantity: 1,
-        type,
-        amount
-      })
-    } else {
-      if (record.quantity < amount) {
-        record.quantity++
-      } else {
-        console.log('เกินไปนะ')
+  ADD_TO_CART: (state, {Akey, foodname, foodprice, type, meters}) => {
+    var tmp = 0 // กำหนดว่าครบไหม
+    const record = state.added.find(p => p.Akey === Akey) // หาจำนวนจาน
+    if (!record) { // กรณีหนึ่งจานเท่านั้น
+      for (var i = 0; i < meters.length; i++) {
+        const stock = state.stocklist.find(p => p.key === meters[i].keystock)
+        if (meters[i].qty <= stock.stockamount && tmp !== 1) { tmp = 0 } else { tmp = 1 }
       }
+      if (tmp === 0) {
+        if (!record) {
+          state.added.push({
+            Akey,
+            foodname,
+            foodprice,
+            quantity: 1,
+            type
+          })
+        }
+      }
+    } else { // หลายจาน
+      for (var y = 0; y < meters.length; y++) {
+        const stock = state.stocklist.find(p => p.key === meters[y].keystock)
+        if (meters[y].qty * record.quantity < stock.stockamount && tmp !== 1) { tmp = 0 } else { tmp = 1 }
+      }
+      if (tmp === 0) { record.quantity++ }
     }
+  },
+  stocklist: (state, payload) => {
+    state.stocklist = payload
+    // console.log(state.stocklist)
   },
   setUserFacebook: (state, userSet) => {
     console.log(userSet)
@@ -146,14 +158,16 @@ const actions = {
     dispatch('save')
   },
   AddCart ({commit}, payload) {
-    console.log(payload)
     const Akey = payload.key
     const foodname = payload.foodname
     const foodprice = payload.foodprice
     const type = payload.type
-    const amount = payload.amount
-    console.log(Akey, foodname, foodprice, type, amount)
-    commit('ADD_TO_CART', {Akey, foodname, foodprice, type, amount})
+    const meters = payload.meters
+    console.log(Akey, foodname, foodprice, type, meters)
+    commit('ADD_TO_CART', {Akey, foodname, foodprice, type, meters})
+  },
+  stocklist ({commit}, payload) {
+    commit('stocklist', (payload))
   },
   CartCle ({commit}) {
     commit('DeleteCart')

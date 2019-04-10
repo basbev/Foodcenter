@@ -155,7 +155,7 @@
                       <h6>จำนวน:&nbsp;{{menu.amount}}&nbsp;ชิ้น</h6>
                       <img v-url={filename:menu.foodpic} width="300" height="350"/><br>
                       <button v-if="checkstock[key] === 1" class="button is-danger" disabled>เพิ่มลง Order</button>
-                      <button v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.amount)" class="button button3">เพิ่มลง Order</button>
+                      <button v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters)" class="button button3">เพิ่มลง Order</button>
                       <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.menupre)" class="button button3">เเก้ไขเมนูอาหาร</button>
                       <button v-if="permission !== '1'" @click="DelFood(menu.key)" class="button button3">ลบ</button>
                       <hr>
@@ -544,16 +544,8 @@ export default {
         this.prodetail = ''
       }
     },
-    Cart (foodname, foodprice, type, key, amount) {
-      // if (amount > 0) {
-      this.$store.dispatch('AddCart', {foodname, foodprice, type, key, amount})
-      // } else {
-      //   this.$swal.fire({
-      //     type: 'warning',
-      //     title: 'ของหมด!'
-      //   })
-      // }
-      // console.log()
+    Cart (foodname, foodprice, type, key, meters) {
+      this.$store.dispatch('AddCart', {foodname, foodprice, type, key, meters})
     },
     SetUpdateMenuShow (key, foodname, foodprice, foodpic, foodtype) {
       this.updateKey = key
@@ -803,7 +795,7 @@ export default {
         }
       })
     },
-    async checkstocklist () {
+    async checkstocklist (data) {
       var stock = ''
       for (var x = 0; x < this.menus.length; x++) {
         var tmp = 0
@@ -816,6 +808,7 @@ export default {
         }
         this.checkstock.push(tmp)
       }
+      this.$store.dispatch('stocklist', data)
     }
   },
   computed: {
@@ -899,7 +892,7 @@ export default {
         data.push(item)
       })
       this.datastock = data
-      this.checkstocklist()
+      this.checkstocklist(data)
     })
   }
 }

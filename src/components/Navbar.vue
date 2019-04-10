@@ -26,6 +26,14 @@
                 จัดการผู้ใช้
               </span>
       </a>
+      <a v-if="permission === '3'" class="navbar-item" href="#/shopmeter">
+        <span class="icon">
+                <i class="fas fa-home"></i>
+              </span>
+              <span>
+                ร้านค้าวัตถุดิบทั้งหมด
+              </span>
+      </a>
       <a v-if="permission === '2'" class="navbar-item" href="#/order">
         <span class="icon">
                 <i class="fas fa-home"></i>
@@ -56,6 +64,14 @@
               </span>
               <span>
                 stockshop
+              </span>
+      </a>
+      <a v-if="permission === '2' || permission === '5'" class="navbar-item" href="#/shopmeter">
+        <span class="icon">
+                <i class="fas fa-home"></i>
+              </span>
+              <span>
+                ร้านค้าวัตถุดิบ
               </span>
       </a>
     </div>
