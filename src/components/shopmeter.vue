@@ -285,7 +285,7 @@ export default {
       this.$store.dispatch('selectShop', name)
         .then(
           user => {
-            this.$router.push('/shop')
+            this.$router.push('/meter')
           },
           err => {
             alert(err.message)
