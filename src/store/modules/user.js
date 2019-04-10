@@ -27,7 +27,8 @@ const getters = {
         price: product.foodprice,
         quantity,
         type: product.type,
-        meters: product.meters
+        meters: product.meters,
+        Cost: product.Cost
       }
     })
   },
@@ -48,7 +49,7 @@ const mutations = {
   setselectShop: (state, shop) => {
     state.selectShop = shop
   },
-  ADD_TO_CART: (state, {Akey, foodname, foodprice, type, meters}) => {
+  ADD_TO_CART: (state, {Akey, foodname, foodprice, type, meters, Cost}) => {
     var tmp = 0 // กำหนดว่าครบไหม
     const record = state.added.find(p => p.Akey === Akey) // หาจำนวนจาน
     for (var i = 0; i < meters.length; i++) {
@@ -75,7 +76,8 @@ const mutations = {
           foodprice,
           quantity: 1,
           type,
-          meters
+          meters,
+          Cost
         })
       } else { record.quantity++ }
     }
@@ -170,8 +172,9 @@ const actions = {
     const foodprice = payload.foodprice
     const type = payload.type
     const meters = payload.meters
-    console.log(Akey, foodname, foodprice, type, meters)
-    commit('ADD_TO_CART', {Akey, foodname, foodprice, type, meters})
+    const Cost = payload.Cost
+    console.log(Akey, foodname, foodprice, type, meters, Cost)
+    commit('ADD_TO_CART', {Akey, foodname, foodprice, type, meters, Cost})
   },
   stocklist ({commit}, payload) {
     commit('stocklist', (payload))

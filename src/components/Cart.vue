@@ -65,7 +65,8 @@ export default {
       minutes: 0,
       reports: {},
       recordshop: {},
-      viewstock: {}
+      viewstock: {},
+      profit: {}
     }
   },
   computed: {
@@ -77,6 +78,11 @@ export default {
     total () {
       return this.products.reduce((total, p) => {
         return total + p.price * p.quantity
+      }, 0)
+    },
+    totalprofit () {
+      return this.products.reduce((Cost, p) => {
+        return Cost + p.Cost * p.quantity
       }, 0)
     },
     CountQuantity () {
@@ -94,6 +100,11 @@ export default {
       await this.report()
       await this.reportmonth()
       await this.reportyear()
+      //
+      await this.reportprofit()
+      await this.reportmonthprofit()
+      await this.reportyearprofit()
+      //
       await this.Cutstock(products)
       for (var i = 0; i < products.length; i++) {
         let date = moment().tz('Asia/Bangkok').format()
@@ -185,6 +196,25 @@ export default {
         foodcenterRef.child('report').child(this.SelectShops).child('day').child(day).child('value').set(updatavalue)
       }
     },
+    reportprofit () {
+      let foundday = ''
+      let day = moment().tz('Asia/Bangkok').format().slice(0, 10)
+      const reportday = foodcenterRef.child('reportprofit').child(this.SelectShops).child('day').orderByChild('label').equalTo(day)
+      reportday.on('child_added', snap => {
+        foundday = snap.val()
+      })
+      if (foundday === '') {
+        let data = {
+          label: day,
+          value: this.totalprofit
+        }
+        foodcenterRef.child('reportprofit').child(this.SelectShops).child('day').child(day).set(data)
+        // foodcenterRef.child('detail').child(this.SelectShops).child('countdoing').set(1)
+      } else {
+        let updatavalue = foundday.value + this.totalprofit
+        foodcenterRef.child('reportprofit').child(this.SelectShops).child('day').child(day).child('value').set(updatavalue)
+      }
+    },
     reportmonth () {
       let foundmonth = ''
       let month = moment().tz('Asia/Bangkok').format().slice(0, 7)
@@ -203,6 +233,24 @@ export default {
         foodcenterRef.child('report').child(this.SelectShops).child('month').child(month).child('value').set(updatavalue)
       }
     },
+    reportmonthprofit () {
+      let foundmonth = ''
+      let month = moment().tz('Asia/Bangkok').format().slice(0, 7)
+      const reportmonth = foodcenterRef.child('reportprofit').child(this.SelectShops).child('month').orderByChild('label').equalTo(month)
+      reportmonth.on('child_added', snap => {
+        foundmonth = snap.val()
+      })
+      if (foundmonth === '') {
+        let data = {
+          label: month,
+          value: this.totalprofit
+        }
+        foodcenterRef.child('reportprofit').child(this.SelectShops).child('month').child(month).set(data)
+      } else {
+        let updatavalue = foundmonth.value + this.totalprofit
+        foodcenterRef.child('reportprofit').child(this.SelectShops).child('month').child(month).child('value').set(updatavalue)
+      }
+    },
     reportyear () {
       let foundyear = ''
       let year = moment().tz('Asia/Bangkok').format().slice(0, 4)
@@ -219,6 +267,24 @@ export default {
       } else {
         let updatavalue = foundyear.value + this.total
         foodcenterRef.child('report').child(this.SelectShops).child('year').child(year).child('value').set(updatavalue)
+      }
+    },
+    reportyearprofit () {
+      let foundyear = ''
+      let year = moment().tz('Asia/Bangkok').format().slice(0, 4)
+      const reportyear = foodcenterRef.child('reportprofit').child(this.SelectShops).child('year').orderByChild('label').equalTo(year)
+      reportyear.on('child_added', snap => {
+        foundyear = snap.val()
+      })
+      if (foundyear === '') {
+        let data = {
+          label: year,
+          value: this.totalprofit
+        }
+        foodcenterRef.child('reportprofit').child(this.SelectShops).child('year').child(year).set(data)
+      } else {
+        let updatavalue = foundyear.value + this.totalprofit
+        foodcenterRef.child('reportprofit').child(this.SelectShops).child('year').child(year).child('value').set(updatavalue)
       }
     },
     async Cutstock (products) {
@@ -261,6 +327,11 @@ export default {
     const dbRefObject3 = foodcenterRef.child('stock').child(this.SelectShops)
     dbRefObject3.on('value', snap => {
       this.viewstock = snap.val()
+    })
+    const dbRefObject4 = foodcenterRef.child('reportprofit').child(this.SelectShops)
+    dbRefObject4.on('value', snap => {
+      this.profit = snap.val()
+      console.log(this.profit)
     })
     // ดึงข้อมูลมาซึ้งกัน
   }

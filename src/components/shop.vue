@@ -155,7 +155,7 @@
                       <h6>จำนวน:&nbsp;{{menu.amount}}&nbsp;ชิ้น</h6>
                       <img v-url={filename:menu.foodpic} width="300" height="350"/><br>
                       <button v-if="checkstock[key] === 1" class="button is-danger" disabled>เพิ่มลง Order</button>
-                      <button v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters)" class="button button3">เพิ่มลง Order</button>
+                      <button v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost)" class="button button3">เพิ่มลง Order</button>
                       <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.menupre)" class="button button3">เเก้ไขเมนูอาหาร</button>
                       <button v-if="permission !== '1'" @click="DelFood(menu.key)" class="button button3">ลบ</button>
                       <hr>
@@ -548,8 +548,8 @@ export default {
         this.prodetail = ''
       }
     },
-    Cart (foodname, foodprice, type, key, meters) {
-      this.$store.dispatch('AddCart', {foodname, foodprice, type, key, meters})
+    Cart (foodname, foodprice, type, key, meters, Cost) {
+      this.$store.dispatch('AddCart', {foodname, foodprice, type, key, meters, Cost})
     },
     SetUpdateMenuShow (key, foodname, foodprice, foodpic, foodtype) {
       this.updateKey = key

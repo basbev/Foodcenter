@@ -7,6 +7,12 @@
         <button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button>
         <button class="button button4" @click="getDataFirebase(getvalue, month)">รายเดือน</button>
         <button class="button button5" @click="getDataFirebase(getvalue, year)">รายปี</button>
+        <!-- Profit -->
+        <h1>กำไรขึ้นต้นได้</h1>
+        <button class="button button3" @click="getDataFirebaseprofit(getvalue, day)">รายวัน</button>
+        <button class="button button4" @click="getDataFirebaseprofit(getvalue, month)">รายเดือน</button>
+        <button class="button button5" @click="getDataFirebaseprofit(getvalue, year)">รายปี</button>
+        <!-- Profit -->
     <div id="chart-container">
     </div>
 </div>
@@ -35,6 +41,20 @@ export default {
     getDataFirebase (getvalue, scale) {
       alert(`Pls Wait`)
       var ref = firebase.database().ref('foodcenter/report/' + this.selectShop + '/' + scale)
+      ref.once('value', snap => {
+        var data = []
+        snap.forEach(ss => {
+          var item = ss.val()
+          data.push(item)
+        })
+        this.getvalue = data
+        console.log(this.getvalue)
+        this.ShowGraph(this.getvalue)
+      })
+    },
+    getDataFirebaseprofit (getvalue, scale) {
+      alert(`Pls Wait`)
+      var ref = firebase.database().ref('foodcenter/reportprofit/' + this.selectShop + '/' + scale)
       ref.once('value', snap => {
         var data = []
         snap.forEach(ss => {
