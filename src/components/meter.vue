@@ -123,9 +123,9 @@
                 </div>
               </article>
               <div class="bucket" @click="isComponentModalActive = true">
-        <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/cart' }">
+        <div class="nav-item is-tab" :class="{ 'active-bottom-border': $route.path === '/Cartmeter' }">
           <div class="field is-grouped">
-              <router-link to='/cart' class="button button9">
+              <router-link to='/Cartmeter' class="button button9">
                 <span class="icon">
                   <i class="fa fa-shopping-cart"></i>
                 </span>

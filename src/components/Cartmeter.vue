@@ -5,7 +5,7 @@
     <div class="box">
       <p v-show="!products.length">
         &nbsp;<i>คุณยังไม่ได้เลือกเมนู!</i>
-        &nbsp;<router-link to="/shop">กลับไปหน้าเมนู</router-link>
+        &nbsp;<router-link to="/meter">กลับไปหน้าเมนู</router-link>
       </p>
        <table class="table is-striped" v-show="products.length">
         <thead>&nbsp;
@@ -39,9 +39,9 @@
     &nbsp;ผู้สั่ง : {{this.users}} <br>
     &nbsp;ร้านค้า : {{this.SelectShops}}
     <hr>
-    &nbsp;จำนวนคิว ณ ขณะนี้ {{shops.q}} คิว  <br>
-    &nbsp;เวลารายการอาหารล่าสุด&nbsp;{{shops.SaveDate.slice(11,16)}}<br>
-    <router-link to="/shop"><button v-show="products.length" class='button button13'>กลับไปเลือกเมนู</button></router-link>
+    <!-- &nbsp;จำนวนคิว ณ ขณะนี้ {{shops.q}} คิว  <br> -->
+    <!-- &nbsp;เวลารายการอาหารล่าสุด&nbsp;{{shops.SaveDate.slice(11,16)}}<br> -->
+    <router-link to="/meter"><button v-show="products.length" class='button button13'>กลับไปเลือกเมนู</button></router-link>
     <button v-show="products.length" class='button button14' @click="order(products, shops.q, CountQuantity, total, shops.SaveDate)">ยืนยันการสั่ง</button>
   </div>
   </div>
@@ -51,7 +51,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
 var database = firebase.database()
-var foodcenterRef = database.ref('/foodcenter')
+var foodcenterRef = database.ref('/meters')
 var moment = require('moment-timezone')
 export default {
   data () {
