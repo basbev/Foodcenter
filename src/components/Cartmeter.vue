@@ -64,7 +64,8 @@ export default {
       updateDoingcount: '',
       minutes: 0,
       reports: {},
-      recordshop: {}
+      recordshop: {},
+      viewstock: {}
     }
   },
   computed: {
@@ -221,14 +222,18 @@ export default {
       }
     },
     Cutstock (products) {
+      console.log(products)
       let stock = null
       for (var i = 0; i < products.length; i++) {
-        const checkstock = foodcenterRef.child('menu').child(this.SelectShops).child(products[i].key)
-        checkstock.on('value', snap => {
-          stock = snap.val() // ดึงข้อมูลอาหาร
-        })
-        stock.amount = stock.amount - products[i].quantity
-        foodcenterRef.child('menu').child(this.SelectShops).child(products[i].key).child('amount').set(stock.amount)
+        for (var y = 0; y < products[i].meters.length; y++) {
+          const checkstock = foodcenterRef.child('stock').child(this.SelectShops).child(products[i].meters[y].keystock)
+          checkstock.on('value', snap => {
+            stock = snap.val() // ดึงข้อมูลอาหาร
+            console.log(stock)
+          })
+          stock.stockamount = stock.stockamount - products[i].meters[y].qty
+          foodcenterRef.child('stock').child(this.SelectShops).child(products[i].meters[y].keystock).child('stockamount').set(stock.stockamount)
+        }
       }
     },
     ...mapActions({
@@ -252,6 +257,10 @@ export default {
     dbRefObject2.on('value', snap => {
       this.recordshop = snap.val()
       console.log(this.recordshop)
+    })
+    const dbRefObject3 = foodcenterRef.child('stock').child(this.SelectShops)
+    dbRefObject3.on('value', snap => {
+      this.viewstock = snap.val()
     })
     // ดึงข้อมูลมาซึ้งกัน
   }
