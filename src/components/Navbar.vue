@@ -74,6 +74,14 @@
                 ร้านค้าวัตถุดิบ
               </span>
       </a>
+      <a v-if="permission === '5'" class="navbar-item" href="#/stockmeter">
+        <span class="icon">
+                <i class="fas fa-home"></i>
+              </span>
+              <span>
+                สต็อตร้านวัตถุดิบ
+              </span>
+      </a>
     </div>
 
     <div class="navbar-end">
