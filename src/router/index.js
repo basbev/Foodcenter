@@ -14,6 +14,7 @@ import stockshop from '@/components/stockshop'
 import shopmeter from '@/components/shopmeter'
 import meter from '@/components/meter'
 import stockmeter from '@/components/stockmeter'
+import Cartmeter from '@/components/Cartmeter'
 Vue.use(Router)
 
 export default new Router({
@@ -87,6 +88,11 @@ export default new Router({
       path: '/stockmeter',
       name: 'stockmeter',
       component: stockmeter
+    },
+    {
+      path: '/Cartmeter',
+      name: 'Cartmeter',
+      component: Cartmeter
     }
   ]
 })
