@@ -9,7 +9,8 @@ const state = {
   added: [],
   permission: null,
   hasShop: null,
-  stocklist: null
+  stocklist: null,
+  stocklimit: []
 }
 
 const getters = {
@@ -50,28 +51,32 @@ const mutations = {
   ADD_TO_CART: (state, {Akey, foodname, foodprice, type, meters}) => {
     var tmp = 0 // กำหนดว่าครบไหม
     const record = state.added.find(p => p.Akey === Akey) // หาจำนวนจาน
-    if (!record) { // กรณีหนึ่งจานเท่านั้น
-      for (var i = 0; i < meters.length; i++) {
-        const stock = state.stocklist.find(p => p.key === meters[i].keystock)
-        if (meters[i].qty <= stock.stockamount && tmp !== 1) { tmp = 0 } else { tmp = 1 }
+    for (var i = 0; i < meters.length; i++) {
+      const dual = state.stocklist.find(p => p.key === meters[i].keystock)
+      const stock = state.stocklimit.find(p => p.key === meters[i].keystock)
+      if (!stock) {
+        state.stocklimit.push({
+          key: meters[i].keystock,
+          name: meters[i].name,
+          qty: meters[i].qty
+        })
+      } else {
+        if (stock.qty <= dual.stockamount) { stock.qty = stock.qty + meters[i].qty }
       }
-      if (tmp === 0) {
-        if (!record) {
-          state.added.push({
-            Akey,
-            foodname,
-            foodprice,
-            quantity: 1,
-            type
-          })
-        }
-      }
-    } else { // หลายจาน
-      for (var y = 0; y < meters.length; y++) {
-        const stock = state.stocklist.find(p => p.key === meters[y].keystock)
-        if (meters[y].qty * record.quantity < stock.stockamount && tmp !== 1) { tmp = 0 } else { tmp = 1 }
-      }
-      if (tmp === 0) { record.quantity++ }
+      const once = state.stocklimit.find(p => p.key === meters[i].keystock)
+      console.log(once.qty, '-->', dual.stockamount)
+      if (once.qty <= dual.stockamount && tmp !== 1) { tmp = 0 } else { tmp = 1 }
+    }
+    if (tmp === 0) {
+      if (!record) {
+        state.added.push({
+          Akey,
+          foodname,
+          foodprice,
+          quantity: 1,
+          type
+        })
+      } else { record.quantity++ }
     }
   },
   stocklist: (state, payload) => {
@@ -85,11 +90,12 @@ const mutations = {
   },
   DeleteCart: (state) => {
     state.added = []
+    state.stocklimit = []
   },
   Cartremove: (state, index) => {
     state.added.splice(index, 1)
   },
-  incleseAmount: (state, index) => {
+  incleseAmount: (state, {index, product}) => {
     if (state.added[index].quantity < state.added[index].amount) {
       state.added[index].quantity++
     }
