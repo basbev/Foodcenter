@@ -27,7 +27,7 @@ const getters = {
         price: product.foodprice,
         quantity,
         type: product.type,
-        lastamount: product.amount
+        meters: product.meters
       }
     })
   },
@@ -74,7 +74,8 @@ const mutations = {
           foodname,
           foodprice,
           quantity: 1,
-          type
+          type,
+          meters
         })
       } else { record.quantity++ }
     }
