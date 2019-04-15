@@ -16,18 +16,19 @@
             <div class="content is-medium">
               <div class="content">
                 <div class="box">
-              <img v-url={filename:detail.banner}>
-              <div :key="key" v-if="(shop, key) in detail"></div>
-                 <h3 class="title is-3">ร้าน&nbsp; {{ detail.name }}&nbsp;&nbsp;<img src="https://www.img.live/images/2018/11/20/img_352451.png" height="15">&nbsp;{{ detail.tel }}&nbsp;<img v-bind:src="detail.status" width="90" height="70" ></h3>
-                 <button v-if="permission !== '1'" class="button button11" @click="setprofile(detail.name, detail.tel, detail.status, detail.banner)">เเก้ไขโปรไฟล์</button>
-                 <div v-if="updateKey === true">
+                  <!-- Profile -->
+                  <div :key="key" v-for="(shop, key) in detail">
+                    <img v-url={filename:shop.banner}>
+                    <h3 class="title is-3">ร้าน&nbsp; {{ shop.name }}&nbsp;&nbsp;<img src="https://www.img.live/images/2018/11/20/img_352451.png" height="15">&nbsp;{{ shop.tel }}&nbsp;<img v-bind:src="shop.status" width="90" height="70" ></h3>
+                 <button v-if="permission !== '1'" class="button button11" @click="setprofile(shop.name, shop.tel, shop.status, shop.banner)">เเก้ไขโปรไฟล์</button>
+                    <div v-if="updateKey === true">
                    <input type="text" v-model="updateName" placeholder="ชื่อร้าน">
                    <input type="number" v-model="updatePhone" placeholder="เบอร์โทร">
                     <select name="status" v-model="updateStatus">
   <option value="https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png">เปิด</option>
   <option value="https://www.img.live/images/2018/11/20/d57b23a07352f87d.png">ปิด</option>
 </select>
-<label class="file-label">
+                    <label class="file-label">
       <input class="file-input" type="file" name="banner" @change="onFileChangebanner($event.target.files[0])">
       <span class="file-cta">
         <span class="file-icon">
@@ -42,7 +43,9 @@
         {{this.dataImg2.name}}
       </span>
                    <button v-if="permission !== '1'" class="button button12" @click="updateprofile(updateName, updatePhone, updateStatus, updateBanner )">บันทึกโปรไฟล์</button>
-                 </div>
+                  </div>
+                  </div>
+                  <!-- Profile -->
               </div>
               </div>
                 <br>
@@ -374,7 +377,7 @@ export default {
       prodetail: '',
       updateProdetail: '',
       records: '',
-      detail: '',
+      detail: [],
       updateName: '',
       updatePhone: '',
       updateStatus: '',
@@ -875,8 +878,11 @@ export default {
       this.promo = snap.val()
     })
     dbRefObjectdetail.on('value', snap => {
-      this.detail = snap.val()
-      console.log(this.detail.banner)
+      var data = snap.val()
+      data.key = snap.key
+      this.detail = []
+      this.detail.push(data)
+      console.log(this.detail)
     })
     dbRefObjectvote.on('value', snap => {
       var datavote = []

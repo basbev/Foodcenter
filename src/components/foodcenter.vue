@@ -402,6 +402,10 @@ export default {
   mounted () {
     const dbRefObject = foodcenterRef.child('detail')
     const shoppoint = foodcenterRef.child('shoppoint')
+    shoppoint.on('value', snap => {
+      this.shoppoints = snap.val()
+      console.log(this.shoppoints)
+    })
     dbRefObject.on('value', snap => {
       var data = []
       snap.forEach(ss => {
@@ -414,10 +418,6 @@ export default {
       console.log(this.shops)
       JSON.stringify(this.shops)
       // console.log(JSON.stringify(this.shops))
-    })
-    shoppoint.on('value', snap => {
-      this.shoppoints = snap.val()
-      console.log(this.shoppoints.ป้าสมบูรณ์)
     })
   },
   computed: {
