@@ -200,13 +200,13 @@ const actions = {
       let permission = JSON.parse(Getpermission)
       let selectShop = JSON.parse(GetselectShop)
       commit('LOAD', {user, permission, selectShop})
-      console.log('show1')
+      // console.log('show1')
     }
     if (Getuser !== 'null' && GetselectShop === 'undefined') {
       let user = JSON.parse(Getuser)
       let permission = JSON.parse(Getpermission)
       commit('LOAD', {user, permission})
-      console.log('show2')
+      // console.log('show2')
     }
   },
   save ({state}) {
