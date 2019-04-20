@@ -231,7 +231,7 @@ export default {
             stock = snap.val() // ดึงข้อมูลอาหาร
             console.log(stock)
           })
-          stock.stockamount = stock.stockamount - products[i].meters[y].qty
+          stock.stockamount = stock.stockamount - products[i].meters[y].qty * products[i].quantity
           foodcenterRef.child('stock').child(this.SelectShops).child(products[i].meters[y].keystock).child('stockamount').set(stock.stockamount)
         }
       }
