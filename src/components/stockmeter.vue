@@ -294,7 +294,7 @@ export default {
     Editstock (key, stockname, stockamount) {
       firebase.database().ref().child('meters/stock/' + this.selectShop).child(key).update({
         stockname: stockname,
-        stockamount: stockamount
+        stockamount: parseInt(stockamount, 10)
       })
       this.showModal = false
       this.statusEdit = false
