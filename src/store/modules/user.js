@@ -96,6 +96,10 @@ const mutations = {
     state.stocklimit = []
   },
   Cartremove: (state, index) => {
+    for (var i = 0; i < state.added[index].meters.length; i++) {
+      const stock = state.stocklimit.find(p => p.key === state.added[index].meters[i].keystock)
+      stock.qty = stock.qty - state.added[index].meters[i].qty * state.added[index].quantity
+    }
     state.added.splice(index, 1)
   },
   incleseAmount: (state, index) => {
