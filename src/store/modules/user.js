@@ -98,8 +98,17 @@ const mutations = {
   Cartremove: (state, index) => {
     state.added.splice(index, 1)
   },
-  incleseAmount: (state, {index, product}) => {
-    if (state.added[index].quantity < state.added[index].amount) {
+  incleseAmount: (state, index) => {
+    var tmp = 0
+    for (var i = 0; i < state.added[index].meters.length; i++) {
+      const dual = state.stocklist.find(p => p.key === state.added[index].meters[i].keystock)
+      const stock = state.stocklimit.find(p => p.key === state.added[index].meters[i].keystock)
+      if (stock.qty < dual.stockamount && tmp !== 1) {
+        stock.qty = stock.qty + state.added[index].meters[i].qty
+        tmp = 0
+      } else { tmp = 1 }
+    }
+    if (tmp === 0) {
       state.added[index].quantity++
     }
   },
@@ -185,7 +194,7 @@ const actions = {
   Cartremove ({commit}, index) {
     commit('Cartremove', index)
   },
-  incleseAmount ({commit, dispatch}, index) {
+  incleseAmount ({commit}, index) {
     commit('incleseAmount', index)
   },
   decleseAmount ({commit}, index) {
