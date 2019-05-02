@@ -62,11 +62,11 @@ const mutations = {
           qty: meters[i].qty
         })
       } else {
-        if (stock.qty <= dual.stockamount) { stock.qty = stock.qty + meters[i].qty }
+        if (stock.qty < dual.stockamount && tmp !== 1) {
+          stock.qty = stock.qty + meters[i].qty
+          tmp = 0
+        } else { tmp = 1 }
       }
-      const once = state.stocklimit.find(p => p.key === meters[i].keystock)
-      console.log(once.qty, '-->', dual.stockamount)
-      if (once.qty <= dual.stockamount && tmp !== 1) { tmp = 0 } else { tmp = 1 }
     }
     if (tmp === 0) {
       if (!record) {
