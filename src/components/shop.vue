@@ -159,7 +159,7 @@
                       <img v-url={filename:menu.foodpic} width="300" height="350"/><br>
                       <button v-if="checkstock[key] === 1" class="button is-danger" disabled>เพิ่มลง Order</button>
                       <button v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost)" class="button button3">เพิ่มลง Order</button>
-                      <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.menupre)" class="button button3">เเก้ไขเมนูอาหาร</button>
+                      <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.meters)" class="button button3">เเก้ไขเมนูอาหาร</button>
                       <button v-if="permission !== '1'" @click="DelFood(menu.key)" class="button button3">ลบ</button>
                       <hr>
                                       <div v-if="updateKey === key">
@@ -177,6 +177,62 @@
   <option value="เมนูทั่วไป" selected>เมนูทั่วไป</option>
   <option value="เมนูแนะนำ">เมนูแนะนำ</option>
 </select>
+<!--  -->
+        <div class="field is-horizontal" v-for="ameter in meters" :key="ameter.id">
+  <div class="field-label is-normal">
+    <label class="label">วัตถุดิบ</label>
+  </div>
+  <div class="field-body">
+    <div class="field">
+      <p class="control is-expanded">
+        <select name="main meter" v-model="ameter.name" aria-readonly="">
+          <option
+              :key="key"
+              v-for="(dep, key) in datastock"
+              :value="dep.stockname"
+              >{{dep.stockname}}</option>
+        </select>
+      </p>
+    </div>
+    <div class="field">
+      <p class="control is-expanded">
+        <input class="input is-success" type="number" placeholder="จำนวน" v-model="ameter.qty">
+        <button @click="removemeter()"><i class="fas fa-times"></i></button>
+      </p>
+    </div>
+  </div>
+</div>
+<div class="field is-horizontal">
+  <div class="field-label is-normal">
+    <label class="label">วัตถุดิบ</label>
+  </div>
+  <div class="field-body">
+    <div class="field">
+      <p class="control is-expanded">
+        <select name="main meter" v-model="meter.name">
+          <option
+              :key="key"
+              v-for="(dep, key) in datastock"
+              :value="dep"
+              >{{dep.stockname}}</option>
+        </select>
+      </p>
+    </div>
+    <div class="field">
+      <p class="control is-expanded">
+        <input class="input is-success" type="number" placeholder="จำนวน" v-model="meter.qty" value="1">
+      </p>
+    </div>
+    <div class="field">
+      <div class="control">
+        <button class="button is-primary" @click="addMeter()">
+          Add
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--  -->
         <label class="file-label">
       <input class="file-input" type="file" name="resume" @change="onFileChangefoodupdate($event.target.files[0])">
       <span class="file-cta">
@@ -191,7 +247,7 @@
     <span class="file-name" v-if="dataImg4">
         {{dataImg4.name}}
       </span>
-        <button @click="UpdateMenu(menu.key, updateMenufood, updateMenuprice, updateMenutype, updateMenupic, updateMenumenupre)" class="button button2">บันทึกเมนูอาหาร</button>
+        <button @click="UpdateMenu(menu.key, updateMenufood, updateMenuprice, updateMenutype, updateMenupic)" class="button button2">บันทึกเมนูอาหาร</button>
         <hr>
       </div>
       <div v-else>
@@ -222,13 +278,6 @@
     <div class="field">
       <p class="control is-expanded">
         <select name="main meter" v-model="ameter.name" aria-readonly="">
-          <!-- <option value="ข้าว">ข้าว</option>
-          <option value="ไข่">ไข่</option>
-          <option value="หมู">หมู</option>
-          <option value="ไก่">ไก่</option>
-          <option value="ปลา">ปลา</option>
-          <option value="หมึก">หมึก</option>
-          <option value="กุ้ง">กุ้ง</option> -->
           <option
               :key="key"
               v-for="(dep, key) in datastock"
@@ -240,6 +289,7 @@
     <div class="field">
       <p class="control is-expanded">
         <input class="input is-success" type="number" placeholder="จำนวน" v-model="ameter.qty">
+        <button @click="removemeter()"><i class="fas fa-times"></i></button>
       </p>
     </div>
   </div>
@@ -252,13 +302,6 @@
     <div class="field">
       <p class="control is-expanded">
         <select name="main meter" v-model="meter.name">
-          <!-- <option value="ข้าว">ข้าว</option>
-          <option value="ไข่">ไข่</option>
-          <option value="หมู">หมู</option>
-          <option value="ไก่">ไก่</option>
-          <option value="ปลา">ปลา</option>
-          <option value="หมึก">หมึก</option>
-          <option value="กุ้ง">กุ้ง</option> -->
           <option
               :key="key"
               v-for="(dep, key) in datastock"
@@ -368,7 +411,7 @@ export default {
       updatefoodtype: '',
       updatefoodprice: '',
       updatefoodpic: '',
-      updateMenupre: '',
+      updateMenumeters: '',
       updateMenufood: '',
       updateMenuprice: '',
       updateMenutype: '',
@@ -427,6 +470,7 @@ export default {
       console.log(this.dataImg2)
     },
     async insertmenu (foodname, foodprice, foodtype, foodpic, meters, Cost) {
+      await this.truestock()
       let data = {
         foodname: foodname,
         foodtype: foodtype,
@@ -595,28 +639,31 @@ export default {
       this.updateKey = ''
       this.prodetail = ''
     },
-    SetUpdateMenu (key, menufood, menuprice, menutype, menupic, menumenupre) {
+    SetUpdateMenu (key, menufood, menuprice, menutype, menupic, meters) {
       this.updateKey = key
       this.updateMenufood = menufood
       this.updateMenuprice = menuprice
       this.updateMenutype = menutype
       this.updateMenupic = menupic
-      this.updateMenumenupre = menumenupre
+      this.meters = meters
     },
     async UpdateMenu (key, updateMenufood, updateMenuprice, updateMenutype, updateMenupic) {
+      await this.truestock()
       if (this.dataImg4 !== '') {
         await storageRef.child(this.dataImg4.name).put(this.dataImg4)
         foodcenterRef.child('menu').child(this.selectShop).child(key).update({
           foodname: updateMenufood,
           foodtype: updateMenutype,
           foodprice: updateMenuprice,
-          foodpic: this.dataImg4.name
+          foodpic: this.dataImg4.name,
+          meters: this.meters
         })
       } else {
         foodcenterRef.child('menu').child(this.selectShop).child(key).update({
           foodname: updateMenufood,
           foodtype: updateMenutype,
-          foodprice: updateMenuprice
+          foodprice: updateMenuprice,
+          meters: this.meters
         })
       }
       this.updateKey = ''
@@ -625,6 +672,7 @@ export default {
       this.updateMenutype = ''
       this.updateMenupic = ''
       this.dataImg4 = ''
+      this.meters = []
     },
     setprofile (name, phone, status, banner) {
       this.updateKey = true
@@ -816,6 +864,15 @@ export default {
         this.checkstock.push(tmp)
       }
       this.$store.dispatch('stocklist', data)
+    },
+    removemeter () {
+      this.meters.splice(0, 1)
+    },
+    truestock () {
+      for (var i = 0; i < this.meters.length; i++) {
+        var tmp = this.datastock.find(p => p.stockname === this.meters[i].name)
+        this.meters[i].keystock = tmp.key
+      }
     }
   },
   computed: {
