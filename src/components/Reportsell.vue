@@ -13,22 +13,23 @@
         <button class="button button4" @click="getDataFirebaseprofit(getvalue, month)">รายเดือน</button>
         <button class="button button5" @click="getDataFirebaseprofit(getvalue, year)">รายปี</button>
         <!-- Profit -->
-    <div id="chart-container">
-    </div>
+    <div id="chart"></div>
 </div>
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import firebase from 'firebase'
-import FusionCharts from 'FusionCharts'
+import ApexCharts from 'apexcharts'
 export default {
   name: 'Reportsell',
   data: function () {
     return {
       getvalue: [],
+      getvalue1: [],
       day: 'day',
       month: 'month',
-      year: 'year'
+      year: 'year',
+      showchart: ''
     }
   },
   methods: {
@@ -43,12 +44,15 @@ export default {
       var ref = firebase.database().ref('foodcenter/report/' + this.selectShop + '/' + scale)
       ref.once('value', snap => {
         var data = []
+        var data1 = []
         snap.forEach(ss => {
-          var item = ss.val()
+          var item = ss.val().value
+          var item1 = ss.val().label
           data.push(item)
+          data1.push(item1)
         })
         this.getvalue = data
-        console.log(this.getvalue)
+        this.getvalue1 = data1
         this.ShowGraph(this.getvalue)
       })
     },
@@ -57,69 +61,114 @@ export default {
       var ref = firebase.database().ref('foodcenter/reportprofit/' + this.selectShop + '/' + scale)
       ref.once('value', snap => {
         var data = []
+        var data1 = []
         snap.forEach(ss => {
-          var item = ss.val()
+          var item = ss.val().value
+          var item1 = ss.val().label
           data.push(item)
+          data1.push(item1)
         })
         this.getvalue = data
-        console.log(this.getvalue)
+        this.getvalue1 = data1
         this.ShowGraph(this.getvalue)
       })
     },
     ShowGraph: function (getvalue) {
-      console.log(this.getvalue)
-      var firebaseChart = new FusionCharts({
-        type: 'column2d',
-        renderAt: 'chart-container',
-        width: '850',
-        height: '600',
-        dataFormat: 'json',
-        dataSource: {
-          'chart': {
-            'caption': 'Report',
-            'subCaption': 'Days{br}Foodcenter Inc.',
-            'subCaptionFontBold': '0',
-            'captionFontSize': '20',
-            'subCaptionFontSize': '17',
-            'captionPadding': '15',
-            'captionFontColor': '#8C8C8C',
-            'baseFontSize': '22',
-            'baseFont': 'Barlow',
-            'canvasBgAlpha': '0',
-            'bgColor': '#FFFFFF',
-            'bgAlpha': '100',
-            'showBorder': '0',
-            'showCanvasBorder': '0',
-            'showPlotBorder': '0',
-            'showAlternateHGridColor': '0',
-            'usePlotGradientColor': '0',
-            'paletteColors': '#6AC1A5',
-            'showValues': '1',
-            'divLineAlpha': '5',
-            'showAxisLines': '1',
-            'drawAnchors': '0',
-            'xAxisLineColor': '#8C8C8C',
-            'xAxisLineThickness': '0.7',
-            'xAxisLineAlpha': '50',
-            'yAxisLineColor': '#8C8C8C',
-            'yAxisLineThickness': '0.7',
-            'yAxisLineAlpha': '50',
-            'baseFontColor': '#8C8C8C',
-            'toolTipBgColor': '#FA8D67',
-            'toolTipPadding': '10',
-            'toolTipColor': '#FFFFFF',
-            'toolTipBorderRadius': '3',
-            'toolTipBorderAlpha': '0',
-            'drawCrossLine': '1',
-            'crossLineColor': '#8C8C8C',
-            'crossLineAlpha': '60',
-            'crossLineThickness': '0.7',
-            'alignCaptionWithCanvas': '1'
+      if (this.showchart !== '') { this.showchart.destroy() }
+      this.showchart = new ApexCharts(document.querySelector('#chart'),
+        {
+          chart: {
+            height: 350,
+            type: 'bar'
           },
-          'data': getvalue
+          plotOptions: {
+            bar: {
+              dataLabels: {
+                position: 'top' // top, center, bottom
+              }
+            }
+          },
+          dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+              return val + ' ' + 'บาท'
+            },
+            offsetY: -20,
+            style: {
+              fontSize: '12px',
+              colors: ['#304758']
+            }
+          },
+          series: [{
+            name: 'Inflation',
+            data: this.getvalue
+          }],
+          xaxis: {
+            categories: this.getvalue1,
+            position: 'top',
+            labels: {
+              offsetY: -18
+            },
+            axisBorder: {
+              show: true
+            },
+            axisTicks: {
+              show: true
+            },
+            crosshairs: {
+              fill: {
+                type: 'gradient',
+                gradient: {
+                  colorFrom: '#D8E3F0',
+                  colorTo: '#BED1E6',
+                  stops: [0, 100],
+                  opacityFrom: 0.4,
+                  opacityTo: 0.5
+                }
+              }
+            },
+            tooltip: {
+              enabled: true,
+              offsetY: -35
+            }
+          },
+          fill: {
+            gradient: {
+              shade: 'light',
+              type: 'horizontal',
+              shadeIntensity: 0.25,
+              gradientToColors: undefined,
+              inverseColors: true,
+              opacityFrom: 1,
+              opacityTo: 1,
+              stops: [50, 0, 100, 100]
+            }
+          },
+          yaxis: {
+            axisBorder: {
+              show: true
+            },
+            axisTicks: {
+              show: true
+            },
+            labels: {
+              show: true,
+              formatter: function (val) {
+                return val + ' ' + 'บาท'
+              }
+            }
+          },
+          title: {
+            text: 'Report Foodcenter, 2019',
+            floating: true,
+            offsetY: 320,
+            align: 'center',
+            style: {
+              color: '#444'
+            }}
         }
-      })
-      firebaseChart.render()
+      )
+      this.showchart.render()
     }
   },
   mounted () {
