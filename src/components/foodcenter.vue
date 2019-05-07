@@ -66,7 +66,7 @@
                 </figure>
                 <div class="media-content">
                   <div class="content">
-                    <h1 class="title is-size-4">ร้าน {{detail.name}}<img src="https://www.img.in.th/images/8c44fe4d804dca493a0e04341aa9e06f.png" width="30" height="30">&nbsp;{{(shoppoints[detail.name].scorce/shoppoints[detail.name].count).toFixed(2)}}</h1>
+                    <h1 class="title is-size-4">ร้าน {{detail.name}}<img src="https://www.img.in.th/images/8c44fe4d804dca493a0e04341aa9e06f.png" width="30" height="30">&nbsp;{{((shoppoints[detail.name].count) === 0)?'0.00':(shoppoints[detail.name].scorce/shoppoints[detail.name].count).toFixed(2)}}</h1>
                     <!-- <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
@@ -248,6 +248,11 @@ export default {
         q: 0,
         status: 'https://www.img.live/images/2018/11/20/d57b23a07352f87d.png'
       }
+      let data2 = {
+        count: 0,
+        scorce: 0,
+        shop: name
+      }
       if (tel === '' || name === '') {
         this.$swal({
           type: 'error',
@@ -257,6 +262,7 @@ export default {
         })
       } else {
         foodcenterRef.child('detail').child(this.name).set(data)
+        foodcenterRef.child('shoppoint').child(this.name).set(data2)
         this.tel = ''
         this.name = ''
       }
