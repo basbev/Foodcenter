@@ -50,6 +50,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
+import axios from 'axios'
 var database = firebase.database()
 var foodcenterRef = database.ref('/meters')
 var moment = require('moment-timezone')
@@ -65,7 +66,10 @@ export default {
       minutes: 0,
       reports: {},
       recordshop: {},
-      viewstock: {}
+      viewstock: {},
+      detail: '',
+      email: '',
+      once: {}
     }
   },
   computed: {
@@ -95,6 +99,7 @@ export default {
       await this.reportmonth()
       await this.reportyear()
       await this.Cutstock(products)
+      await this.sendmail(products)
       for (var i = 0; i < products.length; i++) {
         let date = moment().tz('Asia/Bangkok').format()
         let time = moment().tz('Asia/Bangkok').format().slice(0, 10)
@@ -236,6 +241,39 @@ export default {
         }
       }
     },
+    async sendmail (products) {
+      await this.before()
+      await this.sortcode(products)
+      await axios.get('http://localhost:3001', {
+        params: {
+          id: `<p>มีรายละเอียดดังนี้</p>
+                  <ul>  
+                  ` + this.detail + `
+                  </ul> 
+                  <p>ราคารวม : ` + this.total + ` บาท<p>
+                  <p>ผู้ทำการสั่งซื้อวัตถุดิบ : ` + this.users + `<p>`,
+          name: this.SelectShops,
+          email: this.email
+        }
+      })
+        .then(response => {
+          // JSON responses are automatically parsed.
+          this.posts = response.data
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    sortcode (products) {
+      for (var i = 0; i < products.length; i++) {
+        this.detail = this.detail + '<li >ชื่อวัตถุดิบ: ' + products[i].name + '  ราคา: ' + products[i].quantity * products[i].price + '  บาท' + '<br></li>'
+      }
+    },
+    before () {
+      database.ref('/user').orderByChild('hasShop').equalTo(this.SelectShops).once('child_added', snap => {
+        this.email = snap.val().email
+      })
+    },
     ...mapActions({
       inclese: 'incleseAmount',
       declese: 'decleseAmount',
@@ -261,6 +299,10 @@ export default {
     const dbRefObject3 = foodcenterRef.child('stock').child(this.SelectShops)
     dbRefObject3.on('value', snap => {
       this.viewstock = snap.val()
+    })
+    const dbRefObject4 = database.ref('/user')
+    dbRefObject4.on('value', snap => {
+      this.once = snap.val()
     })
     // ดึงข้อมูลมาซึ้งกัน
   }

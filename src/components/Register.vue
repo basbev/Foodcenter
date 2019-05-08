@@ -26,6 +26,14 @@
     </span>
               </div>
             </div>
+            <div class="field">
+              <div class="control has-icons-left">
+                <input class="input is-large" type="text" placeholder="Your Email" id="text" v-model="email">
+                <span class="icon is-small is-left">
+      <i class="fas fa-lock"></i>
+    </span>
+              </div>
+            </div>
             <hr>
             <div class="buttons is-centered">
               <span class="bd-tw-button button" v-on:click="registerW">Register</span>
@@ -92,7 +100,8 @@ export default {
           lastname: '',
           phonenumber: '',
           address: '',
-          hasShop: ''
+          hasShop: '',
+          email: this.email
         }
         foodcenterRef.push(data)
         this.$router.push('/')
