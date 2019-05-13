@@ -19,6 +19,7 @@ export default {
 body {
   font-family: 'Prompt', sans-serif;
   background-color: #f5f5f5;
+  min-height: 100vh;
 }
 input[type=number], select {
     width: 100%;
@@ -58,7 +59,6 @@ input[type=text], select {
 }
 .button1 {
     margin-top: 7px;
-
     border: 2px solid #0DFF82;
     background-color: #0DFF82;
     color: white;

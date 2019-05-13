@@ -88,7 +88,7 @@
             </p>
             <!-- <hr> -->
             <div class="panel-block">
-              <table class="table">
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                 <thead>
                   <tr>
                     <th>ชื่อวัตถุดิบ</th>

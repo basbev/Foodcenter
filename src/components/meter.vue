@@ -21,7 +21,7 @@
                     <img v-url={filename:shop.banner}>
                     <h3 class="title is-3">ร้าน&nbsp; {{ shop.name }}&nbsp;&nbsp;<img src="https://www.img.live/images/2018/11/20/img_352451.png" height="15">&nbsp;{{ shop.tel }}&nbsp;<img v-bind:src="shop.status" width="90" height="70" ></h3>
                  <button v-if="permission !== '1'" class="button button11" @click="setprofile(shop.name, shop.tel, shop.status, shop.banner)">เเก้ไขโปรไฟล์</button>
-                    <div v-if="updateKey === true">
+                    <!-- <div v-if="updateKey === true">
                    <input type="text" v-model="updateName" placeholder="ชื่อร้าน">
                    <input type="number" v-model="updatePhone" placeholder="เบอร์โทร">
                     <select name="status" v-model="updateStatus">
@@ -43,9 +43,95 @@
         {{this.dataImg2.name}}
       </span>
                    <button v-if="permission !== '1'" class="button button12" @click="updateprofile(updateName, updatePhone, updateStatus, updateBanner )">บันทึกโปรไฟล์</button>
-                  </div>
+                  </div> -->
                   </div>
                   <!-- Profile -->
+                  <!--show modal-->
+                  <div id="modal-ter" class="modal is-active" v-show="showModal" @close="showModal = false">
+      <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">เเก้ไขโปรไฟล์ : {{selectShop}}</p>
+              <button class="delete" aria-label="close" @click="Closemodal()"></button>
+          </header>
+          <section class="modal-card-body">
+            <div class="content">
+              <!-- เนื้อหา -->
+              <!-- <form action> -->
+              <br>
+              <div>
+               <div class="columns">
+                <div class="column is-2">
+                  ชื่อร้านอาหาร :
+                </div>
+                <div class="column">
+                  <input
+                    class="form-control mb-2"
+                    type="text"
+                    v-model="updateName"
+                    placeholder="ร้านอาหาร"
+                  >
+                  </div>
+                  <div class="column is-2">
+                    เบอร์โทร :
+                  </div>
+                  <div class="column">
+                    <input
+                     class="form-control mb-2"
+                      type="text"
+                     v-model="updatePhone"
+                      placeholder="เบอร์โทร"
+                    >
+                  </div>
+                </div>
+                <div class="columns">
+                <div class="column is-2">
+                  สถานะ :
+                </div>
+                <div class="column">
+                  <select name="status" v-model="updateStatus">
+  <option value="https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png">เปิด</option>
+  <option value="https://www.img.live/images/2018/11/20/d57b23a07352f87d.png">ปิด</option>
+</select>
+                  </div>
+                  <div class="column is-2">
+                    อัพโหลดรูป :
+                  </div>
+                  <div class="column">
+                    <label class="file-label">
+      <input class="file-input" type="file" name="banner" @change="onFileChangebanner($event.target.files[0])">
+      <span class="file-cta">
+        <span class="file-icon">
+          <i class="fas fa-upload"></i>
+        </span>
+        <span class="file-label">
+          อัพโหลดรูป
+        </span>
+      </span>
+    </label>
+                  </div>
+                </div>
+                <div class="columns">
+                <div class="column is-2">
+                  ไฟล์ที่อัพโหลด :
+                </div>
+                <span class="file-name" v-if="dataImg2">
+        {{dataImg2.name}}
+      </span>
+                </div>
+              </div>
+              <!-- </form> -->
+              <!-- เนื้อหา -->
+            </div>
+          </section>
+          <footer class="modal-card-foot">
+            <!-- <button class="button is-success">เพิ่มข้อมูล</button> -->
+            <button class="button is-success" @click="updateprofile(updateName, updatePhone, updateStatus, updateBanner )">บันทึกข้อมูล</button>
+            <button class="button" @click="Closemodal()">ยกเลิก</button>
+          </footer>
+        </div>
+    </div>
+                  <!--show modal-->
               </div>
               </div>
                 <br>
@@ -148,6 +234,7 @@
                   <i class="fas fa-info-circle"></i>
                 </span>
                 <h4 id="let1" class="title is-3">เมนูประจำร้าน</h4>
+                <button class="button button11" @click="setinsertmenu()">เพิ่มเมนู</button>
               </article>
               <div class="message-body">
                                     <div class="container">
@@ -162,22 +249,154 @@
                       <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.meters)" class="button button3">เเก้ไขเมนูอาหาร</button>
                       <button v-if="permission !== '1'" @click="DelFood(menu.key)" class="button button3">ลบ</button>
                       <hr>
-                                      <div v-if="updateKey === key">
-        <input type="text" v-model="updateMenufood" placeholder="ชื่อเมนู">
-        <!-- <select name="status" v-model="updateMenutype">
+                      <!-- update menu -->
+                      <!--show modal-->
+                  <div id="modal-ter" class="modal is-active" v-show="showModal3" @close="showModal3 = false">
+      <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">เเก้ไขเมนูอาหาร</p>
+              <button class="delete" aria-label="close" @click="Closemodal3()"></button>
+          </header>
+          <section class="modal-card-body">
+            <div class="content">
+              <!-- เนื้อหา -->
+              <!-- <form action> -->
+              <br>
+              <div>
+               <div class="columns">
+                <div class="column is-2">
+                  ชื่อเมนูอาหาร :
+                </div>
+                <div class="column">
+                  <input type="text" v-model="updateMenufood" placeholder="ชื่อเมนูอาหาร">
+                  </div>
+                  <!-- <div class="column is-2">
+                    ประเภทอาหาร :
+                  </div>
+                  <div class="column">
+                    <select name="status" v-model="updateMenutype">
   <option value="ผัด" selected>ผัด</option>
   <option value="ทอด">ทอด</option>
   <option value="ต้ม">ต้ม</option>
   <option value="แกง">แกง</option>
   <option value="นึ่ง">นึ่ง</option>
   <option value="ย่าง">ย่าง</option>
-</select> -->
+</select>
+                  </div> -->
+                </div>
+                <div class="columns">
+                <div class="column is-2">
+                  ราคาต่อจาน :
+                </div>
+                <div class="column">
+                  <input type="number" v-model="updateMenuprice" min="5" max="50" placeholder="ราคาต่อจาน">
+                  </div>
+                  <div class="column is-2">
+                    ราคาทุนจาน :
+                  </div>
+                  <div class="column">
+                    <input type="number" v-model="updatecost" min="5" max="50" placeholder="ราคาทุนจาน">
+                  </div>
+                </div>
+                <div class="columns">
+                <div class="column is-2">
+                  อัพโหลดรูป :
+                </div>
+                <div class="column">
+                  <label class="file-label">
+      <input class="file-input" type="file" name="banner" @change="onFileChangefood($event.target.files[0])">
+      <span class="file-cta">
+        <span class="file-icon">
+          <i class="fas fa-upload"></i>
+        </span>
+        <span class="file-label">
+          อัพโหลดรูป
+        </span>
+      </span>
+    </label>
+                  </div>
+                  <div class="column is-2">
+                    ไฟล์ที่อัพโหลด :
+                  </div>
+                  <div class="column">
+                    <span class="file-name" v-if="dataImg3">
+        {{dataImg3.name}}
+      </span>
+                  </div>
+                </div>
+                <div class="columns" v-for="ameter in meters" :key="ameter.id">
+                <div class="column is-2">
+                  ชื่อวัตถุดิบ :
+                </div>
+                <div class="column">
+                  <select name="main meter" v-model="ameter.name" aria-readonly="">
+          <option
+              :key="key"
+              v-for="(dep, key) in datastock"
+              :value="dep.stockname"
+              >{{dep.stockname}}</option>
+        </select>
+                  </div>
+                  <div class="column is-2">
+                    จำนวน :
+                  </div>
+                  <div class="column">
+                    <input class="input is-success" type="number" placeholder="จำนวน" v-model="ameter.qty">
+        <button @click="removemeter()"><i class="fas fa-times"></i></button>
+                  </div>
+                </div>
+                <div class="columns">
+                <div class="column is-2">
+                  เพิ่มวัตถุดิบ :
+                </div>
+                <div class="column">
+                  <select name="main meter" v-model="meter.name">
+          <option
+              :key="key"
+              v-for="(dep, key) in datastock"
+              :value="dep"
+              >{{dep.stockname}}</option>
+        </select>
+                  </div>
+                  <div class="column is-2">
+                    จำนวน :
+                  </div>
+                  <div class="column">
+                    <input class="input" type="number" placeholder="จำนวน" v-model="meter.qty" value="1">
+                    <button class="button is-primary" @click="addMeter()">Add</button>
+                  </div>
+                </div>
+              </div>
+              <!-- </form> -->
+              <!-- เนื้อหา -->
+            </div>
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button is-success" @click="UpdateMenu(menu.key, updateMenufood, updateMenuprice, updateMenutype, updateMenupic, updatecost)">อัพเดทเมนู</button>
+            <!-- <button class="button is-success">บันทึกข้อมูล</button> -->
+            <button class="button" @click="Closemodal3()">ยกเลิก</button>
+          </footer>
+        </div>
+    </div>
+                  <!--show modal-->
+                      <!-- update menu -->
+                                      <!-- <div v-if="updateKey === key">
+        <input type="text" v-model="updateMenufood" placeholder="ชื่อเมนู">
+        <select name="status" v-model="updateMenutype">
+  <option value="ผัด" selected>ผัด</option>
+  <option value="ทอด">ทอด</option>
+  <option value="ต้ม">ต้ม</option>
+  <option value="แกง">แกง</option>
+  <option value="นึ่ง">นึ่ง</option>
+  <option value="ย่าง">ย่าง</option>
+</select>
         <input type="text" v-model="updateMenuprice" placeholder="ราคา">
          <select name="menupre" v-model="menupre">
   <option value="เมนูทั่วไป" selected>เมนูทั่วไป</option>
   <option value="เมนูแนะนำ">เมนูแนะนำ</option>
 </select>
-<!--  -->
+
         <div class="field is-horizontal" v-for="ameter in meters" :key="ameter.id">
   <div class="field-label is-normal">
     <label class="label">วัตถุดิบ</label>
@@ -232,7 +451,7 @@
     </div>
   </div>
 </div>
-<!--  -->
+
         <label class="file-label">
       <input class="file-input" type="file" name="resume" @change="onFileChangefoodupdate($event.target.files[0])">
       <span class="file-cta">
@@ -251,7 +470,7 @@
         <hr>
       </div>
       <div v-else>
-        </div>
+        </div> -->
         </div>
                                     </div>
                           </div>
@@ -341,6 +560,136 @@
       </span>
             </div>
     </div>
+    <!--show modal-->
+                  <div id="modal-ter" class="modal is-active" v-show="showModal2" @close="showModal2 = false">
+      <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">เพิ่มเมนูอาหาร : {{selectShop}}</p>
+              <button class="delete" aria-label="close" @click="Closemodal2()"></button>
+          </header>
+          <section class="modal-card-body">
+            <div class="content">
+              <!-- เนื้อหา -->
+              <!-- <form action> -->
+              <br>
+              <div>
+               <div class="columns">
+                <div class="column is-2">
+                  ชื่อเมนูอาหาร :
+                </div>
+                <div class="column">
+                  <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
+                  </div>
+                  <!-- <div class="column is-2">
+                    ประเภทอาหาร :
+                  </div>
+                  <div class="column">
+                    <select name="status" v-model="foodtype">
+  <option value="ผัด" selected>ผัด</option>
+  <option value="ทอด">ทอด</option>
+  <option value="ต้ม">ต้ม</option>
+  <option value="แกง">แกง</option>
+  <option value="นึ่ง">นึ่ง</option>
+  <option value="ย่าง">ย่าง</option>
+</select>
+                  </div> -->
+                </div>
+                <div class="columns">
+                <div class="column is-2">
+                  ราคาต่อจาน :
+                </div>
+                <div class="column">
+                  <input type="number" v-model="foodprice" min="5" max="50" placeholder="ราคาต่อจาน">
+                  </div>
+                  <div class="column is-2">
+                    ราคาทุนจาน :
+                  </div>
+                  <div class="column">
+                    <input type="number" v-model="Cost" min="5" max="50" placeholder="ราคาทุนจาน">
+                  </div>
+                </div>
+                <div class="columns">
+                <div class="column is-2">
+                  อัพโหลดรูป :
+                </div>
+                <div class="column">
+                  <label class="file-label">
+      <input class="file-input" type="file" name="banner" @change="onFileChangefood($event.target.files[0])">
+      <span class="file-cta">
+        <span class="file-icon">
+          <i class="fas fa-upload"></i>
+        </span>
+        <span class="file-label">
+          อัพโหลดรูป
+        </span>
+      </span>
+    </label>
+                  </div>
+                  <div class="column is-2">
+                    ไฟล์ที่อัพโหลด :
+                  </div>
+                  <div class="column">
+                    <span class="file-name" v-if="dataImg3">
+        {{dataImg3.name}}
+      </span>
+                  </div>
+                </div>
+                <div class="columns" v-for="ameter in meters" :key="ameter.id">
+                <div class="column is-2">
+                  ชื่อวัตถุดิบ :
+                </div>
+                <div class="column">
+                  <select name="main meter" v-model="ameter.name" aria-readonly="">
+          <option
+              :key="key"
+              v-for="(dep, key) in datastock"
+              :value="dep.stockname"
+              >{{dep.stockname}}</option>
+        </select>
+                  </div>
+                  <div class="column is-2">
+                    จำนวน :
+                  </div>
+                  <div class="column">
+                    <input class="input is-success" type="number" placeholder="จำนวน" v-model="ameter.qty">
+        <button @click="removemeter()"><i class="fas fa-times"></i></button>
+                  </div>
+                </div>
+                <div class="columns">
+                <div class="column is-2">
+                  เพิ่มวัตถุดิบ :
+                </div>
+                <div class="column">
+                  <select name="main meter" v-model="meter.name">
+          <option
+              :key="key"
+              v-for="(dep, key) in datastock"
+              :value="dep"
+              >{{dep.stockname}}</option>
+        </select>
+                  </div>
+                  <div class="column is-2">
+                    จำนวน :
+                  </div>
+                  <div class="column">
+                    <input class="input" type="number" placeholder="จำนวน" v-model="meter.qty" value="1">
+                    <button class="button is-primary" @click="addMeter()">Add</button>
+                  </div>
+                </div>
+              </div>
+              <!-- </form> -->
+              <!-- เนื้อหา -->
+            </div>
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button is-success" @click="insertmenu(foodname, foodprice, foodtype, foodpic,meters, Cost)">เพิ่มเมนู</button>
+            <!-- <button class="button is-success">บันทึกข้อมูล</button> -->
+            <button class="button" @click="Closemodal2()">ยกเลิก</button>
+          </footer>
+        </div>
+    </div>
+                  <!--show modal-->
            <div class="box">
               <h4 id="let2" class="title is-3">ความเห็นจากลูกค้า</h4>
                                     <div class="row" :key="key" v-for="(review, key) in review">
@@ -441,7 +790,10 @@ export default {
       meters: [],
       datastock: [],
       checkstock: [],
-      tmp1: ''
+      tmp1: '',
+      showModal: false,
+      showModal2: false,
+      showModal3: false
     }
   },
   created () {
@@ -643,6 +995,7 @@ export default {
       this.updateMenutype = menutype
       this.updateMenupic = menupic
       this.meters = meters
+      this.showModal3 = true
     },
     async UpdateMenu (key, updateMenufood, updateMenuprice, updateMenutype, updateMenupic) {
       await this.truestock()
@@ -677,6 +1030,7 @@ export default {
       this.updatePhone = phone
       this.updateStatus = status
       this.updateBanner = banner
+      this.showModal = true
     },
     async updateprofile (name, phone, status, banner) {
       if (this.dataImg2 !== '') {
@@ -700,6 +1054,7 @@ export default {
       this.updateStatus = ''
       this.updateBanner = ''
       this.dataImg2 = ''
+      this.showModal = false
     },
     DelReview (key) {
       foodcenterRef.child('review').child(this.selectShop).child(key).remove()
@@ -870,6 +1225,19 @@ export default {
         var tmp = this.datastock.find(p => p.stockname === this.meters[i].name)
         this.meters[i].keystock = tmp.key
       }
+    },
+    Closemodal () {
+      this.showModal = false
+    },
+    Closemodal2 () {
+      this.showModal2 = false
+    },
+    Closemodal3 () {
+      this.showModal3 = false
+    },
+    setinsertmenu () {
+      this.showModal2 = true
+      this.meters = []
     }
   },
   computed: {

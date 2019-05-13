@@ -1,24 +1,36 @@
 <template>
   <div class='hello'>
     <center>
-    <br><br><br>
-    <img src = "/static/logo1.png" width="300">
-    <div class="columns">
-      <div class="column">
-        <input type="text" v-model="Search" class="inputSearch" placeholder="ค้นหาร้านอาหาร" @input="filterShop(Search)">
+    <!-- <img src = "/static/logo1.png" width="300"> -->
+    <div id="slideshow">
+      <div v-for="(shop) in shops" :key="shop.key">
+        <img v-url={filename:shop.banner}>
       </div>
+      <!-- <div>
+        <img src = "https://foodrevolution.org/wp-content/uploads/2018/04/blog-featured-diabetes-20180406-1330.jpg">
+      </div> -->
+      <!-- <div id="sampletext">
+        Foodcenter
+      </div> -->
     </div>
-    <div v-if="permission !== '1' & permission !== null" class="formAddRes">
-      <h3>เพิ่มร้านอาหาร</h3>
-      <div class="columns">
+    <div class="formAddRes">
+      <div class="columns searchCol">
         <div class="column">
-          <input class="input is-large" type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
+          <input type="text" v-model="Search" class="inputSearch" placeholder="ค้นหาร้านอาหาร" @input="filterShop(Search)">
         </div>
-        <div class="column">
-          <input class="input is-large" type="number" v-model="tel" placeholder="เบอร์">
-        </div>
-        <div class="column is-3">
-          <button class="button button1" @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
+      </div>
+      <div v-if="permission !== '1' & permission !== null" >
+        <h3>เพิ่มร้านอาหาร</h3>
+        <div class="columns">
+          <div class="column">
+            <input class="input is-large" type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
+          </div>
+          <div class="column">
+            <input class="input is-large" type="number" v-model="tel" placeholder="เบอร์">
+          </div>
+          <div class="column is-3">
+            <button class="button button1" @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
+          </div>
         </div>
       </div>
     </div>
@@ -216,6 +228,19 @@
 <script>
 import { mapGetters } from 'vuex'
 import * as firebase from 'firebase'
+import JQuery from 'jquery'
+let $ = JQuery
+$('#slideshow > div:gt(0)').hide()
+
+setInterval(function () {
+  $('#slideshow > div:first')
+    .fadeOut(1000)
+    .next()
+    .fadeIn(2000)
+    .end()
+    .appendTo('#slideshow')
+}, 10000)
+
 var database = firebase.database()
 var foodcenterRef = database.ref('/foodcenter')
 export default {
@@ -450,13 +475,16 @@ input[type=text], select {
     box-sizing: border-box;
 }
 .inputSearch {
-  width: 30%!important;
+  /* width: 50%!important; */
+  padding-bottom: 0px;
 }
 .formAddRes {
   background:#ffffff;
   width: 80%;
   padding: 20px;
   border-radius: 10px;
+  position: relative;
+  margin-top: 30vh;
 }
 .report {
   text-align: center;
@@ -482,4 +510,36 @@ input[type=text], select {
   .input.is-large, .textarea.is-large {
   font-size: 1.0rem;
   }
+  #sampletext {
+  position: absolute;
+  font : italic bold 60px arial;
+  color : #ffffff;
+  margin-top : 200px;
+}
+#slideshow > div {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  height: 75vh;
+  overflow: hidden;
+}
+#slideshow img {
+  width: 100vw;
+  height: auto;
+}
+.inputSearch {
+  margin-top: 400px;
+  position: relative;
+}
+.searchCol {
+  margin-bottom: 0px;
+}
+@media only screen and (max-width: 600px) {
+  body {
+    /* background-color: lightblue; */
+  }
+}
+
 </style>

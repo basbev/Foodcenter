@@ -1,5 +1,30 @@
 <template>
 <nav class="navbar is-black">
+  <!--  -->
+  <div v-click-outside="onOutSide">
+  <nav class="navbar is-black">
+  <div class="toggle-wrap" @click="onSidebar()">
+    <span class="toggle-bar"></span>
+  </div>
+</nav>
+<aside>
+  <div class="toggle-wrap" @click="onOutSide()">
+    <span class="toggle-bar"></span>
+  </div>
+  <ul class="" style="touch-action: pan-y;" id="">
+          <li class="menu-active"><a href="#intro">รายการ</a></li>
+          <li><a class="navbar-item" href="#/foodcenter">
+              <span class="icon"><i class="fas fa-home"></i></span>
+              <span>ร้านอาหารทั้งหมด</span></a></li>
+          <li><a class="navbar-item" href="#/shopmeter">
+              <span class="icon"><i class="fas fa-home"></i></span>
+              <span>ร้านค้าวัตถุดิบทั้งหมด</span></a></li><li><a class="navbar-item" href="#/stockmeter">
+              <span class="icon"><i class="fas fa-home"></i></span>
+              <span>สต็อตร้านวัตถุดิบ</span></a></li>
+        </ul>
+</aside>
+</div>
+  <!--  -->
   <div class="navbar-brand">
     <div class="navbar-burger burger" data-target="navbarExampleTransparentExample">
       <span aria-hidden="true"></span>
@@ -120,9 +145,12 @@
 </nav>
 </template>
 <script>
+import JQuery from 'jquery'
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
 import 'firebase/auth'
+import ClickOutside from 'vue-click-outside'
+let $ = JQuery
 var config = {
   apiKey: 'AIzaSyDIfmWOTTfPFqBIN7h3J3-yt-Ey2hpYnOk',
   authDomain: 'foodcenter-23d67.firebaseapp.com',
@@ -134,9 +162,15 @@ var config = {
 firebase.initializeApp(config)
 export default {
   name: 'navbar',
+  head: {
+    script: [
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js' }
+    ]
+  },
   data () {
     return {
-      currentUser: false
+      currentUser: false,
+      isActive: false
     }
   },
   created () {
@@ -162,6 +196,24 @@ export default {
       this.clearlogin()
       this.$router.push('/')
     },
+    toggleNav: function () {
+      this.isActive = !this.isActive
+    },
+    onToggle: function () {
+      $(this).toggleClass('active')
+      $('aside').animate({width: 'toggle'}, 200)
+    },
+    onSidebar: function () {
+      this.onToggle()
+      this.isActive = true
+    },
+    onOutSide: function () {
+      console.log(this.isActive)
+      if (this.isActive) {
+        this.isActive = false
+        this.onToggle()
+      }
+    },
     ...mapActions({
       load: 'load',
       clearlogin: 'clearlogin'
@@ -173,6 +225,9 @@ export default {
       isLoggedIn: 'isLoggedIn',
       user: 'user'
     })
+  },
+  directives: {
+    ClickOutside
   }
 }
 </script>
@@ -180,5 +235,115 @@ export default {
 <style scoped>
 .email {
   padding-right: 10px;
+}
+/* * {
+  margin: 0;
+  padding: 0;
+} */
+html,body {
+  background: #303030;
+  color: #303030;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  font: normal 1em "Arial";
+}
+nav {
+  /* padding: 5px; */
+  position: relative;
+  background: rgb(255, 255, 255);
+  z-index: 1;
+}
+nav::after {
+  content: "";
+  display: block;
+  clear: block;
+}
+hgroup {
+  float:left;
+  margin: 2px 2px 2px 10px;
+}
+aside {
+  position: fixed;
+  width: 300px;
+  height: 100%;
+  background: #0a0a0a;
+  left: 0;
+  top: 0;
+  display: none;
+  z-index: 1;
+  opacity: 0.99; /* โปร่งใส */
+  filter: Alpha(opacity=50); /* IE8 and earlier */
+}
+aside::before {
+  content: "";
+  display: block;
+  height: 10px;
+}
+aside a {
+  display: block;
+  padding: 12px 18px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  border-bottom: 1px solid #414141;
+}
+.toggle-wrap {
+  padding: 10px;
+  position: relative;
+  cursor: pointer;
+  float: left;
+  /*disable selection*/
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.toggle-bar,
+.toggle-bar::before,
+.toggle-bar::after,
+.toggle-wrap.active .toggle-bar,
+.toggle-wrap.active .toggle-bar::before,
+.toggle-wrap.active .toggle-bar::after {
+  -webkit-transition: all .2s ease-in-out;
+  -moz-transition: all .2s ease-in-out;
+  -o-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+.toggle-bar {
+  width: 38px;
+  margin: 10px 0;
+  position: relative;
+  border-top: 6px solid #111111;
+  display: block;
+}
+.toggle-bar::before,
+.toggle-bar::after {
+  content: "";
+  display: block;
+  background: #111111;
+  height: 6px;
+  width: 38px;
+  position: absolute;
+  top: -16px;
+  transform: rotate(0deg);
+  transform-origin: 13%;
+}
+.toggle-bar::after {
+  top: 4px;
+}
+.toggle-wrap.active .toggle-bar {
+  border-top: 6px solid transparent;
+}
+.toggle-wrap.active .toggle-bar::before {
+  transform: rotate(45deg);
+}
+.toggle-wrap.active .toggle-bar::after {
+  transform: rotate(-45deg);
+}
+.navbar {
+  min-height: fit-content;
 }
 </style>

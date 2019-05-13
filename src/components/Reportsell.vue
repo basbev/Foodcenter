@@ -2,18 +2,25 @@
 <div class="report">
   <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
   <br>
-  <h1>Report :: {{this.selectShop}}</h1><br>
-    <button class="button button2" @click="exportPdf">exportPDF</button>
-        <button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button>
-        <button class="button button4" @click="getDataFirebase(getvalue, month)">รายเดือน</button>
-        <button class="button button5" @click="getDataFirebase(getvalue, year)">รายปี</button>
-        <!-- Profit -->
-        <h1>กำไรขึ้นต้นได้</h1>
-        <button class="button button3" @click="getDataFirebaseprofit(getvalue, day)">รายวัน</button>
-        <button class="button button4" @click="getDataFirebaseprofit(getvalue, month)">รายเดือน</button>
-        <button class="button button5" @click="getDataFirebaseprofit(getvalue, year)">รายปี</button>
-        <!-- Profit -->
-    <div id="chart"></div>
+  <h1 class="title">Report : {{this.selectShop}}</h1>
+  <div class="columns">
+    <div class="column buttonGroup">
+      <h1>รายได้</h1>
+      <button class="button button2" @click="exportPdf">exportPDF</button>
+      <button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button>
+      <button class="button button4" @click="getDataFirebase(getvalue, month)">รายเดือน</button>
+      <button class="button button5" @click="getDataFirebase(getvalue, year)">รายปี</button>
+    </div>
+    <div class="column buttonGroup">
+      <!-- Profit -->
+      <h1>กำไร</h1>
+      <button class="button button3" @click="getDataFirebaseprofit(getvalue, day)">รายวัน</button>
+      <button class="button button4" @click="getDataFirebaseprofit(getvalue, month)">รายเดือน</button>
+      <button class="button button5" @click="getDataFirebaseprofit(getvalue, year)">รายปี</button>
+      <!-- Profit -->
+    </div>
+  </div>
+  <div id="chart"></div>
 </div>
 </template>
 <script>
@@ -40,7 +47,6 @@ export default {
       document.title = tempTitle
     },
     getDataFirebase (getvalue, scale) {
-      alert(`Pls Wait`)
       var ref = firebase.database().ref('foodcenter/report/' + this.selectShop + '/' + scale)
       ref.once('value', snap => {
         var data = []
@@ -57,7 +63,6 @@ export default {
       })
     },
     getDataFirebaseprofit (getvalue, scale) {
-      alert(`Pls Wait`)
       var ref = firebase.database().ref('foodcenter/reportprofit/' + this.selectShop + '/' + scale)
       ref.once('value', snap => {
         var data = []
@@ -172,6 +177,7 @@ export default {
     }
   },
   mounted () {
+    this.getDataFirebase(this.getvalue, this.day)
   },
   computed: {
     ...mapGetters({
@@ -181,9 +187,17 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 .report {
   text-align: center;
+}
+.buttonGroup {
+  background:#ffffff;
+  width: 80%;
+  padding: 20px;
+  border-radius: 10px;
+  margin: 20px;
+  position: relative;
 }
 .button6:hover {background-color: #FFB6C1;
 }

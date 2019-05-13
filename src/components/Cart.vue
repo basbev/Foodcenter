@@ -347,7 +347,6 @@ export default {
 }
 .bucket {
   position: fixed;
-  top: 65%;
   right: 72%;
   cursor: pointer;
 }
