@@ -110,7 +110,7 @@
                     <td>{{stock.stockname}}</td>
                     <td>{{stock.stockamount}}</td>
                     <td class="is-icon">
-                      <button class="btn" @click="setEditstock(stock.key, stock.stockname, stock.stockamount)"><i class="fas fa-edit"></i></button>
+                      <button class="btn" @click="setEditstock(stock.key, stock.stockname, stock.stockamount, stock.safety)"><i class="fas fa-edit"></i></button>
                     </td>
                     <td class="is-icon">
                       <button class="btn" @click="Delstock(stock.key)"><i class="fa fa-trash"></i></button>
@@ -173,14 +173,27 @@
                     >
                   </div>
                 </div>
+                <div class="columns">
+                <div class="column is-2">
+                  safety :
+                </div>
+                <div class="column">
+                  <input
+                    class="form-control mb-2"
+                    type="text"
+                    v-model="safety"
+                    placeholder="safety"
+                  >
+                  </div>
+                </div>
               </div>
               </form>
               <!-- เนื้อหา -->
             </div>
           </section>
           <footer class="modal-card-foot">
-            <button v-if="!statusEdit" class="button is-success" @click="Insertstock(stockname, stockamount)">เพิ่มข้อมูล</button>
-            <button v-if="statusEdit" class="button is-success" @click="Editstock(updatekey, stockname, stockamount)">บันทึกข้อมูล</button>
+            <button v-if="!statusEdit" class="button is-success" @click="Insertstock(stockname, stockamount, safety)">เพิ่มข้อมูล</button>
+            <button v-if="statusEdit" class="button is-success" @click="Editstock(updatekey, stockname, stockamount, safety)">บันทึกข้อมูล</button>
             <button class="button" @click="Closemodal()">ยกเลิก</button>
           </footer>
         </div>
@@ -216,7 +229,8 @@ export default {
       select: '',
       pageSize: 5,
       currentPage: 0,
-      slot: []
+      slot: [],
+      safety: ''
     }
   },
   mounted () {
@@ -265,10 +279,11 @@ export default {
     setInsertstock () {
       this.showModal = true
     },
-    Insertstock (stockname, stockamount) {
+    Insertstock (stockname, stockamount, safety) {
       let data = {
         stockname: stockname,
-        stockamount: parseInt(stockamount, 10)
+        stockamount: parseInt(stockamount, 10),
+        safety: parseInt(safety, 10)
       }
       if (stockname === '' || stockamount === '') {
         this.$swal({
@@ -282,25 +297,29 @@ export default {
         this.stockname = ''
         this.stockamount = ''
         this.showModal = false
+        this.safety = ''
       }
     },
-    setEditstock (key, stockname, stockamount) {
+    setEditstock (key, stockname, stockamount, safety) {
       this.showModal = true
       this.statusEdit = true
       this.stockname = stockname
       this.stockamount = stockamount
       this.updatekey = key
+      this.safety = safety
     },
-    Editstock (key, stockname, stockamount) {
+    Editstock (key, stockname, stockamount, safety) {
       firebase.database().ref().child('foodcenter/stock/' + this.selectShop).child(key).update({
         stockname: stockname,
-        stockamount: parseInt(stockamount, 10)
+        stockamount: parseInt(stockamount, 10),
+        safety: parseInt(safety, 10)
       })
       this.showModal = false
       this.statusEdit = false
       this.stockname = ''
       this.stockamount = ''
       this.updatekey = ''
+      this.safety = ''
     },
     Closemodal () {
       this.showModal = false

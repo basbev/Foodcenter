@@ -60,7 +60,8 @@ export default {
         name: name,
         q: '',
         status: '',
-        tel: tel
+        tel: tel,
+        Rating: 0
       }
       await ShopRef.child('detail').push(data)
       let key

@@ -1,8 +1,9 @@
 <template>
   <div class="hero-body">
     <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
-    <div class="container has-text-centered">
-      <div class="column is-4 is-offset-4">
+    <div class="container">
+      <div class="columns is-mobile is-centered">
+      <div class="column is-10-mobile is-6-tablet is-4-desktop has-text-centered">
         <h3 class="title has-text-grey">Login</h3>
         <p class="subtitle has-text-grey">Please login to FoodCenter.</p>
         <div class="box">
@@ -11,11 +12,11 @@
           </figure>
           <form>
             <div class="field">
-              <div class="control has-icons-left has-icons-right">
+              <div class="control has-icons-left">
                 <input class="input is-large" type="text" placeholder="Username" autofocus="" id="user" v-model="username">
               <span class="icon is-small is-left">
-      <i class="fas fa-user"></i>
-    </span>
+                <i class="fas fa-user"></i>
+              </span>
               </div>
             </div>
 
@@ -34,22 +35,22 @@
               </label>
             </div> -->
             <div class="buttons is-centered">
-              <span class="button is-success" v-on:click="loginWeb">Login</span>
-                <a class="bd-tw-button button" v-on:click="loginFacebook">
+              <span class="button is-warning is-fullwidth" v-on:click="loginWeb">Login</span>
+              <a class="button is-dark is-fullwidth" href="#/Register">
+                <span>Sign Up</span>
+              </a>
+              <hr>
+              <a class="bd-tw-button button is-link is-fullwidth" v-on:click="loginFacebook">
                 <span class="icon">
                   <i class="fab fa-facebook"></i>
                 </span>
-                <span>
-                  facebook
-                </span>
+                &nbsp;facebook
               </a>
-              <a class="button is-primary" href="#/Register">
-              <span>Sign Up</span>
-            </a>
             </div>
           </form>
         </div>
       </div>
+    </div>
     </div>
     <!-- <div class="column is-one-third" :key="key" v-for="(user, key) in users">
     <h1>Username :{{user.username}}</h1>

@@ -50,6 +50,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
+import axios from 'axios'
 var database = firebase.database()
 var foodcenterRef = database.ref('/foodcenter')
 var moment = require('moment-timezone')
@@ -66,7 +67,10 @@ export default {
       reports: {},
       recordshop: {},
       viewstock: {},
-      profit: {}
+      profit: {},
+      email: '',
+      detail: '',
+      once: ''
     }
   },
   computed: {
@@ -289,6 +293,7 @@ export default {
     },
     async Cutstock (products) {
       let stock = null
+      let safetys = []
       for (var i = 0; i < products.length; i++) {
         for (var y = 0; y < products[i].meters.length; y++) {
           const checkstock = foodcenterRef.child('stock').child(this.SelectShops).child(products[i].meters[y].keystock)
@@ -297,9 +302,43 @@ export default {
             console.log(stock)
           })
           stock.stockamount = stock.stockamount - products[i].meters[y].qty * products[i].quantity
+          if (stock.stockamount <= stock.safety) { safetys.push(stock) }
           console.log(stock.stockamount)
           await foodcenterRef.child('stock').child(this.SelectShops).child(products[i].meters[y].keystock).child('stockamount').set(stock.stockamount)
         }
+      }
+      this.safetystock(safetys)
+    },
+    async safetystock (safetys) {
+      await this.before()
+      await this.sortcode(safetys)
+      await axios.get('http://localhost:3001', {
+        params: {
+          id: `<p>ระบบ Safetystock เเจ้งเตือนปริมาณถึงที่กำหนด มีรายละเอียดดังนี้</p>
+                  <ul>  
+                  ` + this.detail + `
+                  </ul> 
+                  <p>Safetystock : ` + this.SelectShops + `<p>`,
+          name: this.SelectShops,
+          email: this.email
+        }
+      })
+        .then(response => {
+          // JSON responses are automatically parsed.
+          this.posts = response.data
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    before () {
+      database.ref('/user').orderByChild('hasShop').equalTo(this.SelectShops).once('child_added', snap => {
+        this.email = snap.val().email
+      })
+    },
+    sortcode (safetys) {
+      for (var i = 0; i < safetys.length; i++) {
+        this.detail = this.detail + '<li >ชื่อวัตถุดิบ: ' + safetys[i].stockname + '  เหลือ: ' + safetys[i].stockamount + ' กก./ช้อนโต๊ะ' + '<br></li>'
       }
     },
     ...mapActions({
@@ -332,6 +371,10 @@ export default {
     dbRefObject4.on('value', snap => {
       this.profit = snap.val()
       console.log(this.profit)
+    })
+    const dbRefObject5 = database.ref('/user')
+    dbRefObject5.on('value', snap => {
+      this.once = snap.val()
     })
     // ดึงข้อมูลมาซึ้งกัน
   }

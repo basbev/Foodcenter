@@ -30,11 +30,13 @@ input[type=number], select {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    font-family: 'Prompt', sans-serif;
 }
 input[type=text], select {
     font-size: 17px;
     width: 100%;
     padding: 1% 1%;
+    /* padding-right: 2.25em; */
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
@@ -43,19 +45,12 @@ input[type=text], select {
     font-family: 'Prompt', sans-serif;
 }
 .button {
-    background-color: rgb(37, 108, 175);
-    border: none;
-    color: white;
-    text-align: center;
-    /*text-decoration: none;*/
-    /*font-size: 14px;*/
-    -webkit-transition-duration: 0.4s; /* Safari */
+    -webkit-transition-duration: 0.4s;
     transition-duration: 0.4s;
-   /* cursor: pointer;*/
-   font-family: 'Prompt', sans-serif;
+    cursor: pointer;
 }
 .button:hover {
-    color: white;
+    /* color: white; */
 }
 .button1 {
     margin-top: 7px;
@@ -78,18 +73,27 @@ input[type=text], select {
 }
 .button2:hover {
     background-color: white;
-    color: black;
+    color: #363636;
 }
 .button3 {
-    margin-top: 7px;
-    color: white;
-    border: 2px solid #f44336;
-    background-color: #f44336;
+    border: 1px solid #a5a5a5;
+    background-color: transparent;
+    color: #a5a5a5;
 }
-.button3:hover {
-    background-color: white;
-    color: black;
-
+.button3:hover, .button3:focus {
+    border: none;
+    background-color: #f44336;
+    color: white;
+}
+.button3-white {
+    border: 2px solid white;
+    background-color: transparent;
+    color: white;
+}
+.button3-white:hover, .button3-white:focus {
+    border: none;
+    background-color: #f44336;
+    color: white;
 }
 .button4 {
     font-size: 15px;
@@ -100,18 +104,18 @@ input[type=text], select {
 }
 .button4:hover {
     background-color: white;
-    color: black;
+    color: #363636;
 }
 .button5 {
     font-size: 15px;
     margin-top: 7px;
     background-color: #7FFF00;
-    color: black;
+    color: #363636;
     border: 2px solid #7FFF00;
 }
 .button5:hover {
     background-color: white;
-    color: black;
+    color: #363636;
 }
 .button6 {
     margin-top: 7px;
@@ -120,7 +124,7 @@ input[type=text], select {
     color: white;
 }
 .button6:hover {
-    color: black;
+    color: #363636;
     background-color: white;
 
 }
@@ -133,7 +137,7 @@ input[type=text], select {
 .button7:hover {
     border: 2px solid #4CAF50;
     background-color: white;
-    color: black;
+    color: #363636;
 }
 .button8 {
     color: white;
@@ -144,15 +148,18 @@ input[type=text], select {
 .button8:hover {
     border: 2px solid #f44336;
     background-color: white;
-    color: black
+    color: #363636
 }
 .button9 {
     font-size: 20px;
     margin-right: 20px;
-    color: white;
-
+    background-color: #ffdd57;
+    border: 2px solid #ffdd57;
+    color: #363636;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
-.button9:hover {background-color: #B8860B;
+.button9:hover {
+    background-color: #B8860B;
 }
 .button10 {
     margin-top: 7px;
@@ -161,7 +168,7 @@ input[type=text], select {
     font-size: 18px;
     margin-top: 8px;
     background-color: white;
-    color: black;
+    color: #363636;
     border: 2px solid #4CAF50;
 }
 .button11:hover {
@@ -172,11 +179,34 @@ input[type=text], select {
     font-size: 18px;
     margin-top: 8px;
     background-color: white;
-    color: black;
+    color: #363636;
     border: 2px solid #008CBA;
 }
 .button12:hover {
     background-color: #0d92be;
     color: white;
+}
+.button13 {
+    border: 1px solid #a5a5a5;
+    background-color: transparent;
+    color: #a5a5a5;
+}
+.button13:hover, .button3:focus {
+    border: none;
+    background-color: #ffdd57;
+    color: white;
+}
+.button13-white {
+    border: 2px solid white;
+    background-color: transparent;
+    color: white;
+}
+.button13-white:hover, .button3-white:focus {
+    border: none;
+    background-color: #ffdd57;
+    color: white;
+}
+hr {
+    width: 100%;
 }
 </style>

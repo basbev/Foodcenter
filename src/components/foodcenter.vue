@@ -62,7 +62,6 @@
         </div>
       </section>
     </center>
-    <hr>
   <section class="section" v-if="!showData.length > 0">
      <div class="allshop">
     <label>ร้านอาหารทั้งหมด {{this.numberOfShop}} ร้าน</label>
@@ -78,7 +77,7 @@
                 </figure>
                 <div class="media-content">
                   <div class="content">
-                    <h1 class="title is-size-4">ร้าน {{detail.name}}<img src="https://www.img.in.th/images/8c44fe4d804dca493a0e04341aa9e06f.png" width="30" height="30">&nbsp;{{((shoppoints[detail.name].count) === 0)?'0.00':(shoppoints[detail.name].scorce/shoppoints[detail.name].count).toFixed(2)}}</h1>
+                    <h1 class="title is-size-4">ร้าน {{detail.name}}<img src="https://www.img.in.th/images/8c44fe4d804dca493a0e04341aa9e06f.png" width="30" height="30">&nbsp;{{((detail.Rating) === 0)?'0.00':detail.Rating}}</h1>
                     <!-- <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
@@ -271,7 +270,8 @@ export default {
         tel: tel,
         name: name,
         q: 0,
-        status: 'https://www.img.live/images/2018/11/20/d57b23a07352f87d.png'
+        status: 'https://www.img.live/images/2018/11/20/d57b23a07352f87d.png',
+        Rating: 0
       }
       let data2 = {
         count: 0,
@@ -392,6 +392,9 @@ export default {
       if (Text) {
         this.$swal('Entered Text: ' + Text)
       }
+    },
+    sortHighest () {
+      this.shops.sort((a, b) => a.Rating < b.Rating ? 1 : -1)
     }
     // async setUpdatefood (tel, name, key) {
     //   // document.getElementById('swal-input1').value = name
@@ -446,8 +449,9 @@ export default {
         this.numberOfShop = snap.numChildren()
       })
       this.shops = data
-      console.log(this.shops)
-      JSON.stringify(this.shops)
+      this.sortHighest()
+      // console.log(this.shops)
+      // JSON.stringify(this.shops)
       // console.log(JSON.stringify(this.shops))
     })
   },
@@ -461,7 +465,7 @@ export default {
 </script>
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
-<style>
+<style scoped>
 .imageTel {
   width: 15px;
   height: 15px;
@@ -494,9 +498,12 @@ input[type=text], select {
   font-size: 18px;
 }
 .number {
+  margin-top: -10px;
   font-size: 30px;
   background-color: #ffdd57;
   border-radius: 50%;
+  width: 60px;
+  height: 60px;
 }
 .swal2-popup #swal2-content {
     text-align: left;

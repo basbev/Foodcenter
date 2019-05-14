@@ -6,7 +6,9 @@ import router from './router'
 import firebase from 'firebase'
 import { store } from './store/store'
 import VueSweetalert2 from 'vue-sweetalert2'
-
+import VueCarousel from '@chenfengyuan/vue-carousel'
+import StarRating from 'vue-star-rating'
+Vue.use(VueCarousel)
 Vue.use(VueSweetalert2)
 let storageRef = firebase.storage().ref()
 Vue.directive('url', {
@@ -16,6 +18,8 @@ Vue.directive('url', {
   }
 })
 Vue.config.productionTip = false
+Vue.component('star-rating', StarRating)
+Vue.component('vue-carousel', VueCarousel)
 
 /* eslint-disable no-new */
 new Vue({

@@ -113,7 +113,7 @@
       <div class="navbar-item">
         <div class="field is-grouped">
           <p class="control" v-if="isLoggedIn">
-            <a class="bd-tw-button button" href="#/Profile">
+            <a class="bd-tw-button button is-link" href="#/Profile">
               <span class="text">
                 {{this.user}}
               </span>
