@@ -40,7 +40,7 @@
           <footer class="card-footer">
             <button
               v-if="order.status === 'กำลังรอ' & permission == '2'"
-              @click="updatemenunow(order.customer, order.order, order.key)"
+              @click="updatemenunow(order.customer, order.order, order.key, key)"
               class="button button7 card-footer-item"
             >กำลังทำ</button>
             <button
@@ -106,7 +106,8 @@ export default {
       groupmenu: [],
       getmenuall: [],
       grouporder: [],
-      keygrouporder: []
+      keygrouporder: [],
+      findindex: ''
     }
   },
   methods: {
@@ -129,6 +130,8 @@ export default {
       console.log(key)
     },
     updatemenunow (name, order, key) {
+      // console.log(key)
+      // if (this.findindex === key) {
       foodcenterRef
         .child('detail')
         .child(this.selectShop)
@@ -142,6 +145,7 @@ export default {
         .update({
           status: 'กำลังทำ'
         })
+      // } else { alert('ไม่สามารถทำข้ามคิวได้') }
     },
     complete (key, q) {
       foodcenterRef
@@ -219,6 +223,15 @@ export default {
       this.keygrouporder = []
       this.groupmenu = []
       this.grouporder = []
+    },
+    findstatus () {
+      let found = false
+      for (var i = 0; i < this.orders.length; i++) {
+        if (this.orders[i].status === 'กำลังรอ' && found === false) {
+          this.findindex = i
+          found = true
+        }
+      }
     }
   },
   mounted () {
@@ -232,6 +245,7 @@ export default {
       })
       this.orders = data
       console.log(this.orders)
+      this.findstatus()
     })
     const dbRefObject1 = foodcenterRef.child('detail').child(this.selectShop)
     dbRefObject1.on('value', snap => {
