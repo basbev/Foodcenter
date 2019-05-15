@@ -171,13 +171,16 @@
                   </div>
                   <div class="foodLists" v-if="showData.length > 0">
                     <div class="columns is-multiline ">
-                      <div class="column is-6" v-for="(menu) in showData" :key="menu.Key">
+                      <div class="column is-6 is-4-tablet is-3-desktop" v-for="(menu) in showData" :key="menu.Key">
                         <div class="foodList">
                           <div class="detail">
                             <h3 class="title is-3">{{menu.foodname}}</h3>
                             <h6 class="">ราคา&nbsp;{{menu.foodprice}}&nbsp;บาท</h6>
                           </div>
-                          <span class="icon is-small cartButton" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost)">
+                          <span class="icon is-small cartButton" v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost)">
+                            <i class="fas fa-cart-plus"></i>
+                          </span>
+                          <span class="icon is-small cartButton disable" v-if="checkstock[key] === 1">
                             <i class="fas fa-cart-plus"></i>
                           </span>
                           <img v-url={filename:menu.foodpic} width="100%" height="auto"/><br>
@@ -185,7 +188,7 @@
                       </div>
                     </div>
                   </div>
-                  <div v-else class="has-text-centered result">
+                  <div v-else-if="Search !==''" class="has-text-centered result">
                     <h5 class="title is-5">
                       ไม่พบ "{{Search}}"
                     </h5>
@@ -255,9 +258,9 @@
                   <h4 id="let1" class="title is-3">เมนูประจำร้าน</h4>
                   <button class="button button11" @click="setinsertmenu()">เพิ่มเมนู</button>
                 </article>
-                  <div class="container">
+                  <div class="">
                     <div class="columns is-multiline">
-                      <div class="column is-6" :key="key" v-for="(menu, key) in menus">
+                      <div class="column is-6 is-4-tablet is-3-desktop" :key="key" v-for="(menu, key) in menus">
                         <div class="foodList">
                           <div class="detail">
                             <h3 class="title is-3">{{menu.foodname}}</h3>
@@ -267,7 +270,7 @@
                           <span class="icon is-small cartButton" v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost)">
                             <i class="fas fa-cart-plus"></i>
                           </span>
-                          <span class="icon is-small cartButtonDisable" v-if="checkstock[key] === 1">
+                          <span class="icon is-small cartButton disable" v-if="checkstock[key] === 1">
                             <i class="fas fa-cart-plus"></i>
                           </span>
                           <img v-url={filename:menu.foodpic} width="100%" height="auto"/>
@@ -746,7 +749,7 @@
               <input type="text" v-model="view" placeholder="รีวิว" size="30" class="input is-large">
               <button class="button button12" @click="insertreview(view)">เพิ่มรีวิว</button><br>
               คะแนนความพอใจ&nbsp;
-              <star-rating :star-size="50" :show-rating="true" v-model="scorce"></star-rating>
+              <star-rating :star-size="40" :show-rating="true" v-model="scorce"></star-rating><br>
               <button class="button is-warning" @click="insertreviewpoint(scorce)">เพิ่มคะแนนร้านค้า</button>
             </div>
           </div>
@@ -756,6 +759,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 import { mapGetters } from 'vuex'
 import * as firebase from 'firebase'
 var database = firebase.database()
@@ -776,7 +780,7 @@ export default {
       menushow: '',
       review: '',
       menus: {},
-      scorce: '',
+      scorce: 0,
       view: '',
       updateKey: '',
       updatefoodname: '',
@@ -819,7 +823,8 @@ export default {
       showModal: false,
       showModal2: false,
       showModal3: false,
-      updatecost: ''
+      updatecost: '',
+      users: {}
     }
   },
   created () {
@@ -855,7 +860,7 @@ export default {
         foodpic: this.dataImg3.name,
         Cost: parseInt(Cost, 10)
       }
-      if (foodname === '' || foodprice === '' || this.dataImg3 === '' || foodtype === '' || meters === '' || Cost === '') {
+      if (foodname === '' || foodprice === '' || this.dataImg3 === '' || foodtype === '' || meters.length === 0 || Cost === '') {
         this.$swal({
           type: 'error',
           title: 'Oops...',
@@ -906,13 +911,13 @@ export default {
         this.dataImg = ''
       }
     },
-    insertreview (view, scorce) {
+    insertreview (view) {
       let data = {
         view: view,
-        scorce: scorce,
+        // scorce: scorce,
         namere: this.user
       }
-      if (view === '' || scorce === '') {
+      if (view === '') {
         this.$swal({
           type: 'error',
           title: 'Oops...',
@@ -955,7 +960,7 @@ export default {
           foodcenterRef.child('detail').child(this.selectShop).child('Rating').set(scorce)
           foodcenterRef.child('shoppoint').child(this.selectShop).set(data)
         }
-        this.scorce = ''
+        this.scorce = 0
         alert('ให้คะแนนร้านค้าเรียบร้อยแล้ว')
       }
     },
@@ -972,6 +977,7 @@ export default {
         })
       } else {
         foodcenterRef.child('promo').child(this.selectShop).push(data)
+        this.notiemail(prodetail)
         this.prodetail = ''
       }
     },
@@ -1021,6 +1027,7 @@ export default {
       this.prodetail = ''
     },
     SetUpdateMenu (key, menufood, menuprice, menutype, menupic, meters, Cost) {
+      // if (meters) { meters = [] }
       this.updateKey = key
       this.updateMenufood = menufood
       this.updateMenuprice = menuprice
@@ -1116,7 +1123,7 @@ export default {
       })
     },
     filterShop (Search) {
-      if (Search.length > 0) {
+      if (Search.length > 0 && this.menus) {
         this.showData = this.menus.filter(
           (shop) => {
             if (shop.foodname.toString().indexOf(Search) >= 0 ||
@@ -1239,7 +1246,7 @@ export default {
         }
       })
     },
-    async checkstocklist (data) {
+    async checkstocklist () {
       var stock = ''
       for (var x = 0; x < this.menus.length; x++) {
         var tmp = 0
@@ -1252,7 +1259,7 @@ export default {
         }
         this.checkstock.push(tmp)
       }
-      this.$store.dispatch('stocklist', data)
+      this.$store.dispatch('stocklist', this.datastock)
     },
     removemeter () {
       this.meters.splice(0, 1)
@@ -1278,6 +1285,30 @@ export default {
     },
     sortHighest () {
       this.records.sort((a, b) => a.amount < b.amount ? 1 : -1)
+    },
+    async notiemail (promo) {
+      for (var i = 0; i < this.users.length; i++) {
+        if (this.users[i].email !== '') {
+          await axios.get('https://foodmail.herokuapp.com/', {
+            params: {
+              id: `<p>ระบบ ร้านค้า เเจ้งเตือนโปรโมชั่นใหม่เข้ามา!! มีรายละเอียดดังนี้</p>
+                      <ul>  
+                      ` + promo + `
+                      </ul> 
+                      <p>Promotion By : ` + this.selectShop + `<p>`,
+              name: this.selectShop,
+              email: this.users[i].email
+            }
+          })
+            .then(response => {
+              // JSON responses are automatically parsed.
+              this.posts = response.data
+            })
+            .catch(e => {
+              console.log(e)
+            })
+        }
+      }
     }
   },
   computed: {
@@ -1324,6 +1355,7 @@ export default {
     const dbRefObjectpromo = foodcenterRef.child('promo').child(this.selectShop)
     const dbRefObjectvote = foodcenterRef.child('shoppoint').orderByChild('shop').equalTo(this.selectShop)
     const dbRefObjectstock = foodcenterRef.child('stock').child(this.selectShop)
+    const dbRefObjectusers = database.ref('/user')
     dbRefObject.on('value', snap => {
       var data = []
       snap.forEach(ss => {
@@ -1384,7 +1416,16 @@ export default {
         data.push(item)
       })
       this.datastock = data
-      this.checkstocklist(data)
+      this.checkstocklist()
+    })
+    dbRefObjectusers.on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.users = data
     })
   }
 }
@@ -1398,7 +1439,7 @@ export default {
   .bucket {
     position: fixed;
     bottom: 5vh;
-    right: 5vw;
+    right: 2vw;
     cursor: pointer;
     z-index: 1;
   }
@@ -1417,7 +1458,7 @@ export default {
   .foodList {
     border-radius: 10px;
     position: relative;
-    height: 270px;
+    height: 300px;
     overflow: hidden;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   }
@@ -1438,14 +1479,6 @@ export default {
   }
   div {
     /* font-family: 'Sriracha', cursive; */
-  }
-  .card {
-    background: #ffffff;
-    margin: 20px;
-    border-radius: 20px;
-    padding: 20px 10px;
-    border: none;
-    box-shadow: none;
   }
   .header {
     padding: 0px;
@@ -1508,8 +1541,8 @@ export default {
   .cartButton:hover {
     color: #dfc14b;
   }
-  .cartButtonDisable {
-    color: #818181;
+  .cartButton.disable {
+    color: #bdbdbd;
     cursor: default;
   }
   .columns {
@@ -1545,5 +1578,8 @@ export default {
   }
   .title {
     margin-bottom: 0px!important;
+  }
+  .vue-star-rating {
+    display: initial!important;
   }
 </style>

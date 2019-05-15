@@ -9,7 +9,7 @@ const state = {
   added: [],
   permission: null,
   hasShop: null,
-  stocklist: null,
+  stocklist: [],
   stocklimit: []
 }
 

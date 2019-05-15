@@ -6,7 +6,7 @@
         <div class='card'>
           <header class='card-header'>
             <p class="card-header-title">
-              คิวที่: {{order.order}}
+              คิวที่: {{order.order + 1}}
               <br>
               ผู้ใช้: {{order.customer}}
               <br>

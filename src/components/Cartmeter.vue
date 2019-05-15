@@ -1,8 +1,10 @@
 <template>
   <div class="cart">
     <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
-     &nbsp;<h1 class="title"> &nbsp;Order ของคุณ</h1>
-    <div class="box">
+    <div class="columns is-mobile is-centered">
+    <div class="column is-12-mobile is-three-fifths-tablet">
+    <div class="box card">
+      <h1 class="title"> &nbsp;Order ของคุณ</h1>
       <p v-show="!products.length">
         &nbsp;<i>คุณยังไม่ได้เลือกเมนู!</i>
         &nbsp;<router-link to="/meter">กลับไปหน้าเมนู</router-link>
@@ -44,6 +46,8 @@
     <router-link to="/meter"><button v-show="products.length" class='button button13'>กลับไปเลือกเมนู</button></router-link>
     <button v-show="products.length" class='button button14' @click="order(products, shops.q, CountQuantity, total, shops.SaveDate)">ยืนยันการสั่ง</button>
   </div>
+  </div>
+    </div>
   </div>
 </template>
 
@@ -244,7 +248,7 @@ export default {
     async sendmail (products) {
       await this.before()
       await this.sortcode(products)
-      await axios.get('http://localhost:3001', {
+      await axios.get('https://foodmail.herokuapp.com/', {
         params: {
           id: `<p>มีรายละเอียดดังนี้</p>
                   <ul>  

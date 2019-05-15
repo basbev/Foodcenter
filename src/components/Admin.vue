@@ -14,31 +14,47 @@
                   1 ลูกค้า &nbsp;&nbsp;2 ร้านค้า &nbsp;&nbsp;3 ผู้ดูเเลศูนย์อาหาร&nbsp;&nbsp;4. ผู้ดูเเลระบบ
                 </div>
               </article>
-              <div class="message-body">
-                                    <div class="container">
-                                      <div class="columns is-multiline">
- <div class="column is-5" :key="key" v-for="(user, key) in users">
-   <!-- <div v-if="updateKey === key">
-     <input type="text" v-model="updateusername" placeholder="Username" disabled>
-     <input type="password" v-model="updatepassword" placeholder="password">
-     <input type="text" v-model="updatefirstname" placeholder="firstname">
-     <input type="text" v-model="updatelastname" placeholder="lastname">
-     <input type="text" v-model="updatephone" placeholder="phone">
-     <input type="text" v-model="updateaddress" placeholder="address">
-     <input type="text" v-model="updatepermission" placeholder="permission">
-     <button class="button button4" @click="updateUser(key, updatepassword, updatefirstname, updatelastname, updatephone, updateaddress, updatepermission)">Save</button>
-   </div> -->
-   <div>
-        <h1>Username:&nbsp;{{user.username}} Password:&nbsp;{{user.password}} firstname:&nbsp;{{user.firstname}}
-          lastname:&nbsp;{{user.lastname}} phone:&nbsp;{{user.phonenumber}} address:&nbsp;{{user.address}}
-          permission:&nbsp;{{user.permission}}
-        </h1>
-        <button class="button button4" @click="setUpdateUser(key, user.firstname, user.lastname, user.password, user.permission, user.phonenumber, user.address, user.username)">Update</button>
-   </div>
-      </div>
-                          </div>
-                </div>
-                </div>
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
+                  <tr>
+                    <th>ชื่อผู้ใช้</th>
+                    <th>พาสเวริ์ด</th>
+                    <th>ชื่อ</th>
+                    <th>นามสกุล</th>
+                    <th>โทรศัทพ์</th>
+                    <th>ที่อยู่</th>
+                    <th>สิทธิ์เข้าถึง</th>
+                    <th>เเก้ไข</th>
+                    <th>ลบ</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th>ชื่อผู้ใช้</th>
+                    <th>พาสเวริ์ด</th>
+                    <th>ชื่อ</th>
+                    <th>นามสกุล</th>
+                    <th>โทรศัทพ์</th>
+                    <th>ที่อยู่</th>
+                    <th>สิทธิ์เข้าถึง</th>
+                    <th>เเก้ไข</th>
+                    <th>ลบ</th>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr :key="key" v-for="(user, key) in users">
+                    <td>{{user.username}}</td>
+                    <td>{{user.password}}</td>
+                    <td>{{user.firstname}}</td>
+                    <td>{{user.lastname}}</td>
+                    <td>{{user.phonenumber}}</td>
+                    <td>{{user.address}}</td>
+                    <td>{{user.permission}}</td>
+                    <td><button class="button button11" @click="setUpdateUser(key, user.firstname, user.lastname, user.password, user.permission, user.phonenumber, user.address, user.username)">Update</button></td>
+                    <td><button class="button button11" @click="befoceDeluser(key)">ลบ</button></td>
+                  </tr>
+                </tbody>
+              </table>
           </div>
           <div class="box">
               <h4 id="let" class="title is-3">ร้านอาหาร</h4>
@@ -77,8 +93,8 @@
                     <td>{{shop.tel}}</td>
                     <td>{{shop.q}}</td>
                     <td><img v-bind:src="shop.status" width="80" height="60"></td>
-                    <td>{{shop.q}}</td>
-                    <td>{{shop.q}}</td>
+                    <td><button class="button button11" @click="setUpdateshop(key, shop.name, shop.tel, shop.q, shop.status)">เเก้ไข</button></td>
+                    <td><button class="button button11" @click="befoceDelshop(key)">ลบ</button></td>
                   </tr>
                 </tbody>
               </table>
@@ -96,20 +112,23 @@
   <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                 <thead>
                   <tr>
-                    <th>Email</th>
-                    <th>Username</th>
+                    <th>อีเมล์</th>
+                    <th>ชื่อผู้ใช้</th>
+                    <th>ลบ</th>
                   </tr>
                 </thead>
                 <tfoot>
                   <tr>
-                    <th>Email</th>
-                    <th>Username</th>
+                    <th>อีเมล์</th>
+                    <th>ชื่อผู้ใช้</th>
+                    <th>ลบ</th>
                   </tr>
                 </tfoot>
                 <tbody>
                   <tr :key="key" v-for="(shop, key) in facebooks">
                     <td>{{shop.email}}</td>
                     <td>{{shop.username}}</td>
+                    <td><button class="button button11" @click="befoceDelface(key)">ลบ</button></td>
                   </tr>
                 </tbody>
               </table>
@@ -393,6 +412,78 @@ export default {
     },
     Closemodal2 () {
       this.showModal2 = false
+    },
+    Delshop (key) {
+      firebase.database().ref().child('foodcenter/detail/').child(key).remove()
+    },
+    befoceDelshop (key) {
+      this.$swal({
+        title: 'คุณกำลังลบร้านอาหาร?',
+        // text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยืนยัน!',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.value) {
+          this.Delshop(key)
+          this.$swal(
+            'ลบเเล้ว!',
+            'ร้านอาหารโดนลบเรียบร้อยเเล้ว.',
+            'success'
+          )
+        }
+      })
+    },
+    befoceDelface (key) {
+      this.$swal({
+        title: 'คุณกำลังลบร้านอาหาร?',
+        // text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยืนยัน!',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.value) {
+          this.Delface(key)
+          this.$swal(
+            'ลบเเล้ว!',
+            'ร้านอาหารโดนลบเรียบร้อยเเล้ว.',
+            'success'
+          )
+        }
+      })
+    },
+    Delface (key) {
+      firebase.database().ref().child('facebook/').child(key).remove()
+    },
+    befoceDeluser (key) {
+      this.$swal({
+        title: 'คุณกำลังลบร้านอาหาร?',
+        // text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยืนยัน!',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.value) {
+          this.Deluser(key)
+          this.$swal(
+            'ลบเเล้ว!',
+            'ร้านอาหารโดนลบเรียบร้อยเเล้ว.',
+            'success'
+          )
+        }
+      })
+    },
+    Deluser (key) {
+      firebase.database().ref().child('user').child(key).remove()
     }
   },
   mounted () {

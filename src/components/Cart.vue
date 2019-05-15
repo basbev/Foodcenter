@@ -1,49 +1,53 @@
 <template>
   <div class="cart">
     <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
-     &nbsp;<h1 class="title"> &nbsp;Order ของคุณ</h1>
-    <div class="box">
-      <p v-show="!products.length">
-        &nbsp;<i>คุณยังไม่ได้เลือกเมนู!</i>
-        &nbsp;<router-link to="/shop">กลับไปหน้าเมนู</router-link>
-      </p>
-       <table class="table is-striped" v-show="products.length">
-        <thead>&nbsp;
-          <tr>
-            <td>ชื่อเมนู</td>
-            <td>ราคา</td>
-            <td>จำนวน</td>
-            <td>ประเภท</td>
-            <td>เพิ่ม</td>
-            <td>ลบ</td>
-            <td>ยกเลิก</td>
-          </tr>
-        </thead>
-            <tbody>
-              <tr :key="key" v-for="(p, key) in products">
-                <td>{{ p.name }}</td>
-                <td>{{ p.price }} บ.</td>
-                <td>{{ p.quantity }} จาน</td>
-                <td><center>{{ p.type }}</center></td>
-                <td><center><div @click="inclese(key)"><i class="fas fa-plus"></i></div></center></td>
-                <td><center><div @click="declese(key)"><i class="fas fa-minus"></i></div></center></td>
-                <td><center><div @click="remove(key)"><i class="fas fa-times"></i></div></center></td>
-                </tr>
-                <tr>
-                  <td><b>ราคารวม:</b></td>
-                  <td> {{CountQuantity}} จาน</td>
-                  <td><b>{{ total }} บ.</b></td>
+    <div class="columns is-mobile is-centered">
+      <div class="column is-12-mobile is-three-fifths-tablet">
+        <div class="box card">
+          <h1 class="title"> &nbsp;Order ของคุณ</h1>
+          <p v-show="!products.length">
+            &nbsp;<i>คุณยังไม่ได้เลือกเมนู!</i>
+            &nbsp;<router-link to="/shop">กลับไปหน้าเมนู</router-link>
+          </p>
+           <table class="table is-striped" v-show="products.length">
+            <thead>&nbsp;
+              <tr>
+                <td>ชื่อเมนู</td>
+                <td>ราคา</td>
+                <td>จำนวน</td>
+                <td>ประเภท</td>
+                <td>เพิ่ม</td>
+                <td>ลบ</td>
+                <td>ยกเลิก</td>
               </tr>
-            </tbody>
-    </table>
-    &nbsp;ผู้สั่ง : {{this.users}} <br>
-    &nbsp;ร้านค้า : {{this.SelectShops}}
-    <hr>
-    &nbsp;จำนวนคิว ณ ขณะนี้ {{shops.q}} คิว  <br>
-    &nbsp;เวลารายการอาหารล่าสุด&nbsp;{{((shops.SaveDate)?shops.SaveDate.slice(11,16):'00.00')}}<br>
-    <router-link to="/shop"><button v-show="products.length" class='button button13'>กลับไปเลือกเมนู</button></router-link>
-    <button v-show="products.length" class='button button14' @click="order(products, shops.q, CountQuantity, total, shops.SaveDate)">ยืนยันการสั่ง</button>
-  </div>
+            </thead>
+                <tbody>
+                  <tr :key="key" v-for="(p, key) in products">
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.price }} บ.</td>
+                    <td>{{ p.quantity }} จาน</td>
+                    <td><center>{{ p.type }}</center></td>
+                    <td><center><div @click="inclese(key)"><i class="fas fa-plus"></i></div></center></td>
+                    <td><center><div @click="declese(key)"><i class="fas fa-minus"></i></div></center></td>
+                    <td><center><div @click="remove(key)"><i class="fas fa-times"></i></div></center></td>
+                    </tr>
+                    <tr>
+                      <td><b>ราคารวม:</b></td>
+                      <td> {{CountQuantity}} จาน</td>
+                      <td><b>{{ total }} บ.</b></td>
+                  </tr>
+                </tbody>
+        </table>
+        &nbsp;ผู้สั่ง : {{this.users}} <br>
+        &nbsp;ร้านค้า : {{this.SelectShops}}
+        <hr>
+        <span v-if="shops.q">&nbsp;จำนวนคิว ณ ขณะนี้ {{shops.q}} คิว  <br></span>
+        &nbsp;เวลารายการอาหารล่าสุด&nbsp;{{((shops.SaveDate)?shops.SaveDate.slice(11,16):'00.00')}}<br>
+        <router-link to="/shop"><button v-show="products.length" class='button button13'>กลับไปเลือกเมนู</button></router-link>
+        <button v-show="products.length" class='button is-success' @click="order(products, shops.q, CountQuantity, total, shops.SaveDate)">ยืนยันการสั่ง</button>
+      </div>
+    </div>
+    </div>
   </div>
 </template>
 
@@ -70,7 +74,10 @@ export default {
       profit: {},
       email: '',
       detail: '',
-      once: ''
+      once: '',
+      D: moment().tz('Asia/Bangkok').format('dddd'),
+      reportmoney: {},
+      reportsell: {}
     }
   },
   computed: {
@@ -110,6 +117,8 @@ export default {
       await this.reportyearprofit()
       //
       await this.Cutstock(products)
+      await this.weekmoney(products)
+      await this.weeksell(products)
       for (var i = 0; i < products.length; i++) {
         let date = moment().tz('Asia/Bangkok').format()
         let time = moment().tz('Asia/Bangkok').format().slice(0, 10)
@@ -165,7 +174,7 @@ export default {
       await foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('customer').set(this.users)
       await foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('order').set(this.shops.countdoing)
       await foodcenterRef.child('order').child(this.SelectShops).child(this.date).child('status').set('กำลังรอ')
-      this.updateQ = q
+      this.updateQ = parseInt(q, 10)
       this.updateDoingcount = this.shops.countdoing
       let SaveDate = ''
       if (q === 0) {
@@ -312,7 +321,7 @@ export default {
     async safetystock (safetys) {
       await this.before()
       await this.sortcode(safetys)
-      await axios.get('http://localhost:3001', {
+      await axios.get('https://foodmail.herokuapp.com/', {
         params: {
           id: `<p>ระบบ Safetystock เเจ้งเตือนปริมาณถึงที่กำหนด มีรายละเอียดดังนี้</p>
                   <ul>  
@@ -339,6 +348,42 @@ export default {
     sortcode (safetys) {
       for (var i = 0; i < safetys.length; i++) {
         this.detail = this.detail + '<li >ชื่อวัตถุดิบ: ' + safetys[i].stockname + '  เหลือ: ' + safetys[i].stockamount + ' กก./ช้อนโต๊ะ' + '<br></li>'
+      }
+    },
+    async weekmoney (products) {
+      let money = ''
+      const getweekmoney = database.ref('foodcenter/weekmoney/' + this.SelectShops + '/' + this.D)
+      getweekmoney.on('value', snap => {
+        money = snap.val()
+        console.log(money.money)
+      })
+      if (money) { await foodcenterRef.child('weekmoney').child(this.SelectShops).child(this.D).child('money').set(money.money + this.total) } else {
+        await foodcenterRef.child('weekmoney').child(this.SelectShops).child(this.D).child('money').set(this.total)
+      }
+    },
+    async weeksell (products) {
+      for (var i = 0; i < products.length; i++) {
+        let sell = ''
+        const getweeksell = database.ref('foodcenter/weeksell/' + this.SelectShops + '/' + this.D + '/' + products[i].key)
+        getweeksell.on('value', snap => {
+          sell = snap.val()
+          console.log(sell)
+        })
+        if (sell) {
+          let data = {
+            name: products[i].name,
+            quantity: sell.quantity + products[i].quantity,
+            price: sell.price + products[i].price * products[i].quantity
+          }
+          await foodcenterRef.child('weeksell').child(this.SelectShops).child(this.D).child(products[i].key).set(data)
+        } else {
+          let data = {
+            name: products[i].name,
+            quantity: products[i].quantity,
+            price: products[i].price * products[i].quantity
+          }
+          await foodcenterRef.child('weeksell').child(this.SelectShops).child(this.D).child(products[i].key).set(data)
+        }
       }
     },
     ...mapActions({
@@ -376,6 +421,14 @@ export default {
     dbRefObject5.on('value', snap => {
       this.once = snap.val()
     })
+    const dbRefObject6 = database.ref('foodcenter/weekmoney')
+    dbRefObject6.on('value', snap => {
+      this.reportmoney = snap.val()
+    })
+    const dbRefObject7 = database.ref('foodcenter/weeksell')
+    dbRefObject7.on('value', snap => {
+      this.reportsell = snap.val()
+    })
     // ดึงข้อมูลมาซึ้งกัน
   }
 }
@@ -404,5 +457,8 @@ export default {
     background-color: #209cee;
     border-color: transparent;
     color: #fff;
+}
+.table {
+  width: 100%;
 }
 </style>

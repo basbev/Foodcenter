@@ -1,40 +1,31 @@
 <template>
   <div class='hello'>
     <center>
-    <!-- <img src = "/static/logo1.png" width="300"> -->
-    <carousel v-if="shops" :data="shopsSlide"></carousel>
-
-    <div class="formAddRes">
-      <div class="columns searchCol">
-        <div class="column">
-          <input type="text" v-model="Search" class="inputSearch" placeholder="ค้นหาร้าน" @input="filterShop(Search)">
-        </div>
+    <br><br><br>
+    <img src = "/static/logo1.png" width="300">
+    <div class="columns">
+      <div class="column">
+        <input type="text" v-model="Search" class="inputSearch" placeholder="ค้นหาร้านวัตถุดิบ" @input="filterShop(Search)">
       </div>
-      <div v-if="permission !== '1' & permission !== null" >
-        <hr>
-        <h3 class="is-size-4">เพิ่มร้านวัตถุดิบ</h3>
-        <div class="columns">
-          <div class="column">
-            <input class="input is-large" type="text" v-model="name" placeholder="ชื่อร้าน">
-          </div>
-          <div class="column">
-            <input class="input is-large" type="number" v-model="tel" placeholder="เบอร์">
-          </div>
-          <div class="column is-3">
-            <button class="button is-warning" @click="insertTofoodcenter(tel, name)">
-              <span class="icon is-small">
-                <i class="fas fa-plus"></i>
-              </span>
-              เพิ่มร้านวัตถุดิบ
-            </button>
-          </div>
+    </div>
+    <div v-if="permission !== '1' & permission !== null" class="formAddRes">
+      <h3>เพิ่มร้านวัตถุดิบ</h3>
+      <div class="columns">
+        <div class="column">
+          <input class="input is-large" type="text" v-model="name" placeholder="ชื่อร้านวัตถุดิบ">
+        </div>
+        <div class="column">
+          <input class="input is-large" type="number" v-model="tel" placeholder="เบอร์">
+        </div>
+        <div class="column is-3">
+          <button class="button button1" @click="insertTofoodcenter(tel, name)">เพิ่มร้านวัตถุดิบ</button>
         </div>
       </div>
     </div>
     <section class="section" v-if="result !== ''">
         <div class="container">
           <div class="columns is-multiline">
-            <article class="media card">
+            <article class="notification media">
                 <figure class="media-left">
                   <span class="icon">
                     <i class="has-text-warning fa fa-columns fa-lg"></i>
@@ -45,9 +36,10 @@
                      <div class="row">
           <div class="column">
     <div>
-      <h1>&nbsp;&nbsp;{{result.name}}&nbsp;&nbsp;
-      <img v-bind:src="result.status" width="70" height="55" ></h1>
+      <h1>&nbsp;&nbsp;{{result.name}}&nbsp;&nbsp;<img v-bind:src="result.status" width="70" height="55" ></h1>
       <img src="https://www.img.live/images/2018/11/20/img_352451.png" height="15">&nbsp;{{result.tel}}
+      <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{result.q}}&nbsp;&nbsp;</hk></h1>
+      <h1>กำลังทำของ:&nbsp;{{result.doing}}&nbsp;&nbsp;</h1>
     </div>
     </div>
         </div>
@@ -58,15 +50,15 @@
         </div>
       </section>
     </center>
+    <hr>
   <section class="section" v-if="!showData.length > 0">
      <div class="allshop">
     <label>ร้านอาหารทั้งหมด {{this.numberOfShop}} ร้าน</label>
     </div>
         <div class="container">
-          <div class="columns is-multiline" v-if="shops">
+          <div class="columns is-multiline">
             <div class="column is-one-third" :key="detail.key" v-for="(detail) in shops">
-              <div :class="(detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' & permission !== null)?'has-background-white card shadow':'has-background-white card'">
-              <article class="notification media has-background-white" @click="SelectShop(detail.key, detail.status)">
+              <article class="notification media has-background-white">
                 <figure class="media-left">
                   <span class="icon">
                     <i class="has-text-warning fa fa-columns fa-lg"></i>
@@ -74,10 +66,7 @@
                 </figure>
                 <div class="media-content">
                   <div class="content">
-                    <div class="shopName"><h1 class="title is-size-4">ร้าน {{detail.name}}</h1></div>
-                    <div class="shopRating"><img src="https://www.img.in.th/images/8c44fe4d804dca493a0e04341aa9e06f.png" width="20" height="20">&nbsp;
-                      <span class="is-size-4">{{((detail.Rating) === 0)?'0.00':detail.Rating}}</span>
-                    </div>
+                    <h1 class="title is-size-4">ร้าน {{detail.name}}&nbsp;</h1>
                     <!-- <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
@@ -86,19 +75,22 @@
       <div>
         <div class="row">
           <div class="column">
-        <img class="statusImg" v-bind:src="detail.status" width="70" height="55">
+        <img v-bind:src="detail.status" width="70" height="55"><br>
     <img src="https://www.img.live/images/2018/11/20/img_352451.png" class="imageTel">&nbsp;{{detail.tel}}
+     <!-- <h1>คิวที่รอ :&nbsp;<span class="number">&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</span></h1>
+     <h5>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h5> -->
         <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, detail.key)">Update</button>
         <!-- <button v-if="permission === '3'" class="button button4" @click="setUpdatefood(detail.tel, detail.name, key)">Update1</button> -->
         <!-- <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button> -->
         <button v-if="permission === '3'" class="button button3" @click="DelFood(detail.key)">Delete</button>
+        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' & permission !== null" @click="SelectShop(detail.key)" class="button button6">Select&nbsp;</button>
+        <button class="button button2" @click="GoSee(detail.key)">Order&nbsp;</button>
         </div>
         </div>
       </div>
                   </div>
                 </div>
               </article>
-                </div>
             </div>
           </div>
         </div>
@@ -108,34 +100,38 @@
         <div class="container">
           <div class="columns is-multiline">
             <div class="column is-one-third" :key="detail.key" v-for="(detail) in showData">
-              <div :class="(detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' & permission !== null)?'has-background-white card shadow':'has-background-white card'">
-                <article class="notification media has-background-white" @click="SelectShop(detail.key, detail.status)">
-                  <figure class="media-left">
-                    <span class="icon">
-                      <i class="has-text-warning fa fa-columns fa-lg"></i>
-                    </span>
-                  </figure>
-                  <div class="media-content">
-                    <div class="content">
-                      <div class="shopName"><h1 class="title is-size-4">ร้าน {{detail.name}}</h1></div>
-                      <div class="shopRating"><img src="https://www.img.in.th/images/8c44fe4d804dca493a0e04341aa9e06f.png" width="20" height="20">&nbsp;
-                        <span class="is-size-4">{{((detail.Rating) === 0)?'0.00':detail.Rating}}</span>
-                      </div>
-                      <div>
-                        <div class="row">
-                          <div class="column">
-                            <img class="statusImg" v-bind:src="detail.status" width="70" height="55">
-                            <img src="https://www.img.live/images/2018/11/20/img_352451.png" class="imageTel">&nbsp;{{detail.tel}}
+              <article class="notification media has-background-white">
+                <figure class="media-left">
+                  <span class="icon">
+                    <i class="has-text-warning fa fa-columns fa-lg"></i>
+                  </span>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <h1 class="title is-size-4">ร้าน</h1>
+                    <!-- <div v-if="updateKey === key">
+        <input type="text" v-model="updateName" placeholder="NAME">
+        <input type="text" v-model="updateTel" placeholder="TEL">
+        <button class="button button1" @click="updatefoodcenter(updateTel, updateName, detail.key)">Save</button>
+      </div> -->
+      <div>
+        <div class="row">
+          <div class="column">
+        <h1>&nbsp;&nbsp;{{detail.name}}&nbsp;&nbsp;<img v-bind:src="detail.status" width="70" height="55" ></h1>
+    <h5><img src="https://www.img.live/images/2018/11/20/img_352451.png" width="25" height="20">&nbsp;{{detail.tel}}</h5>
+     <h2>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</hk></h2>
+     <h5>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h5>
+        <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, detail.key)">Update</button>
         <!-- <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button> -->
+        <button v-if="permission === '3'" class="button button6" @click="DelFood(detail.key)">Delete</button>
+        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png'" @click="SelectShop(detail.key)" class="button button3">Select</button>
+        <button class="button button2" @click="GoSee(detail.key)">Order</button>
         </div>
         </div>
       </div>
                   </div>
                 </div>
               </article>
-                  <button v-if="permission === '3'" class="button button4" @click="setUpdatefood(detail.tel, detail.name, key)">Update1</button>
-                  <button v-if="permission === '3'" class="button button3" @click="DelFood(detail.key)">Delete</button>
-                </div>
             </div>
           </div>
         </div>
@@ -179,27 +175,27 @@
               </div> -->
               <div class="columns">
                 <div class="column is-3">
-                  ชื่อร้าน :
+                  ชื่อร้านอาหาร :
                 </div>
                 <div class="column">
                   <input
                     class="form-control mb-2"
                     type="text"
                     v-model="updateName"
-                    placeholder="ชื่อร้าน"
+                    placeholder="ชื่อร้านอาหาร"
                   >
                 </div>
               </div>
               <div class="columns">
                 <div class="column is-3">
-                  เบอร์ติดต่อร้าน :
+                  เบอร์ติดต่อร้านอาหาร :
                 </div>
                 <div class="column">
                   <input
                     class="form-control mb-2"
                     type="text"
                     v-model="updateTel"
-                    placeholder="เบอร์ติดต่อร้าน"
+                    placeholder="เบอร์ติดต่อร้านอาหาร"
                   >
                 </div>
               </div>
@@ -250,13 +246,7 @@ export default {
         tel: tel,
         name: name,
         q: 0,
-        status: 'https://www.img.live/images/2018/11/20/d57b23a07352f87d.png',
-        Rating: 0
-      }
-      let data2 = {
-        count: 0,
-        scorce: 0,
-        shop: name
+        status: 'https://www.img.live/images/2018/11/20/d57b23a07352f87d.png'
       }
       if (tel === '' || name === '') {
         this.$swal({
@@ -267,7 +257,6 @@ export default {
         })
       } else {
         foodcenterRef.child('detail').child(this.name).set(data)
-        foodcenterRef.child('shoppoint').child(this.name).set(data2)
         this.tel = ''
         this.name = ''
       }
@@ -292,18 +281,16 @@ export default {
     deletefoodcenter (key) {
       foodcenterRef.child('detail').child(key).remove()
     },
-    SelectShop (name, status) {
-      if (status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' && this.permission !== null) {
-        this.$store.dispatch('selectShop', name)
-          .then(
-            user => {
-              this.$router.push('/meter')
-            },
-            err => {
-              alert(err.message)
-            }
-          )
-      }
+    SelectShop (name) {
+      this.$store.dispatch('selectShop', name)
+        .then(
+          user => {
+            this.$router.push('/meter')
+          },
+          err => {
+            alert(err.message)
+          }
+        )
     },
     Searchnow (Search) {
       this.result = ''
@@ -369,14 +356,11 @@ export default {
         title: 'Input Text address',
         input: 'text',
         inputValue: inputValue,
-        inputPlaceholder: 'ชื่อร้าน'
+        inputPlaceholder: 'ชื่อร้านอาหาร'
       })
       if (Text) {
         this.$swal('Entered Text: ' + Text)
       }
-    },
-    sortHighest () {
-      this.shops.sort((a, b) => a.Rating < b.Rating ? 1 : -1)
     }
     // async setUpdatefood (tel, name, key) {
     //   // document.getElementById('swal-input1').value = name
@@ -417,11 +401,7 @@ export default {
   },
   mounted () {
     const dbRefObject = foodcenterRef.child('detail')
-    const shoppoint = foodcenterRef.child('shoppoint')
-    shoppoint.on('value', snap => {
-      this.shoppoints = snap.val()
-      console.log(this.shoppoints)
-    })
+    // const shoppoint = foodcenterRef.child('shoppoint')
     dbRefObject.on('value', snap => {
       var data = []
       snap.forEach(ss => {
@@ -431,38 +411,26 @@ export default {
         this.numberOfShop = snap.numChildren()
       })
       this.shops = data
-      this.sortHighest()
-      // console.log(this.shops)
-      // JSON.stringify(this.shops)
+      console.log(this.shops)
+      JSON.stringify(this.shops)
       // console.log(JSON.stringify(this.shops))
     })
+    // shoppoint.on('value', snap => {
+    //   this.shoppoints = snap.val()
+    //   console.log(this.shoppoints.ป้าสมบูรณ์)
+    // })
   },
   computed: {
     ...mapGetters({
       permission: 'permission',
       selectShop: 'selectShop'
-    }),
-    shopsSlide () {
-      let arr = []
-      if (this.shops.length) {
-        this.shops.forEach(function (shop, index) {
-          let url = 'https://firebasestorage.googleapis.com/v0/b/foodcenter-23d67.appspot.com/o/' + shop.banner + '?alt=media&token=1fe47dd7-7085-4433-8dc5-b98ffb219d37'
-          // arr.push('<img v-url={filename:'+ menu.foodpic+'} width="300" height="350"/>')
-          arr.push('<span>' +
-          '<img src="' + url + '" class="imgMenuCover">' +
-          // '<span class="textCover"><h1 class="title has-text-white">' + menu.foodname + '</h1>' + menu.foodprice + ' บาท </span>' +
-          // '<button @click="this.Cart(' + menu.foodname + ', ' + menu.foodprice + ', ' + menu.foodtype + ', ' + index + ')" class="button button3">เพิ่มลง Order</button>' +
-          '</span>')
-        })
-      }
-      return arr
-    }
+    })
   }
 }
 </script>
 
 <!-- Add 'scoped' attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 .imageTel {
   width: 15px;
   height: 15px;
@@ -475,17 +443,11 @@ input[type=text], select {
     border-radius: 4px;
     box-sizing: border-box;
 }
-.inputSearch {
-  /* width: 50%!important; */
-  padding-bottom: 0px;
-}
 .formAddRes {
   background:#ffffff;
   width: 80%;
   padding: 20px;
   border-radius: 10px;
-  position: relative;
-  margin-top: 20px;
 }
 .report {
   text-align: center;
@@ -495,56 +457,20 @@ input[type=text], select {
   font-size: 18px;
 }
 .number {
-  margin-top: -20px;
   font-size: 30px;
   background-color: #ffdd57;
   border-radius: 50%;
-  width: 70px;
-  height: 70px;
 }
-.inputSearch {
-  margin-top: 400px;
-  position: relative;
+.swal2-popup #swal2-content {
+    text-align: left;
 }
-.searchCol {
-  margin-bottom: 0px;
-}
-.shopName, .shopRating {
-  display: inline-block;
-}
-.shopRating {
-  float: right;
-}
-.statusImg {
-  top: 60%;
-  right: 20px;
-  position: absolute;
-}
-.shadow {
-  box-shadow: none;
-  -webkit-transition-duration: 0.4s;
-  transition-duration: 0.4s;
-  cursor: pointer;
-}
-.shadow:hover, .shadow:focus {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-.card {
-  margin: 0px;
-  text-align: center;
-}
-.card article {
-  margin-bottom: 0px;
-  padding-bottom: 0px;
-}
-.carousel {
-  height: 230px;
-  overflow: hidden;
-}
-@media only screen and (max-width: 600px) {
-  body {
-    /* background-color: lightblue; */
+  .input[type=text], select {
+    width: 100%;
   }
-}
-
+  .input[type=number], select {
+    width: 100%;
+  }
+  .input.is-large, .textarea.is-large {
+  font-size: 1.0rem;
+  }
 </style>

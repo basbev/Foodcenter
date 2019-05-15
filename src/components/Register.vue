@@ -92,19 +92,21 @@ export default {
         console.log(this.hasUser)
       })
       if (this.hasUser.username == null) {
-        let data = {
-          username: this.username,
-          password: this.password,
-          permission: '1',
-          firstname: '',
-          lastname: '',
-          phonenumber: '',
-          address: '',
-          hasShop: '',
-          email: this.email
+        if (this.email === '') { alert('UnSuccessfully Register') } else {
+          let data = {
+            username: this.username,
+            password: this.password,
+            permission: '1',
+            firstname: '',
+            lastname: '',
+            phonenumber: '',
+            address: '',
+            hasShop: '',
+            email: this.email
+          }
+          foodcenterRef.push(data)
+          this.$router.push('/')
         }
-        foodcenterRef.push(data)
-        this.$router.push('/')
       } else {
         alert('UnSuccessfully sign Up')
         this.hasUser = {}

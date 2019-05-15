@@ -75,6 +75,17 @@ input[type=text], select {
     background-color: white;
     color: #363636;
 }
+.button2-invert {
+    font-size: 15px;
+    margin-top: 7px;
+    background-color: white;
+    color: #363636;
+}
+.button2-invert:hover {
+    border: 2px solid #008CBA;
+    background-color: #008CBA;
+    color: white;
+}
 .button3 {
     border: 1px solid #a5a5a5;
     background-color: transparent;
@@ -208,5 +219,16 @@ input[type=text], select {
 }
 hr {
     width: 100%;
+}
+.card {
+    background: #ffffff;
+    margin: 20px;
+    border-radius: 20px;
+    padding: 20px 10px;
+    border: none;
+    box-shadow: none;
+  }
+button .icon {
+    margin-right: 5px!important;
 }
 </style>

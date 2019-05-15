@@ -17,9 +17,76 @@
       <button class="button button3" @click="getDataFirebaseprofit(getvalue, day)">รายวัน</button>
       <button class="button button4" @click="getDataFirebaseprofit(getvalue, month)">รายเดือน</button>
       <button class="button button5" @click="getDataFirebaseprofit(getvalue, year)">รายปี</button>
+      <button class="button button5" @click="showsellhit()">เมนูขายดี</button>
       <!-- Profit -->
     </div>
   </div>
+      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" v-if="showtable">
+                <thead>
+                  <tr>
+                    <th>ชื่อเมนู</th>
+                    <th>จำนวน</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th>ชื่อเมนู</th>
+                    <th>จำนวน</th>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr :key="key" v-for="(record, key) in records">
+                    <td>{{record.key}}</td>
+                    <td>{{record.amount}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" v-if="showtable">
+                <thead>
+                  <tr>
+                    <th>ชื่อเมนู</th>
+                    <th>จำนวน</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th>ชื่อเมนู</th>
+                    <th>จำนวน</th>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr :key="key" v-for="(record, key) in reportmoney">
+                    <td>{{record.key}}</td>
+                    <td>{{record.money}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" v-if="showtable">
+                <thead>
+                  <tr>
+                    <th>วัน</th>
+                    <th>ชื่อเมนู</th>
+                    <th>ราคาเมนู</th>
+                    <th>จำนวนเมนู</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th>วัน</th>
+                    <th>ชื่อเมนู</th>
+                    <th>ราคาเมนู</th>
+                    <th>จำนวนเมนู</th>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr :key="key" v-for="(record, key) in allday">
+                    <td>{{record.Week}}</td>
+                    <td>{{record.name}}</td>
+                    <td>{{record.price}}</td>
+                    <td>{{record.quantity}}</td>
+                  </tr>
+                </tbody>
+              </table>
   <div id="chart"></div>
 </div>
 </template>
@@ -36,10 +103,34 @@ export default {
       day: 'day',
       month: 'month',
       year: 'year',
-      showchart: ''
+      showchart: '',
+      records: '',
+      showtable: false,
+      showsell: false,
+      showsellweek: false,
+      showmoneyweek: false,
+      reportsell: '',
+      reportmoney: '',
+      Week: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturay'],
+      allday: []
     }
   },
   methods: {
+    async getsell () {
+      this.allday = []
+      for (var i = 0; i < this.Week.length; i++) {
+        var ref = firebase.database().ref().child('foodcenter/weeksell').child(this.selectShop).child(this.Week[i]).orderByChild('quantity').limitToLast(1)
+        await ref.on('value', snap => {
+          snap.forEach(ss => {
+            var item = ss.val()
+            item.Week = this.Week[i]
+            this.allday.push(item)
+          })
+        })
+        console.log(this.allday)
+      }
+      this.sortHighest3()
+    },
     exportPdf () {
       var tempTitle = document.title
       document.title = 'Report.pdf'
@@ -79,6 +170,8 @@ export default {
       })
     },
     ShowGraph: function (getvalue) {
+      this.showtable = false
+      this.showsell = true
       if (this.showchart !== '') { this.showchart.destroy() }
       this.showchart = new ApexCharts(document.querySelector('#chart'),
         {
@@ -174,10 +267,59 @@ export default {
         }
       )
       this.showchart.render()
+    },
+    sortHighest () {
+      this.records.sort((a, b) => a.amount < b.amount ? 1 : -1)
+    },
+    sortHighest2 () {
+      this.reportmoney.sort((a, b) => a.money < b.money ? 1 : -1)
+    },
+    sortHighest3 () {
+      this.allday.sort((a, b) => a.quantity < b.quantity ? 1 : -1)
+    },
+    showsellhit () {
+      this.showtable = true
+      this.showsell = false
+      this.getsell()
     }
   },
   mounted () {
     this.getDataFirebase(this.getvalue, this.day)
+    const dbRefObjectMenuhit = firebase.database().ref().child('foodcenter/record').child(this.selectShop)
+    dbRefObjectMenuhit.orderByChild('amount').limitToLast(5).on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.records = data
+      console.log(data)
+      this.sortHighest()
+    })
+    firebase.database().ref().child('foodcenter/weekmoney').child(this.selectShop).on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.reportmoney = data
+      console.log(data)
+      this.sortHighest2()
+    })
+    firebase.database().ref().child('foodcenter/weeksell').child(this.selectShop).on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.reportsell = data
+      console.log(data)
+      // this.sortHighest3()
+    })
+    // this.getsell()
   },
   computed: {
     ...mapGetters({

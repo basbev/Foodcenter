@@ -2,17 +2,8 @@
   <div class='hello'>
     <center>
     <!-- <img src = "/static/logo1.png" width="300"> -->
-    <div id="slideshow">
-      <div v-for="(shop) in shops" :key="shop.key">
-        <img v-url={filename:shop.banner}>
-      </div>
-      <!-- <div>
-        <img src = "https://foodrevolution.org/wp-content/uploads/2018/04/blog-featured-diabetes-20180406-1330.jpg">
-      </div> -->
-      <!-- <div id="sampletext">
-        Foodcenter
-      </div> -->
-    </div>
+    <carousel v-if="shops" :data="shopsSlide"></carousel>
+
     <div class="formAddRes">
       <div class="columns searchCol">
         <div class="column">
@@ -20,7 +11,8 @@
         </div>
       </div>
       <div v-if="permission !== '1' & permission !== null" >
-        <h3>เพิ่มร้านอาหาร</h3>
+        <hr>
+        <h3 class="is-size-4">เพิ่มร้านอาหาร</h3>
         <div class="columns">
           <div class="column">
             <input class="input is-large" type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
@@ -29,7 +21,12 @@
             <input class="input is-large" type="number" v-model="tel" placeholder="เบอร์">
           </div>
           <div class="column is-3">
-            <button class="button button1" @click="insertTofoodcenter(tel, name)">เพิ่มร้านอาหาร</button>
+            <button class="button is-warning" @click="insertTofoodcenter(tel, name)">
+              <span class="icon is-small">
+                <i class="fas fa-plus"></i>
+              </span>
+              เพิ่มร้านอาหาร
+            </button>
           </div>
         </div>
       </div>
@@ -37,7 +34,7 @@
     <section class="section" v-if="result !== ''">
         <div class="container">
           <div class="columns is-multiline">
-            <article class="notification media">
+            <article class="media card">
                 <figure class="media-left">
                   <span class="icon">
                     <i class="has-text-warning fa fa-columns fa-lg"></i>
@@ -48,7 +45,8 @@
                      <div class="row">
           <div class="column">
     <div>
-      <h1>&nbsp;&nbsp;{{result.name}}&nbsp;&nbsp;<img v-bind:src="result.status" width="70" height="55" ></h1>
+      <h1>&nbsp;&nbsp;{{result.name}}&nbsp;&nbsp;
+      <img v-bind:src="result.status" width="70" height="55" ></h1>
       <img src="https://www.img.live/images/2018/11/20/img_352451.png" height="15">&nbsp;{{result.tel}}
       <h1>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{result.q}}&nbsp;&nbsp;</hk></h1>
       <h1>กำลังทำของ:&nbsp;{{result.doing}}&nbsp;&nbsp;</h1>
@@ -67,9 +65,10 @@
     <label>ร้านอาหารทั้งหมด {{this.numberOfShop}} ร้าน</label>
     </div>
         <div class="container">
-          <div class="columns is-multiline">
+          <div class="columns is-multiline" v-if="shops">
             <div class="column is-one-third" :key="detail.key" v-for="(detail) in shops">
-              <article class="notification media has-background-white">
+              <div :class="(detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' & permission !== null)?'has-background-white card shadow':'has-background-white card'">
+              <article class="notification media has-background-white" @click="SelectShop(detail.key, detail.status)">
                 <figure class="media-left">
                   <span class="icon">
                     <i class="has-text-warning fa fa-columns fa-lg"></i>
@@ -77,7 +76,10 @@
                 </figure>
                 <div class="media-content">
                   <div class="content">
-                    <h1 class="title is-size-4">ร้าน {{detail.name}}<img src="https://www.img.in.th/images/8c44fe4d804dca493a0e04341aa9e06f.png" width="30" height="30">&nbsp;{{((detail.Rating) === 0)?'0.00':detail.Rating}}</h1>
+                    <div class="shopName"><h1 class="title is-size-4">ร้าน {{detail.name}}</h1></div>
+                    <div class="shopRating"><img src="https://www.img.in.th/images/8c44fe4d804dca493a0e04341aa9e06f.png" width="20" height="20">&nbsp;
+                      <span class="is-size-4">{{((detail.Rating) === 0)?'0.00':detail.Rating}}</span>
+                    </div>
                     <!-- <div v-if="updateKey === key">
         <input type="text" v-model="updateName" placeholder="NAME">
         <input type="text" v-model="updateTel" placeholder="TEL">
@@ -86,22 +88,22 @@
       <div>
         <div class="row">
           <div class="column">
-        <img v-bind:src="detail.status" width="70" height="55"><br>
+        <img class="statusImg" v-bind:src="detail.status" width="70" height="55">
     <img src="https://www.img.live/images/2018/11/20/img_352451.png" class="imageTel">&nbsp;{{detail.tel}}
      <h1>คิวที่รอ :&nbsp;<span class="number">&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</span></h1>
      <h5>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h5>
-        <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, detail.key)">Update</button>
         <!-- <button v-if="permission === '3'" class="button button4" @click="setUpdatefood(detail.tel, detail.name, key)">Update1</button> -->
         <!-- <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button> -->
-        <button v-if="permission === '3'" class="button button3" @click="DelFood(detail.key)">Delete</button>
-        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' & permission !== null" @click="SelectShop(detail.key)" class="button button6">Select&nbsp;</button>
-        <button class="button button2" @click="GoSee(detail.key)">Order&nbsp;</button>
         </div>
         </div>
       </div>
                   </div>
                 </div>
               </article>
+                  <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, detail.key)">Update</button>
+                  <button v-if="permission === '3'" class="button button3" @click="DelFood(detail.key)">Delete</button>
+                  <button class="button button2-invert" @click="GoSee(detail.key)" v-if="detail.doing !== 'ว่าง'">Order&nbsp;</button>
+                </div>
             </div>
           </div>
         </div>
@@ -111,38 +113,38 @@
         <div class="container">
           <div class="columns is-multiline">
             <div class="column is-one-third" :key="detail.key" v-for="(detail) in showData">
-              <article class="notification media has-background-white">
-                <figure class="media-left">
-                  <span class="icon">
-                    <i class="has-text-warning fa fa-columns fa-lg"></i>
-                  </span>
-                </figure>
-                <div class="media-content">
-                  <div class="content">
-                    <h1 class="title is-size-4">ร้าน</h1>
-                    <!-- <div v-if="updateKey === key">
-        <input type="text" v-model="updateName" placeholder="NAME">
-        <input type="text" v-model="updateTel" placeholder="TEL">
-        <button class="button button1" @click="updatefoodcenter(updateTel, updateName, detail.key)">Save</button>
-      </div> -->
-      <div>
-        <div class="row">
-          <div class="column">
-        <h1>&nbsp;&nbsp;{{detail.name}}&nbsp;&nbsp;<img v-bind:src="detail.status" width="70" height="55" ></h1>
-    <h5><img src="https://www.img.live/images/2018/11/20/img_352451.png" width="25" height="20">&nbsp;{{detail.tel}}</h5>
-     <h2>คิวที่ต้องรอ :&nbsp;<hk>&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</hk></h2>
-     <h5>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h5>
-        <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, detail.key)">Update</button>
+              <div :class="(detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' & permission !== null)?'has-background-white card shadow':'has-background-white card'">
+                <article class="notification media has-background-white" @click="SelectShop(detail.key, detail.status)">
+                  <figure class="media-left">
+                    <span class="icon">
+                      <i class="has-text-warning fa fa-columns fa-lg"></i>
+                    </span>
+                  </figure>
+                  <div class="media-content">
+                    <div class="content">
+                      <div class="shopName"><h1 class="title is-size-4">ร้าน {{detail.name}}</h1></div>
+                      <div class="shopRating"><img src="https://www.img.in.th/images/8c44fe4d804dca493a0e04341aa9e06f.png" width="20" height="20">&nbsp;
+                        <span class="is-size-4">{{((detail.Rating) === 0)?'0.00':detail.Rating}}</span>
+                      </div>
+                      <div>
+                        <div class="row">
+                          <div class="column">
+                            <img class="statusImg" v-bind:src="detail.status" width="70" height="55">
+                            <img src="https://www.img.live/images/2018/11/20/img_352451.png" class="imageTel">&nbsp;{{detail.tel}}
+                            <h1>คิวที่รอ :&nbsp;<span class="number">&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</span></h1>
+                            <h5>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h5>
+        <!-- <button v-if="permission === '3'" class="button button4" @click="setUpdatefood(detail.tel, detail.name, key)">Update1</button> -->
         <!-- <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button> -->
-        <button v-if="permission === '3'" class="button button6" @click="DelFood(detail.key)">Delete</button>
-        <button v-if="detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png'" @click="SelectShop(detail.key)" class="button button3">Select</button>
-        <button class="button button2" @click="GoSee(detail.key)">Order</button>
         </div>
         </div>
       </div>
                   </div>
                 </div>
               </article>
+                  <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, detail.key)">Update</button>
+                  <button v-if="permission === '3'" class="button button3" @click="DelFood(detail.key)">Delete</button>
+                  <button class="button button2-invert" @click="GoSee(detail.key)" v-if="detail.doing !== 'ว่าง'">Order&nbsp;</button>
+                </div>
             </div>
           </div>
         </div>
@@ -227,19 +229,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import * as firebase from 'firebase'
-import JQuery from 'jquery'
-let $ = JQuery
-$('#slideshow > div:gt(0)').hide()
-
-setInterval(function () {
-  $('#slideshow > div:first')
-    .fadeOut(1000)
-    .next()
-    .fadeIn(2000)
-    .end()
-    .appendTo('#slideshow')
-}, 10000)
-
 var database = firebase.database()
 var foodcenterRef = database.ref('/foodcenter')
 export default {
@@ -312,16 +301,18 @@ export default {
     deletefoodcenter (key) {
       foodcenterRef.child('detail').child(key).remove()
     },
-    SelectShop (name) {
-      this.$store.dispatch('selectShop', name)
-        .then(
-          user => {
-            this.$router.push('/shop')
-          },
-          err => {
-            alert(err.message)
-          }
-        )
+    SelectShop (name, status) {
+      if (status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' && this.permission !== null) {
+        this.$store.dispatch('selectShop', name)
+          .then(
+            user => {
+              this.$router.push('/shop')
+            },
+            err => {
+              alert(err.message)
+            }
+          )
+      }
     },
     Searchnow (Search) {
       this.result = ''
@@ -459,7 +450,22 @@ export default {
     ...mapGetters({
       permission: 'permission',
       selectShop: 'selectShop'
-    })
+    }),
+    shopsSlide () {
+      let arr = []
+      if (this.shops.length) {
+        this.shops.forEach(function (shop, index) {
+          let url = 'https://firebasestorage.googleapis.com/v0/b/foodcenter-23d67.appspot.com/o/' + shop.banner + '?alt=media&token=1fe47dd7-7085-4433-8dc5-b98ffb219d37'
+          // arr.push('<img v-url={filename:'+ menu.foodpic+'} width="300" height="350"/>')
+          arr.push('<span>' +
+          '<img src="' + url + '" class="imgMenuCover">' +
+          // '<span class="textCover"><h1 class="title has-text-white">' + menu.foodname + '</h1>' + menu.foodprice + ' บาท </span>' +
+          // '<button @click="this.Cart(' + menu.foodname + ', ' + menu.foodprice + ', ' + menu.foodtype + ', ' + index + ')" class="button button3">เพิ่มลง Order</button>' +
+          '</span>')
+        })
+      }
+      return arr
+    }
   }
 }
 </script>
@@ -488,7 +494,7 @@ input[type=text], select {
   padding: 20px;
   border-radius: 10px;
   position: relative;
-  margin-top: 30vh;
+  margin-top: 20px;
 }
 .report {
   text-align: center;
@@ -498,43 +504,12 @@ input[type=text], select {
   font-size: 18px;
 }
 .number {
-  margin-top: -10px;
+  margin-top: -20px;
   font-size: 30px;
   background-color: #ffdd57;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
-}
-.swal2-popup #swal2-content {
-    text-align: left;
-}
-  .input[type=text], select {
-    width: 100%;
-  }
-  .input[type=number], select {
-    width: 100%;
-  }
-  .input.is-large, .textarea.is-large {
-  font-size: 1.0rem;
-  }
-  #sampletext {
-  position: absolute;
-  font : italic bold 60px arial;
-  color : #ffffff;
-  margin-top : 200px;
-}
-#slideshow > div {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  height: 75vh;
-  overflow: hidden;
-}
-#slideshow img {
-  width: 100vw;
-  height: auto;
+  width: 70px;
+  height: 70px;
 }
 .inputSearch {
   margin-top: 400px;
@@ -542,6 +517,34 @@ input[type=text], select {
 }
 .searchCol {
   margin-bottom: 0px;
+}
+.shopName, .shopRating {
+  display: inline-block;
+}
+.shopRating {
+  float: right;
+}
+.statusImg {
+  top: 60%;
+  right: 20px;
+  position: absolute;
+}
+.shadow {
+  box-shadow: none;
+  -webkit-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}
+.shadow:hover, .shadow:focus {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.card {
+  margin: 0px;
+  text-align: center;
+}
+.card article {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
 }
 @media only screen and (max-width: 600px) {
   body {

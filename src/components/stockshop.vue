@@ -278,8 +278,12 @@ export default {
     },
     setInsertstock () {
       this.showModal = true
+      this.stockname = ''
+      this.stockamount = ''
+      this.safety = 0
     },
     Insertstock (stockname, stockamount, safety) {
+      if (safety === '') { safety = 0 }
       let data = {
         stockname: stockname,
         stockamount: parseInt(stockamount, 10),
@@ -301,6 +305,7 @@ export default {
       }
     },
     setEditstock (key, stockname, stockamount, safety) {
+      if (safety) { safety = 0 }
       this.showModal = true
       this.statusEdit = true
       this.stockname = stockname
@@ -309,17 +314,29 @@ export default {
       this.safety = safety
     },
     Editstock (key, stockname, stockamount, safety) {
-      firebase.database().ref().child('foodcenter/stock/' + this.selectShop).child(key).update({
-        stockname: stockname,
-        stockamount: parseInt(stockamount, 10),
-        safety: parseInt(safety, 10)
-      })
-      this.showModal = false
-      this.statusEdit = false
-      this.stockname = ''
-      this.stockamount = ''
-      this.updatekey = ''
-      this.safety = ''
+      if (safety) {
+        firebase.database().ref().child('foodcenter/stock/' + this.selectShop).child(key).update({
+          stockname: stockname,
+          stockamount: parseInt(stockamount, 10),
+          safety: parseInt(safety, 10)
+        })
+        this.showModal = false
+        this.statusEdit = false
+        this.stockname = ''
+        this.stockamount = ''
+        this.updatekey = ''
+        this.safety = ''
+      } else {
+        firebase.database().ref().child('foodcenter/stock/' + this.selectShop).child(key).update({
+          stockname: stockname,
+          stockamount: parseInt(stockamount, 10)
+        })
+        this.showModal = false
+        this.statusEdit = false
+        this.stockname = ''
+        this.stockamount = ''
+        this.updatekey = ''
+      }
     },
     Closemodal () {
       this.showModal = false
