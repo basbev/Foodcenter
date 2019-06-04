@@ -752,6 +752,7 @@
               คะแนนความพอใจ&nbsp;
               <star-rating :star-size="40" :show-rating="true" v-model="scorce"></star-rating><br>
               <button class="button is-warning" @click="insertreviewpoint(scorce)">เพิ่มคะแนนร้านค้า</button>
+              <button class="button is-warning">เเก้ไขคะแนนร้านค้า</button>
               </center>
             </div>
           </div>

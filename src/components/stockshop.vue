@@ -99,16 +99,16 @@
                   <tr>
                     <th>ชื่อวัตถุดิบ</th>
                     <th>จำนวน</th>
-                    <th></th>
-                    <th></th>
+                    <th>เเก้ไข</th>
+                    <th>ลบ</th>
                   </tr>
                 </thead>
                 <tfoot>
                   <tr>
                     <th>ชื่อวัตถุดิบ</th>
                     <th>จำนวน</th>
-                    <th></th>
-                    <th></th>
+                    <th>เเก้ไข</th>
+                    <th>ลบ</th>
                   </tr>
                 </tfoot>
                 <tbody>
@@ -223,16 +223,16 @@
                   <tr>
                     <th>ชื่อวัตถุดิบ</th>
                     <th>จำนวน</th>
-                    <th></th>
-                    <th></th>
+                    <th>เเก้ไข</th>
+                    <th>ลบ</th>
                   </tr>
                 </thead>
                 <tfoot>
                   <tr>
                     <th>ชื่อวัตถุดิบ</th>
                     <th>จำนวน</th>
-                    <th></th>
-                    <th></th>
+                    <th>เเก้ไข</th>
+                    <th>ลบ</th>
                   </tr>
                 </tfoot>
                 <tbody>
@@ -393,7 +393,7 @@ export default {
       }
     },
     setEditstock (key, stockname, stockamount, safety) {
-      if (safety) { safety = 0 }
+      if (!safety) { safety = 0 }
       this.showModal = true
       this.statusEdit = true
       this.stockname = stockname

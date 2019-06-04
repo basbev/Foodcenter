@@ -59,7 +59,7 @@
                 ร้านค้าวัตถุดิบทั้งหมด
               </span>
       </a>
-      <a v-if="permission === '2'" class="navbar-item" href="#/order">
+      <a v-if="permission === '2'" class="navbar-item" href="#/order" @click="myshop()">
         <span class="icon">
                 <i class="fas fa-home"></i>
               </span>
@@ -75,7 +75,7 @@
                 ร้านของฉัน
               </span>
       </a>
-      <a v-if="permission === '2'" class="navbar-item" href="#/Reportsell">
+      <a v-if="permission === '2'" class="navbar-item" href="#/Reportsell" @click="myshop()">
         <span class="icon">
                 <i class="fas fa-home"></i>
               </span>
@@ -83,7 +83,7 @@
                 สรุปยอดขาย
               </span>
       </a>
-      <a v-if="permission === '2'" class="navbar-item" href="#/stockshop">
+      <a v-if="permission === '2'" class="navbar-item" href="#/stockshop" @click="myshop()">
         <span class="icon">
                 <i class="fas fa-home"></i>
               </span>
