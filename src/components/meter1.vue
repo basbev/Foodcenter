@@ -1252,7 +1252,7 @@ export default {
       return cart.reduce((accum, item) => accum + item.quantity, 0)
     },
     hasShop () {
-      return this.$store.state.hasShop
+      return this.$store.getters.hasShop
     },
     user () {
       return this.$store.getters.user

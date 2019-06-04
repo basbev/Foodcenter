@@ -80,7 +80,8 @@ export default {
     ...mapGetters({
       products: 'cartProducts',
       users: 'user',
-      SelectShops: 'selectShop'
+      SelectShops: 'selectShop',
+      hasshop: 'hasShop'
     }),
     total () {
       return this.products.reduce((total, p) => {
@@ -246,6 +247,7 @@ export default {
       }
     },
     async sendmail (products) {
+      await this.deliver(products)
       await this.before()
       await this.sortcode(products)
       await axios.get('https://foodmail.herokuapp.com/', {
@@ -277,6 +279,15 @@ export default {
       database.ref('/user').orderByChild('hasShop').equalTo(this.SelectShops).once('child_added', snap => {
         this.email = snap.val().email
       })
+    },
+    deliver (products) {
+      for (var i = 0; i < products.length; i++) {
+        let data = {
+          foodname: products[i].name,
+          foodamount: products[i].quantity
+        }
+        database.ref('/foodcenter/deliver').child(this.hasshop).push(data)
+      }
     },
     ...mapActions({
       inclese: 'incleseAmount',

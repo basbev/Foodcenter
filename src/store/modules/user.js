@@ -41,6 +41,7 @@ const mutations = {
     console.log(userSet)
     console.log(passSet)
     console.log(perSet)
+    console.log(shopSet)
     state.user = userSet
     state.password = passSet
     state.permission = perSet
@@ -125,10 +126,11 @@ const mutations = {
       state.added[index].quantity--
     }
   },
-  LOAD (state, {user, permission, selectShop}) {
+  LOAD (state, {user, permission, selectShop, hasShop}) {
     state.user = user
     state.permission = permission
     state.selectShop = selectShop
+    state.hasShop = hasShop
   },
   logout: (state) => {
     state.user = null
@@ -151,7 +153,7 @@ const actions = {
         const passSet = state.profile.password
         const perSet = state.profile.permission
         const shopSet = state.profile.hasShop
-        console.log(userSet, passSet, perSet)
+        console.log(userSet, passSet, perSet, shopSet)
         commit('setUser', {userSet, passSet, perSet, shopSet})
         commit('setselectShop', shopSet)
         dispatch('save')
@@ -212,11 +214,13 @@ const actions = {
     let Getuser = localStorage.getItem('user')
     let Getpermission = localStorage.getItem('permission')
     let GetselectShop = localStorage.getItem('selectShop')
+    let GethasShop = localStorage.getItem('hasShop')
     if (Getuser !== 'null' && GetselectShop !== 'undefined') {
       let user = JSON.parse(Getuser)
       let permission = JSON.parse(Getpermission)
       let selectShop = JSON.parse(GetselectShop)
-      commit('LOAD', {user, permission, selectShop})
+      let hasShop = JSON.parse(GethasShop)
+      commit('LOAD', {user, permission, selectShop, hasShop})
       // console.log('show1')
     }
     if (Getuser !== 'null' && GetselectShop === 'undefined') {
@@ -230,6 +234,7 @@ const actions = {
     localStorage.setItem('user', JSON.stringify(state.user))
     localStorage.setItem('permission', JSON.stringify(state.permission))
     localStorage.setItem('selectShop', JSON.stringify(state.selectShop))
+    localStorage.setItem('hasShop', JSON.stringify(state.hasShop))
     console.log(state.selectShop, state.permission)
   },
   clearlogin ({commit, dispatch}) {

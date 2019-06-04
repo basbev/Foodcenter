@@ -747,10 +747,12 @@
               </div>
               <hr>
               <input type="text" v-model="view" placeholder="รีวิว" size="30" class="input is-large">
+              <center>
               <button class="button button12" @click="insertreview(view)">เพิ่มรีวิว</button><br>
               คะแนนความพอใจ&nbsp;
               <star-rating :star-size="40" :show-rating="true" v-model="scorce"></star-rating><br>
               <button class="button is-warning" @click="insertreviewpoint(scorce)">เพิ่มคะแนนร้านค้า</button>
+              </center>
             </div>
           </div>
         </div>
@@ -824,7 +826,8 @@ export default {
       showModal2: false,
       showModal3: false,
       updatecost: '',
-      users: {}
+      users: {},
+      userpoint: ''
     }
   },
   created () {
@@ -1323,7 +1326,7 @@ export default {
       return cart.reduce((accum, item) => accum + item.quantity, 0)
     },
     hasShop () {
-      return this.$store.state.hasShop
+      return this.$store.getters.hasShop
     },
     user () {
       return this.$store.getters.user
@@ -1426,6 +1429,11 @@ export default {
         data.push(item)
       })
       this.users = data
+    })
+    const getuser = firebase.database().ref('user').orderByChild('username').equalTo(this.user)
+    getuser.on('child_added', snap => {
+      this.userpoint = snap.key
+      console.log(this.userpoint)
     })
   }
 }

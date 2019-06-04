@@ -145,7 +145,7 @@
                            ขายดี
                           <label :class="(Search == record.key)?'button is-primary':'button'" :key="key" v-for="(record, key) in records">
                             <i class="fas fa-star star"></i>
-                            <input type="radio" class="radioButton" :value="record.key" v-model="Search">
+                            <input type="radio" class="radioButton" :value="record.key" v-model="Search" @input="filterShop(record.key)">
                             <h3>&nbsp;&nbsp;{{record.key}} {{record.amount}} จาน</h3>
                           </label>
                         </div>
@@ -1286,7 +1286,7 @@ export default {
       return cart.reduce((accum, item) => accum + item.quantity, 0)
     },
     hasShop () {
-      return this.$store.state.hasShop
+      return this.$store.getters.hasShop
     },
     user () {
       return this.$store.getters.user

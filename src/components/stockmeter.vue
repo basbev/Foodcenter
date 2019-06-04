@@ -52,7 +52,7 @@
           </div>
           <div class="level-item">
             <p class="control has-addons">
-              <input class="input" v-model="Search" placeholder="Find a post" @input="filter(Search)">
+              <input class="input" v-model="Search" placeholder="ค้นหา" @input="filter(Search)">
               <!-- <button class="button">
                 ค้นหา
               </button> -->
@@ -60,13 +60,19 @@
           </div>
         </div>
         <!-- Right side -->
-        <!-- <div class="level-right">
-          <p class="level-item"><strong>All</strong></p>
+        <div class="level-right">
+          <!-- <p class="level-item"><strong>All</strong></p>
           <p class="level-item"><a>Published</a></p>
           <p class="level-item"><a>Drafts</a></p>
           <p class="level-item"><a>Deleted</a></p>
-          <p class="level-item"><a class="button is-success">New</a></p>
-        </div> -->
+          <p class="level-item"><a class="button is-success">New</a></p> -->
+          <div @click="isComponentModalActive = true" class="button is-danger">
+                      <span class="icon">
+                        <i class="fa fa-shopping-cart"></i>
+                      </span>
+                      <span>วัตถุดิบที่สั่งซื้อ 0</span>
+              </div>
+        </div>
       </nav>
     </div>
     <div class="spacer"></div>
@@ -77,7 +83,7 @@
           <div class="level-right">
             <p class="level-item"><input class="input" type="number" placeholder="รายการที่เเสดงต่อหน้า" v-model.number="pageSize"></p>
             <p class="level-item"><a class="button is-success" @click="updateTable()">รายการ</a></p>
-            <p class="level-item"><a class="button is-success" @click="setInsertstock()">New</a></p>
+            <p class="level-item"><a class="button is-success" @click="setInsertstock()">เพิ่มวัตถุดิบ</a></p>
            </div>
            <br>
           <!--  -->
@@ -122,8 +128,8 @@
           </section>
           <!--  -->
           <nav class="pagination" role="navigation" aria-label="pagination">
-            <a class="pagination-previous" v-on:click="updatePage(currentPage - 1)" :disabled="showPreviousLink()">Previous</a>
-            <a class="pagination-next" v-on:click="updatePage(currentPage + 1)" :disabled="showNextLink()">Next page</a>
+            <a class="pagination-previous" v-on:click="updatePage(currentPage - 1)" :disabled="showPreviousLink()">ก่อนหน้า</a>
+            <a class="pagination-next" v-on:click="updatePage(currentPage + 1)" :disabled="showNextLink()">ถัดไป</a>
             <ul class="pagination-list">
             <li v-for="(page,index) in totalPages()" :key="index">
             <a class="pagination-link" v-on:click="updatePage(index)" v-bind:class="{ 'is-current': currentPage === index }">{{page}}</a>

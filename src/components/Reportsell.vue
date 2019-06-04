@@ -44,19 +44,19 @@
               <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" v-if="showtable">
                 <thead>
                   <tr>
-                    <th>ชื่อเมนู</th>
+                    <th>วัน</th>
                     <th>จำนวน</th>
                   </tr>
                 </thead>
                 <tfoot>
                   <tr>
-                    <th>ชื่อเมนู</th>
+                    <th>วัน</th>
                     <th>จำนวน</th>
                   </tr>
                 </tfoot>
                 <tbody>
                   <tr :key="key" v-for="(record, key) in reportmoney">
-                    <td>{{record.key}}</td>
+                    <td>{{record.Week}}</td>
                     <td>{{record.money}}</td>
                   </tr>
                 </tbody>
@@ -273,9 +273,22 @@ export default {
     },
     sortHighest2 () {
       this.reportmoney.sort((a, b) => a.money < b.money ? 1 : -1)
+      this.engtothai(this.reportmoney)
     },
     sortHighest3 () {
       this.allday.sort((a, b) => a.quantity < b.quantity ? 1 : -1)
+      this.engtothai(this.allday)
+    },
+    engtothai (day) {
+      for (var i = 0; i < day.length; i++) {
+        if (day[i].Week === 'Monday') { day[i].Week = 'จันทร์' }
+        if (day[i].Week === 'Tuesday') { day[i].Week = 'อังคาร' }
+        if (day[i].Week === 'Wednesday') { day[i].Week = 'พุธ' }
+        if (day[i].Week === 'Thursday') { day[i].Week = 'พฤหัสบดี' }
+        if (day[i].Week === 'Friday') { day[i].Week = 'ศุกร์' }
+        if (day[i].Week === 'Saturay') { day[i].Week = 'เสาร์' }
+        if (day[i].Week === 'Sunday') { day[i].Week = 'อาทิตย์' }
+      }
     },
     showsellhit () {
       this.showtable = true
@@ -301,7 +314,7 @@ export default {
       var data = []
       snap.forEach(ss => {
         var item = ss.val()
-        item.key = ss.key
+        item.Week = ss.key
         data.push(item)
       })
       this.reportmoney = data

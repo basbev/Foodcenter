@@ -67,7 +67,7 @@
                 จัดการ Order
               </span>
       </a>
-      <a v-if="permission === '2'" class="navbar-item" href="#/shop">
+      <a v-if="permission === '2'" class="navbar-item" href="#/shop" @click="myshop()">
         <span class="icon">
                 <i class="fas fa-home"></i>
               </span>
@@ -208,11 +208,14 @@ export default {
       this.isActive = true
     },
     onOutSide: function () {
-      console.log(this.isActive)
+      // console.log(this.isActive)
       if (this.isActive) {
         this.isActive = false
         this.onToggle()
       }
+    },
+    myshop () {
+      this.$store.dispatch('selectShop', this.hasShop)
     },
     ...mapActions({
       load: 'load',
@@ -223,7 +226,8 @@ export default {
     ...mapGetters({
       permission: 'permission',
       isLoggedIn: 'isLoggedIn',
-      user: 'user'
+      user: 'user',
+      hasShop: 'hasShop'
     })
   },
   directives: {

@@ -42,7 +42,7 @@
         &nbsp;ร้านค้า : {{this.SelectShops}}
         <hr>
         <span v-if="shops.q">&nbsp;จำนวนคิว ณ ขณะนี้ {{shops.q}} คิว  <br></span>
-        &nbsp;เวลารายการอาหารล่าสุด&nbsp;{{((shops.SaveDate)?shops.SaveDate.slice(11,16):'00.00')}}<br>
+        &nbsp;เวลารายการอาหารล่าสุด&nbsp;{{((shops.SaveDate)?shops.SaveDate.slice(11,16):'00.00 น.')}}&nbsp;น.<br>
         <router-link to="/shop"><button v-show="products.length" class='button button13'>กลับไปเลือกเมนู</button></router-link>
         <button v-show="products.length" class='button is-success' @click="order(products, shops.q, CountQuantity, total, shops.SaveDate)">ยืนยันการสั่ง</button>
       </div>

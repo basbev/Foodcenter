@@ -52,7 +52,7 @@
           </div>
           <div class="level-item">
             <p class="control has-addons">
-              <input class="input" v-model="Search" placeholder="Find a post" @input="filter(Search)">
+              <input class="input" v-model="Search" placeholder="ค้นหา" @input="filter(Search)">
               <!-- <button class="button">
                 ค้นหา
               </button> -->
@@ -60,13 +60,19 @@
           </div>
         </div>
         <!-- Right side -->
-        <!-- <div class="level-right">
-          <p class="level-item"><strong>All</strong></p>
+        <div class="level-right">
+          <!-- <p class="level-item"><strong>All</strong></p>
           <p class="level-item"><a>Published</a></p>
           <p class="level-item"><a>Drafts</a></p>
           <p class="level-item"><a>Deleted</a></p>
-          <p class="level-item"><a class="button is-success">New</a></p>
-        </div> -->
+          <p class="level-item"><a class="button is-success">New</a></p> -->
+          <div @click="setdeliverstock" class="button is-danger">
+                      <span class="icon">
+                        <i class="fa fa-shopping-cart"></i>
+                      </span>
+                      <span>วัตถุดิบที่สั่งซื้อ ({{this.deliver.length}})</span>
+              </div>
+        </div>
       </nav>
     </div>
     <div class="spacer"></div>
@@ -77,7 +83,7 @@
           <div class="level-right">
             <p class="level-item"><input class="input" type="number" placeholder="รายการที่เเสดงต่อหน้า" v-model.number="pageSize"></p>
             <p class="level-item"><a class="button is-success" @click="updateTable()">รายการ</a></p>
-            <p class="level-item"><a class="button is-success" @click="setInsertstock()">New</a></p>
+            <p class="level-item"><a class="button is-success" @click="setInsertstock()">เพิ่มวัตถุดิบ</a></p>
            </div>
            <br>
           <!--  -->
@@ -122,8 +128,8 @@
           </section>
           <!--  -->
           <nav class="pagination" role="navigation" aria-label="pagination">
-            <a class="pagination-previous" v-on:click="updatePage(currentPage - 1)" :disabled="showPreviousLink()">Previous</a>
-            <a class="pagination-next" v-on:click="updatePage(currentPage + 1)" :disabled="showNextLink()">Next page</a>
+            <a class="pagination-previous" v-on:click="updatePage(currentPage - 1)" :disabled="showPreviousLink()">ก่อนหน้า</a>
+            <a class="pagination-next" v-on:click="updatePage(currentPage + 1)" :disabled="showNextLink()">ถัดไป</a>
             <ul class="pagination-list">
             <li v-for="(page,index) in totalPages()" :key="index">
             <a class="pagination-link" v-on:click="updatePage(index)" v-bind:class="{ 'is-current': currentPage === index }">{{page}}</a>
@@ -199,15 +205,61 @@
         </div>
     </div>
   <!--show modal-->
-  <!-- Select -->
-    <!-- <select class="is-hovered" v-model="select">
-            <option
-              :key="key"
-              v-for="(dep, key) in datastock"
-              :value="dep.stockname"
-              >{{dep.stockname}}</option>
-                    </select> -->
-  <!-- Select -->
+  <!-- incomestock -->
+  <div id="modal-ter" class="modal is-active" v-show="showModal2" @close="showModal2 = false">
+      <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">วัตถุดิบ</p>
+              <button class="delete" aria-label="close" @click="Closemodal2()"></button>
+          </header>
+          <section class="modal-card-body">
+            <div class="content">
+              <!-- เนื้อหา -->
+              <br>
+              <div>
+                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
+                  <tr>
+                    <th>ชื่อวัตถุดิบ</th>
+                    <th>จำนวน</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <th>ชื่อวัตถุดิบ</th>
+                    <th>จำนวน</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </tfoot>
+                <tbody>
+                  <tr :key="key" v-for="(stock, key) in deliver">
+                    <td>{{stock.foodname}}</td>
+                    <td>{{stock.foodamount}}</td>
+                    <td class="is-icon">
+                      <button class="btn" @click="addstock(stock.foodname, stock.foodamount, stock.key)"><i class="fa fa-plus"></i></button>
+                    </td>
+                    <td class="is-icon">
+                      <button class="btn" @click="Deldeliver2(stock.key)"><i class="fa fa-trash"></i></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+              <!-- เนื้อหา -->
+            </div>
+          </section>
+          <footer class="modal-card-foot">
+            <button v-if="!statusEdit" class="button is-success" @click="Insertstock(stockname, stockamount, safety)">เพิ่มข้อมูล</button>
+            <button v-if="statusEdit" class="button is-success" @click="Editstock(updatekey, stockname, stockamount, safety)">บันทึกข้อมูล</button>
+            <button class="button" @click="Closemodal2()">ยกเลิก</button>
+          </footer>
+        </div>
+    </div>
+  <!-- incomestock -->
   </div>
 </template>
 <script>
@@ -219,6 +271,7 @@ export default {
     return {
       datastock: [],
       showModal: false,
+      showModal2: false,
       stockname: '',
       stockamount: '',
       statusEdit: false,
@@ -230,11 +283,13 @@ export default {
       pageSize: 5,
       currentPage: 0,
       slot: [],
-      safety: ''
+      safety: '',
+      deliver: ''
     }
   },
   mounted () {
     const dbRefObject = firebase.database().ref().child('foodcenter/stock/' + this.selectShop)
+    const dbRefObject1 = firebase.database().ref().child('foodcenter/deliver/' + this.selectShop)
     dbRefObject.on('value', snap => {
       var data = []
       this.Countstock = snap.numChildren()
@@ -245,6 +300,15 @@ export default {
       })
       this.datastock = data
       this.updateTable()
+    })
+    dbRefObject1.on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.deliver = data
     })
   },
   computed: {
@@ -276,11 +340,35 @@ export default {
         }
       })
     },
+    Deldeliver2 (key) {
+      this.$swal({
+        title: 'คุณกำลังลบวัตถุดิบนี้?',
+        // text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยืนยัน!',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.value) {
+          this.Deletedeliver(key)
+          this.$swal(
+            'ลบเเล้ว!',
+            'วัตถุดิบนี้โดนลบเรียบร้อยเเล้ว.',
+            'success'
+          )
+        }
+      })
+    },
     setInsertstock () {
       this.showModal = true
       this.stockname = ''
       this.stockamount = ''
       this.safety = 0
+    },
+    setdeliverstock () {
+      this.showModal2 = true
     },
     Insertstock (stockname, stockamount, safety) {
       if (safety === '') { safety = 0 }
@@ -342,8 +430,14 @@ export default {
       this.showModal = false
       this.statusEdit = false
     },
+    Closemodal2 () {
+      this.showModal2 = false
+    },
     Deletestock (key) {
       firebase.database().ref().child('foodcenter/stock/' + this.selectShop).child(key).remove()
+    },
+    Deletedeliver (key) {
+      firebase.database().ref().child('foodcenter/deliver/' + this.selectShop).child(key).remove()
     },
     filter (Search) {
       if (Search.length > 0) {
@@ -382,6 +476,23 @@ export default {
         this.updatePage(this.currentPage - 1)
       }
       console.log(this.currentPage, this.pageSize)
+    },
+    addstock (name, amount, key) {
+      const found = this.datastock.find(p => p.stockname === name)
+      if (found) {
+        firebase.database().ref().child('foodcenter/stock/' + this.selectShop).child(found.key).update({
+          stockamount: found.stockamount + amount
+        })
+        this.Deletedeliver(key)
+      } else {
+        let data = {
+          stockname: name,
+          stockamount: amount,
+          safety: 0
+        }
+        firebase.database().ref().child('foodcenter/stock/' + this.selectShop).push(data)
+        this.Deletedeliver(key)
+      }
     }
   }
 }
