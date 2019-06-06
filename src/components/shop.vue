@@ -748,11 +748,18 @@
               <hr>
               <input type="text" v-model="view" placeholder="รีวิว" size="30" class="input is-large">
               <center>
+                <div v-if="!editvote[0]">
               <button class="button button12" @click="insertreview(view)">เพิ่มรีวิว</button><br>
               คะแนนความพอใจ&nbsp;
               <star-rating :star-size="40" :show-rating="true" v-model="scorce"></star-rating><br>
               <button class="button is-warning" @click="insertreviewpoint(scorce)">เพิ่มคะแนนร้านค้า</button>
-              <button class="button is-warning">เเก้ไขคะแนนร้านค้า</button>
+                </div>
+                <div v-if="editvote[0]">
+              <button class="button button12" @click="insertreview(view)">เพิ่มรีวิว</button><br>
+              คะแนนความพอใจ&nbsp;
+              <star-rating :star-size="40" :show-rating="true" v-model="tmpvote"></star-rating><br>
+              <button class="button is-warning" @click="editreviewpoint(tmpvote)">เเก้ไขคะแนนร้านค้า</button>
+                </div>
               </center>
             </div>
           </div>
@@ -828,7 +835,9 @@ export default {
       showModal3: false,
       updatecost: '',
       users: {},
-      userpoint: ''
+      userpoint: '',
+      editvote: '',
+      tmpvote: 0
     }
   },
   created () {
@@ -936,7 +945,7 @@ export default {
       }
     },
     insertreviewpoint (scorce) {
-      scorce = parseInt(scorce, 10)
+      if (scorce === 0) { scorce = parseInt(this.tmpvote, 10) } else { scorce = parseInt(scorce, 10) }
       console.log(scorce)
       let data = {
         scorce: scorce,
@@ -951,22 +960,47 @@ export default {
           // footer: '<a href>Why do I have this issue?</a>'
         })
       } else {
-        if (this.vote.length !== 0) {
-          console.log(this.vote)
-          let Refcount = this.vote[0].count + 1
+        if (this.vote.length === 0 && this.tmpvote === 0) {
+          console.log(scorce, '1')
+          foodcenterRef.child('detail').child(this.selectShop).child('Rating').set(scorce.toFixed(2))
+          foodcenterRef.child('shoppoint').child(this.selectShop).set(data)
+          this.uservote(scorce)
+        }
+        if (this.vote.length !== 0 && this.tmpvote === 0) {
+          console.log(scorce, '2')
           let Refscorce = this.vote[0].scorce + scorce
+          let Refcount = this.vote[0].count + 1
           let Rating = Refscorce / Refcount
           foodcenterRef.child('shoppoint').child(this.vote[0].key).child('count').set(Refcount)
           foodcenterRef.child('shoppoint').child(this.vote[0].key).child('scorce').set(Refscorce)
           foodcenterRef.child('detail').child(this.selectShop).child('Rating').set(Rating.toFixed(2))
-        } else {
-          console.log('else')
-          foodcenterRef.child('detail').child(this.selectShop).child('Rating').set(scorce)
-          foodcenterRef.child('shoppoint').child(this.selectShop).set(data)
+          this.uservote(scorce)
         }
         this.scorce = 0
         alert('ให้คะแนนร้านค้าเรียบร้อยแล้ว')
       }
+    },
+    editreviewpoint (scorce) {
+      let Refscorce = (this.vote[0].scorce - this.editvote[0].scorce) + this.tmpvote
+      let Refcount = this.vote[0].count
+      let Rating = Refscorce / Refcount
+      foodcenterRef.child('shoppoint').child(this.vote[0].key).child('count').set(Refcount)
+      foodcenterRef.child('shoppoint').child(this.vote[0].key).child('scorce').set(Refscorce)
+      foodcenterRef.child('detail').child(this.selectShop).child('Rating').set(Rating.toFixed(2))
+      this.uservote(scorce)
+      alert('เเก้ไขคะแนนร้านค้าเรียบร้อยแล้ว')
+    },
+    uservote (scorce) {
+      console.log(scorce)
+      let data = {
+        user: this.user,
+        scorce: scorce
+      }
+      if (this.editvote[0]) {
+        foodcenterRef.child('vote').child(this.selectShop).child(this.editvote[0].key).update({
+          scorce: scorce
+        })
+      } else { foodcenterRef.child('vote').child(this.selectShop).push(data) }
     },
     insertpromo (prodetail) {
       let data = {
@@ -1360,6 +1394,7 @@ export default {
     const dbRefObjectvote = foodcenterRef.child('shoppoint').orderByChild('shop').equalTo(this.selectShop)
     const dbRefObjectstock = foodcenterRef.child('stock').child(this.selectShop)
     const dbRefObjectusers = database.ref('/user')
+    const dbRefObjecteditvote = foodcenterRef.child('vote').child(this.selectShop).orderByChild('user').equalTo(this.user)
     dbRefObject.on('value', snap => {
       var data = []
       snap.forEach(ss => {
@@ -1435,6 +1470,18 @@ export default {
     getuser.on('child_added', snap => {
       this.userpoint = snap.key
       console.log(this.userpoint)
+    })
+    dbRefObjecteditvote.on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.editvote = data
+      if (data[0]) {
+        this.tmpvote = data[0].scorce
+      }
     })
   }
 }
