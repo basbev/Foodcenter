@@ -321,7 +321,7 @@ export default {
     async safetystock (safetys) {
       await this.before()
       await this.sortcode(safetys)
-      await axios.get('https://foodmail.herokuapp.com/', {
+      await axios.get('http://localhost:3001', {
         params: {
           id: `<p>ระบบ Safetystock เเจ้งเตือนปริมาณถึงที่กำหนด มีรายละเอียดดังนี้</p>
                   <ul>  
@@ -329,7 +329,8 @@ export default {
                   </ul> 
                   <p>Safetystock : ` + this.SelectShops + `<p>`,
           name: this.SelectShops,
-          email: this.email
+          email: this.email,
+          subject: 'Safetystock'
         }
       })
         .then(response => {

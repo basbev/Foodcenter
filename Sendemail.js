@@ -23,9 +23,9 @@ function mail (params) {
   var mailOptions = {
     from: 'Foodcenterkmutnb@gmail.com',
     to: params.email,
-    subject: 'การสั่งซื้อวัตถุดิบ',
+    subject: params.subject,
     // text: `Foodcenter Welcome.` + params.id,
-    html: '<h1>รายการสั่งซื้อวัตถุดิบ ' + params.name + '</h1><p>' + params.id + '</p>'
+    html: '<h1>' + params.subject + ' ' + params.name + '</h1><p>' + params.id + '</p>'
   }
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {

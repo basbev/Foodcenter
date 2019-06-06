@@ -1327,7 +1327,7 @@ export default {
     async notiemail (promo) {
       for (var i = 0; i < this.users.length; i++) {
         if (this.users[i].email !== '') {
-          await axios.get('https://foodmail.herokuapp.com/', {
+          await axios.get('http://localhost:3001', {
             params: {
               id: `<p>ระบบ ร้านค้า เเจ้งเตือนโปรโมชั่นใหม่เข้ามา!! มีรายละเอียดดังนี้</p>
                       <ul>  
@@ -1335,7 +1335,8 @@ export default {
                       </ul> 
                       <p>Promotion By : ` + this.selectShop + `<p>`,
               name: this.selectShop,
-              email: this.users[i].email
+              email: this.users[i].email,
+              subject: 'เเจ้งเตือนโปรโมชั่นใหม่'
             }
           })
             .then(response => {

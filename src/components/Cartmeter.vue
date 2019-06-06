@@ -250,7 +250,7 @@ export default {
       await this.deliver(products)
       await this.before()
       await this.sortcode(products)
-      await axios.get('https://foodmail.herokuapp.com/', {
+      await axios.get('http://localhost:3001', {
         params: {
           id: `<p>มีรายละเอียดดังนี้</p>
                   <ul>  
@@ -259,7 +259,8 @@ export default {
                   <p>ราคารวม : ` + this.total + ` บาท<p>
                   <p>ผู้ทำการสั่งซื้อวัตถุดิบ : ` + this.users + `<p>`,
           name: this.SelectShops,
-          email: this.email
+          email: this.email,
+          subject: 'การสั่งซื้อวัตถุดิบ'
         }
       })
         .then(response => {
