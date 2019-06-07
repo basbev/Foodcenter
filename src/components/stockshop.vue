@@ -253,8 +253,8 @@
             </div>
           </section>
           <footer class="modal-card-foot">
-            <button v-if="!statusEdit" class="button is-success" @click="Insertstock(stockname, stockamount, safety)">เพิ่มข้อมูล</button>
-            <button v-if="statusEdit" class="button is-success" @click="Editstock(updatekey, stockname, stockamount, safety)">บันทึกข้อมูล</button>
+            <!-- <button v-if="!statusEdit" class="button is-success" @click="Insertstock(stockname, stockamount, safety)">เพิ่มข้อมูล</button>
+            <button v-if="statusEdit" class="button is-success" @click="Editstock(updatekey, stockname, stockamount, safety)">บันทึกข้อมูล</button> -->
             <button class="button" @click="Closemodal2()">ยกเลิก</button>
           </footer>
         </div>

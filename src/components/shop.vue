@@ -265,12 +265,12 @@
                           <div class="detail">
                             <h3 class="title is-3">{{menu.foodname}}</h3>
                             <h6 class="">ราคา&nbsp;{{menu.foodprice}}&nbsp;บาท</h6>
-                            <h6>จำนวน&nbsp;{{menu.amount}}&nbsp;ชิ้น</h6>
+                            <!-- <h6>จำนวน&nbsp;{{menu.amount}}&nbsp;ชิ้น</h6> -->
                           </div>
                           <span class="icon is-small cartButton" v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost)">
                             <i class="fas fa-cart-plus"></i>
                           </span>
-                          <span class="icon is-small cartButton disable" v-if="checkstock[key] === 1">
+                          <span class="icon is-small cartButton disable" v-if="checkstock[key] === 1" @click="Cartdisable()">
                             <i class="fas fa-cart-plus"></i>
                           </span>
                           <img v-url={filename:menu.foodpic} width="100%" height="auto"/>
@@ -1299,6 +1299,23 @@ export default {
       }
       this.$store.dispatch('stocklist', this.datastock)
     },
+    maximum () {
+      for (var x = 0; x < this.menus.length; x++) {
+        var tmp = 0
+        var Plate = 0
+        for (var y = 0; y < this.menus[x].meters.length; y++) {
+          var food = this.datastock.find(p => p.stockname === this.menus[x].meters[y].name)
+          var Usefood = this.menus[x].meters[y].qty
+          // for (var j = this.menus[x].meters[y].qty; j < food.stockamount; j+j) { // จำนวนจานที่สามารถซื้อได้
+          // }
+          if (Usefood < food.stockamount && tmp !== 1) {
+            Usefood = Usefood + Usefood
+            tmp = 0
+          } else { tmp = 1 }
+        }
+        if (tmp === 0) { Plate = Plate + 1 }
+      }
+    },
     removemeter () {
       this.meters.splice(0, 1)
     },
@@ -1348,6 +1365,9 @@ export default {
             })
         }
       }
+    },
+    Cartdisable () {
+      this.$swal.fire('ไม่สามารถเพิ่มได้!', 'เนื่องจากวัตถุดิบที่ใช้ไม่เพียงพอ!', 'error')
     }
   },
   computed: {
@@ -1457,6 +1477,7 @@ export default {
       })
       this.datastock = data
       this.checkstocklist()
+      // this.maximum()
     })
     dbRefObjectusers.on('value', snap => {
       var data = []

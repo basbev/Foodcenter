@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-
+const Swal = require('sweetalert2')
 const state = {
   user: null,
   password: null,
@@ -81,7 +81,7 @@ const mutations = {
           Cost
         })
       } else { record.quantity++ }
-    }
+    } else { Swal.fire('ไม่สามารถเพิ่มได้!', 'เนื่องจากวัตถุดิบที่ใช้ไม่เพียงพอ!', 'error') }
   },
   stocklist: (state, payload) => {
     state.stocklist = payload
