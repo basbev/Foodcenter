@@ -111,7 +111,7 @@ export default {
       showmoneyweek: false,
       reportsell: '',
       reportmoney: '',
-      Week: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturay'],
+      Week: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       allday: []
     }
   },
@@ -286,7 +286,7 @@ export default {
         if (day[i].Week === 'Wednesday') { day[i].Week = 'พุธ' }
         if (day[i].Week === 'Thursday') { day[i].Week = 'พฤหัสบดี' }
         if (day[i].Week === 'Friday') { day[i].Week = 'ศุกร์' }
-        if (day[i].Week === 'Saturay') { day[i].Week = 'เสาร์' }
+        if (day[i].Week === 'Saturday') { day[i].Week = 'เสาร์' }
         if (day[i].Week === 'Sunday') { day[i].Week = 'อาทิตย์' }
       }
     },
