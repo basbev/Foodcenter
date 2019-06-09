@@ -28,7 +28,8 @@ const getters = {
         quantity,
         type: product.type,
         meters: product.meters,
-        Cost: product.Cost
+        Cost: product.Cost,
+        unit: product.unit
       }
     })
   },
@@ -50,7 +51,7 @@ const mutations = {
   setselectShop: (state, shop) => {
     state.selectShop = shop
   },
-  ADD_TO_CART: (state, {Akey, foodname, foodprice, type, meters, Cost}) => {
+  ADD_TO_CART: (state, {Akey, foodname, foodprice, type, meters, Cost, unit}) => {
     var tmp = 0 // กำหนดว่าครบไหม
     const record = state.added.find(p => p.Akey === Akey) // หาจำนวนจาน
     for (var i = 0; i < meters.length; i++) {
@@ -78,7 +79,8 @@ const mutations = {
           quantity: 1,
           type,
           meters,
-          Cost
+          Cost,
+          unit
         })
       } else { record.quantity++ }
     } else { Swal.fire('ไม่สามารถเพิ่มได้!', 'เนื่องจากวัตถุดิบที่ใช้ไม่เพียงพอ!', 'error') }
@@ -115,7 +117,7 @@ const mutations = {
     }
     if (tmp === 0) {
       state.added[index].quantity++
-    }
+    } else { Swal.fire('ไม่สามารถเพิ่มได้!', 'เนื่องจากวัตถุดิบที่ใช้ไม่เพียงพอ!', 'error') }
   },
   decleseAmount: (state, index) => {
     if (state.added[index].quantity > 1) {
@@ -124,7 +126,7 @@ const mutations = {
         stock.qty = stock.qty - state.added[index].meters[i].qty
       }
       state.added[index].quantity--
-    }
+    } else { Swal.fire('ไม่สามารถลบได้!', 'เนื่องจากขั้นต้นในการสั่งเมนูนี้!', 'error') }
   },
   LOAD (state, {user, permission, selectShop, hasShop}) {
     state.user = user
@@ -192,8 +194,9 @@ const actions = {
     const type = payload.type
     const meters = payload.meters
     const Cost = payload.Cost
-    console.log(Akey, foodname, foodprice, type, meters, Cost)
-    commit('ADD_TO_CART', {Akey, foodname, foodprice, type, meters, Cost})
+    const unit = payload.typeunit
+    console.log(Akey, foodname, foodprice, type, meters, Cost, unit)
+    commit('ADD_TO_CART', {Akey, foodname, foodprice, type, meters, Cost, unit})
   },
   stocklist ({commit}, payload) {
     commit('stocklist', (payload))

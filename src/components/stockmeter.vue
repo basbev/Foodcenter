@@ -66,11 +66,11 @@
           <p class="level-item"><a>Drafts</a></p>
           <p class="level-item"><a>Deleted</a></p>
           <p class="level-item"><a class="button is-success">New</a></p> -->
-          <div @click="isComponentModalActive = true" class="button is-danger">
+          <div @click="setunit" class="button is-info">
                       <span class="icon">
-                        <i class="fa fa-shopping-cart"></i>
+                        <i class="fa fa-book"></i>
                       </span>
-                      <span>วัตถุดิบที่สั่งซื้อ 0</span>
+                      <span>หน่วยวัตถุดิบ </span>
               </div>
         </div>
       </nav>
@@ -99,27 +99,29 @@
                   <tr>
                     <th>ชื่อวัตถุดิบ</th>
                     <th>จำนวน</th>
-                    <th></th>
-                    <th></th>
+                    <th>หน่วยวัตถุดิบ</th>
+                    <th>เเก้ไข</th>
+                    <th>ลบ</th>
                   </tr>
                 </thead>
-                <tfoot>
+                <!-- <tfoot>
                   <tr>
                     <th>ชื่อวัตถุดิบ</th>
                     <th>จำนวน</th>
                     <th></th>
                     <th></th>
                   </tr>
-                </tfoot>
+                </tfoot> -->
                 <tbody>
                   <tr :key="key" v-for="(stock, key) in (showData.length>0)?showData:slot">
                     <td>{{stock.stockname}}</td>
                     <td>{{stock.stockamount}}</td>
+                    <td>{{stock.type}}</td>
                     <td class="is-icon">
-                      <button class="btn" @click="setEditstock(stock.key, stock.stockname, stock.stockamount)"><i class="fas fa-edit"></i></button>
+                      <button class="button is-warning" @click="setEditstock(stock.key, stock.stockname, stock.stockamount, stock.type)"><i class="fas fa-edit"></i></button>
                     </td>
                     <td class="is-icon">
-                      <button class="btn" @click="Delstock(stock.key)"><i class="fa fa-trash"></i></button>
+                      <button class="button is-danger" @click="Delstock(stock.key)"><i class="fa fa-trash"></i></button>
                     </td>
                   </tr>
                 </tbody>
@@ -179,6 +181,20 @@
                     >
                   </div>
                 </div>
+                <div class="columns">
+                  <div class="column is-2">
+                  ประเภทหน่วยวัตถุดิบ :
+                </div>
+                <div class="column">
+                  <select name="main meter" v-model="typeunit" aria-readonly="">
+                    <option
+                    :key="key"
+                    v-for="(dep, key) in units"
+                    :value="dep.name"
+                    >{{dep.name}}</option>
+                    </select>
+                  </div>
+                </div>
               </div>
               </form>
               <!-- เนื้อหา -->
@@ -192,6 +208,121 @@
         </div>
     </div>
   <!--show modal-->
+  <!-- หน่วยวัตถุดิบ -->
+  <div id="modal-ter" class="modal is-active" v-show="showModal3" @close="showModal3 = false">
+      <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">หน่วยวัตถุดิบ</p>
+              <button class="delete" aria-label="close" @click="Closemodal3()"></button>
+          </header>
+          <section class="modal-card-body">
+            <div class="content">
+              <!-- เนื้อหา -->
+              <br>
+              <!-- เพิ่มวัตถุดิบ -->
+              <div class="columns" v-if="!updateunit">
+              <div class="column">
+                ชื่อหน่วยวัตถุดิบ :
+              </div>
+              <div class="column">
+                <input
+                    class="form-control mb-2"
+                    type="text"
+                    v-model="unit"
+                    placeholder="หน่วย"
+                  >
+              </div>
+              <div class="column">
+                <button class="button is-success" @click="insertunit()">เพิ่มหน่วยวัตถุดิบ</button>
+              </div>
+            </div>
+            <!-- edit -->
+                <div class="columns" v-if="updateunit">
+                <div class="column">
+                  ชื่อหน่วยวัตถุดิบ :
+                </div>
+                <div class="column">
+                  <input
+                    class="form-control mb-2"
+                    type="text"
+                    v-model="updateunit"
+                    placeholder="หน่วย"
+                  >
+                  </div>
+                </div>
+                <div class="columns" v-if="updateunit">
+                  <button class="button is-success" @click="updateunitfire()">เเก้ไขหน่วยวัตถุดิบ</button>
+                </div>
+                <!-- edit -->
+              <!-- <div class="columns" v-if="!updateunit">
+                <div class="column is-3">
+                  ชื่อหน่วยวัตถุดิบ :
+                </div>
+                <div class="column is-6">
+                  <input
+                    class="form-control mb-2"
+                    type="text"
+                    v-model="unit"
+                    placeholder="หน่วย"
+                  >
+                  </div>
+                  <div class="column is-3">
+                </div>
+                </div> -->
+                <!-- เพิ่มวัตถุดิบ -->
+              <div>
+                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
+                <thead>
+                  <tr>
+                    <th>ชื่อหน่วยวัตถุดิบ</th>
+                    <th>เเก้ไข</th>
+                    <th>ลบ</th>
+                  </tr>
+                </thead>
+                <!-- <tfoot>
+                  <tr>
+                    <th>ชื่อวัตถุดิบ</th>
+                    <th>จำนวน</th>
+                    <th>เเก้ไข</th>
+                    <th>ลบ</th>
+                  </tr>
+                </tfoot> -->
+                <tbody>
+                  <tr :key="key" v-for="(unit, key) in units">
+                    <td> {{unit.name}}</td>
+                    <td class="is-icon">
+                      <center><button class="button is-warning" @click="setupdate(unit.name, unit.key)"><i class="fas fa-edit"></i></button></center>
+                    </td>
+                    <td class="is-icon">
+                      <center><button class="button is-danger" @click="Delunit(unit.key)"><i class="fa fa-trash"></i></button></center>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+              <!-- เนื้อหา -->
+            </div>
+          </section>
+          <footer class="modal-card-foot">
+            <!-- <button v-if="!statusEdit" class="button is-success" @click="Insertstock(stockname, stockamount, safety)">เพิ่มข้อมูล</button>
+            <button v-if="statusEdit" class="button is-success" @click="Editstock(updatekey, stockname, stockamount, safety)">บันทึกข้อมูล</button> -->
+                  <!-- <div class="columns">
+                    <div class="column"></div>
+                  <center> -->
+                  <div class="columns">
+                    <div class="column">
+                      <!-- &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                      &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                      &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                      &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; -->
+                    <button class="button is-danger" @click="Closemodal3()">ยกเลิก</button>
+                    </div>
+                  </div>
+          </footer>
+        </div>
+    </div>
+    <!-- หน่วยวัตถุดิบ -->
   <!-- Select -->
     <!-- <select class="is-hovered" v-model="select">
             <option
@@ -216,17 +347,24 @@ export default {
       stockamount: '',
       statusEdit: false,
       updatekey: '',
+      updatekey2: '',
       showData: [],
       Search: '',
       Countstock: 0,
       select: '',
       pageSize: 5,
       currentPage: 0,
-      slot: []
+      slot: [],
+      showModal3: false,
+      units: '',
+      unit: '',
+      updateunit: '',
+      typeunit: ''
     }
   },
   mounted () {
     const dbRefObject = firebase.database().ref().child('meters/stock/' + this.selectShop)
+    const dbRefObject2 = firebase.database().ref().child('meters/unit/' + this.selectShop)
     dbRefObject.on('value', snap => {
       var data = []
       this.Countstock = snap.numChildren()
@@ -237,6 +375,15 @@ export default {
       })
       this.datastock = data
       this.updateTable()
+    })
+    dbRefObject2.on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.units = data
     })
   },
   computed: {
@@ -268,13 +415,58 @@ export default {
         }
       })
     },
+    Delunit (key) {
+      this.$swal({
+        title: 'คุณกำลังลบวัตถุดิบนี้?',
+        // text: "You won't be able to revert this!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยืนยัน!',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.value) {
+          this.Deleteunit(key)
+          this.$swal(
+            'ลบเเล้ว!',
+            'วัตถุดิบนี้โดนลบเรียบร้อยเเล้ว.',
+            'success'
+          )
+        }
+      })
+    },
+    Deleteunit (key) {
+      firebase.database().ref().child('meters/unit/' + this.selectShop).child(key).remove()
+    },
+    updateunitfire () {
+      firebase.database().ref().child('meters/unit/' + this.selectShop).child(this.updatekey2).update({
+        name: this.updateunit
+      })
+      this.updateunit = ''
+    },
     setInsertstock () {
       this.showModal = true
+    },
+    setunit () {
+      this.showModal3 = true
+    },
+    setupdate (name, key) {
+      this.updateunit = name
+      this.updatekey2 = key
+    },
+    insertunit () {
+      let data = {
+        name: this.unit
+      }
+      firebase.database().ref().child('meters/unit/' + this.selectShop).push(data)
+      this.unit = ''
     },
     Insertstock (stockname, stockamount) {
       let data = {
         stockname: stockname,
-        stockamount: parseInt(stockamount, 10)
+        stockamount: parseInt(stockamount, 10),
+        type: this.typeunit
       }
       if (stockname === '' || stockamount === '') {
         this.$swal({
@@ -288,29 +480,37 @@ export default {
         this.stockname = ''
         this.stockamount = ''
         this.showModal = false
+        this.typeunit = ''
       }
     },
-    setEditstock (key, stockname, stockamount) {
+    setEditstock (key, stockname, stockamount, type) {
       this.showModal = true
       this.statusEdit = true
       this.stockname = stockname
       this.stockamount = stockamount
       this.updatekey = key
+      this.typeunit = type
     },
     Editstock (key, stockname, stockamount) {
       firebase.database().ref().child('meters/stock/' + this.selectShop).child(key).update({
         stockname: stockname,
-        stockamount: parseInt(stockamount, 10)
+        stockamount: parseInt(stockamount, 10),
+        type: this.typeunit
       })
       this.showModal = false
       this.statusEdit = false
       this.stockname = ''
       this.stockamount = ''
       this.updatekey = ''
+      this.typeunit = ''
     },
     Closemodal () {
       this.showModal = false
       this.statusEdit = false
+    },
+    Closemodal3 () {
+      this.showModal3 = false
+      this.updateunit = ''
     },
     Deletestock (key) {
       firebase.database().ref().child('meters/stock/' + this.selectShop).child(key).remove()

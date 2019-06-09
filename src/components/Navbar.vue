@@ -107,6 +107,14 @@
                 สต็อตร้านวัตถุดิบ
               </span>
       </a>
+      <a v-if="permission === '5'" class="navbar-item" href="#/meter" @click="myshop()">
+        <span class="icon">
+                <i class="fas fa-home"></i>
+              </span>
+              <span>
+                ร้านวัตถุดิบ
+              </span>
+      </a>
     </div>
 
     <div class="navbar-end">

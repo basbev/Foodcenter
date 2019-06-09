@@ -255,9 +255,9 @@
                           <div class="detail">
                             <h3 class="title is-3">{{menu.foodname}}</h3>
                             <h6 class="">ราคา&nbsp;{{menu.foodprice}}&nbsp;บาท</h6>
-                            <h6>จำนวน&nbsp;{{menu.amount}}&nbsp;ชิ้น</h6>
+                            <h6>จำนวน&nbsp;{{menu.type}}&nbsp;ชิ้น</h6>
                           </div>
-                          <span class="icon is-small cartButton" v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost)">
+                          <span class="icon is-small cartButton" v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost, menu.type)">
                             <i class="fas fa-cart-plus"></i>
                           </span>
                           <span class="icon is-small cartButton disable" v-if="checkstock[key] === 1">
@@ -265,7 +265,7 @@
                           </span>
                           <img v-url={filename:menu.foodpic} width="100%" height="auto"/>
                           <div class="editMenuBtns">
-                            <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.meters, menu.Cost)" class="button button13-white">
+                            <button v-if="permission !== '1'" @click="SetUpdateMenu(menu.key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.meters, menu.Cost, menu.type)" class="button button13-white">
                               <span class="icon">
                                 <i class="fas fa-edit"></i>
                               </span>
@@ -353,6 +353,22 @@
                                       </span>
                                     </div>
                                   </div>
+                                  <!-- type -->
+                          <div class="columns">
+                              <div class="column is-2">
+                                ชื่อหน่วยวัตถุดิบ
+                              </div>
+                              <div class="column">
+                                <select name="main meter" v-model="typeunit" aria-readonly="">
+                                <option
+                                :key="key"
+                                v-for="(dep, key) in units"
+                                :value="dep.name"
+                                >{{dep.name}}</option>
+                                </select>
+                              </div>
+                            </div>
+                          <!-- type -->
                                   <div class="columns" v-for="ameter in meters" :key="ameter.id">
                                     <div class="column is-2">
                                       ชื่อวัตถุดิบ :
@@ -403,7 +419,7 @@
                               </div>
                             </section>
                             <footer class="modal-card-foot">
-                              <button class="button is-success" @click="UpdateMenu(menu.key, updateMenufood, updateMenuprice, updateMenutype, updateMenupic, updatecost)">อัพเดทเมนู</button>
+                              <button class="button is-success" @click="UpdateMenu(updateKey, updateMenufood, updateMenuprice, updateMenutype, updateMenupic, updatecost)">อัพเดทเมนู</button>
                               <!-- <button class="button is-success">บันทึกข้อมูล</button> -->
                               <button class="button" @click="Closemodal3()">ยกเลิก</button>
                             </footer>
@@ -665,6 +681,22 @@
                               </span>
                             </div>
                           </div>
+                          <!-- type -->
+                          <div class="columns">
+                              <div class="column is-2">
+                                ชื่อหน่วยวัตถุดิบ
+                              </div>
+                              <div class="column">
+                                <select name="main meter" v-model="typeunit" aria-readonly="">
+                                <option
+                                :key="key"
+                                v-for="(dep, key) in units"
+                                :value="dep.name"
+                                >{{dep.name}}</option>
+                                </select>
+                              </div>
+                            </div>
+                          <!-- type -->
                           <div class="columns" v-for="ameter in meters" :key="ameter.id">
                             <div class="column is-2">
                               ชื่อวัตถุดิบ :
@@ -713,7 +745,7 @@
                     </div>
                   </section>
                   <footer class="modal-card-foot">
-                    <button class="button is-success" @click="insertmenu(foodname, foodprice, foodtype, foodpic,meters, Cost)">เพิ่มเมนู</button>
+                    <button class="button is-success" @click="insertmenu(foodname, foodprice, foodtype, foodpic,meters, Cost, typeunit)">เพิ่มเมนู</button>
                     <!-- <button class="button is-success">บันทึกข้อมูล</button> -->
                     <button class="button" @click="Closemodal2()">ยกเลิก</button>
                   </footer>
@@ -812,7 +844,9 @@ export default {
       showModal: false,
       showModal2: false,
       showModal3: false,
-      updatecost: ''
+      updatecost: '',
+      units: '',
+      typeunit: ''
     }
   },
   created () {
@@ -838,7 +872,7 @@ export default {
       this.dataImg2 = fileImg
       console.log(this.dataImg2)
     },
-    async insertmenu (foodname, foodprice, foodtype, foodpic, meters, Cost) {
+    async insertmenu (foodname, foodprice, foodtype, foodpic, meters, Cost, type) {
       await this.truestock()
       foodtype = 'วัตถุดิบ'
       let data = {
@@ -847,9 +881,10 @@ export default {
         foodprice: foodprice,
         meters: meters,
         foodpic: this.dataImg3.name,
-        Cost: parseInt(Cost, 10)
+        Cost: parseInt(Cost, 10),
+        type: type
       }
-      if (foodname === '' || foodprice === '' || this.dataImg3 === '' || foodtype === '' || meters.length === 0 || Cost === '') {
+      if (foodname === '' || foodprice === '' || this.dataImg3 === '' || foodtype === '' || meters.length === 0 || Cost === '' || type === '') {
         this.$swal({
           type: 'error',
           title: 'Oops...',
@@ -873,6 +908,7 @@ export default {
         }
         this.Cost = ''
         this.showModal2 = false
+        this.type = ''
       }
       // console.log(this.tmp)
     },
@@ -969,9 +1005,9 @@ export default {
         this.prodetail = ''
       }
     },
-    Cart (foodname, foodprice, type, key, meters, Cost) {
-      console.log(foodname, foodprice, type, key, meters, Cost)
-      this.$store.dispatch('AddCart', {foodname, foodprice, type, key, meters, Cost})
+    Cart (foodname, foodprice, type, key, meters, Cost, typeunit) {
+      console.log(foodname, foodprice, type, key, meters, Cost, typeunit)
+      this.$store.dispatch('AddCart', {foodname, foodprice, type, key, meters, Cost, typeunit})
     },
     SetUpdateMenuShow (key, foodname, foodprice, foodpic, foodtype) {
       this.updateKey = key
@@ -1014,7 +1050,7 @@ export default {
       this.updateKey = ''
       this.prodetail = ''
     },
-    SetUpdateMenu (key, menufood, menuprice, menutype, menupic, meters, Cost) {
+    SetUpdateMenu (key, menufood, menuprice, menutype, menupic, meters, Cost, type) {
       this.updateKey = key
       this.updateMenufood = menufood
       this.updateMenuprice = menuprice
@@ -1023,6 +1059,7 @@ export default {
       this.meters = meters
       this.showModal3 = true
       this.updatecost = Cost
+      this.typeunit = type
     },
     async UpdateMenu (key, updateMenufood, updateMenuprice, updateMenutype, updateMenupic, updatecost) {
       await this.truestock()
@@ -1034,7 +1071,8 @@ export default {
           foodprice: updateMenuprice,
           foodpic: this.dataImg4.name,
           meters: this.meters,
-          Cost: updatecost
+          Cost: updatecost,
+          type: this.typeunit
         })
       } else {
         foodcenterRef.child('menu').child(this.selectShop).child(key).update({
@@ -1042,7 +1080,8 @@ export default {
           foodtype: updateMenutype,
           foodprice: updateMenuprice,
           meters: this.meters,
-          Cost: updatecost
+          Cost: updatecost,
+          type: this.typeunit
         })
       }
       this.updateKey = ''
@@ -1054,6 +1093,7 @@ export default {
       this.meters = []
       this.showModal3 = false
       this.updatecost = ''
+      this.typeunit = ''
     },
     setprofile (name, phone, status, banner) {
       // this.updateKey = true
@@ -1318,6 +1358,7 @@ export default {
     const dbRefObjectpromo = foodcenterRef.child('promo').child(this.selectShop)
     const dbRefObjectvote = foodcenterRef.child('shoppoint').orderByChild('shop').equalTo(this.selectShop)
     const dbRefObjectstock = foodcenterRef.child('stock').child(this.selectShop)
+    const dbRefObject2 = firebase.database().ref().child('meters/unit/' + this.selectShop)
     dbRefObject.on('value', snap => {
       var data = []
       snap.forEach(ss => {
@@ -1379,6 +1420,15 @@ export default {
       })
       this.datastock = data
       this.checkstocklist()
+    })
+    dbRefObject2.on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.units = data
     })
   }
 }

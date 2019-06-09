@@ -29,7 +29,7 @@
                     <td><center>{{ p.type }}</center></td>
                     <td><center><div @click="inclese(key)"><i class="fas fa-plus"></i></div></center></td>
                     <td><center><div @click="declese(key)"><i class="fas fa-minus"></i></div></center></td>
-                    <td><center><div @click="remove(key)"><i class="fas fa-times"></i></div></center></td>
+                    <td><center><div @click="beforeremove(key)"><i class="fas fa-times"></i></div></center></td>
                     </tr>
                     <tr>
                       <td><b>ราคารวม:</b></td>
@@ -348,7 +348,7 @@ export default {
     },
     sortcode (safetys) {
       for (var i = 0; i < safetys.length; i++) {
-        this.detail = this.detail + '<li >ชื่อวัตถุดิบ: ' + safetys[i].stockname + '  เหลือ: ' + safetys[i].stockamount + ' กก./ช้อนโต๊ะ' + '<br></li>'
+        this.detail = this.detail + '<li >ชื่อวัตถุดิบ: ' + safetys[i].stockname + '  เหลือ: ' + safetys[i].stockamount + '  ' + safetys[i].type + '<br></li>'
       }
     },
     async weekmoney (products) {
@@ -386,6 +386,26 @@ export default {
           await foodcenterRef.child('weeksell').child(this.SelectShops).child(this.D).child(products[i].key).set(data)
         }
       }
+    },
+    beforeremove (key) {
+      this.$swal({
+        title: 'คุณกำลังลบเมนูอาหารนี้?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยืนยัน!',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.value) {
+          this.remove(key)
+          this.$swal(
+            'ลบเเล้ว!',
+            'เมนูอาหารโดนลบเรียบร้อยเเล้ว.',
+            'success'
+          )
+        }
+      })
     },
     ...mapActions({
       inclese: 'incleseAmount',

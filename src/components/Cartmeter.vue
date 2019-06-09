@@ -25,15 +25,15 @@
               <tr :key="key" v-for="(p, key) in products">
                 <td>{{ p.name }}</td>
                 <td>{{ p.price }} บ.</td>
-                <td>{{ p.quantity }} จาน</td>
+                <td>{{ p.quantity }} {{ p.unit }}</td>
                 <td><center>{{ p.type }}</center></td>
                 <td><center><div @click="inclese(key)"><i class="fas fa-plus"></i></div></center></td>
                 <td><center><div @click="declese(key)"><i class="fas fa-minus"></i></div></center></td>
-                <td><center><div @click="remove(key)"><i class="fas fa-times"></i></div></center></td>
+                <td><center><div @click="beforeremove(key)"><i class="fas fa-times"></i></div></center></td>
                 </tr>
                 <tr>
                   <td><b>ราคารวม:</b></td>
-                  <td> {{CountQuantity}} จาน</td>
+                  <td> {{CountQuantity}} อย่าง</td>
                   <td><b>{{ total }} บ.</b></td>
               </tr>
             </tbody>
@@ -273,7 +273,7 @@ export default {
     },
     sortcode (products) {
       for (var i = 0; i < products.length; i++) {
-        this.detail = this.detail + '<li >ชื่อวัตถุดิบ: ' + products[i].name + '  ราคา: ' + products[i].quantity * products[i].price + '  บาท' + '<br></li>'
+        this.detail = this.detail + '<li >ชื่อวัตถุดิบ: ' + products[i].name + 'จำนวน: ' + products[i].quantity + ' ' + products[i].unit + '  ราคา: ' + products[i].quantity * products[i].price + '  บาท' + '<br></li>'
       }
     },
     before () {
@@ -289,6 +289,26 @@ export default {
         }
         database.ref('/foodcenter/deliver').child(this.hasshop).push(data)
       }
+    },
+    beforeremove (key) {
+      this.$swal({
+        title: 'คุณกำลังลบเมนูอาหารนี้?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ใช่, ยืนยัน!',
+        cancelButtonText: 'ยกเลิก'
+      }).then((result) => {
+        if (result.value) {
+          this.remove(key)
+          this.$swal(
+            'ลบเเล้ว!',
+            'เมนูอาหารโดนลบเรียบร้อยเเล้ว.',
+            'success'
+          )
+        }
+      })
     },
     ...mapActions({
       inclese: 'incleseAmount',

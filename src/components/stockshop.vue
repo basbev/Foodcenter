@@ -39,15 +39,16 @@
         </ul>
       </div>
     </div> -->
+    <br><br>
     <div class="box">
       <!-- Main container -->
       <nav class="level">
         <!-- Left side -->
+        <br>
         <div class="level-left">
           <div class="level-item">
             <p class="subtitle is-5">
               <!-- <strong>{{Countstock}}</strong> รายการ -->
-              <strong>{{(showData.length>0)?showData.length:Countstock}}</strong> รายการ
             </p>
           </div>
           <div class="level-item">
@@ -57,6 +58,9 @@
                 ค้นหา
               </button> -->
             </p>
+            &nbsp;&nbsp;
+            &nbsp;&nbsp;
+            <strong>{{(showData.length>0)?showData.length:Countstock}}</strong> &nbsp;รายการ
           </div>
         </div>
         <!-- Right side -->
@@ -72,6 +76,7 @@
                       </span>
                       <span>หน่วยวัตถุดิบ </span>
               </div>
+              &nbsp;&nbsp;
               <div @click="setdeliverstock" class="button is-danger">
                       <span class="icon">
                         <i class="fa fa-shopping-cart"></i>
@@ -81,21 +86,38 @@
         </div>
       </nav>
     </div>
-    <div class="spacer"></div>
-    <section class="section">
-      <div class="columns is-mobile is-multiline">
-        <div class="column is-one-quarter-fullhd is-full-mobile">
+    <!-- <div class="spacer"></div> -->
+    <!-- <section class="section">
+      <div class="column is-three-fifths is-offset-one-fifth">
+        <div class="columns is-mobile"> -->
           <!--  -->
-          <div class="level-right">
+          <div class="columns">
+          <div class="column">
+          </div>
+          <div class="column">
+            <div class="level">
             <p class="level-item"><input class="input" type="number" placeholder="รายการที่เเสดงต่อหน้า" v-model.number="pageSize"></p>
+            &nbsp;&nbsp;&nbsp;
             <p class="level-item"><a class="button is-success" @click="updateTable()">รายการ</a></p>
             <p class="level-item"><a class="button is-success" @click="setInsertstock()">เพิ่มวัตถุดิบ</a></p>
            </div>
-           <br>
+          </div>
+          <div class="column">
+          </div>
+        </div>
+           <!--  -->
           <!--  -->
-          <section class="panel">
+        <!-- </div>
+      </div>
+    </section> -->
+  </div>
+  <div class="columns">
+  <div class="column">
+  </div>
+  <div class="column is-half">
+   <section class="panel">
             <p class="panel-heading">
-              รายการวัถตุดิบในร้านอาหาร
+            <center>รายการวัถตุดิบในร้านอาหาร</center>
               <!-- <a class="button is-success right">New</a> -->
             </p>
             <!-- <hr> -->
@@ -110,7 +132,7 @@
                     <th>ลบ</th>
                   </tr>
                 </thead>
-                <tfoot>
+                <!-- <tfoot>
                   <tr>
                     <th>ชื่อวัตถุดิบ</th>
                     <th>จำนวน</th>
@@ -118,38 +140,27 @@
                     <th>เเก้ไข</th>
                     <th>ลบ</th>
                   </tr>
-                </tfoot>
+                </tfoot> -->
                 <tbody>
                   <tr :key="key" v-for="(stock, key) in (showData.length>0)?showData:slot">
                     <td>{{stock.stockname}}</td>
                     <td>{{stock.stockamount}}</td>
                     <td>{{stock.type}}</td>
                     <td class="is-icon">
-                      <button class="btn" @click="setEditstock(stock.key, stock.stockname, stock.stockamount, stock.safety, stock.type)"><i class="fas fa-edit"></i></button>
+                      <center><button class="button is-warning" @click="setEditstock(stock.key, stock.stockname, stock.stockamount, stock.safety, stock.type)"><i class="fas fa-edit" ></i></button></center>
                     </td>
                     <td class="is-icon">
-                      <button class="btn" @click="Delstock(stock.key)"><i class="fa fa-trash"></i></button>
+                    <center><button class="button is-danger" @click="Delstock(stock.key)"><i class="fa fa-trash"></i></button></center>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </section>
-          <!--  -->
-          <nav class="pagination" role="navigation" aria-label="pagination">
-            <a class="pagination-previous" v-on:click="updatePage(currentPage - 1)" :disabled="showPreviousLink()">ก่อนหน้า</a>
-            <a class="pagination-next" v-on:click="updatePage(currentPage + 1)" :disabled="showNextLink()">ถัดไป</a>
-            <ul class="pagination-list">
-            <li v-for="(page,index) in totalPages()" :key="index">
-            <a class="pagination-link" v-on:click="updatePage(index)" v-bind:class="{ 'is-current': currentPage === index }">{{page}}</a>
-            </li>
-           </ul>
-          </nav>
-          <!--  -->
-        </div>
-      </div>
-    </section>
   </div>
+  <div class="column">
+  </div>
+</div>
   <!--show modal-->
     <div id="modal-ter" class="modal is-active" v-show="showModal" @close="showModal = false">
       <div class="modal-background"></div>
@@ -293,6 +304,57 @@
             <div class="content">
               <!-- เนื้อหา -->
               <br>
+              <!-- เพิ่มวัตถุดิบ -->
+              <div class="columns" v-if="!updateunit">
+              <div class="column">
+                ชื่อหน่วยวัตถุดิบ :
+              </div>
+              <div class="column">
+                <input
+                    class="form-control mb-2"
+                    type="text"
+                    v-model="unit"
+                    placeholder="หน่วย"
+                  >
+              </div>
+              <div class="column">
+                <button class="button is-success" @click="insertunit()">เพิ่มหน่วยวัตถุดิบ</button>
+              </div>
+            </div>
+            <!-- edit -->
+                <div class="columns" v-if="updateunit">
+                <div class="column">
+                  ชื่อหน่วยวัตถุดิบ :
+                </div>
+                <div class="column">
+                  <input
+                    class="form-control mb-2"
+                    type="text"
+                    v-model="updateunit"
+                    placeholder="หน่วย"
+                  >
+                  </div>
+                </div>
+                <div class="columns" v-if="updateunit">
+                  <button class="button is-success" @click="updateunitfire()">เเก้ไขหน่วยวัตถุดิบ</button>
+                </div>
+                <!-- edit -->
+              <!-- <div class="columns" v-if="!updateunit">
+                <div class="column is-3">
+                  ชื่อหน่วยวัตถุดิบ :
+                </div>
+                <div class="column is-6">
+                  <input
+                    class="form-control mb-2"
+                    type="text"
+                    v-model="unit"
+                    placeholder="หน่วย"
+                  >
+                  </div>
+                  <div class="column is-3">
+                </div>
+                </div> -->
+                <!-- เพิ่มวัตถุดิบ -->
               <div>
                 <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                 <thead>
@@ -312,64 +374,67 @@
                 </tfoot> -->
                 <tbody>
                   <tr :key="key" v-for="(unit, key) in units">
-                    <td>{{unit.name}}</td>
+                    <td> {{unit.name}}</td>
                     <td class="is-icon">
-                      <button class="btn" @click="setupdate(unit.name, unit.key)"><i class="fas fa-edit"></i></button>
+                      <center><button class="button is-warning" @click="setupdate(unit.name, unit.key)"><i class="fas fa-edit"></i></button></center>
                     </td>
                     <td class="is-icon">
-                      <button class="btn" @click="Delunit(unit.key)"><i class="fa fa-trash"></i></button>
+                      <center><button class="button is-danger" @click="Delunit(unit.key)"><i class="fa fa-trash"></i></button></center>
                     </td>
                   </tr>
                 </tbody>
               </table>
               </div>
-              <!-- เพิ่มวัตถุดิบ -->
-              <div class="columns" v-if="!updateunit">
-                <div class="column is-2">
-                  ชื่อหน่วยวัตถุดิบ :
-                </div>
-                <div class="column">
-                  <input
-                    class="form-control mb-2"
-                    type="text"
-                    v-model="unit"
-                    placeholder="หน่วย"
-                  >
-                  </div>
-                </div>
-                <div class="columns" v-if="!updateunit">
-                  <button class="button" @click="insertunit()">เพิ่มหน่วยวัตถุดิบ</button>
-                </div>
-                <!-- edit -->
-                <div class="columns" v-if="updateunit">
-                <div class="column is-2">
-                  ชื่อหน่วยวัตถุดิบ :
-                </div>
-                <div class="column">
-                  <input
-                    class="form-control mb-2"
-                    type="text"
-                    v-model="updateunit"
-                    placeholder="หน่วย"
-                  >
-                  </div>
-                </div>
-                <div class="columns" v-if="updateunit">
-                  <button class="button" @click="updateunitfire()">เเก้ไขหน่วยวัตถุดิบ</button>
-                </div>
-                <!-- edit -->
-              <!-- เพิ่มวัตถุดิบ -->
               <!-- เนื้อหา -->
             </div>
           </section>
           <footer class="modal-card-foot">
             <!-- <button v-if="!statusEdit" class="button is-success" @click="Insertstock(stockname, stockamount, safety)">เพิ่มข้อมูล</button>
             <button v-if="statusEdit" class="button is-success" @click="Editstock(updatekey, stockname, stockamount, safety)">บันทึกข้อมูล</button> -->
-            <button class="button" @click="Closemodal3()">ยกเลิก</button>
+                  <!-- <div class="columns">
+                    <div class="column"></div>
+                  <center> -->
+                  <div class="columns">
+                    <div class="column">
+                      <!-- &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                      &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                      &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+                      &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; -->
+                    <button class="button is-danger" @click="Closemodal3()">ยกเลิก</button>
+                    </div>
+                  </div>
           </footer>
         </div>
     </div>
-  <!-- หน่วยวัตถุดิบ -->
+    <!-- หน่วยวัตถุดิบ -->
+  <div class="columns">
+  <div class="column">
+  </div>
+  <div class="column is-half">
+     <!--  -->
+          <!-- <nav class="pagination" role="navigation" aria-label="pagination">
+            <ul class="pagination-list">
+            <a class="pagination-previous" v-on:click="updatePage(currentPage - 1)" :disabled="showPreviousLink()">ก่อนหน้า</a>
+            <li v-for="(page,index) in totalPages()" :key="index">
+            <a class="pagination-link" v-on:click="updatePage(index)" v-bind:class="{ 'is-current': currentPage === index }">{{page}}</a>
+            </li>
+            <a class="pagination-next" v-on:click="updatePage(currentPage + 1)" :disabled="showNextLink()">ถัดไป</a>
+           </ul>
+          </nav> -->
+          <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+          <ul class="pagination-list">
+            <li><a class="pagination-previous" v-on:click="updatePage(currentPage - 1)" :disabled="showPreviousLink()">ก่อนหน้า</a></li>
+            <li v-for="(page,index) in totalPages()" :key="index">
+            <a class="pagination-link" v-on:click="updatePage(index)" v-bind:class="{ 'is-current': currentPage === index }">{{page}}</a>
+            </li>
+            <li><a class="pagination-next" v-on:click="updatePage(currentPage + 1)" :disabled="showNextLink()">ถัดไป</a></li>
+          </ul>
+        </nav>
+          <!--  -->
+  </div>
+  <div class="column">
+  </div>
+  </div>
   </div>
 </template>
 <script>
@@ -609,6 +674,7 @@ export default {
     },
     Closemodal3 () {
       this.showModal3 = false
+      this.updateunit = ''
     },
     Deletestock (key) {
       firebase.database().ref().child('foodcenter/stock/' + this.selectShop).child(key).remove()
