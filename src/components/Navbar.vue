@@ -18,7 +18,7 @@
               <span>ร้านอาหารทั้งหมด</span></a></li>
           <li><a class="navbar-item" href="#/shopmeter">
               <span class="icon"><i class="fas fa-home"></i></span>
-              <span>ร้านค้าวัตถุดิบทั้งหมด</span></a></li><li><a class="navbar-item" href="#/stockmeter">
+              <span @click="myshop()">ร้านค้าวัตถุดิบทั้งหมด</span></a></li><li><a class="navbar-item" href="#/stockmeter">
               <span class="icon"><i class="fas fa-home"></i></span>
               <span>สต็อตร้านวัตถุดิบ</span></a></li>
         </ul>
@@ -33,7 +33,7 @@
     </div>
   </div>
 
-  <div id="navbarExampleTransparentExample" class="navbar-menu">
+  <div id="navbarExampleTransparentExample" class="navbar-menu" style="background-color:000000;">
     <div class="navbar-start">
       <a class="navbar-item" href="#/foodcenter">
         <span class="icon">
@@ -99,7 +99,7 @@
                 ร้านค้าวัตถุดิบ
               </span>
       </a>
-      <a v-if="permission === '5'" class="navbar-item" href="#/stockmeter">
+      <a v-if="permission === '5'" class="navbar-item" href="#/stockmeter" @click="myshop()">
         <span class="icon">
                 <i class="fas fa-home"></i>
               </span>
@@ -357,5 +357,9 @@ aside a {
 }
 .navbar {
   min-height: fit-content;
+}
+.navbar.is-black {
+    background-color: #363636;
+    color: #fff;
 }
 </style>

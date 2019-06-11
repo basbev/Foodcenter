@@ -8,7 +8,7 @@
         <p class="subtitle has-text-grey">Please login to FoodCenter.</p>
         <div class="box">
           <figure class="avatar">
-            <img src="/static/logo1.png">
+            <img src="/static/logo3.png">
           </figure>
           <form>
             <div class="field">
@@ -61,8 +61,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
+const messaging = firebase.messaging()
+messaging.usePublicVapidKey('BOCxXkDUpL4e9JNQjZucT-W8PLaFGDbm84uLKEnM15z8bRerxzWzy3n-rK78tiahFs1v0-FpUEpnjbB43egKKlE')
+
 export default {
   name: 'login',
   data: function () {
@@ -71,10 +74,17 @@ export default {
       getuser: {},
       users: {},
       username: '',
-      password: ''
+      password: '',
+      gettoken: ''
     }
   },
   methods: {
+     ...mapActions([
+      'saveToken'
+    ]),
+    saveToken (token) {
+      this.$store.dispatch('saveToken', token)
+    },
     loginWeb: function (e) {
       if (this.user === null) {
         if (this.username !== '' && this.password !== '') {
@@ -94,6 +104,7 @@ export default {
           alert('Successfully sign in\nWelcome User Shop: ' + ' ' + this.user)
           this.$router.push('/shop')
         } if (this.isLoggedIn === true && this.permission === '1') {
+          this.updatetoken()
           alert('Successfully sign in\nWelcome User Customer: ' + ' ' + this.user)
           this.$router.push('/foodcenter')
         } if (this.isLoggedIn === true && this.permission === '2' && this.selectShop === '') {
@@ -104,6 +115,11 @@ export default {
           this.$router.push('/meter')
         }
       }
+    },
+    updatetoken () {
+      console.log('key', this.key)
+      console.log('token', this.token)
+      firebase.database().ref('user/').child(this.key).child('token').set(this.token)
     },
     loginFacebook: function (e) {
       var provider = new firebase.auth.FacebookAuthProvider()
@@ -121,6 +137,41 @@ export default {
             alert(err.message)
           }
         )
+    },
+    requestPermission () {
+      console.log('Requesting permission...')
+      // [START request_permission]
+      Notification.requestPermission().then( (permission) =>{
+        if (permission === 'granted') {
+          console.log('Notification permission granted.')
+          // TODO(developer): Retrieve an Instance ID token for use with FCM.
+          // [START_EXCLUDE]
+          // In many cases once an app has been granted notification permission,
+          // it should update its UI reflecting this.
+          // this.saveToken('xxxxx')
+          messaging.getToken().then( (currentToken) => {
+            if (currentToken) {
+              // console.log('Get', this.gettoken)
+              console.log('Token is', currentToken)
+              // this.gettoken = currentToken
+              // this.$store.dispatch('saveToken', currentToken)
+              this.saveToken(currentToken)
+              // sendTokenToServer(currentToken);
+              // updateUIForPushEnabled(currentToken);
+            } else {
+              // Show permission request.
+              console.log('No Instance ID token available. Request permission to generate one.')
+              // Show permission UI.
+            }
+          }).catch(function (err) {
+            console.log('An error occurred while retrieving token. ', err)
+          })
+          // [END_EXCLUDE]
+        } else {
+          console.log('Unable to get permission to notify.')
+        }
+      })
+      // [END request_permission]
     }
   },
   mounted () {
@@ -134,6 +185,7 @@ export default {
       this.facebook = snap.val()
       console.log(this.facebook)
     })
+    this.requestPermission()
   },
   computed: {
     ...mapGetters({
@@ -141,7 +193,9 @@ export default {
       selectShop: 'selectShop',
       user: 'user',
       isLoggedIn: 'isLoggedIn',
-      hasShop: 'hasShop'
+      hasShop: 'hasShop',
+      key: 'key',
+      token: 'token'
     })
   }
 }

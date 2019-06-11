@@ -10,7 +10,9 @@ const state = {
   permission: null,
   hasShop: null,
   stocklist: [],
-  stocklimit: []
+  stocklimit: [],
+  token: null,
+  key: null
 }
 
 const getters = {
@@ -34,11 +36,13 @@ const getters = {
     })
   },
   permission: state => state.permission,
-  hasShop: state => state.hasShop
+  hasShop: state => state.hasShop,
+  token: state => state.token,
+  key: state => state.key
 }
 
 const mutations = {
-  setUser: (state, {userSet, passSet, perSet, shopSet}) => {
+  setUser: (state, {userSet, passSet, perSet, shopSet, key}) => {
     console.log(userSet)
     console.log(passSet)
     console.log(perSet)
@@ -47,6 +51,11 @@ const mutations = {
     state.password = passSet
     state.permission = perSet
     state.hasShop = shopSet
+    state.key = key
+  },
+  setToken: (state, token) => {
+    console.log('token', token)
+    state.token = token
   },
   setselectShop: (state, shop) => {
     state.selectShop = shop
@@ -146,6 +155,7 @@ const actions = {
     const dbReflist = dbRefObject.orderByChild('username').equalTo(payload.username)
     dbReflist.on('child_added', snap => {
       state.profile = snap.val()
+      state.key = snap.key
       console.log(state.profile)
     })
     if (state.profile != null) {
@@ -155,8 +165,9 @@ const actions = {
         const passSet = state.profile.password
         const perSet = state.profile.permission
         const shopSet = state.profile.hasShop
-        console.log(userSet, passSet, perSet, shopSet)
-        commit('setUser', {userSet, passSet, perSet, shopSet})
+        const key = state.key
+        console.log(userSet, passSet, perSet, shopSet, key)
+        commit('setUser', {userSet, passSet, perSet, shopSet, key})
         commit('setselectShop', shopSet)
         dispatch('save')
       } else alert(`Username Or Password incorrect`)
@@ -173,12 +184,17 @@ const actions = {
       var dbRefObject1 = firebase.database().ref().child('facebook')
       let data = {
         username: firebase.auth().currentUser.displayName,
-        email: firebase.auth().currentUser.email
+        email: firebase.auth().currentUser.email,
+        token: state.token
       }
       dbRefObject1.push(data)
     }
     console.log(payload)
     commit('setUser', payload)
+  },
+  saveToken: ({commit}, payload) => {
+    console.log('Token', payload)
+    commit('setToken', payload)
   },
   autoSign ({commit}, payload) {
     commit('setUserFacebook', payload.displayName)

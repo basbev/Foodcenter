@@ -229,6 +229,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import * as firebase from 'firebase'
+// const messaging = firebase.messaging()
+// messaging.usePublicVapidKey('BOCxXkDUpL4e9JNQjZucT-W8PLaFGDbm84uLKEnM15z8bRerxzWzy3n-rK78tiahFs1v0-FpUEpnjbB43egKKlE')
+
 var database = firebase.database()
 var foodcenterRef = database.ref('/foodcenter')
 export default {

@@ -112,7 +112,8 @@ export default {
       reportsell: '',
       reportmoney: '',
       Week: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-      allday: []
+      allday: [],
+      date: new Date()
     }
   },
   methods: {
