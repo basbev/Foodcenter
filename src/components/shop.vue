@@ -140,7 +140,7 @@
                       <div class="column">
                         <!-- <input type="text" v-model="Search" placeholder="ค้นหาเมนู" v-if="Searchtype === ''" disabled class="input is-large">
                         <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" v-if="Searchtype === 'menushow'" class="input is-large"> -->
-                        <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" class="input is-large">
+                        <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" class="input is-large" style="width:75%">
                          <div>
                            ขายดี
                           <label :class="(Search == record.key)?'button is-primary':'button'" :key="key" v-for="(record, key) in records">
@@ -256,24 +256,29 @@
                     <i class="fas fa-info-circle"></i>
                   </span>
                   <h4 id="let1" class="title is-3">เมนูประจำร้าน</h4>
+                  <button v-if="sub" class="button is-danger is-outlined" @click="getmenus()">จานเดี่ยว</button>
+                  <button v-if="!sub" class="button is-danger is-outlined" @click="getmenus()" disabled>จานเดี่ยว</button>
+                  <button v-if="!sub" class="button is-info is-outlined" @click="getsubrice()">กับข้าว</button>
+                  <button v-if="sub" class="button is-info is-outlined" @click="getsubrice()" disabled>กับข้าว</button>
                   <button class="button button11" @click="setinsertmenu()">เพิ่มเมนู</button>
                 </article>
                   <div class="">
                     <div class="columns is-multiline">
-                      <div class="column is-6 is-4-tablet is-3-desktop" :key="key" v-for="(menu, key) in menus">
+                      <div class="column is-6 is-4-tablet is-3-desktop" :key="key" v-for="(menu, key) in (sub === false)?menus:subrice">
                         <div class="foodList">
                           <div class="detail">
                             <h3 class="title is-3">{{menu.foodname}}</h3>
-                            <h6 class="">ราคา&nbsp;{{menu.foodprice}}&nbsp;บาท</h6>
+                            <h6 class="">ราคา&nbsp;{{menu.foodprice}}&nbsp;บาท {{(sub===false)?'(อาหารจานเดี่ยว)':'(อาหารกับข้าว)'}}</h6>
                             <!-- <h6>จำนวน&nbsp;{{menu.amount}}&nbsp;ชิ้น</h6> -->
                           </div>
-                          <span class="icon is-small cartButton" v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost)">
+                          <span class="icon is-small cartButton" v-if="((sub === false)?menus[key].Cart === 0:subrice[key].Cart === 0)" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost, menu.foodpic)">
                             <i class="fas fa-cart-plus"></i>
                           </span>
-                          <span class="icon is-small cartButton disable" v-if="checkstock[key] === 1" @click="Cartdisable()">
+                          <span class="icon is-small cartButton disable" v-if="((sub === false)?menus[key].Cart === 1:subrice[key].Cart === 1)" @click="Cartdisable()">
                             <i class="fas fa-cart-plus"></i>
                           </span>
-                          <img v-url={filename:menu.foodpic} width="100%" height="auto"/>
+                          <img v-if="!sub" v-url={filename:menu.foodpic} width="100%" height="auto"/>
+                          <img v-if="sub" :src="menu.foodpic" width="100%" height="auto"/>
                           <div class="editMenuBtns">
                             <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.meters, menu.Cost)" class="button button13-white">
                               <span class="icon">
@@ -717,6 +722,19 @@
                             <button class="button is-primary" @click="addMeter()">Add</button>
                           </div>
                         </div>
+                        <!-- type -->
+                                  <!-- <div class="columns">
+                                    <div class="column is-2">
+                                      ประเภทวัตถุดิบ :
+                                    </div>
+                                  <div class="column">
+                                    <select name="main meter" v-model="submeter">
+                                      <option value="วัตถุดิบหลัก">วัตถุดิบหลัก</option>
+                                      <option value="วัตถุดิบรอง">วัตถุดิบรอง</option>
+                                    </select>
+                                    </div>
+                                  </div> -->
+                                  <!-- type -->
                       </div>
                         <!-- </form> -->
                         <!-- เนื้อหา -->
@@ -730,7 +748,34 @@
                 </div>
               </div>
               <!--show modal-->
-              <!-- เพิ่มเมนูอาหาร -->
+              <!-- subrice -->
+              <!--show modal-->
+                <div id="modal-ter" class="modal is-active" v-show="showModal4" @close="showModal4 = false">
+                  <div class="modal-background"></div>
+                    <div class="modal-card">
+                      <header class="modal-card-head">
+                        <p class="modal-card-title">{{namefood}} ร้านอาหาร {{selectShop}}</p>
+                        <button class="delete" aria-label="close" @click="Closemodal4()"></button>
+                      </header>
+                      <section class="modal-card-body">
+                        <div class="content">
+                          <img :src="linkpic" width="325" height="325">
+                          <!-- เนื้อหา -->
+                          <!-- <form action> -->
+                        <!-- </form> -->
+                        <!-- เนื้อหา -->
+                    </div>
+                  </section>
+                  <footer class="modal-card-foot">
+                    <button class="button is-success">สั่งกับข้าวนี้</button>
+                    <!-- <button class="button is-success">บันทึกข้อมูล</button> -->
+                    <button class="button" @click="Closemodal4()">ยกเลิก</button>
+                  </footer>
+                </div>
+              </div>
+              <!--show modal-->
+              <!-- subrice -->
+              <!-- select -->
             </div>
             <div class="card">
               <h3 id="let2" class="title is-3">ความเห็นจากลูกค้า</h3>
@@ -829,15 +874,22 @@ export default {
       meters: [],
       datastock: [],
       checkstock: [],
+      checkstocksubrice: [],
       tmp1: '',
       showModal: false,
       showModal2: false,
       showModal3: false,
+      showModal4: false,
       updatecost: '',
       users: {},
       userpoint: '',
       editvote: '',
-      tmpvote: 0
+      tmpvote: 0,
+      subrice: '',
+      sub: false,
+      linkpic: '',
+      namefood: '',
+      submeter: ''
     }
   },
   created () {
@@ -870,7 +922,8 @@ export default {
         foodtype: foodtype,
         foodprice: foodprice,
         meters: meters,
-        foodpic: this.dataImg3.name,
+        // foodpic: this.dataImg3.name,
+        foodpic: 'https://firebasestorage.googleapis.com/v0/b/foodcenter-23d67.appspot.com/o/' + this.dataImg3.name + '?alt=media&token=1fe47dd7-7085-4433-8dc5-b98ffb219d37',
         Cost: parseInt(Cost, 10)
       }
       if (foodname === '' || foodprice === '' || this.dataImg3 === '' || foodtype === '' || meters.length === 0 || Cost === '') {
@@ -881,7 +934,7 @@ export default {
           // footer: '<a href>Why do I have this issue?</a>'
         })
       } else {
-        await foodcenterRef.child('menu').child(this.selectShop).push(data)
+        if (this.sub === false) { await foodcenterRef.child('menu').child(this.selectShop).push(data) } else { await foodcenterRef.child('subrice').child(this.selectShop).push(data) }
         await storageRef.child(this.dataImg3.name).put(this.dataImg3)
         // this.tmp = await storageRef.child(this.dataImg3.name).getDownloadURL()
         this.foodname = ''
@@ -1019,9 +1072,15 @@ export default {
         this.prodetail = ''
       }
     },
-    Cart (foodname, foodprice, type, key, meters, Cost) {
+    Cart (foodname, foodprice, type, key, meters, Cost, pic) {
+      // if (this.sub) {
+      //   this.showModal4 = true
+      //   this.linkpic = 'https://firebasestorage.googleapis.com/v0/b/foodcenter-23d67.appspot.com/o/' + pic + '?alt=media&token=1fe47dd7-7085-4433-8dc5-b98ffb219d37'
+      //   this.namefood = foodname
+      // } else {
       console.log(foodname, foodprice, type, key, meters, Cost)
       this.$store.dispatch('AddCart', {foodname, foodprice, type, key, meters, Cost})
+      // }
     },
     SetUpdateMenuShow (key, foodname, foodprice, foodpic, foodtype) {
       this.updateKey = key
@@ -1079,22 +1138,43 @@ export default {
       await this.truestock()
       if (this.dataImg4 !== '') {
         await storageRef.child(this.dataImg4.name).put(this.dataImg4)
-        foodcenterRef.child('menu').child(this.selectShop).child(key).update({
-          foodname: updateMenufood,
-          foodtype: updateMenutype,
-          foodprice: updateMenuprice,
-          foodpic: this.dataImg4.name,
-          meters: this.meters,
-          Cost: updatecost
-        })
+        if (this.sub === false) {
+          foodcenterRef.child('menu').child(this.selectShop).child(key).update({
+            foodname: updateMenufood,
+            foodtype: updateMenutype,
+            foodprice: updateMenuprice,
+            foodpic: this.dataImg4.name,
+            meters: this.meters,
+            Cost: updatecost
+          })
+        } else {
+          foodcenterRef.child('subrice').child(this.selectShop).child(key).update({
+            foodname: updateMenufood,
+            foodtype: updateMenutype,
+            foodprice: updateMenuprice,
+            foodpic: this.dataImg4.name,
+            meters: this.meters,
+            Cost: updatecost
+          })
+        }
       } else {
-        foodcenterRef.child('menu').child(this.selectShop).child(key).update({
-          foodname: updateMenufood,
-          foodtype: updateMenutype,
-          foodprice: updateMenuprice,
-          meters: this.meters,
-          Cost: updatecost
-        })
+        if (this.sub === false) {
+          foodcenterRef.child('menu').child(this.selectShop).child(key).update({
+            foodname: updateMenufood,
+            foodtype: updateMenutype,
+            foodprice: updateMenuprice,
+            meters: this.meters,
+            Cost: updatecost
+          })
+        } else {
+          foodcenterRef.child('subrice').child(this.selectShop).child(key).update({
+            foodname: updateMenufood,
+            foodtype: updateMenutype,
+            foodprice: updateMenuprice,
+            meters: this.meters,
+            Cost: updatecost
+          })
+        }
       }
       this.updateKey = ''
       this.updateMenufood = ''
@@ -1145,7 +1225,11 @@ export default {
       foodcenterRef.child('promo').child(this.selectShop).child(key).remove()
     },
     DeleteMenu (key) {
-      foodcenterRef.child('menu').child(this.selectShop).child(key).remove()
+      if (this.sub === false) {
+        foodcenterRef.child('menu').child(this.selectShop).child(key).remove()
+      } else {
+        foodcenterRef.child('subrice').child(this.selectShop).child(key).remove()
+      }
     },
     DeleteMenushow (key) {
       foodcenterRef.child('menushow').child(this.selectShop).child(key).remove()
@@ -1256,11 +1340,13 @@ export default {
       this.meter.keystock = this.meter.name.key
       this.meter.name = this.meter.name.stockname
       this.meter.qty = parseInt(this.meter.qty, 10)
+      // this.meter.type = this.submeter
       this.meters.push(this.meter)
       this.meter = {
         name: '',
         qty: 1
       }
+      // this.submeter = ''
       console.log(this.meters)
     },
     DelRe (key) {
@@ -1295,9 +1381,39 @@ export default {
           })
           if (this.menus[x].meters[y].qty <= stock.stockamount && tmp !== 1) { tmp = 0 } else { tmp = 1 }
         }
-        this.checkstock.push(tmp)
+        // this.checkstock.push(tmp)
+        this.menus[x].Cart = tmp
       }
       this.$store.dispatch('stocklist', this.datastock)
+      this.sortmenu()
+    },
+    sortmenu () {
+      this.menus.sort((a, b) => a.foodname < b.foodname ? -1 : 1)
+    },
+    sortsub () {
+      this.subrice.sort((a, b) => a.foodname < b.foodname ? -1 : 1)
+    },
+    async checkstocksub () {
+      var stock = ''
+      for (var x = 0; x < this.subrice.length; x++) {
+        var tmp = 0
+        for (var y = 0; y < this.subrice[x].meters.length; y++) {
+          const checked = foodcenterRef.child('stock').child(this.selectShop).child(this.subrice[x].meters[y].keystock)
+          await checked.on('value', snap => {
+            stock = snap.val()
+          })
+          if (this.subrice[x].meters[y].qty <= stock.stockamount && tmp !== 1) { tmp = 0 } else { tmp = 1 }
+        }
+        // this.checkstocksubrice.push(tmp)
+        this.subrice[x].Cart = tmp
+      }
+      this.sortsub()
+    },
+    getsubrice () {
+      this.sub = true
+    },
+    getmenus () {
+      this.sub = false
     },
     maximum () {
       for (var x = 0; x < this.menus.length; x++) {
@@ -1333,6 +1449,9 @@ export default {
     },
     Closemodal3 () {
       this.showModal3 = false
+    },
+    Closemodal4 () {
+      this.showModal4 = false
     },
     setinsertmenu () {
       this.showModal2 = true
@@ -1416,6 +1535,7 @@ export default {
     const dbRefObjectstock = foodcenterRef.child('stock').child(this.selectShop)
     const dbRefObjectusers = database.ref('/user')
     const dbRefObjecteditvote = foodcenterRef.child('vote').child(this.selectShop).orderByChild('user').equalTo(this.user)
+    const dbRefObjectsub = firebase.database().ref().child('foodcenter/subrice').child(this.selectShop)
     dbRefObject.on('value', snap => {
       var data = []
       snap.forEach(ss => {
@@ -1504,6 +1624,16 @@ export default {
       if (data[0]) {
         this.tmpvote = data[0].scorce
       }
+    })
+    dbRefObjectsub.on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.subrice = data
+      this.checkstocksub()
     })
   }
 }
