@@ -21,6 +21,7 @@
     "axios": "^0.18.0",
     "bulma-carousel": "^4.0.4",
     "express": "^4.16.4",
+    "fcm-node": "^1.5.1",
     "firebase": "^5.5.6",
     "fusioncharts": "^3.13.2-sr.1",
     "jquery": "^3.4.1",

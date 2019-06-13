@@ -271,6 +271,7 @@ export default {
     },
     sortHighest () {
       this.records.sort((a, b) => a.amount < b.amount ? 1 : -1)
+      // this.records.sort((a, b) => a.key < b.key ? -1 : 1)
     },
     sortHighest2 () {
       this.reportmoney.sort((a, b) => a.money < b.money ? 1 : -1)

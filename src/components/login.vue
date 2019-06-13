@@ -79,7 +79,7 @@ export default {
     }
   },
   methods: {
-     ...mapActions([
+    ...mapActions([
       'saveToken'
     ]),
     saveToken (token) {
@@ -141,7 +141,7 @@ export default {
     requestPermission () {
       console.log('Requesting permission...')
       // [START request_permission]
-      Notification.requestPermission().then( (permission) =>{
+      Notification.requestPermission().then((permission) => {
         if (permission === 'granted') {
           console.log('Notification permission granted.')
           // TODO(developer): Retrieve an Instance ID token for use with FCM.
@@ -149,7 +149,7 @@ export default {
           // In many cases once an app has been granted notification permission,
           // it should update its UI reflecting this.
           // this.saveToken('xxxxx')
-          messaging.getToken().then( (currentToken) => {
+          messaging.getToken().then((currentToken) => {
             if (currentToken) {
               // console.log('Get', this.gettoken)
               console.log('Token is', currentToken)

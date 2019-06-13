@@ -28,7 +28,8 @@
             <li><a href="#let2" class=""><i class=""></i> ความเห็นจากลูกค้า</a></li>
           </ul>
         </aside>
-        <carousel v-if="menus" :Cart="Cart" :data="foodRecoment"></carousel>
+        <!-- <carousel v-if="menus" :Cart="Cart" :data="foodRecoment"></carousel> -->
+        <carousel v-if="menus && subrice" :Cart="Cart" :data="foodRecoment"></carousel>
       </div>
     </div>
         <div class="container">
@@ -141,11 +142,15 @@
                         <!-- <input type="text" v-model="Search" placeholder="ค้นหาเมนู" v-if="Searchtype === ''" disabled class="input is-large">
                         <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" v-if="Searchtype === 'menushow'" class="input is-large"> -->
                         <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" class="input is-large" style="width:75%">
+                        <select v-model="Searchmode" style="width:25%">
+                                      <option value="จานเดี่ยว">จานเดี่ยว</option>
+                                      <option value="กับข้าว">กับข้าว</option>
+                                    </select>
                          <div>
                            ขายดี
                           <label :class="(Search == record.key)?'button is-primary':'button'" :key="key" v-for="(record, key) in records">
                             <i class="fas fa-star star"></i>
-                            <input type="radio" class="radioButton" :value="record.key" v-model="Search">
+                            <input type="radio" class="radioButton" :value="record.key" v-model="Search" @input="filterShop(Search)">
                             <h3>&nbsp;&nbsp;{{record.key}} {{record.amount}} จาน</h3>
                           </label>
                         </div>
@@ -177,13 +182,14 @@
                             <h3 class="title is-3">{{menu.foodname}}</h3>
                             <h6 class="">ราคา&nbsp;{{menu.foodprice}}&nbsp;บาท</h6>
                           </div>
-                          <span class="icon is-small cartButton" v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost)">
+                          <span class="icon is-small cartButton" v-if="((sub === false)?menus[key].Cart === 0:subrice[key].Cart === 0)" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost)">
                             <i class="fas fa-cart-plus"></i>
                           </span>
-                          <span class="icon is-small cartButton disable" v-if="checkstock[key] === 1">
+                          <span class="icon is-small cartButton disable" v-if="((sub === false)?menus[key].Cart === 1:subrice[key].Cart === 1)" @click="Cartdisable()">
                             <i class="fas fa-cart-plus"></i>
                           </span>
-                          <img v-url={filename:menu.foodpic} width="100%" height="auto"/><br>
+                          <!-- <img v-url={filename:menu.foodpic} width="100%" height="auto"/><br> -->
+                          <img :src="menu.foodpic" width="100%" height="auto"/>
                         </div>
                       </div>
                     </div>
@@ -277,8 +283,8 @@
                           <span class="icon is-small cartButton disable" v-if="((sub === false)?menus[key].Cart === 1:subrice[key].Cart === 1)" @click="Cartdisable()">
                             <i class="fas fa-cart-plus"></i>
                           </span>
-                          <img v-if="!sub" v-url={filename:menu.foodpic} width="100%" height="auto"/>
-                          <img v-if="sub" :src="menu.foodpic" width="100%" height="auto"/>
+                          <!-- <img v-if="!sub" v-url={filename:menu.foodpic} width="100%" height="auto"/> -->
+                          <img :src="menu.foodpic" width="100%" height="auto"/>
                           <div class="editMenuBtns">
                             <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.meters, menu.Cost)" class="button button13-white">
                               <span class="icon">
@@ -889,7 +895,8 @@ export default {
       sub: false,
       linkpic: '',
       namefood: '',
-      submeter: ''
+      submeter: '',
+      Searchmode: 'จานเดี่ยว'
     }
   },
   created () {
@@ -1246,29 +1253,52 @@ export default {
     },
     filterShop (Search) {
       if (Search.length > 0 && this.menus) {
-        this.showData = this.menus.filter(
-          (shop) => {
-            if (shop.foodname.toString().indexOf(Search) >= 0 ||
-              shop.foodprice.toString().indexOf(Search) >= 0 ||
-              shop.foodtype.toString().indexOf(Search) >= 0) {
-              return shop
+        // SearchMode === จานเดี่ยว
+        if (this.Searchmode === 'จานเดี่ยว') {
+          this.showData = this.menus.filter(
+            (shop) => {
+              if (shop.foodname.toString().indexOf(Search) >= 0 ||
+                shop.foodprice.toString().indexOf(Search) >= 0 ||
+                shop.foodtype.toString().indexOf(Search) >= 0) {
+                return shop
+              }
             }
-          }
-        )
+          )
+        } else { // SearchMode === กับข้าว
+          this.showData = this.subrice.filter(
+            (shop) => {
+              if (shop.foodname.toString().indexOf(Search) >= 0 ||
+                shop.foodprice.toString().indexOf(Search) >= 0 ||
+                shop.foodtype.toString().indexOf(Search) >= 0) {
+                return shop
+              }
+            }
+          )
+        }
       } else {
         this.showData = []
       }
     },
     filterShop2 (Searchtype) {
-      console.log('ทำ')
+      console.log('ค้นหาตามประเภท')
       if (Searchtype.length > 0) {
-        this.showData = this.menus.filter(
-          (shop) => {
-            if (shop.foodtype === Searchtype) {
-              return shop
+        if (this.Searchmode === 'จานเดี่ยว') {
+          this.showData = this.menus.filter(
+            (shop) => {
+              if (shop.foodtype === Searchtype) {
+                return shop
+              }
             }
-          }
-        )
+          )
+        } else {
+          this.showData = this.subrice.filter(
+            (shop) => {
+              if (shop.foodtype === Searchtype) {
+                return shop
+              }
+            }
+          )
+        }
       } else {
         this.showData = []
       }
@@ -1509,12 +1539,20 @@ export default {
     foodRecoment () {
       let arr = []
       this.menus.forEach(function (menu, index) {
-        let url = 'https://firebasestorage.googleapis.com/v0/b/foodcenter-23d67.appspot.com/o/' + menu.foodpic + '?alt=media&token=1fe47dd7-7085-4433-8dc5-b98ffb219d37'
+        // let url = 'https://firebasestorage.googleapis.com/v0/b/foodcenter-23d67.appspot.com/o/' + menu.foodpic + '?alt=media&token=1fe47dd7-7085-4433-8dc5-b98ffb219d37'
+        let url = menu.foodpic
         // arr.push('<img v-url={filename:'+ menu.foodpic+'} width="300" height="350"/>')
         arr.push('<span>' +
         '<img src="' + url + '" class="imgMenuCover">' +
         '<span class="textCover"><h1 class="title has-text-white">' + menu.foodname + '</h1>' + menu.foodprice + ' บาท </span>' +
         // '<button @click="this.Cart(' + menu.foodname + ', ' + menu.foodprice + ', ' + menu.foodtype + ', ' + index + ')" class="button button3">เพิ่มลง Order</button>' +
+        '</span>')
+      })
+      this.subrice.forEach(function (sub, index) {
+        let url = sub.foodpic
+        arr.push('<span>' +
+        '<img src="' + url + '" class="imgMenuCover">' +
+        '<span class="textCover"><h1 class="title has-text-white">' + sub.foodname + '</h1>' + sub.foodprice + ' บาท </span>' +
         '</span>')
       })
       return arr

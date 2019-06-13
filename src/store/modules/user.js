@@ -66,6 +66,8 @@ const mutations = {
     for (var i = 0; i < meters.length; i++) {
       const dual = state.stocklist.find(p => p.key === meters[i].keystock)
       const stock = state.stocklimit.find(p => p.key === meters[i].keystock)
+      console.log('stock.qty', stock)
+      console.log('dual.stockamount', dual.stockamount)
       if (!stock) {
         state.stocklimit.push({
           key: meters[i].keystock,
@@ -73,6 +75,8 @@ const mutations = {
           qty: meters[i].qty
         })
       } else {
+        console.log('stock.qty', stock.qty)
+        console.log('dual.stockamount', dual.stockamount)
         if (stock.qty < dual.stockamount && tmp !== 1) {
           stock.qty = stock.qty + meters[i].qty
           tmp = 0

@@ -230,7 +230,7 @@
             </div>
           </section>
           <footer class="modal-card-foot">
-            <button v-if="!statusEdit" class="button is-success" @click="Insertstock(stockname, stockamount, safety)">เพิ่มข้อมูล</button>
+            <button v-if="!statusEdit" class="button is-success" @click="checkstock(stockname, stockamount, safety)">เพิ่มข้อมูล</button>
             <button v-if="statusEdit" class="button is-success" @click="Editstock(updatekey, stockname, stockamount, safety)">บันทึกข้อมูล</button>
             <button class="button" @click="Closemodal()">ยกเลิก</button>
           </footer>
@@ -255,27 +255,27 @@
                   <tr>
                     <th>ชื่อวัตถุดิบ</th>
                     <th>จำนวน</th>
-                    <th>เเก้ไข</th>
+                    <th>เพิ่ม</th>
                     <th>ลบ</th>
                   </tr>
                 </thead>
-                <tfoot>
+                <!-- <tfoot>
                   <tr>
                     <th>ชื่อวัตถุดิบ</th>
                     <th>จำนวน</th>
                     <th>เเก้ไข</th>
                     <th>ลบ</th>
                   </tr>
-                </tfoot>
+                </tfoot> -->
                 <tbody>
                   <tr :key="key" v-for="(stock, key) in deliver">
                     <td>{{stock.foodname}}</td>
                     <td>{{stock.foodamount}}</td>
                     <td class="is-icon">
-                      <button class="btn" @click="addstock(stock.foodname, stock.foodamount, stock.key)"><i class="fa fa-plus"></i></button>
+                      <button class="button is-success" @click="addstock(stock.foodname, stock.foodamount, stock.key)"><i class="fa fa-plus"></i></button>
                     </td>
                     <td class="is-icon">
-                      <button class="btn" @click="Deldeliver2(stock.key)"><i class="fa fa-trash"></i></button>
+                      <button class="button is-danger" @click="Deldeliver2(stock.key)"><i class="fa fa-trash"></i></button>
                     </td>
                   </tr>
                 </tbody>
@@ -610,7 +610,7 @@ export default {
         safety: parseInt(safety, 10),
         type: this.typeunit
       }
-      if (stockname === '' || stockamount === '') {
+      if (stockname === '' || stockamount === '' || this.typeunit === '') {
         this.$swal({
           type: 'error',
           title: 'Oops...',
@@ -625,6 +625,17 @@ export default {
         this.safety = ''
         this.typeunit = ''
       }
+    },
+    checkstock (stockname, stockamount, safety) {
+      const found = this.datastock.find(p => p.stockname === stockname)
+      if (found) {
+        this.$swal({
+          type: 'error',
+          title: 'Oops...',
+          text: 'วัตถุดิบนี้ซ้ำ!!!'
+          // footer: '<a href>Why do I have this issue?</a>'
+        })
+      } else { this.Insertstock(stockname, stockamount, safety) }
     },
     setEditstock (key, stockname, stockamount, safety, type) {
       if (!safety) { safety = 0 }
