@@ -7,7 +7,7 @@
           <div class="column is-two-thirds">
             <h1 class="title is-size-1">{{ shop.name }} <img v-bind:src="shop.status" class="statusOpen"></h1>
             <i class="fas fa-phone"></i> {{ shop.tel }}
-            <button v-if="permission !== '1'" class="button button13" @click="setprofile(shop.name, shop.tel, shop.status, shop.banner)">
+            <button v-if="permission !== '1' && hasShop === selectShop" class="button button13" @click="setprofile(shop.name, shop.tel, shop.status, shop.banner)">
               <span class="icon">
                 <i class="fas fa-user-edit"></i>
               </span>
@@ -214,12 +214,12 @@
                       <input type="text" v-model="updateProdetail" placeholder="รายละเอียดโปร">
                     </span>
                     <div class="editPromotionBtn">
-                      <button v-if="permission !== '1' && updateKey !== key" @click="SetUpdatePromo(key, promo.prodetail)" class="button button13">
+                      <button v-if="permission !== '1' && updateKey !== key && hasShop === selectShop" @click="SetUpdatePromo(key, promo.prodetail)" class="button button13">
                         <span class="icon">
                           <i class="fas fa-edit"></i>
                         </span>
                       </button>
-                      <button v-if="permission !== '1' && updateKey !== key" class="button button3" @click="DelPro(key)">
+                      <button v-if="permission !== '1' && updateKey !== key && hasShop === selectShop" class="button button3" @click="DelPro(key)">
                         <span class="icon">
                           <i class="fas fa-trash"></i>
                         </span>
@@ -246,7 +246,7 @@
                   </div>
                 </div>
               </div>
-              <div v-if="permission !== '1'">
+              <div v-if="permission !== '1' && hasShop === selectShop">
                 <input type="text" v-model="prodetail" placeholder="รายละเอียดโปรโมชั่น" size="30" required class="input is-large">
                 <button class="button is-warning" @click="insertpromo(prodetail)">
                   <span class="icon">
@@ -266,7 +266,7 @@
                   <button v-if="!sub" class="button is-danger is-outlined" @click="getmenus()" disabled>จานเดี่ยว</button>
                   <button v-if="!sub" class="button is-info is-outlined" @click="getsubrice()">กับข้าว</button>
                   <button v-if="sub" class="button is-info is-outlined" @click="getsubrice()" disabled>กับข้าว</button>
-                  <button class="button button11" @click="setinsertmenu()">เพิ่มเมนู</button>
+                  <button v-if="permission !== '1' && hasShop === selectShop" class="button button11" @click="setinsertmenu()">เพิ่มเมนู</button>
                 </article>
                   <div class="">
                     <div class="columns is-multiline">
@@ -286,12 +286,12 @@
                           <!-- <img v-if="!sub" v-url={filename:menu.foodpic} width="100%" height="auto"/> -->
                           <img :src="menu.foodpic" width="100%" height="auto"/>
                           <div class="editMenuBtns">
-                            <button v-if="permission !== '1'" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.meters, menu.Cost)" class="button button13-white">
+                            <button v-if="permission !== '1' && hasShop === selectShop" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.meters, menu.Cost)" class="button button13-white">
                               <span class="icon">
                                 <i class="fas fa-edit"></i>
                               </span>
                             </button>
-                            <button v-if="permission !== '1'" @click="DelFood(menu.key)" class="button button3-white">
+                            <button v-if="permission !== '1' && hasShop === selectShop" @click="DelFood(menu.key)" class="button button3-white">
                               <span class="icon">
                                 <i class="fas fa-trash"></i>
                               </span>
@@ -789,7 +789,7 @@
                 <div class="">
                   <h5>Review:&nbsp;</h5>{{review.view}}
                   <h5>โดย คุณ&nbsp;{{review.namere}}</h5>
-                  <button v-if="permission !== '1'" class="deleteComment button button3" @click="DelRe(key)">
+                  <button v-if="permission !== '1' && hasShop === selectShop" class="deleteComment button button3" @click="DelRe(key)">
                     <span class="icon">
                       <i class="fas fa-trash"></i>
                     </span>

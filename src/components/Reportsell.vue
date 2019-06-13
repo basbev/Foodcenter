@@ -10,6 +10,7 @@
       <button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button>
       <button class="button button4" @click="getDataFirebase(getvalue, month)">รายเดือน</button>
       <button class="button button5" @click="getDataFirebase(getvalue, year)">รายปี</button>
+      <button class="button button5" @click="getdonut(getvalue, year)">สรุปรายได้กำไร</button>
     </div>
     <div class="column buttonGroup">
       <!-- Profit -->
@@ -100,6 +101,7 @@ export default {
     return {
       getvalue: [],
       getvalue1: [],
+      getvalue2: [],
       day: 'day',
       month: 'month',
       year: 'year',
@@ -111,6 +113,7 @@ export default {
       showmoneyweek: false,
       reportsell: '',
       reportmoney: '',
+      reportprofit: '',
       Week: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       allday: [],
       date: new Date()
@@ -296,6 +299,86 @@ export default {
       this.showtable = true
       this.showsell = false
       this.getsell()
+    },
+    async getdonut (getvalue, scale) {
+      var ref = firebase.database().ref('foodcenter/report/' + this.selectShop + '/' + scale)
+      await ref.on('value', snap => {
+        var data = []
+        var data1 = []
+        snap.forEach(ss => {
+          var item = ss.val().value
+          var item1 = ss.val().label
+          data.push(item)
+          data1.push(item1)
+        })
+        this.getvalue = data
+        this.getvalue1 = data1
+        // this.Graphdonut(this.getvalue)
+      })
+      var ref2 = firebase.database().ref('foodcenter/reportprofit/' + this.selectShop + '/' + scale)
+      await ref2.on('value', snap => {
+        var data = []
+        var data1 = []
+        snap.forEach(ss => {
+          var item = ss.val().value
+          var item1 = ss.val().label
+          data.push(item)
+          data1.push(item1)
+        })
+        console.log(data)
+        this.getvalue2 = data
+        // this.getvalue1 = data1
+        // this.Graphdonut(this.getvalue)
+      })
+      this.reducevalue()
+    },
+    reducevalue () {
+      const result = this.getvalue.reduce((sum, number) => {
+        return sum + number
+      }, 0)
+      const result2 = this.getvalue2.reduce((sum, number) => {
+        return sum + number
+      }, 0)
+      this.Graphdonut(result, result2)
+    },
+    Graphdonut (getvalue, getvalue2) {
+      console.log(getvalue)
+      console.log(getvalue2)
+      if (this.showchart !== '') { this.showchart.destroy() }
+      this.showchart = new ApexCharts(document.querySelector('#chart'),
+        {
+          chart: {
+            type: 'donut',
+            width: 380
+          },
+          series: [getvalue, getvalue2],
+          labels: ['รายได้รวม', 'กำไร'],
+          responsive: [{
+            breakpoint: 480,
+            options: {
+              plotOptions: {
+                pie: {
+                  donut: {
+                    size: '65%'
+                  }
+                }
+              },
+              chart: {
+                width: 200,
+                height: 200
+              },
+              hart: {
+                width: 100,
+                height: 100
+              },
+              legend: {
+                position: 'bottom'
+              }
+            }
+          }]
+        }
+      )
+      this.showchart.render()
     }
   },
   mounted () {
@@ -331,6 +414,18 @@ export default {
         data.push(item)
       })
       this.reportsell = data
+      console.log(data)
+      // this.sortHighest3()
+    })
+    // this.getsell()
+    firebase.database().ref().child('foodcenter/reportprofit').child(this.selectShop).on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.reportprofit = data
       console.log(data)
       // this.sortHighest3()
     })
