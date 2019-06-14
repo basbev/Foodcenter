@@ -250,7 +250,7 @@ export default {
       await this.deliver(products)
       await this.before()
       await this.sortcode(products)
-      await axios.get('http://https://foodmail.herokuapp.com/', {
+      await axios.get('https://foodmail.herokuapp.com/', {
         params: {
           id: `<p>มีรายละเอียดดังนี้</p>
                   <ul>  

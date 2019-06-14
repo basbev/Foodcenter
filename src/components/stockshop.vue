@@ -193,7 +193,7 @@
                   <div class="column">
                     <input
                      class="form-control mb-2"
-                      type="text"
+                      type="number"
                      v-model="stockamount"
                       placeholder="กรัม/จำนวน"
                     >
