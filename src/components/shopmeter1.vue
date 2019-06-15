@@ -470,7 +470,4 @@ input[type=text], select {
   .input[type=number], select {
     width: 100%;
   }
-  .input.is-large, .textarea.is-large {
-  font-size: 1.0rem;
-  }
 </style>

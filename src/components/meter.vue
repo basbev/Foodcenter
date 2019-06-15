@@ -199,17 +199,17 @@
                     </span>
                     <div class="editPromotionBtn">
                       <button v-if="permission !== '1' && updateKey !== key" @click="SetUpdatePromo(key, promo.prodetail)" class="button button13">
-                        <span class="icon">
+                        <span class="aicon">
                           <i class="fas fa-edit"></i>
                         </span>
                       </button>
                       <button v-if="permission !== '1' && updateKey !== key" class="button button3" @click="DelPro(key)">
-                        <span class="icon">
+                        <span class="aicon">
                           <i class="fas fa-trash"></i>
                         </span>
                       </button>
                       <button v-if="updateKey === key" @click="UpdatePromo(key, updateProdetail)" class="button is-success">
-                        <span class="icon">
+                        <span class="aicon">
                           <i class="fas fa-save"></i>
                         </span>
                       </button>
@@ -266,12 +266,12 @@
                           <img v-url={filename:menu.foodpic} width="100%" height="auto"/>
                           <div class="editMenuBtns">
                             <button v-if="permission !== '1'" @click="SetUpdateMenu(menu.key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.meters, menu.Cost, menu.type)" class="button button13-white">
-                              <span class="icon">
+                              <span class="aicon">
                                 <i class="fas fa-edit"></i>
                               </span>
                             </button>
                             <button v-if="permission !== '1'" @click="DelFood(menu.key)" class="button button3-white">
-                              <span class="icon">
+                              <span class="aicon">
                                 <i class="fas fa-trash"></i>
                               </span>
                             </button>
@@ -767,9 +767,9 @@
                   </button>
                 </div>
               </div>
-              <hr>
               <input type="text" v-model="view" placeholder="รีวิว" size="30" class="input is-large">
-              <button class="button button12" @click="insertreview(view)">เพิ่มรีวิว</button><br>
+              <button class="button is-warning" @click="insertreview(view)">เพิ่มรีวิว</button><br>
+              <hr>
               คะแนนความพอใจ&nbsp;
               <star-rating :star-size="40" :show-rating="true" v-model="scorce"></star-rating><br>
               <button class="button is-warning" @click="insertreviewpoint(scorce)">เพิ่มคะแนนร้านค้า</button>
@@ -1434,7 +1434,6 @@ export default {
 }
 </script>
 <style>
-
   .report {
     text-align: center;
   }
@@ -1476,9 +1475,6 @@ export default {
   }
   .input[type=number], select {
     width: 100%;
-  }
-  .input.is-large, .textarea.is-large {
-    font-size: 1.0rem;
   }
   div {
     /* font-family: 'Sriracha', cursive; */

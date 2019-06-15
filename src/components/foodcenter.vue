@@ -15,10 +15,10 @@
         <h3 class="is-size-4">เพิ่มร้านอาหาร</h3>
         <div class="columns">
           <div class="column">
-            <input class="input is-large" type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
+            <input class="input" type="text" v-model="name" placeholder="ชื่อร้านอาหาร">
           </div>
           <div class="column">
-            <input class="input is-large" type="number" v-model="tel" placeholder="เบอร์">
+            <input class="input" type="number" v-model="tel" placeholder="เบอร์">
           </div>
           <div class="column is-3">
             <button class="button is-warning" @click="insertTofoodcenter(tel, name)">
@@ -37,7 +37,8 @@
             <article class="media card">
                 <figure class="media-left">
                   <span class="icon">
-                    <i class="has-text-warning fa fa-columns fa-lg"></i>
+                    <!-- <i class="has-text-warning fa fa-columns fa-lg"></i> -->
+                    <img class="statusImg" v-bind:src="detail.status" width="70" height="55">
                   </span>
                 </figure>
                 <div class="media-content">
@@ -68,10 +69,11 @@
           <div class="columns is-multiline" v-if="shops">
             <div class="column is-one-third" :key="detail.key" v-for="(detail) in shops">
               <div :class="(detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' & permission !== null)?'has-background-white card shadow':'has-background-white card'">
-              <article class="notification media has-background-white" @click="SelectShop(detail.key, detail.status)">
+              <article class="media has-background-white" @click="SelectShop(detail.key, detail.status)">
                 <figure class="media-left">
                   <span class="icon">
-                    <i class="has-text-warning fa fa-columns fa-lg"></i>
+                    <!-- <i class="has-text-warning fa fa-columns fa-lg"></i> -->
+                    <img class="statusImg" v-bind:src="detail.status" width="70" height="55">
                   </span>
                 </figure>
                 <div class="media-content">
@@ -88,7 +90,6 @@
       <div>
         <div class="row">
           <div class="column">
-        <img class="statusImg" v-bind:src="detail.status" width="70" height="55">
     <img src="https://www.img.live/images/2018/11/20/img_352451.png" class="imageTel">&nbsp;{{detail.tel}}
      <h1>คิวที่รอ :&nbsp;<span class="number">&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</span></h1>
      <h5>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h5>
@@ -114,10 +115,11 @@
           <div class="columns is-multiline">
             <div class="column is-one-third" :key="detail.key" v-for="(detail) in showData">
               <div :class="(detail.status === 'https://www.img.live/images/2018/11/20/bb0bf29aaea59877.png' & permission !== null)?'has-background-white card shadow':'has-background-white card'">
-                <article class="notification media has-background-white" @click="SelectShop(detail.key, detail.status)">
+                <article class="media has-background-white" @click="SelectShop(detail.key, detail.status)">
                   <figure class="media-left">
                     <span class="icon">
-                      <i class="has-text-warning fa fa-columns fa-lg"></i>
+                      <!-- <i class="has-text-warning fa fa-columns fa-lg"></i> -->
+                      <img class="statusImg" v-bind:src="detail.status" width="70" height="55">
                     </span>
                   </figure>
                   <div class="media-content">
@@ -129,7 +131,6 @@
                       <div>
                         <div class="row">
                           <div class="column">
-                            <img class="statusImg" v-bind:src="detail.status" width="70" height="55">
                             <img src="https://www.img.live/images/2018/11/20/img_352451.png" class="imageTel">&nbsp;{{detail.tel}}
                             <h1>คิวที่รอ :&nbsp;<span class="number">&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</span></h1>
                             <h5>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h5>
@@ -528,9 +529,10 @@ input[type=text], select {
   float: right;
 }
 .statusImg {
-  top: 60%;
+  /* top: 60%;
   right: 20px;
-  position: absolute;
+  position: absolute; */
+  min-width: 40px;
 }
 .shadow {
   box-shadow: none;

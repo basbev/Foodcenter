@@ -89,6 +89,7 @@
                 </tbody>
               </table>
   <div id="chart"></div>
+  <div id="chart2"></div>
 </div>
 </template>
 <script>

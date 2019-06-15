@@ -1365,9 +1365,6 @@ export default {
   .input[type=number], select {
     width: 100%;
   }
-  .input.is-large, .textarea.is-large {
-  font-size: 1.0rem;
-  }
   div {
   font-family: 'Sriracha', cursive;
 }

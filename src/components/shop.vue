@@ -141,11 +141,11 @@
                       <div class="column">
                         <!-- <input type="text" v-model="Search" placeholder="ค้นหาเมนู" v-if="Searchtype === ''" disabled class="input is-large">
                         <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" v-if="Searchtype === 'menushow'" class="input is-large"> -->
-                        <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" class="input is-large" style="width:75%">
+                        <input type="text" v-model="Search" placeholder="ค้นหาเมนู" @input="filterShop(Search)" class="input is-large">
                         <select v-model="Searchmode" style="width:25%">
-                                      <option value="จานเดี่ยว">จานเดี่ยว</option>
-                                      <option value="กับข้าว">กับข้าว</option>
-                                    </select>
+                          <option value="จานเดี่ยว">จานเดียว</option>
+                          <option value="กับข้าว">กับข้าว</option>
+                        </select>
                          <div>
                            ขายดี
                           <label :class="(Search == record.key)?'button is-primary':'button'" :key="key" v-for="(record, key) in records">
@@ -154,8 +154,10 @@
                             <h3>&nbsp;&nbsp;{{record.key}} {{record.amount}} จาน</h3>
                           </label>
                         </div>
-                        <br>ค้นหาแบบประเภทอาหาร
-                        <select v-model="Searchtype" placeholder="ค้นหาตามประเภท">
+                        <hr>
+                        ค้นหาแบบประเภทอาหาร
+                        <select v-model="Searchtype" placeholder="ค้นหาตามประเภท" @change="filterShop2(Searchtype)">
+                          <option value="">เลือกประเภท</option>
                           <option value="ผัด">ผัด</option>
                           <option value="ทอด">ทอด</option>
                           <option value="ต้ม">ต้ม</option>
@@ -163,7 +165,6 @@
                           <option value="นึ่ง">นึ่ง</option>
                           <option value="ย่าง">ย่าง</option>
                         </select>
-                        <button class="button is-warning" @click="filterShop2(Searchtype)">ค้นหาตามประเภท</button>
                       </div>
                     </div>
                     <!--<button class="button button11" @click="Searchnow(Search, Searchtype)">ค้นหาอาหาร</button>-->
@@ -215,17 +216,17 @@
                     </span>
                     <div class="editPromotionBtn">
                       <button v-if="permission !== '1' && updateKey !== key && hasShop === selectShop" @click="SetUpdatePromo(key, promo.prodetail)" class="button button13">
-                        <span class="icon">
+                        <span class="aicon">
                           <i class="fas fa-edit"></i>
                         </span>
                       </button>
                       <button v-if="permission !== '1' && updateKey !== key && hasShop === selectShop" class="button button3" @click="DelPro(key)">
-                        <span class="icon">
+                        <span class="aicon">
                           <i class="fas fa-trash"></i>
                         </span>
                       </button>
                       <button v-if="updateKey === key" @click="UpdatePromo(key, updateProdetail)" class="button is-success">
-                        <span class="icon">
+                        <span class="aicon">
                           <i class="fas fa-save"></i>
                         </span>
                       </button>
@@ -261,12 +262,11 @@
                   <span class="icon has-text-primary">
                     <i class="fas fa-info-circle"></i>
                   </span>
-                  <h4 id="let1" class="title is-3">เมนูประจำร้าน</h4>
-                  <button v-if="sub" class="button is-danger is-outlined" @click="getmenus()">จานเดี่ยว</button>
-                  <button v-if="!sub" class="button is-danger is-outlined" @click="getmenus()" disabled>จานเดี่ยว</button>
-                  <button v-if="!sub" class="button is-info is-outlined" @click="getsubrice()">กับข้าว</button>
-                  <button v-if="sub" class="button is-info is-outlined" @click="getsubrice()" disabled>กับข้าว</button>
-                  <button v-if="permission !== '1' && hasShop === selectShop" class="button button11" @click="setinsertmenu()">เพิ่มเมนู</button>
+                  <h4 id="let1" class="title is-3">เมนูประจำร้าน
+                    <button v-if="permission !== '1' && hasShop === selectShop" class="button is-info" @click="setinsertmenu()">เพิ่มเมนู</button>
+                  </h4>
+                  <button :class="(sub)?'button is-outlined':'button is-warning'" @click="getmenus()">จานเดียว</button>
+                  <button :class="(!sub)?'button is-outlined':'button is-warning'" @click="getsubrice()">กับข้าว</button>
                 </article>
                   <div class="">
                     <div class="columns is-multiline">
@@ -287,12 +287,12 @@
                           <img :src="menu.foodpic" width="100%" height="auto"/>
                           <div class="editMenuBtns">
                             <button v-if="permission !== '1' && hasShop === selectShop" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.meters, menu.Cost)" class="button button13-white">
-                              <span class="icon">
+                              <span class="aicon">
                                 <i class="fas fa-edit"></i>
                               </span>
                             </button>
                             <button v-if="permission !== '1' && hasShop === selectShop" @click="DelFood(menu.key)" class="button button3-white">
-                              <span class="icon">
+                              <span class="aicon">
                                 <i class="fas fa-trash"></i>
                               </span>
                             </button>
@@ -790,23 +790,24 @@
                   <h5>Review:&nbsp;</h5>{{review.view}}
                   <h5>โดย คุณ&nbsp;{{review.namere}}</h5>
                   <button v-if="permission !== '1' && hasShop === selectShop" class="deleteComment button button3" @click="DelRe(key)">
-                    <span class="icon">
+                    <span class="aicon">
                       <i class="fas fa-trash"></i>
                     </span>
                   </button>
                 </div>
               </div>
-              <hr>
-              <input type="text" v-model="view" placeholder="รีวิว" size="30" class="input is-large">
+              <input type="text" v-model="view" placeholder="รีวิว" size="30" class="input">
               <center>
                 <div v-if="!editvote[0]">
-              <button class="button button12" @click="insertreview(view)">เพิ่มรีวิว</button><br>
+              <button class="button is-warning" @click="insertreview(view)">เพิ่มรีวิว</button><br>
+              <hr>
               คะแนนความพอใจ&nbsp;
               <star-rating :star-size="40" :show-rating="true" v-model="scorce"></star-rating><br>
               <button class="button is-warning" @click="insertreviewpoint(scorce)">เพิ่มคะแนนร้านค้า</button>
                 </div>
                 <div v-if="editvote[0]">
-              <button class="button button12" @click="insertreview(view)">เพิ่มรีวิว</button><br>
+              <button class="button is-warning" @click="insertreview(view)">เพิ่มรีวิว</button><br>
+              <hr>
               คะแนนความพอใจ&nbsp;
               <star-rating :star-size="40" :show-rating="true" v-model="tmpvote"></star-rating><br>
               <button class="button is-warning" @click="editreviewpoint(tmpvote)">เเก้ไขคะแนนร้านค้า</button>
@@ -1720,9 +1721,6 @@ export default {
   .input[type=number], select {
     width: 100%;
   }
-  .input.is-large, .textarea.is-large {
-    font-size: 1.0rem;
-  }
   div {
     /* font-family: 'Sriracha', cursive; */
   }
@@ -1822,10 +1820,8 @@ export default {
     left: 35%;
     bottom: 20px;
   }
-  .title {
-    margin-bottom: 0px!important;
-  }
   .vue-star-rating {
     display: initial!important;
   }
+
 </style>

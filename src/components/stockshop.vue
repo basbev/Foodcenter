@@ -39,8 +39,7 @@
         </ul>
       </div>
     </div> -->
-    <br><br>
-    <div class="box">
+    <div class="card">
       <!-- Main container -->
       <nav class="level">
         <!-- Left side -->
@@ -96,10 +95,12 @@
           </div>
           <div class="column">
             <div class="level">
-            <p class="level-item"><input class="input" type="number" placeholder="รายการที่เเสดงต่อหน้า" v-model.number="pageSize"></p>
-            &nbsp;&nbsp;&nbsp;
-            <p class="level-item"><a class="button is-success" @click="updateTable()">รายการ</a></p>
-            <p class="level-item"><a class="button is-success" @click="setInsertstock()">เพิ่มวัตถุดิบ</a></p>
+            <p class="level-item">
+              <input class="input" type="number" placeholder="รายการที่เเสดงต่อหน้า" v-model.number="pageSize" @input="updateTable()" min="1">
+              &nbsp;รายการ
+            </p>
+            &nbsp;&nbsp;
+            <a class="button is-success" @click="setInsertstock()">เพิ่มวัตถุดิบ</a>
            </div>
           </div>
           <div class="column">
@@ -115,13 +116,13 @@
   <div class="column">
   </div>
   <div class="column is-half">
-   <section class="panel">
+   <section class="panel card">
             <p class="panel-heading">
             <center>รายการวัถตุดิบในร้านอาหาร</center>
               <!-- <a class="button is-success right">New</a> -->
             </p>
             <!-- <hr> -->
-            <div class="panel-block">
+            <div class="">
               <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                 <thead>
                   <tr>
@@ -146,10 +147,10 @@
                     <td>{{stock.stockname}}</td>
                     <td>{{stock.stockamount}}</td>
                     <td>{{stock.type}}</td>
-                    <td class="is-icon">
+                    <td class="is-icon has-text-centered">
                       <center><button class="button is-warning" @click="setEditstock(stock.key, stock.stockname, stock.stockamount, stock.safety, stock.type)"><i class="fas fa-edit" ></i></button></center>
                     </td>
-                    <td class="is-icon">
+                    <td class="is-icon has-text-centered">
                     <center><button class="button is-danger" @click="Delstock(stock.key)"><i class="fa fa-trash"></i></button></center>
                     </td>
                   </tr>
@@ -170,7 +171,7 @@
               <button class="delete" aria-label="close" @click="Closemodal()"></button>
           </header>
           <section class="modal-card-body">
-            <div class="content">
+            <div class="">
               <!-- เนื้อหา -->
               <form action>
               <br>
@@ -185,7 +186,15 @@
                     type="text"
                     v-model="stockname"
                     placeholder="วัตถุดิบ"
+                    @input="filterstock(stockname)"
                   >
+                  <div class="options">
+                    <ul>
+                      <li v-for="stock in showData2" :key="stock.key" @click="itemClicked(stock.stockname)">
+                        {{stock.stockname}}
+                      </li>
+                    </ul>
+                  </div>
                   </div>
                   <div class="column is-2">
                     ประมาณ :
@@ -224,6 +233,26 @@
                     </select>
                   </div>
                 </div>
+                <!-- <div class="columns">
+                <div class="column is-2">
+                  ชื่อวัตถุดิบ :
+                </div>
+                <div class="column">
+                  <input
+                    type="text"
+                    v-model="query"
+                    placeholder="วัตถุดิบ"
+                    @input="filterstock(query)"
+                  >
+                  <div class="options">
+                    <ul>
+                      <li v-for="stock in showData2" :key="stock.key" @click="itemClicked(stock.stockname)">
+                        {{stock.stockname}}
+                      </li>
+                    </ul>
+                  </div>
+                  </div>
+                </div> -->
               </div>
               </form>
               <!-- เนื้อหา -->
@@ -453,6 +482,7 @@ export default {
       statusEdit: false,
       updatekey: '',
       showData: [],
+      showData2: [],
       Search: '',
       Countstock: 0,
       select: '',
@@ -465,7 +495,8 @@ export default {
       unit: '',
       updateunit: '',
       updatekey2: '',
-      typeunit: ''
+      typeunit: '',
+      query: ''
     }
   },
   mounted () {
@@ -578,6 +609,8 @@ export default {
       this.stockname = ''
       this.stockamount = ''
       this.safety = 0
+      this.showData2 = []
+      this.typeunit = ''
     },
     setdeliverstock () {
       this.showModal2 = true
@@ -710,6 +743,20 @@ export default {
         this.showData = []
       }
     },
+    filterstock (Search) {
+      if (Search.length > 0) {
+        this.showData2 = this.datastock.filter(
+          (stock) => {
+            if (stock.stockname.toString().indexOf(Search) >= 0 ||
+              stock.stockamount.toString().indexOf(Search) >= 0) {
+              return stock
+            }
+          }
+        )
+      } else {
+        this.showData2 = []
+      }
+    },
     totalPages () {
       return Math.ceil(this.datastock.length / this.pageSize)
     },
@@ -750,6 +797,10 @@ export default {
         firebase.database().ref().child('foodcenter/stock/' + this.selectShop).push(data)
         this.Deletedeliver(key)
       }
+    },
+    itemClicked (select) {
+      this.stockname = select
+      this.showData2 = []
     }
   }
 }
@@ -757,4 +808,29 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.options ul {
+  list-style-type: none;
+  max-height: 150px;
+  overflow-y: scroll;
+  border: 1px solid #d4d4d4;
+  min-width: 180px;
+  position: absolute;
+  z-index: 10;
+}
+.options ul li {
+    padding: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+}
+input[type=text], select {
+  margin: 0px 0;
+}
+.options ul li:hover {
+    background: #8c8c8c;
+    color: #fff;
+}
+.content ul {
+
+}
 </style>
