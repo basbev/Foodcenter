@@ -39,7 +39,7 @@
         </ul>
       </div>
     </div> -->
-    <div class="box">
+    <div class="card">
       <!-- Main container -->
       <nav class="level">
         <!-- Left side -->
@@ -81,19 +81,22 @@
         <div class="column is-one-quarter-fullhd is-full-mobile">
           <!--  -->
           <div class="level-right">
-            <p class="level-item"><input class="input" type="number" placeholder="รายการที่เเสดงต่อหน้า" v-model.number="pageSize"></p>
-            <p class="level-item"><a class="button is-success" @click="updateTable()">รายการ</a></p>
-            <p class="level-item"><a class="button is-success" @click="setInsertstock()">เพิ่มวัตถุดิบ</a></p>
+            <p class="level-item">
+              <input class="input" type="number" placeholder="รายการที่เเสดงต่อหน้า" v-model.number="pageSize" @input="updateTable()" min="1">
+              &nbsp;รายการ
+            </p>
+            &nbsp;&nbsp;
+            <a class="button is-success" @click="setInsertstock()">เพิ่มวัตถุดิบ</a>
            </div>
            <br>
           <!--  -->
-          <section class="panel">
+          <section class="panel card">
             <p class="panel-heading">
               รายการวัถตุดิบในร้านอาหาร
               <!-- <a class="button is-success right">New</a> -->
             </p>
             <!-- <hr> -->
-            <div class="panel-block">
+             <div class="">
               <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                 <thead>
                   <tr>
@@ -117,10 +120,10 @@
                     <td>{{stock.stockname}}</td>
                     <td>{{stock.stockamount}}</td>
                     <td>{{stock.type}}</td>
-                    <td class="is-icon">
+                    <td class="is-icon has-text-centered">
                       <button class="button is-warning" @click="setEditstock(stock.key, stock.stockname, stock.stockamount, stock.type)"><i class="fas fa-edit"></i></button>
                     </td>
-                    <td class="is-icon">
+                    <td class="is-icon has-text-centered">
                       <button class="button is-danger" @click="Delstock(stock.key)"><i class="fa fa-trash"></i></button>
                     </td>
                   </tr>
@@ -129,7 +132,7 @@
             </div>
           </section>
           <!--  -->
-          <nav class="pagination" role="navigation" aria-label="pagination">
+          <!-- <nav class="pagination" role="navigation" aria-label="pagination">
             <a class="pagination-previous" v-on:click="updatePage(currentPage - 1)" :disabled="showPreviousLink()">ก่อนหน้า</a>
             <a class="pagination-next" v-on:click="updatePage(currentPage + 1)" :disabled="showNextLink()">ถัดไป</a>
             <ul class="pagination-list">
@@ -137,7 +140,7 @@
             <a class="pagination-link" v-on:click="updatePage(index)" v-bind:class="{ 'is-current': currentPage === index }">{{page}}</a>
             </li>
            </ul>
-          </nav>
+          </nav> -->
           <!--  -->
         </div>
       </div>
@@ -152,7 +155,7 @@
               <button class="delete" aria-label="close" @click="Closemodal()"></button>
           </header>
           <section class="modal-card-body">
-            <div class="content">
+            <div class="">
               <!-- เนื้อหา -->
               <form action>
               <br>
@@ -167,7 +170,15 @@
                     type="text"
                     v-model="stockname"
                     placeholder="วัตถุดิบ"
+                    @input="filterstock(stockname)"
                   >
+                  <div class="options">
+                    <ul>
+                      <li v-for="stock in showData2" :key="stock.key" @click="itemClicked(stock.stockname)">
+                        {{stock.stockname}}
+                      </li>
+                    </ul>
+                  </div>
                   </div>
                   <div class="column is-2">
                     ประมาณ :
@@ -201,7 +212,7 @@
             </div>
           </section>
           <footer class="modal-card-foot">
-            <button v-if="!statusEdit" class="button is-success" @click="Insertstock(stockname, stockamount)">เพิ่มข้อมูล</button>
+            <button v-if="!statusEdit" class="button is-success" @click="checkstock(stockname, stockamount)">เพิ่มข้อมูล</button>
             <button v-if="statusEdit" class="button is-success" @click="Editstock(updatekey, stockname, stockamount)">บันทึกข้อมูล</button>
             <button class="button" @click="Closemodal()">ยกเลิก</button>
           </footer>
@@ -234,7 +245,7 @@
                   >
               </div>
               <div class="column">
-                <button class="button is-success" @click="insertunit()">เพิ่มหน่วยวัตถุดิบ</button>
+                <button class="button is-success" @click="checkunit(unit)">เพิ่มหน่วยวัตถุดิบ</button>
               </div>
             </div>
             <!-- edit -->
@@ -332,6 +343,34 @@
               >{{dep.stockname}}</option>
                     </select> -->
   <!-- Select -->
+   <div class="columns">
+  <div class="column">
+  </div>
+  <div class="column is-half">
+     <!--  -->
+          <!-- <nav class="pagination" role="navigation" aria-label="pagination">
+            <ul class="pagination-list">
+            <a class="pagination-previous" v-on:click="updatePage(currentPage - 1)" :disabled="showPreviousLink()">ก่อนหน้า</a>
+            <li v-for="(page,index) in totalPages()" :key="index">
+            <a class="pagination-link" v-on:click="updatePage(index)" v-bind:class="{ 'is-current': currentPage === index }">{{page}}</a>
+            </li>
+            <a class="pagination-next" v-on:click="updatePage(currentPage + 1)" :disabled="showNextLink()">ถัดไป</a>
+           </ul>
+          </nav> -->
+          <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+          <ul class="pagination-list">
+            <li><a class="pagination-previous" v-on:click="updatePage(currentPage - 1)" :disabled="showPreviousLink()">ก่อนหน้า</a></li>
+            <li v-for="(page,index) in totalPages()" :key="index">
+            <a class="pagination-link" v-on:click="updatePage(index)" v-bind:class="{ 'is-current': currentPage === index }">{{page}}</a>
+            </li>
+            <li><a class="pagination-next" v-on:click="updatePage(currentPage + 1)" :disabled="showNextLink()">ถัดไป</a></li>
+          </ul>
+        </nav>
+          <!--  -->
+  </div>
+  <div class="column">
+  </div>
+  </div>
   </div>
 </template>
 <script>
@@ -359,7 +398,9 @@ export default {
       units: '',
       unit: '',
       updateunit: '',
-      typeunit: ''
+      typeunit: '',
+      showData2: [],
+      query: ''
     }
   },
   mounted () {
@@ -447,6 +488,10 @@ export default {
     },
     setInsertstock () {
       this.showModal = true
+      this.showData2 = []
+      this.stockname = ''
+      this.stockamount = ''
+      this.typeunit = ''
     },
     setunit () {
       this.showModal3 = true
@@ -456,11 +501,20 @@ export default {
       this.updatekey2 = key
     },
     insertunit () {
-      let data = {
-        name: this.unit
+      if (this.unit === '') {
+        this.$swal({
+          type: 'error',
+          title: 'Oops...',
+          text: 'กรอกข้อมูลให้ครบ!!!'
+          // footer: '<a href>Why do I have this issue?</a>'
+        })
+      } else {
+        let data = {
+          name: this.unit
+        }
+        firebase.database().ref().child('meters/unit/' + this.selectShop).push(data)
+        this.unit = ''
       }
-      firebase.database().ref().child('meters/unit/' + this.selectShop).push(data)
-      this.unit = ''
     },
     Insertstock (stockname, stockamount) {
       let data = {
@@ -511,6 +565,7 @@ export default {
     Closemodal3 () {
       this.showModal3 = false
       this.updateunit = ''
+      this.unit = ''
     },
     Deletestock (key) {
       firebase.database().ref().child('meters/stock/' + this.selectShop).child(key).remove()
@@ -552,6 +607,46 @@ export default {
         this.updatePage(this.currentPage - 1)
       }
       console.log(this.currentPage, this.pageSize)
+    },
+    filterstock (Search) {
+      if (Search.length > 0) {
+        this.showData2 = this.datastock.filter(
+          (stock) => {
+            if (stock.stockname.toString().indexOf(Search) >= 0 ||
+              stock.stockamount.toString().indexOf(Search) >= 0) {
+              return stock
+            }
+          }
+        )
+      } else {
+        this.showData2 = []
+      }
+    },
+    itemClicked (select) {
+      this.stockname = select
+      this.showData2 = []
+    },
+    checkstock (stockname, stockamount) {
+      const found = this.datastock.find(p => p.stockname === stockname)
+      if (found) {
+        this.$swal({
+          type: 'error',
+          title: 'Oops...',
+          text: 'วัตถุดิบนี้ซ้ำ!!!'
+          // footer: '<a href>Why do I have this issue?</a>'
+        })
+      } else { this.Insertstock(stockname, stockamount) }
+    },
+    checkunit (unit) {
+      const found = this.units.find(p => p.name === unit)
+      if (found) {
+        this.$swal({
+          type: 'error',
+          title: 'Oops...',
+          text: 'หน่วยวัตถุดิบนี้ซ้ำ!!!'
+          // footer: '<a href>Why do I have this issue?</a>'
+        })
+      } else { this.insertunit(unit) }
     }
   }
 }
@@ -559,4 +654,28 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.options ul {
+  list-style-type: none;
+  max-height: 150px;
+  overflow-y: scroll;
+  border: 1px solid #d4d4d4;
+  min-width: 180px;
+  position: absolute;
+  z-index: 10;
+}
+.options ul li {
+    padding: 5px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+}
+input[type=text], select {
+  margin: 0px 0;
+}
+.options ul li:hover {
+    background: #8c8c8c;
+    color: #fff;
+}
+.content ul {
+}
 </style>

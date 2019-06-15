@@ -7,7 +7,7 @@
           <div class="column is-two-thirds">
             <h1 class="title is-size-1">{{ shop.name }} <img v-bind:src="shop.status" class="statusOpen"></h1>
             <i class="fas fa-phone"></i> {{ shop.tel }}
-            <button v-if="permission !== '1'" class="button button13" @click="setprofile(shop.name, shop.tel, shop.status, shop.banner)">
+            <button v-if="permission !== '1' && hasShop === selectShop" class="button button13" @click="setprofile(shop.name, shop.tel, shop.status, shop.banner)">
               <span class="icon">
                 <i class="fas fa-user-edit"></i>
               </span>
@@ -167,13 +167,14 @@
                             <h3 class="title is-3">{{menu.foodname}}</h3>
                             <h6 class="">ราคา&nbsp;{{menu.foodprice}}&nbsp;บาท</h6>
                           </div>
-                          <span class="icon is-small cartButton" v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost)">
+                          <span class="icon is-small cartButton" v-if="menus[key].Cart === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost)">
                             <i class="fas fa-cart-plus"></i>
                           </span>
-                          <span class="icon is-small cartButton disable" v-if="checkstock[key] === 1">
+                          <span class="icon is-small cartButton disable" v-if="menus[key].Cart === 1">
                             <i class="fas fa-cart-plus"></i>
                           </span>
-                          <img v-url={filename:menu.foodpic} width="100%" height="auto"/><br>
+                          <!-- <img v-url={filename:menu.foodpic} width="100%" height="auto"/><br> -->
+                          <img :src="menu.foodpic" width="100%" height="auto"/>
                         </div>
                       </div>
                     </div>
@@ -198,12 +199,12 @@
                       <input type="text" v-model="updateProdetail" placeholder="รายละเอียดโปร">
                     </span>
                     <div class="editPromotionBtn">
-                      <button v-if="permission !== '1' && updateKey !== key" @click="SetUpdatePromo(key, promo.prodetail)" class="button button13">
+                      <button v-if="permission !== '1' && updateKey !== key && hasShop === selectShop" @click="SetUpdatePromo(key, promo.prodetail)" class="button button13">
                         <span class="aicon">
                           <i class="fas fa-edit"></i>
                         </span>
                       </button>
-                      <button v-if="permission !== '1' && updateKey !== key" class="button button3" @click="DelPro(key)">
+                      <button v-if="permission !== '1' && updateKey !== key && hasShop === selectShop" class="button button3" @click="DelPro(key)">
                         <span class="aicon">
                           <i class="fas fa-trash"></i>
                         </span>
@@ -230,7 +231,7 @@
                   </div>
                 </div>
               </div>
-              <div v-if="permission !== '1'">
+              <div v-if="permission !== '1' && hasShop === selectShop">
                 <input type="text" v-model="prodetail" placeholder="รายละเอียดโปรโมชั่น" size="30" required class="input is-large">
                 <button class="button is-warning" @click="insertpromo(prodetail)">
                   <span class="icon">
@@ -246,7 +247,7 @@
                     <i class="fas fa-info-circle"></i>
                   </span>
                   <h4 id="let1" class="title is-3">เมนูประจำร้าน</h4>
-                  <button class="button button11" @click="setinsertmenu()">เพิ่มเมนู</button>
+                  <button v-if="permission !== '1' && hasShop === selectShop" class="button is-info" @click="setinsertmenu()">เพิ่มเมนู</button>
                 </article>
                   <div class="">
                     <div class="columns is-multiline">
@@ -257,20 +258,21 @@
                             <h6 class="">ราคา&nbsp;{{menu.foodprice}}&nbsp;บาท</h6>
                             <h6>จำนวน&nbsp;{{menu.type}}&nbsp;ชิ้น</h6>
                           </div>
-                          <span class="icon is-small cartButton" v-if="checkstock[key] === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost, menu.type)">
+                          <span class="icon is-small cartButton" v-if="menus[key].Cart === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost, menu.type)">
                             <i class="fas fa-cart-plus"></i>
                           </span>
-                          <span class="icon is-small cartButton disable" v-if="checkstock[key] === 1">
+                          <span class="icon is-small cartButton disable" v-if="menus[key].Cart === 1">
                             <i class="fas fa-cart-plus"></i>
                           </span>
-                          <img v-url={filename:menu.foodpic} width="100%" height="auto"/>
+                          <!-- <img v-url={filename:menu.foodpic} width="100%" height="auto"/> -->
+                          <img :src="menu.foodpic" width="100%" height="auto"/>
                           <div class="editMenuBtns">
-                            <button v-if="permission !== '1'" @click="SetUpdateMenu(menu.key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.meters, menu.Cost, menu.type)" class="button button13-white">
+                            <button v-if="permission !== '1' && hasShop === selectShop" @click="SetUpdateMenu(menu.key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.meters, menu.Cost, menu.type)" class="button button13-white">
                               <span class="aicon">
                                 <i class="fas fa-edit"></i>
                               </span>
                             </button>
-                            <button v-if="permission !== '1'" @click="DelFood(menu.key)" class="button button3-white">
+                            <button v-if="permission !== '1' && hasShop === selectShop" @click="DelFood(menu.key)" class="button button3-white">
                               <span class="aicon">
                                 <i class="fas fa-trash"></i>
                               </span>
@@ -760,7 +762,7 @@
                 <div class="">
                   <h5>Review:&nbsp;</h5>{{review.view}}
                   <h5>โดย คุณ&nbsp;{{review.namere}}</h5>
-                  <button v-if="permission !== '1'" class="deleteComment button button3" @click="DelRe(key)">
+                  <button v-if="permission !== '1' && hasShop === selectShop" class="deleteComment button button3" @click="DelRe(key)">
                     <span class="icon">
                       <i class="fas fa-trash"></i>
                     </span>
@@ -768,11 +770,22 @@
                 </div>
               </div>
               <input type="text" v-model="view" placeholder="รีวิว" size="30" class="input is-large">
+              <center>
+                <div v-if="!editvote[0]">
               <button class="button is-warning" @click="insertreview(view)">เพิ่มรีวิว</button><br>
               <hr>
               คะแนนความพอใจ&nbsp;
               <star-rating :star-size="40" :show-rating="true" v-model="scorce"></star-rating><br>
               <button class="button is-warning" @click="insertreviewpoint(scorce)">เพิ่มคะแนนร้านค้า</button>
+                </div>
+                <div v-if="editvote[0]">
+              <button class="button is-warning" @click="insertreview(view)">เพิ่มรีวิว</button><br>
+              <hr>
+              คะแนนความพอใจ&nbsp;
+              <star-rating :star-size="40" :show-rating="true" v-model="tmpvote"></star-rating><br>
+              <button class="button is-warning" @click="editreviewpoint(tmpvote)">เเก้ไขคะแนนร้านค้า</button>
+                </div>
+              </center>
             </div>
           </div>
         </div>
@@ -846,7 +859,10 @@ export default {
       showModal3: false,
       updatecost: '',
       units: '',
-      typeunit: ''
+      typeunit: '',
+      tmpvote: 0,
+      editvote: '',
+      userpoint: ''
     }
   },
   created () {
@@ -880,7 +896,8 @@ export default {
         foodtype: foodtype,
         foodprice: foodprice,
         meters: meters,
-        foodpic: this.dataImg3.name,
+        // foodpic: this.dataImg3.name,
+        foodpic: 'https://firebasestorage.googleapis.com/v0/b/foodcenter-23d67.appspot.com/o/' + this.dataImg3.name + '?alt=media&token=1fe47dd7-7085-4433-8dc5-b98ffb219d37',
         Cost: parseInt(Cost, 10),
         type: type
       }
@@ -957,7 +974,7 @@ export default {
       }
     },
     insertreviewpoint (scorce) {
-      scorce = parseInt(scorce, 10)
+      if (scorce === 0) { scorce = parseInt(this.tmpvote, 10) } else { scorce = parseInt(scorce, 10) }
       console.log(scorce)
       let data = {
         scorce: scorce,
@@ -972,18 +989,21 @@ export default {
           // footer: '<a href>Why do I have this issue?</a>'
         })
       } else {
-        if (this.vote.length !== 0) {
-          console.log(this.vote)
-          let Refcount = this.vote[0].count + 1
+        if (this.vote.length === 0 && this.tmpvote === 0) {
+          console.log(scorce, '1')
+          foodcenterRef.child('detail').child(this.selectShop).child('Rating').set(scorce.toFixed(2))
+          foodcenterRef.child('shoppoint').child(this.selectShop).set(data)
+          this.uservote(scorce)
+        }
+        if (this.vote.length !== 0 && this.tmpvote === 0) {
+          console.log(scorce, '2')
           let Refscorce = this.vote[0].scorce + scorce
+          let Refcount = this.vote[0].count + 1
           let Rating = Refscorce / Refcount
           foodcenterRef.child('shoppoint').child(this.vote[0].key).child('count').set(Refcount)
           foodcenterRef.child('shoppoint').child(this.vote[0].key).child('scorce').set(Refscorce)
           foodcenterRef.child('detail').child(this.selectShop).child('Rating').set(Rating.toFixed(2))
-        } else {
-          console.log('else')
-          foodcenterRef.child('detail').child(this.selectShop).child('Rating').set(scorce)
-          foodcenterRef.child('shoppoint').child(this.selectShop).set(data)
+          this.uservote(scorce)
         }
         this.scorce = 0
         alert('ให้คะแนนร้านค้าเรียบร้อยแล้ว')
@@ -1284,9 +1304,14 @@ export default {
           })
           if (this.menus[x].meters[y].qty <= stock.stockamount && tmp !== 1) { tmp = 0 } else { tmp = 1 }
         }
-        this.checkstock.push(tmp)
+        // this.checkstock.push(tmp)
+        this.menus[x].Cart = tmp
       }
       this.$store.dispatch('stocklist', this.datastock)
+      this.sortmenu()
+    },
+    sortmenu () {
+      this.menus.sort((a, b) => a.foodname < b.foodname ? -1 : 1)
     },
     removemeter () {
       this.meters.splice(0, 1)
@@ -1312,6 +1337,28 @@ export default {
     },
     sortHighest () {
       this.records.sort((a, b) => a.amount < b.amount ? 1 : -1)
+    },
+    editreviewpoint (scorce) {
+      let Refscorce = (this.vote[0].scorce - this.editvote[0].scorce) + this.tmpvote
+      let Refcount = this.vote[0].count
+      let Rating = Refscorce / Refcount
+      foodcenterRef.child('shoppoint').child(this.vote[0].key).child('count').set(Refcount)
+      foodcenterRef.child('shoppoint').child(this.vote[0].key).child('scorce').set(Refscorce)
+      foodcenterRef.child('detail').child(this.selectShop).child('Rating').set(Rating.toFixed(2))
+      this.uservote(scorce)
+      alert('เเก้ไขคะแนนร้านค้าเรียบร้อยแล้ว')
+    },
+    uservote (scorce) {
+      console.log(scorce)
+      let data = {
+        user: this.user,
+        scorce: scorce
+      }
+      if (this.editvote[0]) {
+        foodcenterRef.child('vote').child(this.selectShop).child(this.editvote[0].key).update({
+          scorce: scorce
+        })
+      } else { foodcenterRef.child('vote').child(this.selectShop).push(data) }
     }
   },
   computed: {
@@ -1334,7 +1381,8 @@ export default {
     foodRecoment () {
       let arr = []
       this.menus.forEach(function (menu, index) {
-        let url = 'https://firebasestorage.googleapis.com/v0/b/foodcenter-23d67.appspot.com/o/' + menu.foodpic + '?alt=media&token=1fe47dd7-7085-4433-8dc5-b98ffb219d37'
+        // let url = 'https://firebasestorage.googleapis.com/v0/b/foodcenter-23d67.appspot.com/o/' + menu.foodpic + '?alt=media&token=1fe47dd7-7085-4433-8dc5-b98ffb219d37'
+        let url = menu.foodpic
         // arr.push('<img v-url={filename:'+ menu.foodpic+'} width="300" height="350"/>')
         arr.push('<span>' +
         '<img src="' + url + '" class="imgMenuCover">' +
@@ -1359,6 +1407,7 @@ export default {
     const dbRefObjectvote = foodcenterRef.child('shoppoint').orderByChild('shop').equalTo(this.selectShop)
     const dbRefObjectstock = foodcenterRef.child('stock').child(this.selectShop)
     const dbRefObject2 = firebase.database().ref().child('meters/unit/' + this.selectShop)
+    const dbRefObjecteditvote = foodcenterRef.child('vote').child(this.selectShop).orderByChild('user').equalTo(this.user)
     dbRefObject.on('value', snap => {
       var data = []
       snap.forEach(ss => {
@@ -1429,6 +1478,23 @@ export default {
         data.push(item)
       })
       this.units = data
+    })
+    dbRefObjecteditvote.on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.editvote = data
+      if (data[0]) {
+        this.tmpvote = data[0].scorce
+      }
+    })
+    const getuser = firebase.database().ref('user').orderByChild('username').equalTo(this.user)
+    getuser.on('child_added', snap => {
+      this.userpoint = snap.key
+      console.log(this.userpoint)
     })
   }
 }

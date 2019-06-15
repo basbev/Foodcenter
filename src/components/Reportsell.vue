@@ -107,6 +107,7 @@ export default {
       month: 'month',
       year: 'year',
       showchart: '',
+      showchart2: '',
       records: '',
       showtable: false,
       showsell: false,
@@ -117,7 +118,9 @@ export default {
       reportprofit: '',
       Week: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       allday: [],
-      date: new Date()
+      date: new Date(),
+      dayhit: '',
+      moneyhit: ''
     }
   },
   methods: {
@@ -295,6 +298,46 @@ export default {
         if (day[i].Week === 'Saturday') { day[i].Week = 'เสาร์' }
         if (day[i].Week === 'Sunday') { day[i].Week = 'อาทิตย์' }
       }
+      // this.showPie()
+    },
+    showPie () {
+      if (this.showchart2 !== '') { this.showchart2.destroy() }
+      this.showchart2 = new ApexCharts(document.querySelector('#chart2'),
+        {
+          chart: {
+            width: 380,
+            type: 'pie'
+          },
+          labels: this.dayhit,
+          series: this.moneyhit,
+          // labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+          // series: [44, 55, 13, 43, 22],
+          responsive: [{
+            breakpoint: 480,
+            options: {
+              plotOptions: {
+                pie: {
+                  donut: {
+                    size: '65%'
+                  }
+                }
+              },
+              chart: {
+                width: 200,
+                height: 200
+              },
+              hart: {
+                width: 100,
+                height: 100
+              },
+              legend: {
+                position: 'bottom'
+              }
+            }
+          }]
+        }
+      )
+      this.showchart2.render()
     },
     showsellhit () {
       this.showtable = true
@@ -380,6 +423,18 @@ export default {
         }
       )
       this.showchart.render()
+    },
+    engtothaiday () {
+      for (var i = 0; i < this.dayhit.length; i++) {
+        if (this.dayhit[i] === 'Monday') { this.dayhit[i] = 'จันทร์' }
+        if (this.dayhit[i] === 'Tuesday') { this.dayhit[i] = 'อังคาร' }
+        if (this.dayhit[i] === 'Wednesday') { this.dayhit[i] = 'พุธ' }
+        if (this.dayhit[i] === 'Thursday') { this.dayhit[i] = 'พฤหัสบดี' }
+        if (this.dayhit[i] === 'Friday') { this.dayhit[i] = 'ศุกร์' }
+        if (this.dayhit[i] === 'Saturday') { this.dayhit[i] = 'เสาร์' }
+        if (this.dayhit[i] === 'Sunday') { this.dayhit[i] = 'อาทิตย์' }
+      }
+      this.showPie()
     }
   },
   mounted () {
@@ -398,14 +453,24 @@ export default {
     })
     firebase.database().ref().child('foodcenter/weekmoney').child(this.selectShop).on('value', snap => {
       var data = []
+      var data1 = []
+      var data2 = []
       snap.forEach(ss => {
         var item = ss.val()
         item.Week = ss.key
+        var item1 = ss.val().money
+        var item2 = ss.key
         data.push(item)
+        data1.push(item1)
+        data2.push(item2)
       })
       this.reportmoney = data
-      console.log(data)
+      this.dayhit = data2
+      this.moneyhit = data1
+      // console.log(data.Week)
       this.sortHighest2()
+      // this.showPie()
+      this.engtothaiday()
     })
     firebase.database().ref().child('foodcenter/weeksell').child(this.selectShop).on('value', snap => {
       var data = []

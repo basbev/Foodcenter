@@ -347,7 +347,7 @@
                   >
               </div>
               <div class="column">
-                <button class="button is-success" @click="insertunit()">เพิ่มหน่วยวัตถุดิบ</button>
+                <button class="button is-success" @click="checkunit(unit)">เพิ่มหน่วยวัตถุดิบ</button>
               </div>
             </div>
             <!-- edit -->
@@ -629,11 +629,20 @@ export default {
       this.updateunit = ''
     },
     insertunit () {
-      let data = {
-        name: this.unit
+      if (this.unit === '') {
+        this.$swal({
+          type: 'error',
+          title: 'Oops...',
+          text: 'กรอกข้อมูลให้ครบ!!!'
+          // footer: '<a href>Why do I have this issue?</a>'
+        })
+      } else {
+        let data = {
+          name: this.unit
+        }
+        firebase.database().ref().child('foodcenter/unit/' + this.selectShop).push(data)
+        this.unit = ''
       }
-      firebase.database().ref().child('foodcenter/unit/' + this.selectShop).push(data)
-      this.unit = ''
     },
     Insertstock (stockname, stockamount, safety) {
       if (safety === '') { safety = 0 }
@@ -801,6 +810,17 @@ export default {
     itemClicked (select) {
       this.stockname = select
       this.showData2 = []
+    },
+    checkunit (unit) {
+      const found = this.units.find(p => p.name === unit)
+      if (found) {
+        this.$swal({
+          type: 'error',
+          title: 'Oops...',
+          text: 'หน่วยวัตถุดิบนี้ซ้ำ!!!'
+          // footer: '<a href>Why do I have this issue?</a>'
+        })
+      } else { this.insertunit(unit) }
     }
   }
 }
