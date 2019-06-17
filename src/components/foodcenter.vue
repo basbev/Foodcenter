@@ -254,11 +254,12 @@ export default {
       numberOfShop: 0,
       showModal: false,
       tmp: '',
-      shoppoints: ''
+      shoppoints: '',
+      useradd: ''
     }
   },
   methods: {
-    insertTofoodcenter (tel, name) {
+    async insertTofoodcenter (tel, name) {
       let data = {
         tel: tel,
         name: name,
@@ -279,7 +280,12 @@ export default {
           // footer: '<a href>Why do I have this issue?</a>'
         })
       } else {
-        foodcenterRef.child('detail').child(this.name).set(data)
+        await foodcenterRef.child('detail').push(data)
+        let key
+        await foodcenterRef.child('detail').orderByChild('name').equalTo(name).once('child_added', snap => {
+          key = snap.key
+        })
+        await firebase.database().ref().child('user').child(this.useradd).child('hasShop').set(key)
         foodcenterRef.child('shoppoint').child(this.name).set(data2)
         this.tel = ''
         this.name = ''
@@ -449,11 +455,17 @@ export default {
       // JSON.stringify(this.shops)
       // console.log(JSON.stringify(this.shops))
     })
+    const getuser = firebase.database().ref().child('user').orderByChild('username').equalTo(this.user)
+    getuser.on('child_added', snap => {
+      this.useradd = snap.key
+      console.log(this.useradd)
+    })
   },
   computed: {
     ...mapGetters({
       permission: 'permission',
-      selectShop: 'selectShop'
+      selectShop: 'selectShop',
+      user: 'user'
     }),
     shopsSlide () {
       let arr = []
