@@ -54,40 +54,48 @@ function mail (params) {
     }
   })  
 }
+/* setInterval(() => {
+  const userFacebookList = facebookObject.orderByChild('username').equalTo(username)
 
+},30000) */
 setInterval(()=>{
   username = null
-  order = {}
-  orderRef.on('value', snap => {
+  orderNoti = {}
+  let pathNoti = ''
+  orderRef.on('value', snap => {//fetch ร้าน
     let orders = snap.val()
-    // console.log(orders.ป้าสมบูรณ์['1557222647046'])
-    Object.keys(orders).forEach(function (item) {
-      let store = {}
-      Object.keys(orders[item]).sort().forEach(function(key) {
-        store[key] = orders[item][key];
+    Object.keys(orders).forEach(function (keyStore) {
+      let store = []
+      Object.keys(orders[keyStore]).sort().forEach(function(key) { //เรียงเวลา
+        orders[keyStore][key]["key"] = key
+        store.push(orders[keyStore][key]);
       });
-      Object.keys(store).forEach(function (item) {
-        order = store[item]
-        if (order.status == 'กำลังรอ' && !username) {
-          username = order.menu[0].customer
-        }
-      });
+      let order = store.find((val) => {
+        return val.status === 'กำลังรอ'
+      })
+      console.log(order)
+      if (order && !order.alerted) {
+        username = order.customer
+        pathNoti = keyStore + '/' + order.key
+        orderNoti = order
+      }
     });
   })
   if (username) {
-    const facebookObject = firebase.database().ref('/facebook')
+    const facebookObject = firebase.database().ref('facebook')
     const userFacebookList = facebookObject.orderByChild('username').equalTo(username)
   
-    const userObject = firebase.database().ref('/user')
+    const userObject = firebase.database().ref('user')
     const userlist = userObject.orderByChild('username').equalTo(username)
-    token = null
-    userFacebookList.once('value', snap => {
+    let token = null
+    userFacebookList.once('value', snap => { //find user
       let user = snap.val()
       if (user) {
         user = user[Object.keys(user)[0]]
         token = user.token
-        sentNoti (token, order)
-        console.log(user.token)
+        if (token)
+          sentNoti(token, orderNoti)
+          saveAlerted(pathNoti)
       }
     })
     if (!token) {
@@ -96,35 +104,46 @@ setInterval(()=>{
         if (user) {
           user = user[Object.keys(user)[0]]
           token = user.token
-          sentNoti (token, order)
-          console.log(user.token)
+          // console.log(user)
+          if (token) {
+            sentNoti(token, orderNoti)
+            saveAlerted(pathNoti)
+          }
         }
       })
     }
   }
-}, 30000);
+}, 60000);
+function saveAlerted (pathNoti) {
+  orderRef.child(pathNoti+ '/alerted').set(true)
+}
 function sentNoti (token, order) {
-  console.log("sent noti",order)
-  var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-    to: token, 
-    // collapse_key: 'your_collapse_key',
-    
-    notification: {
-        title: 'ถึงคิวคุณแล้ว ผู้ใช้: ' + order.customer, 
-        body: 'order ' + order.menu[0].name
-    },
-    
-    data: {  //you can send only notification or only data(or include both)
-        my_key: 'my value',
-        my_another_key: 'my another value'
-    }
-  };
-
-  fcm.send(message, function(err, response){
-    if (err) {
-        console.log("Something has gone wrong!");
-    } else {
-        console.log("Successfully sent with response: ", response);
-    }
-  });
+  if (token) {
+    // console.log("sent noti",order)
+    let strMenu = ''
+    order.menu.forEach((item) => {
+      strMenu += item.name + ' ' + item.quantity + ' '
+    })
+    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+      to: token, 
+      // collapse_key: 'your_collapse_key',
+      notification: {
+          title: 'ถึงคิวคุณแล้ว ผู้ใช้: ' + order.customer, 
+          body: strMenu
+      },
+      
+      data: {  //you can send only notification or only data(or include both)
+          my_key: 'my value',
+          my_another_key: 'my another value'
+      }
+    };
+  
+    fcm.send(message, function(err, response){
+      if (err) {
+          console.log("Something has gone wrong!");
+      } else {
+          console.log("Successfully sent with response: ", response);
+      }
+    });
+  }
 }

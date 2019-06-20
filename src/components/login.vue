@@ -64,7 +64,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
 const messaging = firebase.messaging()
-messaging.usePublicVapidKey('BOCxXkDUpL4e9JNQjZucT-W8PLaFGDbm84uLKEnM15z8bRerxzWzy3n-rK78tiahFs1v0-FpUEpnjbB43egKKlE')
+messaging.usePublicVapidKey('BPYiRhXJmradMivdBv3IFGdIA2Lnae6uWvT9PbLd8vUNnxm2f5Lo18eQLvGp3snSMZlWmTILmVdUQDi9kakgPHk')
 
 export default {
   name: 'login',
@@ -149,6 +149,7 @@ export default {
           // In many cases once an app has been granted notification permission,
           // it should update its UI reflecting this.
           // this.saveToken('xxxxx')
+          // messaging.onTokenRefresh(function () {
           messaging.getToken().then((currentToken) => {
             if (currentToken) {
               // console.log('Get', this.gettoken)
@@ -166,6 +167,7 @@ export default {
           }).catch(function (err) {
             console.log('An error occurred while retrieving token. ', err)
           })
+          // })
           // [END_EXCLUDE]
         } else {
           console.log('Unable to get permission to notify.')

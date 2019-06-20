@@ -2,39 +2,160 @@
 <div class="report">
   <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
   <br>
-  <h1 class="title">Report : {{this.selectShop}}</h1>
+  <br>
+  <h1 class="title"><center>สรุปยอดขายร้าน{{this.selectShop}}</center></h1>
+  <br>
   <div class="columns">
-    <div class="column buttonGroup">
-      <h1>รายได้</h1>
+  <div class="column">
+  </div>
+  <div class="column is-two-fifths">
+    <article class="message is-dark">
+      <div class="message-header"><p>ยอดขาย</p></div>
+      <div class="message-body" style="position: relative;">
       <button class="button button2" @click="exportPdf">exportPDF</button>
       <button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button>
       <button class="button button4" @click="getDataFirebase(getvalue, month)">รายเดือน</button>
       <button class="button button5" @click="getDataFirebase(getvalue, year)">รายปี</button>
-      <button class="button button5" @click="getdonut(getvalue, year)">สรุปรายได้กำไร</button>
-    </div>
-    <div class="column buttonGroup">
-      <!-- Profit -->
-      <h1>กำไร</h1>
+      <!-- <button class="button button5" @click="getdonut(getvalue, year)">สรุปรายได้กำไร</button> -->
+      </div>
+      </article>
+  </div>
+  <div class="column is-two-fifths">
+    <article class="message is-dark">
+      <div class="message-header"><p>กำไร</p></div>
+      <div class="message-body" style="position: relative;">
+      <!-- <button class="button button2" @click="exportPdf">exportPDF</button> -->
       <button class="button button3" @click="getDataFirebaseprofit(getvalue, day)">รายวัน</button>
       <button class="button button4" @click="getDataFirebaseprofit(getvalue, month)">รายเดือน</button>
       <button class="button button5" @click="getDataFirebaseprofit(getvalue, year)">รายปี</button>
-      <button class="button button5" @click="showsellhit()">เมนูขายดี</button>
-      <!-- Profit -->
-    </div>
+      <!-- <button class="button button5" @click="showsellhit()">เมนูขายดี</button> -->
+      </div>
+      </article>
   </div>
-      <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" v-if="showtable">
+  <div class="column">
+  </div>
+</div>
+  <div class="columns">
+    <!-- <div class="column buttonGroup"> -->
+      <div class="is-one-quarter"></div>
+                <div class="column is-half">
+      <!--  -->
+      </div>
+      <div class="column is-half">
+      </div>
+    <!-- </div> -->
+    <!-- <div class="column buttonGroup"> -->
+      <!-- Profit -->
+      <!-- <h1>กำไร</h1>
+      <button class="button button3" @click="getDataFirebaseprofit(getvalue, day)">รายวัน</button>
+      <button class="button button4" @click="getDataFirebaseprofit(getvalue, month)">รายเดือน</button>
+      <button class="button button5" @click="getDataFirebaseprofit(getvalue, year)">รายปี</button>
+      <button class="button button5" @click="showsellhit()">เมนูขายดี</button> -->
+      <!-- Profit -->
+    <!-- </div> -->
+    <!--  -->
+    <!-- <div class="columns is-multiline">
+    <div class="column">
+    <div class="box notification is-primary">
+    <div class="heading">Top Seller Total</div>
+    <div class="title"><button class="button button2" @click="exportPdf">exportPDF</button></div>
+    </div>
+    </div>
+    <div class="column">
+    <div class="box notification is-primary">
+    <div class="heading">Top Seller Total</div>
+    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
+    </div>
+    </div>
+    <div class="column">
+    <div class="box notification is-primary">
+    <div class="heading">Top Seller Total</div>
+    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
+    </div>
+    </div>
+    <div class="column">
+    <div class="box notification is-primary">
+    <div class="heading">Top Seller Total</div>
+    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
+    </div>
+    </div>
+    <div class="column">
+    <div class="box notification is-primary">
+    <div class="heading">Top Seller Total</div>
+    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
+    </div>
+    </div>
+    <div class="column">
+    <div class="box notification is-primary">
+    <div class="heading">Top Seller Total</div>
+    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
+    </div>
+    </div>
+    <div class="column">
+    <div class="box notification is-primary">
+    <div class="heading">Top Seller Total</div>
+    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
+    </div>
+    </div>
+    <div class="column">
+    <div class="box notification is-primary">
+    <div class="heading">Top Seller Total</div>
+    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
+    </div>
+    </div>
+    <div class="column">
+    <div class="box notification is-primary">
+    <div class="heading">Top Seller Total</div>
+    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
+    </div>
+    </div>
+    </div> -->
+    <!--  -->
+  </div>
+              <!--  -->
+              <div class="columns">
+              <div class="column">
+              </div>
+              <div class="column is-three-fifths">
+               <article class="message is-dark">
+                <div class="message-header"><p>Chart</p></div>
+                <div class="message-body" style="position: relative;">
+                <div id="chart"></div>
+                </div>
+                </article>
+              </div>
+              <div class="column">
+                <article class="message is-dark">
+                <div class="message-header"><p>Chart</p></div>
+                <div class="message-body" style="position: relative;">
+                <div id="chart2"></div>
+                </div>
+                </article>
+              </div>
+              <div class="column">
+              </div>
+            </div>
+            <!-- table -->
+            <div class="columns">
+              <div class="column">
+                <article class="message is-dark">
+                <div class="message-header"><p>สรุปรายได้กำไร</p></div>
+                <div class="message-body" style="position: relative;">
+                  <div id="chart3"></div>
+                </div>
+                </article>
+              </div>
+              <div class="column">
+               <article class="message is-dark">
+                <div class="message-header"><p>เมนูอาหารขายดีตลอดกาล</p></div>
+                <div class="message-body" style="position: relative;">
+                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                 <thead>
                   <tr>
                     <th>ชื่อเมนู</th>
                     <th>จำนวน</th>
                   </tr>
                 </thead>
-                <tfoot>
-                  <tr>
-                    <th>ชื่อเมนู</th>
-                    <th>จำนวน</th>
-                  </tr>
-                </tfoot>
                 <tbody>
                   <tr :key="key" v-for="(record, key) in records">
                     <td>{{record.key}}</td>
@@ -42,19 +163,20 @@
                   </tr>
                 </tbody>
               </table>
-              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" v-if="showtable">
+                </div>
+                </article>
+              </div>
+              <div class="column">
+                <article class="message is-dark">
+                <div class="message-header"><p>วันที่ขายดี</p></div>
+                <div class="message-body" style="position: relative;">
+                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                 <thead>
                   <tr>
                     <th>วัน</th>
                     <th>จำนวน</th>
                   </tr>
                 </thead>
-                <tfoot>
-                  <tr>
-                    <th>วัน</th>
-                    <th>จำนวน</th>
-                  </tr>
-                </tfoot>
                 <tbody>
                   <tr :key="key" v-for="(record, key) in reportmoney">
                     <td>{{record.Week}}</td>
@@ -62,7 +184,14 @@
                   </tr>
                 </tbody>
               </table>
-              <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth" v-if="showtable">
+                </div>
+                </article>
+              </div>
+              <div class="column">
+                <article class="message is-dark">
+                <div class="message-header"><p>เมนูอาหารขายดีประจำวัน</p></div>
+                <div class="message-body" style="position: relative;">
+                <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                 <thead>
                   <tr>
                     <th>วัน</th>
@@ -71,14 +200,6 @@
                     <th>จำนวนเมนู</th>
                   </tr>
                 </thead>
-                <tfoot>
-                  <tr>
-                    <th>วัน</th>
-                    <th>ชื่อเมนู</th>
-                    <th>ราคาเมนู</th>
-                    <th>จำนวนเมนู</th>
-                  </tr>
-                </tfoot>
                 <tbody>
                   <tr :key="key" v-for="(record, key) in allday">
                     <td>{{record.Week}}</td>
@@ -88,8 +209,12 @@
                   </tr>
                 </tbody>
               </table>
-  <div id="chart"></div>
-  <div id="chart2"></div>
+                </div>
+                </article>
+              </div>
+            </div>
+            <!-- table -->
+              <!--  -->
 </div>
 </template>
 <script>
@@ -108,6 +233,7 @@ export default {
       year: 'year',
       showchart: '',
       showchart2: '',
+      showchart3: '',
       records: '',
       showtable: false,
       showsell: false,
@@ -120,24 +246,31 @@ export default {
       allday: [],
       date: new Date(),
       dayhit: '',
-      moneyhit: ''
+      moneyhit: '',
+      menudayhit: []
     }
   },
   methods: {
     async getsell () {
-      this.allday = []
-      for (var i = 0; i < this.Week.length; i++) {
-        var ref = firebase.database().ref().child('foodcenter/weeksell').child(this.selectShop).child(this.Week[i]).orderByChild('quantity').limitToLast(1)
-        await ref.on('value', snap => {
+      this.menudayhit = []
+      await this.Week.forEach((day) => {
+        // console.log('Do getsell')
+        var ref = firebase.database().ref().child('foodcenter/weeksell').child(this.selectShop).child(day).orderByChild('quantity').limitToLast(1)
+        ref.on('value', snap => {
           snap.forEach(ss => {
             var item = ss.val()
-            item.Week = this.Week[i]
-            this.allday.push(item)
+            item.Week = day
+            this.menudayhit.push(item)
           })
         })
-        console.log(this.allday)
-      }
-      this.sortHighest3()
+        // console.log(this.menudayhit)
+      })
+      this.allday = this.menudayhit
+      // await this.sortHighest3()
+    },
+    async beforeallday () {
+      await this.getsell()
+      await this.sortHighest3()
     },
     exportPdf () {
       var tempTitle = document.title
@@ -284,9 +417,10 @@ export default {
       this.reportmoney.sort((a, b) => a.money < b.money ? 1 : -1)
       this.engtothai(this.reportmoney)
     },
-    sortHighest3 () {
-      this.allday.sort((a, b) => a.quantity < b.quantity ? 1 : -1)
-      this.engtothai(this.allday)
+    async sortHighest3 () {
+      await this.allday.sort((a, b) => a.quantity < b.quantity ? 1 : -1)
+      await this.engtothai(this.allday)
+      console.log('Do sortHighest3')
     },
     engtothai (day) {
       for (var i = 0; i < day.length; i++) {
@@ -298,6 +432,7 @@ export default {
         if (day[i].Week === 'Saturday') { day[i].Week = 'เสาร์' }
         if (day[i].Week === 'Sunday') { day[i].Week = 'อาทิตย์' }
       }
+      console.log(this.allday)
       // this.showPie()
     },
     showPie () {
@@ -388,8 +523,8 @@ export default {
     Graphdonut (getvalue, getvalue2) {
       console.log(getvalue)
       console.log(getvalue2)
-      if (this.showchart !== '') { this.showchart.destroy() }
-      this.showchart = new ApexCharts(document.querySelector('#chart'),
+      if (this.showchart3 !== '') { this.showchart3.destroy() }
+      this.showchart3 = new ApexCharts(document.querySelector('#chart3'),
         {
           chart: {
             type: 'donut',
@@ -408,12 +543,12 @@ export default {
                 }
               },
               chart: {
-                width: 200,
-                height: 200
+                width: 200
+                // height: 200
               },
               hart: {
-                width: 100,
-                height: 100
+                width: 100
+                // height: 100
               },
               legend: {
                 position: 'bottom'
@@ -422,7 +557,7 @@ export default {
           }]
         }
       )
-      this.showchart.render()
+      this.showchart3.render()
     },
     engtothaiday () {
       for (var i = 0; i < this.dayhit.length; i++) {
@@ -481,9 +616,8 @@ export default {
       })
       this.reportsell = data
       console.log(data)
-      // this.sortHighest3()
+      this.beforeallday()
     })
-    // this.getsell()
     firebase.database().ref().child('foodcenter/reportprofit').child(this.selectShop).on('value', snap => {
       var data = []
       snap.forEach(ss => {
@@ -493,7 +627,7 @@ export default {
       })
       this.reportprofit = data
       console.log(data)
-      // this.sortHighest3()
+      this.getdonut(this.getvalue, this.year)
     })
     // this.getsell()
   },
@@ -506,9 +640,9 @@ export default {
 }
 </script>
 <style scoped>
-.report {
+/* .report {
   text-align: center;
-}
+} */
 .buttonGroup {
   background:#ffffff;
   width: 80%;
