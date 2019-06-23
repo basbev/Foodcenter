@@ -449,9 +449,9 @@ input[type=text], select {
   padding: 20px;
   border-radius: 10px;
 }
-.report {
+/* .report {
   text-align: center;
-}
+} */
 
 .allshop {
   font-size: 18px;

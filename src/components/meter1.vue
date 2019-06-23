@@ -1331,9 +1331,9 @@ export default {
 </script>
 <style scoped>
 
-.report {
+/* .report {
   text-align: center;
-}
+} */
 
 .bucket {
   position: fixed;

@@ -1500,9 +1500,9 @@ export default {
 }
 </script>
 <style>
-  .report {
+  /* .report {
     text-align: center;
-  }
+  } */
 
   .bucket {
     position: fixed;

@@ -345,9 +345,9 @@ export default {
 }
 </script>
 <style>
-.report {
+/* .report {
   text-align: center;
-}
+} */
 .cart {
   font-size: 19px;
   font-family: 'Prompt', sans-serif;

@@ -487,9 +487,9 @@ input[type=text], select {
   position: relative;
   margin-top: 20px;
 }
-.report {
+/* .report {
   text-align: center;
-}
+} */
 
 .allshop {
   font-size: 18px;
