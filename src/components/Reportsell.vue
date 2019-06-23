@@ -12,10 +12,10 @@
     <article class="message is-dark">
       <div class="message-header"><p>ยอดขาย</p></div>
       <div class="message-body" style="position: relative;">
-      <button class="button button2" @click="exportPdf">exportPDF</button>
-      <button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button>
-      <button class="button button4" @click="getDataFirebase(getvalue, month)">รายเดือน</button>
-      <button class="button button5" @click="getDataFirebase(getvalue, year)">รายปี</button>
+      <button class="button is-link" @click="exportPdf">exportPDF</button>
+      <button class="button" @click="getDataFirebase(getvalue, day)" v-bind:class="{ 'is-warning is-hovered': select === 'day' }">รายวัน</button>
+      <button class="button" @click="getDataFirebase(getvalue, month)" v-bind:class="{ 'is-warning is-hovered': select === 'month' }">รายเดือน</button>
+      <button class="button" @click="getDataFirebase(getvalue, year)" v-bind:class="{ 'is-warning is-hovered': select === 'year' }">รายปี</button>
       <!-- <button class="button button5" @click="getdonut(getvalue, year)">สรุปรายได้กำไร</button> -->
       </div>
       </article>
@@ -25,9 +25,9 @@
       <div class="message-header"><p>กำไร</p></div>
       <div class="message-body" style="position: relative;">
       <!-- <button class="button button2" @click="exportPdf">exportPDF</button> -->
-      <button class="button button3" @click="getDataFirebaseprofit(getvalue, day)">รายวัน</button>
-      <button class="button button4" @click="getDataFirebaseprofit(getvalue, month)">รายเดือน</button>
-      <button class="button button5" @click="getDataFirebaseprofit(getvalue, year)">รายปี</button>
+      <button class="button" @click="getDataFirebaseprofit(getvalue, day)" v-bind:class="{ 'is-warning is-hovered': select === 'proday' }">รายวัน</button>
+      <button class="button" @click="getDataFirebaseprofit(getvalue, month)" v-bind:class="{ 'is-warning is-hovered': select === 'promonth' }">รายเดือน</button>
+      <button class="button" @click="getDataFirebaseprofit(getvalue, year)" v-bind:class="{ 'is-warning is-hovered': select === 'proyear' }">รายปี</button>
       <!-- <button class="button button5" @click="showsellhit()">เมนูขายดี</button> -->
       </div>
       </article>
@@ -43,73 +43,6 @@
       </div>
       <div class="column is-half">
       </div>
-    <!-- </div> -->
-    <!-- <div class="column buttonGroup"> -->
-      <!-- Profit -->
-      <!-- <h1>กำไร</h1>
-      <button class="button button3" @click="getDataFirebaseprofit(getvalue, day)">รายวัน</button>
-      <button class="button button4" @click="getDataFirebaseprofit(getvalue, month)">รายเดือน</button>
-      <button class="button button5" @click="getDataFirebaseprofit(getvalue, year)">รายปี</button>
-      <button class="button button5" @click="showsellhit()">เมนูขายดี</button> -->
-      <!-- Profit -->
-    <!-- </div> -->
-    <!--  -->
-    <!-- <div class="columns is-multiline">
-    <div class="column">
-    <div class="box notification is-primary">
-    <div class="heading">Top Seller Total</div>
-    <div class="title"><button class="button button2" @click="exportPdf">exportPDF</button></div>
-    </div>
-    </div>
-    <div class="column">
-    <div class="box notification is-primary">
-    <div class="heading">Top Seller Total</div>
-    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
-    </div>
-    </div>
-    <div class="column">
-    <div class="box notification is-primary">
-    <div class="heading">Top Seller Total</div>
-    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
-    </div>
-    </div>
-    <div class="column">
-    <div class="box notification is-primary">
-    <div class="heading">Top Seller Total</div>
-    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
-    </div>
-    </div>
-    <div class="column">
-    <div class="box notification is-primary">
-    <div class="heading">Top Seller Total</div>
-    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
-    </div>
-    </div>
-    <div class="column">
-    <div class="box notification is-primary">
-    <div class="heading">Top Seller Total</div>
-    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
-    </div>
-    </div>
-    <div class="column">
-    <div class="box notification is-primary">
-    <div class="heading">Top Seller Total</div>
-    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
-    </div>
-    </div>
-    <div class="column">
-    <div class="box notification is-primary">
-    <div class="heading">Top Seller Total</div>
-    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
-    </div>
-    </div>
-    <div class="column">
-    <div class="box notification is-primary">
-    <div class="heading">Top Seller Total</div>
-    <div class="title"><button class="button button3" @click="getDataFirebase(getvalue, day)">รายวัน</button></div>
-    </div>
-    </div>
-    </div> -->
     <!--  -->
   </div>
               <!--  -->
@@ -128,7 +61,7 @@
                 <article class="message is-dark">
                 <div class="message-header"><p>Chart</p></div>
                 <div class="message-body" style="position: relative;">
-                <div id="chart2"></div>
+                <div id="chart2"></div>*ยอดขายรวมในเเต่ละวันในสัปดาห์
                 </div>
                 </article>
               </div>
@@ -139,8 +72,10 @@
             <div class="columns">
               <div class="column">
                 <article class="message is-dark">
-                <div class="message-header"><p>สรุปรายได้กำไร</p></div>
+                <div class="message-header"><p>สรุปกำไรขั้นต้น</p></div>
                 <div class="message-body" style="position: relative;">
+                  <br>
+                  *จำนวนเงินทั้งหมด {{this.summoney}} บาท.
                   <div id="chart3"></div>
                 </div>
                 </article>
@@ -159,7 +94,7 @@
                 <tbody>
                   <tr :key="key" v-for="(record, key) in records">
                     <td>{{record.key}}</td>
-                    <td>{{record.amount}}</td>
+                    <td>{{record.amount}} จาน</td>
                   </tr>
                 </tbody>
               </table>
@@ -180,7 +115,7 @@
                 <tbody>
                   <tr :key="key" v-for="(record, key) in reportmoney">
                     <td>{{record.Week}}</td>
-                    <td>{{record.money}}</td>
+                    <td>{{record.money}} บาท.</td>
                   </tr>
                 </tbody>
               </table>
@@ -204,8 +139,8 @@
                   <tr :key="key" v-for="(record, key) in allday">
                     <td>{{record.Week}}</td>
                     <td>{{record.name}}</td>
-                    <td>{{record.price}}</td>
-                    <td>{{record.quantity}}</td>
+                    <td>{{record.price}} บาท.</td>
+                    <td>{{record.quantity}} จาน.</td>
                   </tr>
                 </tbody>
               </table>
@@ -245,9 +180,12 @@ export default {
       Week: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       allday: [],
       date: new Date(),
-      dayhit: '',
-      moneyhit: '',
-      menudayhit: []
+      dayhit: [],
+      moneyhit: [],
+      menudayhit: [],
+      select: 0,
+      piedaymoney: '',
+      summoney: 0
     }
   },
   methods: {
@@ -279,6 +217,7 @@ export default {
       document.title = tempTitle
     },
     getDataFirebase (getvalue, scale) {
+      this.select = scale
       var ref = firebase.database().ref('foodcenter/report/' + this.selectShop + '/' + scale)
       ref.once('value', snap => {
         var data = []
@@ -291,10 +230,11 @@ export default {
         })
         this.getvalue = data
         this.getvalue1 = data1
-        this.ShowGraph(this.getvalue)
+        this.ShowGraph(this.getvalue, scale)
       })
     },
     getDataFirebaseprofit (getvalue, scale) {
+      this.select = 'pro' + scale
       var ref = firebase.database().ref('foodcenter/reportprofit/' + this.selectShop + '/' + scale)
       ref.once('value', snap => {
         var data = []
@@ -307,10 +247,14 @@ export default {
         })
         this.getvalue = data
         this.getvalue1 = data1
-        this.ShowGraph(this.getvalue)
+        this.ShowGraph(this.getvalue, scale)
       })
     },
-    ShowGraph: function (getvalue) {
+    ShowGraph: function (getvalue, scale) {
+      // console.log(Math.max(...this.getvalue))
+      if (scale === 'day') { scale = 'ประจำวัน' }
+      if (scale === 'month') { scale = 'ประจำเดือน' }
+      if (scale === 'year') { scale = 'ประจำปี' }
       this.showtable = false
       this.showsell = true
       if (this.showchart !== '') { this.showchart.destroy() }
@@ -323,14 +267,16 @@ export default {
           plotOptions: {
             bar: {
               dataLabels: {
-                position: 'top' // top, center, bottom
+                position: 'top', // top, center, bottom
+                columnWidth: '80%'
               }
             }
           },
           dataLabels: {
             enabled: true,
             formatter: function (val) {
-              return val + ' ' + 'บาท'
+              // return val + ' ' + 'บาท'
+              return val
             },
             offsetY: -20,
             style: {
@@ -343,10 +289,12 @@ export default {
             data: this.getvalue
           }],
           xaxis: {
+            rotate: -90,
             categories: this.getvalue1,
-            position: 'top',
+            // position: 'top',
             labels: {
-              offsetY: -18
+              // offsetY: 10,
+              rotate: -90
             },
             axisBorder: {
               show: true
@@ -384,6 +332,8 @@ export default {
             }
           },
           yaxis: {
+            // max: Math.max(...this.getvalue),
+            // min: 0,
             axisBorder: {
               show: true
             },
@@ -398,9 +348,9 @@ export default {
             }
           },
           title: {
-            text: 'Report Foodcenter, 2019',
+            text: 'รายงาน, ' + scale,
             floating: true,
-            offsetY: 320,
+            // offsetY: 320,
             align: 'center',
             style: {
               color: '#444'
@@ -411,11 +361,53 @@ export default {
     },
     sortHighest () {
       this.records.sort((a, b) => a.amount < b.amount ? 1 : -1)
-      // this.records.sort((a, b) => a.key < b.key ? -1 : 1)
     },
     sortHighest2 () {
       this.reportmoney.sort((a, b) => a.money < b.money ? 1 : -1)
       this.engtothai(this.reportmoney)
+    },
+    beforesortpie () {
+      for (var i = 0; i < this.piedaymoney.length; i++) {
+        if (this.piedaymoney[i].Week === 'Monday') {
+          this.piedaymoney[i].Week = 'จันทร์ ' + this.piedaymoney[i].money + ' บาท'
+          this.piedaymoney[i].sort = 0
+        }
+        if (this.piedaymoney[i].Week === 'Tuesday') {
+          this.piedaymoney[i].Week = 'อังคาร ' + this.piedaymoney[i].money + ' บาท'
+          this.piedaymoney[i].sort = 1
+        }
+        if (this.piedaymoney[i].Week === 'Wednesday') {
+          this.piedaymoney[i].Week = 'พุธ ' + this.piedaymoney[i].money + ' บาท'
+          this.piedaymoney[i].sort = 2
+        }
+        if (this.piedaymoney[i].Week === 'Thursday') {
+          this.piedaymoney[i].Week = 'พฤหัสบดี ' + this.piedaymoney[i].money + ' บาท'
+          this.piedaymoney[i].sort = 3
+        }
+        if (this.piedaymoney[i].Week === 'Friday') {
+          this.piedaymoney[i].Week = 'ศุกร์ ' + this.piedaymoney[i].money + ' บาท'
+          this.piedaymoney[i].sort = 4
+        }
+        if (this.piedaymoney[i].Week === 'Saturday') {
+          this.piedaymoney[i].Week = 'เสาร์ ' + this.piedaymoney[i].money + ' บาท'
+          this.piedaymoney[i].sort = 5
+        }
+        if (this.piedaymoney[i].Week === 'Sunday') {
+          this.piedaymoney[i].Week = 'อาทิตย์ ' + this.piedaymoney[i].money + ' บาท'
+          this.piedaymoney[i].sort = 6
+        }
+      }
+      console.log('DO beforesortpie')
+      this.sortpie()
+    },
+    sortpie () {
+      this.piedaymoney.sort((a, b) => a.sort > b.sort ? 1 : -1)
+      // เเยกข้อมูล
+      for (var i = 0; i < this.piedaymoney.length; i++) {
+        this.dayhit.push(this.piedaymoney[i].Week)
+        this.moneyhit.push(this.piedaymoney[i].money)
+      }
+      this.showPie()
     },
     async sortHighest3 () {
       await this.allday.sort((a, b) => a.quantity < b.quantity ? 1 : -1)
@@ -432,8 +424,7 @@ export default {
         if (day[i].Week === 'Saturday') { day[i].Week = 'เสาร์' }
         if (day[i].Week === 'Sunday') { day[i].Week = 'อาทิตย์' }
       }
-      console.log(this.allday)
-      // this.showPie()
+      console.log(day)
     },
     showPie () {
       if (this.showchart2 !== '') { this.showchart2.destroy() }
@@ -445,8 +436,6 @@ export default {
           },
           labels: this.dayhit,
           series: this.moneyhit,
-          // labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-          // series: [44, 55, 13, 43, 22],
           responsive: [{
             breakpoint: 480,
             options: {
@@ -492,7 +481,6 @@ export default {
         })
         this.getvalue = data
         this.getvalue1 = data1
-        // this.Graphdonut(this.getvalue)
       })
       var ref2 = firebase.database().ref('foodcenter/reportprofit/' + this.selectShop + '/' + scale)
       await ref2.on('value', snap => {
@@ -506,8 +494,6 @@ export default {
         })
         console.log(data)
         this.getvalue2 = data
-        // this.getvalue1 = data1
-        // this.Graphdonut(this.getvalue)
       })
       this.reducevalue()
     },
@@ -519,6 +505,7 @@ export default {
         return sum + number
       }, 0)
       this.Graphdonut(result, result2)
+      this.summoney = result + result2
     },
     Graphdonut (getvalue, getvalue2) {
       console.log(getvalue)
@@ -530,8 +517,11 @@ export default {
             type: 'donut',
             width: 380
           },
+          // title: {
+          //   text: 'Number of leads'
+          // },
           series: [getvalue, getvalue2],
-          labels: ['รายได้รวม', 'กำไร'],
+          labels: ['รายได้รวม ' + getvalue + ' บาท', 'กำไร ' + getvalue2 + ' บาท'],
           responsive: [{
             breakpoint: 480,
             options: {
@@ -558,18 +548,6 @@ export default {
         }
       )
       this.showchart3.render()
-    },
-    engtothaiday () {
-      for (var i = 0; i < this.dayhit.length; i++) {
-        if (this.dayhit[i] === 'Monday') { this.dayhit[i] = 'จันทร์' }
-        if (this.dayhit[i] === 'Tuesday') { this.dayhit[i] = 'อังคาร' }
-        if (this.dayhit[i] === 'Wednesday') { this.dayhit[i] = 'พุธ' }
-        if (this.dayhit[i] === 'Thursday') { this.dayhit[i] = 'พฤหัสบดี' }
-        if (this.dayhit[i] === 'Friday') { this.dayhit[i] = 'ศุกร์' }
-        if (this.dayhit[i] === 'Saturday') { this.dayhit[i] = 'เสาร์' }
-        if (this.dayhit[i] === 'Sunday') { this.dayhit[i] = 'อาทิตย์' }
-      }
-      this.showPie()
     }
   },
   mounted () {
@@ -600,12 +578,7 @@ export default {
         data2.push(item2)
       })
       this.reportmoney = data
-      this.dayhit = data2
-      this.moneyhit = data1
-      // console.log(data.Week)
       this.sortHighest2()
-      // this.showPie()
-      this.engtothaiday()
     })
     firebase.database().ref().child('foodcenter/weeksell').child(this.selectShop).on('value', snap => {
       var data = []
@@ -629,7 +602,16 @@ export default {
       console.log(data)
       this.getdonut(this.getvalue, this.year)
     })
-    // this.getsell()
+    firebase.database().ref().child('foodcenter/weekmoney').child(this.selectShop).on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.Week = ss.key
+        data.push(item)
+      })
+      this.piedaymoney = data
+      this.beforesortpie()
+    })
   },
   computed: {
     ...mapGetters({

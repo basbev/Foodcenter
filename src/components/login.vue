@@ -119,7 +119,7 @@ export default {
     updatetoken () {
       console.log('key', this.key)
       console.log('token', this.token)
-      firebase.database().ref('user/').child(this.key).child('token').set(this.token)
+      if (this.token) { firebase.database().ref('user/').child(this.key).child('token').child(this.token).set(this.token) }
     },
     loginFacebook: function (e) {
       var provider = new firebase.auth.FacebookAuthProvider()

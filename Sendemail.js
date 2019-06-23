@@ -20,7 +20,7 @@ var database = firebase.database()
 var orderRef = database.ref('foodcenter/order')
 
 const app = express()
-const port = 3001
+const port = process.env.PORT || 3001;
 
 app.get('/', (req, res) => {
   res.send('send mail')
@@ -93,9 +93,12 @@ setInterval(()=>{
       if (user) {
         user = user[Object.keys(user)[0]]
         token = user.token
-        if (token)
-          sentNoti(token, orderNoti)
+        if (token) {
+          Object.keys(token).forEach(function (noti) {
+            sentNoti(noti, orderNoti)
+          })
           saveAlerted(pathNoti)
+        }
       }
     })
     if (!token) {
@@ -106,7 +109,9 @@ setInterval(()=>{
           token = user.token
           // console.log(user)
           if (token) {
-            sentNoti(token, orderNoti)
+            Object.keys(token).forEach(function (noti) {
+              sentNoti(noti, orderNoti)
+            })
             saveAlerted(pathNoti)
           }
         }

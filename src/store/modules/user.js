@@ -147,9 +147,13 @@ const mutations = {
     state.selectShop = selectShop
     state.hasShop = hasShop
   },
+  LOADTOKEN (state, {token}) {
+    state.token = token
+  },
   logout: (state) => {
     state.user = null
     state.permission = null
+    state.token = null
   }
 }
 
@@ -196,9 +200,10 @@ const actions = {
     console.log(payload)
     commit('setUser', payload)
   },
-  saveToken: ({commit}, payload) => {
+  saveToken: ({commit, dispatch}, payload) => {
     console.log('Token', payload)
     commit('setToken', payload)
+    dispatch('save')
   },
   autoSign ({commit}, payload) {
     commit('setUserFacebook', payload.displayName)
@@ -238,18 +243,23 @@ const actions = {
     let Getpermission = localStorage.getItem('permission')
     let GetselectShop = localStorage.getItem('selectShop')
     let GethasShop = localStorage.getItem('hasShop')
+    let Gettoken = localStorage.getItem('token')
     if (Getuser !== 'null' && GetselectShop !== 'undefined') {
       let user = JSON.parse(Getuser)
       let permission = JSON.parse(Getpermission)
       let selectShop = JSON.parse(GetselectShop)
       let hasShop = JSON.parse(GethasShop)
+      let token = JSON.parse(Gettoken)
       commit('LOAD', {user, permission, selectShop, hasShop})
+      commit('LOADTOKEN', {token})
       // console.log('show1')
     }
     if (Getuser !== 'null' && GetselectShop === 'undefined') {
       let user = JSON.parse(Getuser)
       let permission = JSON.parse(Getpermission)
+      let token = JSON.parse(Gettoken)
       commit('LOAD', {user, permission})
+      commit('LOADTOKEN', {token})
       // console.log('show2')
     }
   },
@@ -258,6 +268,7 @@ const actions = {
     localStorage.setItem('permission', JSON.stringify(state.permission))
     localStorage.setItem('selectShop', JSON.stringify(state.selectShop))
     localStorage.setItem('hasShop', JSON.stringify(state.hasShop))
+    localStorage.getItem('token', JSON.stringify(state.token))
     console.log(state.selectShop, state.permission)
   },
   clearlogin ({commit, dispatch}) {

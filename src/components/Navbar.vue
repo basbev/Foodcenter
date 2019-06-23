@@ -128,7 +128,7 @@
             </a>
           </p>
           <p class="control" v-if="isLoggedIn" v-on:click="logout">
-            <a class="bd-tw-button button is-danger" href="/">
+            <a class="bd-tw-button button is-danger">
               <span>
                 ออกจากระบบ
               </span>
@@ -201,7 +201,9 @@ export default {
           this.$router.go({ path: this.$router.path })
           this.$router.push('/')
         })
+      if (this.token) { firebase.database().ref('user/').child(this.key).child('token').child(this.token).remove() }
       this.clearlogin()
+      console.log('clearlogin')
       this.$router.push('/')
     },
     toggleNav: function () {
@@ -235,7 +237,9 @@ export default {
       permission: 'permission',
       isLoggedIn: 'isLoggedIn',
       user: 'user',
-      hasShop: 'hasShop'
+      hasShop: 'hasShop',
+      token: 'token',
+      key: 'key'
     })
   },
   directives: {
