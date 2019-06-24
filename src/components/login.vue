@@ -119,7 +119,12 @@ export default {
     updatetoken () {
       console.log('key', this.key)
       console.log('token', this.token)
-      if (this.token) { firebase.database().ref('user/').child(this.key).child('token').child(this.token).set(this.token) }
+      if (this.token && this.key) { firebase.database().ref('user/').child(this.key).child('token').child(this.token).set(this.token) }
+    },
+    updatetokenfacebook () {
+      console.log('key', this.key)
+      console.log('token', this.token)
+      if (this.token && this.key) { firebase.database().ref('facebook/').child(this.key).child('token').child(this.token).set(this.token) }
     },
     loginFacebook: function (e) {
       var provider = new firebase.auth.FacebookAuthProvider()
@@ -130,6 +135,7 @@ export default {
           user => {
             const userSet = firebase.auth().currentUser.displayName
             this.$store.dispatch('loginfacebook', userSet)
+            this.updatetokenfacebook()
             this.$router.push('/foodcenter')
             alert(`You are logged in as ${userSet}`)
           },

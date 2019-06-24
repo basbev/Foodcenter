@@ -45,6 +45,7 @@
         &nbsp;เวลารายการอาหารล่าสุด&nbsp;{{((shops.SaveDate)?shops.SaveDate.slice(11,16):'00.00 น.')}}&nbsp;น.<br>
         <router-link to="/shop"><button v-show="products.length" class='button button13'>กลับไปเลือกเมนู</button></router-link>
         <button v-show="products.length" class='button is-success' @click="order(products, shops.q, CountQuantity, total, shops.SaveDate)">ยืนยันการสั่ง</button>
+        <!-- <button v-show="products.length" class='button is-success' @click="beforeCutstock(products, shops.q, CountQuantity, total, shops.SaveDate)">ยืนยันการสั่ง</button> -->
       </div>
     </div>
     </div>
@@ -299,6 +300,24 @@ export default {
         let updatavalue = foundyear.value + this.totalprofit
         foodcenterRef.child('reportprofit').child(this.SelectShops).child('year').child(year).child('value').set(updatavalue)
       }
+    },
+    async beforeCutstock (products) {
+      let stock = null
+      var listfood = []
+      for (var i = 0; i < products.length; i++) {
+        var checkcutstock = 0
+        for (var y = 0; y < products[i].meters.length; y++) {
+          const checkstock = foodcenterRef.child('stock').child(this.SelectShops).child(products[i].meters[y].keystock)
+          await checkstock.once('value', snap => {
+            stock = snap.val() // ดึงข้อมูลอาหาร
+            // console.log(stock)
+          })
+          stock.stockamount = stock.stockamount - products[i].meters[y].qty * products[i].quantity
+          if (stock.stockamount >= 0 && checkcutstock !== 1) { checkcutstock = 0 } else { checkcutstock = 1 }
+        }
+        if (checkcutstock === 1) { listfood.push(products[i]) }
+      }
+      console.log(listfood)
     },
     async Cutstock (products) {
       let stock = null

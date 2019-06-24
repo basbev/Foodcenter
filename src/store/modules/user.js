@@ -102,10 +102,12 @@ const mutations = {
     state.stocklist = payload
     // console.log(state.stocklist)
   },
-  setUserFacebook: (state, userSet) => {
-    console.log(userSet)
-    state.user = userSet
+  setUserFacebook: (state, {name, token, key}) => {
+    console.log(name, token, key)
+    state.user = name
     state.permission = '1'
+    state.key = key
+    state.token = token
   },
   DeleteCart: (state) => {
     state.added = []
@@ -150,10 +152,15 @@ const mutations = {
   LOADTOKEN (state, {token}) {
     state.token = token
   },
+  LOADKEY (state, {key}) {
+    console.log('key', key)
+    state.key = key
+  },
   logout: (state) => {
     state.user = null
     state.permission = null
     state.token = null
+    state.key = null
   }
 }
 
@@ -181,32 +188,41 @@ const actions = {
       } else alert(`Username Or Password incorrect`)
     } else alert(`Username Or Password incorrect`)
   },
-  loginfacebook: ({commit}, payload) => {
+  loginfacebook: ({commit, dispatch}, payload) => {
+    console.log(payload)
     const dbRefObject = firebase.database().ref().child('facebook')
     const dbReflist = dbRefObject.orderByChild('username').equalTo(payload)
     dbReflist.once('child_added', snap => {
       state.profile = snap.val()
+      state.key = snap.key
       console.log(state.profile)
     })
     if (state.profile == null) {
       var dbRefObject1 = firebase.database().ref().child('facebook')
       let data = {
         username: firebase.auth().currentUser.displayName,
-        email: firebase.auth().currentUser.email,
-        token: state.token
+        email: firebase.auth().currentUser.email
+        // token: state.token
       }
       dbRefObject1.push(data)
     }
-    console.log(payload)
-    commit('setUser', payload)
+    const name = payload
+    const token = state.token
+    const key = state.key
+    console.log(name, token, key)
+    commit('setUserFacebook', {name, token, key})
+    dispatch('save')
   },
   saveToken: ({commit, dispatch}, payload) => {
     console.log('Token', payload)
     commit('setToken', payload)
     dispatch('save')
   },
-  autoSign ({commit}, payload) {
-    commit('setUserFacebook', payload.displayName)
+  autoSign ({commit, dispatch}, payload) {
+    const name = payload.displayName
+    commit('setUserFacebook', {name})
+    console.log('DO')
+    // dispatch('loginfacebook', payload.displayName)
   },
   selectShop ({commit, dispatch}, shop) {
     commit('setselectShop', shop)
@@ -244,22 +260,30 @@ const actions = {
     let GetselectShop = localStorage.getItem('selectShop')
     let GethasShop = localStorage.getItem('hasShop')
     let Gettoken = localStorage.getItem('token')
+    let Getkey = localStorage.getItem('key')
+    console.log('Getkey', Getkey)
     if (Getuser !== 'null' && GetselectShop !== 'undefined') {
       let user = JSON.parse(Getuser)
       let permission = JSON.parse(Getpermission)
       let selectShop = JSON.parse(GetselectShop)
       let hasShop = JSON.parse(GethasShop)
       let token = JSON.parse(Gettoken)
+      let key = JSON.parse(Getkey)
       commit('LOAD', {user, permission, selectShop, hasShop})
       commit('LOADTOKEN', {token})
+      commit('LOADKEY', {key})
+      console.log('key', key)
       // console.log('show1')
     }
     if (Getuser !== 'null' && GetselectShop === 'undefined') {
       let user = JSON.parse(Getuser)
       let permission = JSON.parse(Getpermission)
       let token = JSON.parse(Gettoken)
+      let key = JSON.parse(Getkey)
       commit('LOAD', {user, permission})
       commit('LOADTOKEN', {token})
+      commit('LOADKEY', {key})
+      console.log('key', key)
       // console.log('show2')
     }
   },
@@ -268,8 +292,10 @@ const actions = {
     localStorage.setItem('permission', JSON.stringify(state.permission))
     localStorage.setItem('selectShop', JSON.stringify(state.selectShop))
     localStorage.setItem('hasShop', JSON.stringify(state.hasShop))
-    localStorage.getItem('token', JSON.stringify(state.token))
+    localStorage.setItem('token', JSON.stringify(state.token))
+    localStorage.setItem('key', JSON.stringify(state.key))
     console.log(state.selectShop, state.permission)
+    console.log('key', state.key)
   },
   clearlogin ({commit, dispatch}) {
     commit('logout')

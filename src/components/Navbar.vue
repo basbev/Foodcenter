@@ -194,17 +194,29 @@ export default {
   },
   methods: {
     logout: function () {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          this.$router.go({ path: this.$router.path })
-          this.$router.push('/')
-        })
-      if (this.token) { firebase.database().ref('user/').child(this.key).child('token').child(this.token).remove() }
+      this.logoutfacebook(this.token, this.key)
+      console.log(this.token, 'this.token')
+      console.log(this.key, 'key')
+      if (this.token && this.key) { firebase.database().ref('user/').child(this.key).child('token').child(this.token).remove() }
       this.clearlogin()
       console.log('clearlogin')
       this.$router.push('/')
+    },
+    logoutfacebook (token, key) {
+      console.log('Do facebook')
+      console.log(this.token, this.key)
+      if (firebase.auth().currentUser) {
+        if (this.token && this.key) {
+          firebase.database().ref('facebook/').child(this.key).child('token').child(this.token).remove()
+        }
+        firebase
+          .auth()
+          .signOut()
+          .then(() => {
+          // this.$router.go({ path: this.$router.path })
+          // this.$router.push('/')
+          })
+      }
     },
     toggleNav: function () {
       this.isActive = !this.isActive

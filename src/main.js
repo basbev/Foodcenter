@@ -32,7 +32,8 @@ new Vue({
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         // console.log('App login')
-        this.$store.dispatch('autoSign', user)
+        // this.$store.dispatch('autoSign', user)
+        this.$store.dispatch('load')
       } else {
         // console.log('App logout')
       }
