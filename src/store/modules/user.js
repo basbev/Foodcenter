@@ -218,6 +218,11 @@ const actions = {
     commit('setToken', payload)
     dispatch('save')
   },
+  // pushtoken: (payload) => {
+  //   console.log('key', payload.key)
+  //   console.log('token', payload.token)
+  //   if (payload.token && payload.key) { firebase.database().ref('user/').child(payload.key).child('token').child(payload.token).set(payload.token) }
+  // },
   autoSign ({commit, dispatch}, payload) {
     const name = payload.displayName
     commit('setUserFacebook', {name})

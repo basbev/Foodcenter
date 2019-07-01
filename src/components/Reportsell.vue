@@ -75,7 +75,8 @@
                 <div class="message-header"><p>สรุปกำไรขั้นต้น</p></div>
                 <div class="message-body" style="position: relative;">
                   <br>
-                  *จำนวนเงินทั้งหมด {{this.summoney}} บาท.
+                  <!-- *จำนวนเงินทั้งหมด {{this.summoney}} บาท. -->
+                  *รายได้จากการขายทั้งหมด {{this.summoney}} บาท.
                   <div id="chart3"></div>
                 </div>
                 </article>
@@ -498,14 +499,16 @@ export default {
       this.reducevalue()
     },
     reducevalue () {
+      // การขาย
       const result = this.getvalue.reduce((sum, number) => {
         return sum + number
       }, 0)
+      // กำไรขั้นต้น
       const result2 = this.getvalue2.reduce((sum, number) => {
         return sum + number
       }, 0)
-      this.Graphdonut(result, result2)
-      this.summoney = result + result2
+      this.Graphdonut(result - result2, result2)
+      this.summoney = result
     },
     Graphdonut (getvalue, getvalue2) {
       console.log(getvalue)
@@ -521,7 +524,7 @@ export default {
           //   text: 'Number of leads'
           // },
           series: [getvalue, getvalue2],
-          labels: ['รายได้รวม ' + getvalue + ' บาท', 'กำไร ' + getvalue2 + ' บาท'],
+          labels: ['ต้นทุนขาย ' + getvalue + ' บาท', 'กำไรขั้นต้น ' + getvalue2 + ' บาท'],
           responsive: [{
             breakpoint: 480,
             options: {

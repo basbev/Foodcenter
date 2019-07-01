@@ -23,7 +23,7 @@ const app = express()
 const port = process.env.PORT || 3001;
 
 app.get('/', (req, res) => {
-  res.send('send mail')
+  res.send('send mail || Noti')
   let params = req.query
   console.log(req.query)
   mail(params)

@@ -198,7 +198,11 @@ export default {
       console.log(this.token, 'this.token')
       console.log(this.key, 'key')
       if (this.token && this.key) { firebase.database().ref('user/').child(this.key).child('token').child(this.token).remove() }
-      this.clearlogin()
+      // this.clearlogin()
+      this.clearlogin().then(() => {
+        this.$router.push('/')
+        this.$router.go({ path: this.$router.path })
+      })
       console.log('clearlogin')
       this.$router.push('/')
     },

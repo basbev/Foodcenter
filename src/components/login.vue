@@ -13,7 +13,7 @@
           <form>
             <div class="field">
               <div class="control has-icons-left">
-                <input class="input is-large" type="text" placeholder="Username" autofocus="" id="user" v-model="username">
+                <input class="input is-large" type="text" placeholder="Username" autofocus="" id="user" v-model="username" style="margin-top: 0px;">
               <span class="icon is-small is-left">
                 <i class="fas fa-user"></i>
               </span>
@@ -63,8 +63,6 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
-const messaging = firebase.messaging()
-messaging.usePublicVapidKey('BPYiRhXJmradMivdBv3IFGdIA2Lnae6uWvT9PbLd8vUNnxm2f5Lo18eQLvGp3snSMZlWmTILmVdUQDi9kakgPHk')
 
 export default {
   name: 'login',
@@ -78,14 +76,20 @@ export default {
       gettoken: ''
     }
   },
+  created () {
+    if (this.user) { this.$router.push('/foodcenter') }
+    // const messaging = firebase.messaging()
+    // messaging.usePublicVapidKey('BPYiRhXJmradMivdBv3IFGdIA2Lnae6uWvT9PbLd8vUNnxm2f5Lo18eQLvGp3snSMZlWmTILmVdUQDi9kakgPHk')
+  },
   methods: {
     ...mapActions([
       'saveToken'
+      // 'pushtoken'
     ]),
     saveToken (token) {
       this.$store.dispatch('saveToken', token)
     },
-    loginWeb: function (e) {
+    async loginWeb () {
       if (this.user === null) {
         if (this.username !== '' && this.password !== '') {
           this.$store.dispatch('signIn', {username: this.username, password: this.password})
@@ -104,6 +108,7 @@ export default {
           alert('Successfully sign in\nWelcome User Shop: ' + ' ' + this.user)
           this.$router.push('/shop')
         } if (this.isLoggedIn === true && this.permission === '1') {
+          // await this.requestPermission().then(function (result) { this.updatetoken() }).catch(function (error) { if (error) this.$router.push('/foodcenter') })
           this.updatetoken()
           alert('Successfully sign in\nWelcome User Customer: ' + ' ' + this.user)
           this.$router.push('/foodcenter')
@@ -116,7 +121,10 @@ export default {
         }
       }
     },
-    updatetoken () {
+    updatetoken (token) {
+      // const key = this.key
+      // this.$store.dispatch('pushtoken', {token, key})
+      this.gettoken = 'token'
       console.log('key', this.key)
       console.log('token', this.token)
       if (this.token && this.key) { firebase.database().ref('user/').child(this.key).child('token').child(this.token).set(this.token) }
@@ -145,39 +153,42 @@ export default {
         )
     },
     requestPermission () {
+      const messaging = firebase.messaging()
+      messaging.usePublicVapidKey('BPYiRhXJmradMivdBv3IFGdIA2Lnae6uWvT9PbLd8vUNnxm2f5Lo18eQLvGp3snSMZlWmTILmVdUQDi9kakgPHk')
       console.log('Requesting permission...')
       // [START request_permission]
-      Notification.requestPermission().then((permission) => {
-        if (permission === 'granted') {
-          console.log('Notification permission granted.')
-          // TODO(developer): Retrieve an Instance ID token for use with FCM.
-          // [START_EXCLUDE]
-          // In many cases once an app has been granted notification permission,
-          // it should update its UI reflecting this.
-          // this.saveToken('xxxxx')
-          // messaging.onTokenRefresh(function () {
-          messaging.getToken().then((currentToken) => {
-            if (currentToken) {
-              // console.log('Get', this.gettoken)
-              console.log('Token is', currentToken)
-              // this.gettoken = currentToken
-              // this.$store.dispatch('saveToken', currentToken)
-              this.saveToken(currentToken)
-              // sendTokenToServer(currentToken);
-              // updateUIForPushEnabled(currentToken);
-            } else {
-              // Show permission request.
-              console.log('No Instance ID token available. Request permission to generate one.')
-              // Show permission UI.
-            }
-          }).catch(function (err) {
-            console.log('An error occurred while retrieving token. ', err)
-          })
-          // })
-          // [END_EXCLUDE]
-        } else {
-          console.log('Unable to get permission to notify.')
-        }
+      messaging.requestPermission().then(() => {
+        // if (true || permission === 'granted') {
+        console.log('Notification permission granted.')
+        // TODO(developer): Retrieve an Instance ID token for use with FCM.
+        // [START_EXCLUDE]
+        // In many cases once an app has been granted notification permission,
+        // it should update its UI reflecting this.
+        // this.saveToken('xxxxx')
+        // messaging.onTokenRefresh(function () {
+        messaging.getToken().then((currentToken) => {
+          if (currentToken) {
+            // console.log('Get', this.gettoken)
+            console.log('Token is', currentToken)
+            // this.gettoken = currentToken
+            // this.$store.dispatch('saveToken', currentToken)
+            this.saveToken(currentToken)
+            this.updatetoken(currentToken)
+            // sendTokenToServer(currentToken);
+            // updateUIForPushEnabled(currentToken);
+          } else {
+            // Show permission request.
+            console.log('No Instance ID token available. Request permission to generate one.')
+            // Show permission UI.
+          }
+        }).catch(function (err) {
+          console.log('An error occurred while retrieving token. ', err)
+        })
+        // })
+        // [END_EXCLUDE]
+      }).catch(function (err) {
+        console.log('Unable to get permission to notify.', err)
+        // if (this.user) { this.$router.push('/foodcenter') }
       })
       // [END request_permission]
     }
@@ -193,7 +204,11 @@ export default {
       this.facebook = snap.val()
       console.log(this.facebook)
     })
-    this.requestPermission()
+    // try {
+    //   this.requestPermission()
+    // } catch (error) {
+    //   console.log(error)
+    // }
   },
   computed: {
     ...mapGetters({

@@ -1503,7 +1503,8 @@ export default {
                       <p>Promotion By : ` + this.selectShop + `<p>`,
               name: this.selectShop,
               email: this.users[i].email,
-              subject: 'เเจ้งเตือนโปรโมชั่นใหม่'
+              subject: 'เเจ้งเตือนโปรโมชั่นใหม่',
+              type: 'email'
             }
           })
             .then(response => {

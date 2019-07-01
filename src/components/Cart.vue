@@ -220,7 +220,7 @@ export default {
       if (foundday === '') {
         let data = {
           label: day,
-          value: this.totalprofit
+          value: this.total - this.totalprofit
         }
         foodcenterRef.child('reportprofit').child(this.SelectShops).child('day').child(day).set(data)
         // foodcenterRef.child('detail').child(this.SelectShops).child('countdoing').set(1)
@@ -257,7 +257,7 @@ export default {
       if (foundmonth === '') {
         let data = {
           label: month,
-          value: this.totalprofit
+          value: this.total - this.totalprofit
         }
         foodcenterRef.child('reportprofit').child(this.SelectShops).child('month').child(month).set(data)
       } else {
@@ -293,7 +293,7 @@ export default {
       if (foundyear === '') {
         let data = {
           label: year,
-          value: this.totalprofit
+          value: this.total - this.totalprofit
         }
         foodcenterRef.child('reportprofit').child(this.SelectShops).child('year').child(year).set(data)
       } else {
