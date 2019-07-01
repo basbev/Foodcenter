@@ -59,7 +59,7 @@
                 ร้านค้าวัตถุดิบทั้งหมด
               </span>
       </a>
-      <a v-if="permission === '2'" class="navbar-item" href="#/order" @click="myshop()">
+      <a v-if="permission === '2'" class="navbar-item" href="#/order2" @click="myshop()">
         <span class="icon">
                 <i class="fas fa-home"></i>
               </span>

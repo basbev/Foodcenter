@@ -9,6 +9,7 @@ import shop from '@/components/shop'
 import Cart from '@/components/Cart'
 import Admin from '@/components/Admin'
 import order from '@/components/order'
+import order2 from '@/components/order2'
 import Reportsell from '@/components/Reportsell'
 import stockshop from '@/components/stockshop'
 import shopmeter from '@/components/shopmeter'
@@ -63,6 +64,11 @@ export default new Router({
       path: '/order',
       name: 'order',
       component: order
+    },
+    {
+      path: '/order2',
+      name: 'order2',
+      component: order2
     },
     {
       path: '/Reportsell',
