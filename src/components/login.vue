@@ -205,7 +205,7 @@ export default {
       console.log(this.facebook)
     })
     // try {
-    //   this.requestPermission()
+    this.requestPermission()
     // } catch (error) {
     //   console.log(error)
     // }
