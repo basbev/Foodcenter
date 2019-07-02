@@ -173,7 +173,7 @@ export default {
             // this.gettoken = currentToken
             // this.$store.dispatch('saveToken', currentToken)
             this.saveToken(currentToken)
-            this.updatetoken(currentToken)
+            // this.updatetoken(currentToken)
             // sendTokenToServer(currentToken);
             // updateUIForPushEnabled(currentToken);
           } else {

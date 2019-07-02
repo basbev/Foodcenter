@@ -260,7 +260,8 @@ export default {
                   <p>ผู้ทำการสั่งซื้อวัตถุดิบ : ` + this.users + `<p>`,
           name: this.SelectShops,
           email: this.email,
-          subject: 'การสั่งซื้อวัตถุดิบ'
+          subject: 'การสั่งซื้อวัตถุดิบ',
+          type: 'email'
         }
       })
         .then(response => {

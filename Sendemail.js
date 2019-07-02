@@ -26,7 +26,8 @@ app.get('/', (req, res) => {
   res.send('send mail || Noti')
   let params = req.query
   console.log(req.query)
-  mail(params)
+  if (params.type === 'email') { mail(params) }
+  if (params.type === 'noti') { sentNoti2(params.noti, params.order) }
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
@@ -134,6 +135,39 @@ function sentNoti (token, order) {
       // collapse_key: 'your_collapse_key',
       notification: {
           title: 'ถึงคิวคุณแล้ว ผู้ใช้: ' + order.customer, 
+          body: strMenu
+      },
+      
+      data: {  //you can send only notification or only data(or include both)
+          my_key: 'my value',
+          my_another_key: 'my another value'
+      }
+    };
+  
+    fcm.send(message, function(err, response){
+      if (err) {
+          console.log("Something has gone wrong!");
+      } else {
+          console.log("Successfully sent with response: ", response);
+      }
+    });
+  }
+}
+function sentNoti2 (token, order) {
+  if (token) {
+    // console.log("sent noti",order)
+    // console.log(order)
+    order = JSON.parse(order)
+    console.log(order)
+    let strMenu = ''
+    order.menu.forEach((item) => {
+      strMenu += item.name + ' ' + item.quantity + ' '
+    })
+    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+      to: token, 
+      // collapse_key: 'your_collapse_key',
+      notification: {
+          title: 'รายการอาหารทำเสร็จเเล้ว ผู้ใช้: ' + order.customer, 
           body: strMenu
       },
       

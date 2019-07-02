@@ -13,7 +13,7 @@
               สถานะ: {{findkey.status}}
               <br>
             </p>
-            <p><button class="button button4">ปุ่มแจ้งเตือน</button></p>
+            <p><button class="button button4" @click="noti(findkey.customer, findkey)">ปุ่มแจ้งเตือน</button></p>
           </header>
           <div :key="keyy" v-for="(detail, keyy) in findkey.menu">
             <div class="card-content">
@@ -43,12 +43,12 @@
           <footer class="card-footer">
              <button
               v-if="findkey.status === 'กำลังรอ' & permission == '2'"
-              @click="updatemenunow(findkey.order.customer, findkey.order, findkey.key, key)"
+              @click="updatemenunow(findkey.customer, findkey.order, findkey.key)"
               class="button button7 card-footer-item"
             >กำลังทำ</button>
             <button
               v-if="findkey.status === 'กำลังทำ' & permission == '2'"
-              @click="complete(findkey.key, shops.q)"
+              @click="complete(findkey.key, shops.q, findkey.customer, findkey)"
               class="button button7 card-footer-item"
             >ทำเสร็จเเล้ว</button>
             <button
@@ -63,6 +63,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import * as firebase from 'firebase'
+import axios from 'axios'
 var database = firebase.database()
 var foodcenterRef = database.ref('/foodcenter')
 export default {
@@ -70,7 +71,9 @@ export default {
   data () {
     return {
       findkey: [],
-      nodata: true
+      nodata: true,
+      keyorder: '',
+      shops: ''
     }
   },
   computed: {
@@ -79,9 +82,16 @@ export default {
       permission: 'permission'
     })
   },
+  mounted () {
+    const dbRefObject1 = foodcenterRef.child('detail').child(this.selectShop)
+    dbRefObject1.on('value', snap => {
+      this.shops = snap.val()
+    })
+  },
   watch: {
     orderKey: function (val) {
       if (val !== '') {
+        this.keyorder = val
         console.log(val)
         const dbRefObject = foodcenterRef.child('order').child(this.selectShop).child(val)
         dbRefObject.on('value', snap => {
@@ -109,9 +119,10 @@ export default {
       foodcenterRef
         .child('order')
         .child(this.selectShop)
-        .child(key)
+        .child(this.keyorder)
         .remove()
-      console.log(key)
+      console.log(this.keyorder)
+      this.nodata = true
     },
     updatemenunow (name, order, key) {
       // console.log(key)
@@ -125,17 +136,17 @@ export default {
       foodcenterRef
         .child('order')
         .child(this.selectShop)
-        .child(key)
+        .child(this.keyorder)
         .update({
           status: 'กำลังทำ'
         })
       // } else { alert('ไม่สามารถทำข้ามคิวได้') }
     },
-    complete (key, q) {
+    complete (key, q, username, orderNoti) {
       foodcenterRef
         .child('order')
         .child(this.selectShop)
-        .child(key)
+        .child(this.keyorder)
         .update({
           status: 'ทำเสร็จเเล้ว'
         })
@@ -152,6 +163,59 @@ export default {
           q: q - 1
           // countdoing: this.updatecount + 1,
           // count: order
+        })
+      this.noti(username, orderNoti)
+    },
+    async noti (username, orderNoti) {
+      const userFacebookList = firebase.database().ref('facebook').orderByChild('username').equalTo(username)
+      const userlist = firebase.database().ref('user').orderByChild('username').equalTo(username)
+      let token = null
+      userFacebookList.once('value', snap => { // find user
+        let user = snap.val()
+        if (user) {
+          alert('facebook')
+          user = user[Object.keys(user)[0]]
+          token = user.token
+          if (token) {
+            Object.keys(token).forEach(function (noti) {
+              this.sentNoti(noti, orderNoti)
+            })
+            // saveAlerted(pathNoti)
+          }
+        }
+      })
+      if (!token) {
+        userlist.once('value', snap => {
+          let user = snap.val()
+          if (user) {
+            // alert('web')
+            user = user[Object.keys(user)[0]]
+            token = user.token
+            if (token) {
+              Object.keys(token).forEach(noti => {
+                // alert(noti)
+                this.sentNoti(noti, orderNoti)
+              })
+              // saveAlerted(pathNoti)
+            }
+          }
+        })
+      }
+    },
+    async sentNoti (noti, order) {
+      await axios.get('http://localhost:3001/', {
+        params: {
+          noti: noti,
+          order: order,
+          type: 'noti'
+        }
+      })
+        .then(response => {
+          // JSON responses are automatically parsed.
+          this.posts = response.data
+        })
+        .catch(e => {
+          console.log(e)
         })
     }
   }

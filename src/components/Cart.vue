@@ -349,7 +349,8 @@ export default {
                   <p>Safetystock : ` + this.SelectShops + `<p>`,
           name: this.SelectShops,
           email: this.email,
-          subject: 'Safetystock'
+          subject: 'Safetystock',
+          type: 'email'
         }
       })
         .then(response => {

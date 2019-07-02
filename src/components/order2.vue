@@ -86,7 +86,9 @@ export default {
       next_order: '',
       present_key: '',
       next_key: '',
-      newkey: ''
+      newkey: '',
+      userRef: {},
+      faceRef: {}
     }
   },
   methods: {
@@ -245,6 +247,14 @@ export default {
     dbRefObject1.on('value', snap => {
       this.shops = snap.val()
       // console.log(this.shops)
+    })
+    const facebookObject = firebase.database().ref('facebook')
+    facebookObject.on('value', snap => {
+      this.faceRef = snap.val()
+    })
+    const userObject = firebase.database().ref('user')
+    userObject.on('value', snap => {
+      this.userRef = snap.val()
     })
   },
   computed: {
