@@ -44,8 +44,8 @@
         <span v-if="shops.q">&nbsp;จำนวนคิว ณ ขณะนี้ {{shops.q}} คิว  <br></span>
         &nbsp;เวลารายการอาหารล่าสุด&nbsp;{{((shops.SaveDate)?shops.SaveDate.slice(11,16):'00.00 น.')}}&nbsp;น.<br>
         <router-link to="/shop"><button v-show="products.length" class='button button13'>กลับไปเลือกเมนู</button></router-link>
-        <button v-show="products.length" class='button is-success' @click="order(products, shops.q, CountQuantity, total, shops.SaveDate)">ยืนยันการสั่ง</button>
-        <!-- <button v-show="products.length" class='button is-success' @click="beforeCutstock(products, shops.q, CountQuantity, total, shops.SaveDate)">ยืนยันการสั่ง</button> -->
+        <!-- <button v-show="products.length" class='button is-success' @click="order(products, shops.q, CountQuantity, total, shops.SaveDate)">ยืนยันการสั่ง</button> -->
+        <button v-show="products.length" class='button is-success' @click="beforeCutstock(products, shops.q, CountQuantity, total, shops.SaveDate)">ยืนยันการสั่ง</button>
       </div>
     </div>
     </div>
@@ -303,7 +303,7 @@ export default {
         foodcenterRef.child('reportprofit').child(this.SelectShops).child('year').child(year).child('value').set(updatavalue)
       }
     },
-    async beforeCutstock (products) {
+    async beforeCutstock (products, q, CountQuantity, total, gettime) {
       let stock = null
       var listfood = []
       for (var i = 0; i < products.length; i++) {
@@ -319,7 +319,18 @@ export default {
         }
         if (checkcutstock === 1) { listfood.push(products[i]) }
       }
-      console.log(listfood)
+      console.log(listfood.length)
+      if (listfood.length === 0) { this.order(products, q, CountQuantity, total, gettime) } else {
+        let strMenu = ''
+        listfood.forEach(menu => {
+          strMenu += menu.name + ' ' + menu.quantity + ' จาน'
+        })
+        this.$swal({
+          type: 'error',
+          title: 'ขออภัย',
+          text: 'รายการอาหารไม่สามารถสั่งได้หรือไม่สามารถสั่งได้ตามที่ต้องการ ' + strMenu
+        })
+      }
     },
     async Cutstock (products) {
       let stock = null
