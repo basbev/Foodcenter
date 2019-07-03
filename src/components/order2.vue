@@ -61,6 +61,7 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
 import { mapGetters } from 'vuex'
 import * as firebase from 'firebase'
 import PresentOrder from './PresentOrder'
@@ -128,7 +129,7 @@ export default {
         })
       // } else { alert('ไม่สามารถทำข้ามคิวได้') }
     },
-    complete (key, q) {
+    complete (key, q, username, orderNoti) {
       foodcenterRef
         .child('order')
         .child(this.selectShop)
@@ -150,6 +151,7 @@ export default {
           // countdoing: this.updatecount + 1,
           // count: order
         })
+      this.noti(username, orderNoti)
     },
     group () {
       // this.getmenu()
@@ -157,7 +159,7 @@ export default {
       for (var i = 0; i < this.orders.length; i++) {
         if (this.orders[i].status === 'กำลังรอ') {
           this.grouporder.push(this.orders[i].order)
-          this.keygrouporder.push(this.orders[i].key)
+          this.keygrouporder.push(this.orders[i])
           // alert(`กรุ๊ปเมนู one: ` + i)
           for (var y = 0; y < this.orders[i].menu.length; y++) {
             // alert(`กรุ๊ปเมนู two: ` + y)
@@ -196,10 +198,10 @@ export default {
         // console.log(data)
       })
     },
-    completedgroup () {
+    async completedgroup () {
       for (var i = 0; i < this.keygrouporder.length; i++) {
         // alert(`Key in as` + this.keygrouporder[i])
-        this.complete(this.keygrouporder[i], this.shops.q)
+        await this.complete(this.keygrouporder[i].key, this.shops.q, this.keygrouporder[i].customer, this.keygrouporder[i])
       }
       this.keygrouporder = []
       this.groupmenu = []
@@ -228,6 +230,71 @@ export default {
         this.next_order = ''
         this.next_key = ''
       }
+    },
+    async noti (username, orderNoti) {
+      this.interfacealert(username)
+      const userFacebookList = firebase.database().ref('facebook').orderByChild('username').equalTo(username)
+      const userlist = firebase.database().ref('user').orderByChild('username').equalTo(username)
+      let token = null
+      userFacebookList.once('value', snap => { // find user
+        let user = snap.val()
+        if (user) {
+          alert('facebook')
+          user = user[Object.keys(user)[0]]
+          token = user.token
+          if (token) {
+            Object.keys(token).forEach(function (noti) {
+              this.sentNoti(noti, orderNoti)
+            })
+            // saveAlerted(pathNoti)
+          }
+        }
+      })
+      if (!token) {
+        userlist.once('value', snap => {
+          let user = snap.val()
+          if (user) {
+            // alert('web')
+            user = user[Object.keys(user)[0]]
+            token = user.token
+            if (token) {
+              Object.keys(token).forEach(noti => {
+                // alert(noti)
+                this.sentNoti(noti, orderNoti)
+              })
+              // saveAlerted(pathNoti)
+            }
+          }
+        })
+      }
+    },
+    async sentNoti (noti, order) {
+      await axios.get('http://localhost:3001/', {
+        params: {
+          noti: noti,
+          order: order,
+          type: 'noti'
+        }
+      })
+        .then(response => {
+          // JSON responses are automatically parsed.
+          this.posts = response.data
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+    interfacealert (username) {
+      const Toast = this.$swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
+      })
+      Toast.fire({
+        type: 'success',
+        title: 'เเจ้งเตือนผู้ใช้ ' + 'ในกรุ๊ปเมนูอาหาร' + ' เรียบร้อยเเล้ว'
+      })
     }
   },
   mounted () {
