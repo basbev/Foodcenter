@@ -104,19 +104,27 @@
               </div>
               <div class="column">
                 <article class="message is-dark">
-                <div class="message-header"><p>วันที่ขายดี</p></div>
+                <div class="message-header"><p>ช่วงเวลาขายดี</p></div>
                 <div class="message-body" style="position: relative;">
+                  <a class="button" @click="sellofweek()" v-bind:class="{ 'is-warning is-hovered': select2 === 'day' }">รายวัน</a>
+                  <a class="button" @click="sellofmonth()" v-bind:class="{ 'is-warning is-hovered': select2 === 'month' }">รายเดือน</a>
+                  <a class="button" @click="sellofyear()" v-bind:class="{ 'is-warning is-hovered': select2 === 'year' }">รายปี</a>
                 <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                 <thead>
                   <tr>
-                    <th>วัน</th>
+                    <th v-if="select2 === 'day'">วัน</th>
+                    <th v-if="select2 === 'month'">เดือน</th>
+                    <th v-if="select2 === 'year'">ปี</th>
                     <th>จำนวน</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr :key="key" v-for="(record, key) in reportmoney">
-                    <td>{{record.Week}}</td>
-                    <td>{{record.money}} บาท.</td>
+                    <td v-if="record.Week">{{record.Week}}</td>
+                    <td v-if="record.month">{{record.month}}</td>
+                    <td v-if="record.label">{{record.label}}</td>
+                    <td v-if="record.value">{{record.value}} บาท.</td>
+                    <td v-if="record.money">{{record.money}} บาท.</td>
                   </tr>
                 </tbody>
               </table>
@@ -185,8 +193,10 @@ export default {
       moneyhit: [],
       menudayhit: [],
       select: 0,
+      select2: 'day',
       piedaymoney: '',
-      summoney: 0
+      summoney: 0,
+      tmpreportmoney: ''
     }
   },
   methods: {
@@ -290,6 +300,9 @@ export default {
             data: this.getvalue
           }],
           xaxis: {
+            title: {
+              text: 'วันที่เปิดการขาย'
+            },
             rotate: -90,
             categories: this.getvalue1,
             // position: 'top',
@@ -335,6 +348,9 @@ export default {
           yaxis: {
             // max: Math.max(...this.getvalue),
             // min: 0,
+            title: {
+              text: 'ยอดขาย'
+            },
             axisBorder: {
               show: true
             },
@@ -551,6 +567,115 @@ export default {
         }
       )
       this.showchart3.render()
+    },
+    sellofweek () {
+      this.select2 = 'day'
+      this.reportmoney = this.tmpreportmoney
+    },
+    sellofmonth () {
+      this.select2 = 'month'
+      if (!this.tmpreportmoney) { this.tmpreportmoney = this.reportmoney }
+      let tmp = ''
+      var Refmonth = firebase.database().ref('foodcenter/report/' + this.selectShop + '/' + 'month')
+      Refmonth.once('value', snap => {
+        var data = []
+        snap.forEach(ss => {
+          var item = ss.val()
+          data.push(item)
+        })
+        tmp = data
+        this.sumsellofmonth(tmp)
+      })
+    },
+    sumsellofmonth (month) {
+      let summonth = []
+      // console.log(month)
+      for (var i = 0; i < month.length; i++) {
+        // console.log(month[i].label.slice(5, 7))
+        const found = summonth.find(p => p.month === month[i].label.slice(5, 7))
+        if (found) {
+          found.value = found.value + month[i].label
+        } else {
+          summonth.push({
+            month: month[i].label.slice(5, 7),
+            money: month[i].value
+          })
+        }
+      }
+      // console.log(summonth)
+      this.engtothaisellofmonth(summonth)
+    },
+    engtothaisellofmonth (month) {
+      month.forEach((item) => {
+        if (item.month === '01') {
+          item.month = 'มกราคม'
+          item.sort = 1
+        }
+        if (item.month === '02') {
+          item.month = 'กุมภาพันธ์'
+          item.sort = 2
+        }
+        if (item.month === '03') {
+          item.month = 'มีนาคม'
+          item.sort = 3
+        }
+        if (item.month === '04') {
+          item.month = 'เมษายน'
+          item.sort = 4
+        }
+        if (item.month === '05') {
+          item.month = 'พฤษภาคม'
+          item.sort = 5
+        }
+        if (item.month === '06') {
+          item.month = 'มิถุนายน'
+          item.sort = 6
+        }
+        if (item.month === '07') {
+          item.month = 'กรกฎาคม'
+          item.sort = 7
+        }
+        if (item.month === '08') {
+          item.month = 'สิงหาคม'
+          item.sort = 8
+        }
+        if (item.month === '09') {
+          item.month = 'กันยายน'
+          item.sort = 9
+        }
+        if (item.month === '10') {
+          item.month = 'ตุลาคม'
+          item.sort = 10
+        }
+        if (item.month === '11') {
+          item.month = 'พฤศจิกายน'
+          item.sort = 11
+        }
+        if (item.month === '12') {
+          item.month = 'ธันวาคม'
+          item.sort = 12
+        }
+      })
+      this.sortHighest4(month)
+    },
+    async sortHighest4 (month) {
+      this.reportmoney = await month.sort((a, b) => a.money < b.money ? 1 : -1)
+      // console.log(month)
+    },
+    sellofyear () {
+      this.select2 = 'year'
+      if (!this.tmpreportmoney) { this.tmpreportmoney = this.reportmoney }
+      let tmp = ''
+      var Refyear = firebase.database().ref('foodcenter/report/' + this.selectShop + '/' + 'year')
+      Refyear.once('value', snap => {
+        var data = []
+        snap.forEach(ss => {
+          var item = ss.val()
+          data.push(item)
+        })
+        tmp = data
+        this.reportmoney = tmp.sort((a, b) => a.money < b.money ? 1 : -1)
+      })
     }
   },
   mounted () {
