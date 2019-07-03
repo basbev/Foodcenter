@@ -47,7 +47,6 @@
           <div class="level-item">
             <p class="subtitle is-5">
               <!-- <strong>{{Countstock}}</strong> รายการ -->
-              <strong>{{(showData.length>0)?showData.length:Countstock}}</strong> รายการ
             </p>
           </div>
           <div class="level-item">
@@ -57,6 +56,9 @@
                 ค้นหา
               </button> -->
             </p>
+            &nbsp;&nbsp;
+            &nbsp;&nbsp;
+            <strong>{{(showData.length>0)?showData.length:Countstock}}</strong> &nbsp;รายการ
           </div>
         </div>
         <!-- Right side -->
@@ -72,15 +74,20 @@
                       </span>
                       <span>หน่วยวัตถุดิบ </span>
               </div>
+              &nbsp;&nbsp;
         </div>
       </nav>
     </div>
-    <div class="spacer"></div>
-    <section class="section">
+    <!-- <div class="spacer"></div> -->
+    <!-- <section class="section">
       <div class="columns is-mobile is-multiline">
-        <div class="column is-one-quarter-fullhd is-full-mobile">
+        <div class="column is-one-quarter-fullhd is-full-mobile"> -->
           <!--  -->
-          <div class="level-right">
+          <div class="columns">
+            <div class="column">
+          </div>
+          <div class="column">
+            <div class="level">
             <p class="level-item">
               <input class="input" type="number" placeholder="รายการที่เเสดงต่อหน้า" v-model.number="pageSize" @input="updateTable()" min="1">
               &nbsp;รายการ
@@ -88,11 +95,14 @@
             &nbsp;&nbsp;
             <a class="button is-success" @click="setInsertstock()">เพิ่มวัตถุดิบ</a>
            </div>
-           <br>
+          </div>
+           <div class="column">
+          </div>
+        </div>
           <!--  -->
           <section class="panel card">
             <p class="panel-heading">
-              รายการวัถตุดิบในร้านอาหาร
+              <center>รายการวัถตุดิบในร้านอาหาร</center>
               <!-- <a class="button is-success right">New</a> -->
             </p>
             <!-- <hr> -->
@@ -143,9 +153,9 @@
           </nav> -->
           <!--  -->
         </div>
-      </div>
+      <!-- </div>
     </section>
-  </div>
+  </div> -->
   <!--show modal-->
     <div id="modal-ter" class="modal is-active" v-show="showModal" @close="showModal = false">
       <div class="modal-background"></div>
