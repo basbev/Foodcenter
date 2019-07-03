@@ -31,7 +31,8 @@ const getters = {
         type: product.type,
         meters: product.meters,
         Cost: product.Cost,
-        unit: product.unit
+        unit: product.unit,
+        minute: product.minute
       }
     })
   },
@@ -60,7 +61,7 @@ const mutations = {
   setselectShop: (state, shop) => {
     state.selectShop = shop
   },
-  ADD_TO_CART: (state, {Akey, foodname, foodprice, type, meters, Cost, unit}) => {
+  ADD_TO_CART: (state, {Akey, foodname, foodprice, type, meters, Cost, unit, minute}) => {
     var tmp = 0 // กำหนดว่าครบไหม
     const record = state.added.find(p => p.Akey === Akey) // หาจำนวนจาน
     for (var i = 0; i < meters.length; i++) {
@@ -93,7 +94,8 @@ const mutations = {
           type,
           meters,
           Cost,
-          unit
+          unit,
+          minute
         })
       } else { record.quantity++ }
     } else { Swal.fire('ไม่สามารถเพิ่มได้!', 'เนื่องจากวัตถุดิบที่ใช้ไม่เพียงพอ!', 'error') }
@@ -241,8 +243,9 @@ const actions = {
     const meters = payload.meters
     const Cost = payload.Cost
     const unit = payload.typeunit
-    console.log(Akey, foodname, foodprice, type, meters, Cost, unit)
-    commit('ADD_TO_CART', {Akey, foodname, foodprice, type, meters, Cost, unit})
+    const minute = payload.minute
+    console.log(Akey, foodname, foodprice, type, meters, Cost, unit, minute)
+    commit('ADD_TO_CART', {Akey, foodname, foodprice, type, meters, Cost, unit, minute})
   },
   stocklist ({commit}, payload) {
     commit('stocklist', (payload))
