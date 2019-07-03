@@ -167,6 +167,7 @@ export default {
       this.noti(username, orderNoti)
     },
     async noti (username, orderNoti) {
+      this.interfacealert(username)
       const userFacebookList = firebase.database().ref('facebook').orderByChild('username').equalTo(username)
       const userlist = firebase.database().ref('user').orderByChild('username').equalTo(username)
       let token = null
@@ -217,6 +218,18 @@ export default {
         .catch(e => {
           console.log(e)
         })
+    },
+    interfacealert (username) {
+      const Toast = this.$swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000
+      })
+      Toast.fire({
+        type: 'success',
+        title: 'เเจ้งเตือนผู้ใช้ ' + username + ' เรียบร้อยเเล้ว'
+      })
     }
   }
 }
