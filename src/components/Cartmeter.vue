@@ -24,8 +24,8 @@
             <tbody>
               <tr :key="key" v-for="(p, key) in products">
                 <td>{{ p.name }}</td>
-                <td>{{ p.price }} บ.</td>
-                <td>{{ p.quantity }} {{ p.unit }}</td>
+                <td>{{ p.price * p.quantity }} บ.</td>
+                <td>{{ p.quantity * p.meters[0].qty }} {{ p.unit }}</td>
                 <td><center>{{ p.type }}</center></td>
                 <td><center><div @click="inclese(key)"><i class="fas fa-plus"></i></div></center></td>
                 <td><center><div @click="declese(key)"><i class="fas fa-minus"></i></div></center></td>
@@ -33,7 +33,8 @@
                 </tr>
                 <tr>
                   <td><b>ราคารวม:</b></td>
-                  <td> {{CountQuantity}} อย่าง</td>
+                  <!-- <td> {{CountQuantity}} อย่าง</td> -->
+                  <td> {{products.length}} อย่าง</td>
                   <td><b>{{ total }} บ.</b></td>
               </tr>
             </tbody>
@@ -250,7 +251,7 @@ export default {
       await this.deliver(products)
       await this.before()
       await this.sortcode(products)
-      await axios.get('https://foodmail.herokuapp.com/', {
+      await axios.get('https://foodcenternoti.herokuapp.com/', {
         params: {
           id: `<p>มีรายละเอียดดังนี้</p>
                   <ul>  
@@ -286,7 +287,7 @@ export default {
       for (var i = 0; i < products.length; i++) {
         let data = {
           foodname: products[i].name,
-          foodamount: products[i].quantity
+          foodamount: products[i].quantity * products[i].meters[0].qty
         }
         database.ref('/foodcenter/deliver').child(this.hasshop).push(data)
       }

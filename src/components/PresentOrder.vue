@@ -226,7 +226,7 @@ export default {
       }
     },
     async sentNoti (noti, order) {
-      await axios.get('http://localhost:3001/', {
+      await axios.get('https://foodcenternoti.herokuapp.com/', {
         params: {
           noti: noti,
           order: order,

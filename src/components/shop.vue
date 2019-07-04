@@ -1524,7 +1524,7 @@ export default {
     async notiemail (promo) {
       for (var i = 0; i < this.users.length; i++) {
         if (this.users[i].email !== '') {
-          await axios.get('https://foodmail.herokuapp.com/', {
+          await axios.get('https://foodcenternoti.herokuapp.com/', {
             params: {
               id: `<p>ระบบ ร้านค้า เเจ้งเตือนโปรโมชั่นใหม่เข้ามา!! มีรายละเอียดดังนี้</p>
                       <ul>  

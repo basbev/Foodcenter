@@ -353,7 +353,7 @@ export default {
     async safetystock (safetys) {
       await this.before()
       await this.sortcode(safetys)
-      await axios.get('https://foodmail.herokuapp.com/', {
+      await axios.get('https://foodcenternoti.herokuapp.com/', {
         params: {
           id: `<p>ระบบ Safetystock เเจ้งเตือนปริมาณถึงที่กำหนด มีรายละเอียดดังนี้</p>
                   <ul>  
