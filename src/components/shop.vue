@@ -286,7 +286,7 @@
                           <!-- <img v-if="!sub" v-url={filename:menu.foodpic} width="100%" height="auto"/> -->
                           <img :src="menu.foodpic" width="100%" height="auto"/>
                           <div class="editMenuBtns">
-                            <button v-if="permission !== '1' && hasShop === selectShop" @click="SetUpdateMenu(key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.meters, menu.Cost, menu.minute)" class="button button13-white">
+                            <button v-if="permission !== '1' && hasShop === selectShop" @click="SetUpdateMenu(menu.key, menu.foodname, menu.foodprice, menu.foodtype, menu.foodpic, menu.meters, menu.Cost, menu.minute)" class="button button13-white">
                               <span class="aicon">
                                 <i class="fas fa-edit"></i>
                               </span>
@@ -434,7 +434,7 @@
                               </div>
                             </section>
                             <footer class="modal-card-foot">
-                              <button class="button is-success" @click="UpdateMenu(menu.key, updateMenufood, updateMenuprice, updateMenutype, updateMenupic, updatecost)">อัพเดทเมนู</button>
+                              <button class="button is-success" @click="UpdateMenu(updateKey, updateMenufood, updateMenuprice, updateMenutype, updateMenupic, updatecost)">อัพเดทเมนู</button>
                               <!-- <button class="button is-success">บันทึกข้อมูล</button> -->
                               <button class="button" @click="Closemodal3()">ยกเลิก</button>
                             </footer>
@@ -918,7 +918,7 @@ export default {
       namefood: '',
       submeter: '',
       Searchmode: 'จานเดี่ยว',
-      minute: 1
+      minute: 0
     }
   },
   created () {
@@ -956,7 +956,7 @@ export default {
         Cost: parseInt(Cost, 10),
         minute: parseInt(this.minute, 10)
       }
-      if (foodname === '' || foodprice === '' || this.dataImg3 === '' || foodtype === '' || meters.length === 0 || Cost === '') {
+      if (foodname === '' || foodprice === '' || this.dataImg3 === '' || foodtype === '' || meters.length === 0 || Cost === '' || this.minute === 0) {
         this.$swal({
           type: 'error',
           title: 'Oops...',
@@ -1614,6 +1614,7 @@ export default {
         data.push(item)
       })
       this.menus = data
+      this.checkstocklist()
     })
     dbRefObjectshow.on('value', snap => {
       var data = []
