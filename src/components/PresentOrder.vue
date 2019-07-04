@@ -75,7 +75,8 @@ export default {
       findkey: [],
       nodata: true,
       keyorder: '',
-      shops: ''
+      shops: '',
+      orders: []
     }
   },
   computed: {
@@ -88,6 +89,18 @@ export default {
     const dbRefObject1 = foodcenterRef.child('detail').child(this.selectShop)
     dbRefObject1.on('value', snap => {
       this.shops = snap.val()
+    })
+    const dbRefObject = foodcenterRef.child('order').child(this.selectShop)
+    dbRefObject.on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.orders = data
+      // console.log(this.orders)
+      this.findstatus()
     })
   },
   watch: {
@@ -128,21 +141,28 @@ export default {
     },
     updatemenunow (name, order, key) {
       // console.log(key)
-      // if (this.findindex === key) {
-      foodcenterRef
-        .child('detail')
-        .child(this.selectShop)
-        .update({
-          doing: name
+      if (this.findindex === key) {
+        foodcenterRef
+          .child('detail')
+          .child(this.selectShop)
+          .update({
+            doing: name
+          })
+        foodcenterRef
+          .child('order')
+          .child(this.selectShop)
+          .child(this.keyorder)
+          .update({
+            status: 'กำลังทำ'
+          })
+      } else {
+        this.$swal({
+          type: 'error',
+          title: 'ลัดคิว',
+          text: 'กรุณาทำทีละรายการ!!!'
+          // footer: '<a href>Why do I have this issue?</a>'
         })
-      foodcenterRef
-        .child('order')
-        .child(this.selectShop)
-        .child(this.keyorder)
-        .update({
-          status: 'กำลังทำ'
-        })
-      // } else { alert('ไม่สามารถทำข้ามคิวได้') }
+      }
     },
     complete (key, q, username, orderNoti) {
       foodcenterRef
@@ -176,11 +196,11 @@ export default {
       userFacebookList.once('value', snap => { // find user
         let user = snap.val()
         if (user) {
-          alert('facebook')
+          // alert('facebook')
           user = user[Object.keys(user)[0]]
           token = user.token
           if (token) {
-            Object.keys(token).forEach(function (noti) {
+            Object.keys(token).forEach(noti => {
               this.sentNoti(noti, orderNoti)
             })
             // saveAlerted(pathNoti)
@@ -232,6 +252,15 @@ export default {
         type: 'success',
         title: 'เเจ้งเตือนผู้ใช้ ' + username + ' เรียบร้อยเเล้ว'
       })
+    },
+    findstatus () {
+      let found = false
+      for (var i = 0; i < this.orders.length; i++) {
+        if (this.orders[i].status === 'กำลังรอ' && found === false) {
+          this.findindex = i
+          found = true
+        }
+      }
     }
   }
 }

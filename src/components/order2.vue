@@ -239,11 +239,11 @@ export default {
       userFacebookList.once('value', snap => { // find user
         let user = snap.val()
         if (user) {
-          alert('facebook')
+          // alert('facebook')
           user = user[Object.keys(user)[0]]
           token = user.token
           if (token) {
-            Object.keys(token).forEach(function (noti) {
+            Object.keys(token).forEach(noti => {
               this.sentNoti(noti, orderNoti)
             })
             // saveAlerted(pathNoti)

@@ -686,6 +686,6 @@ input[type=text], select {
     background: #8c8c8c;
     color: #fff;
 }
-.content ul {
-}
+/* .content ul {
+} */
 </style>
