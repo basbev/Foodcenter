@@ -74,7 +74,8 @@ export default {
       nodata: true,
       keyorder: '',
       shops: '',
-      orders: []
+      orders: [],
+      findindex: ''
     }
   },
   computed: {
@@ -139,7 +140,7 @@ export default {
     },
     updatemenunow (name, order, key) {
       // console.log(key)
-      if (this.findindex === key) {
+      if (this.findindex === this.keyorder) {
         foodcenterRef
           .child('detail')
           .child(this.selectShop)
@@ -255,7 +256,7 @@ export default {
       let found = false
       for (var i = 0; i < this.orders.length; i++) {
         if (this.orders[i].status === 'กำลังรอ' && found === false) {
-          this.findindex = i
+          this.findindex = this.orders[i].key
           found = true
         }
       }

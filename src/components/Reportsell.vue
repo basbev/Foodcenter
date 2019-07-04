@@ -8,7 +8,7 @@
   <div class="columns">
   <div class="column">
   </div>
-  <div class="column is-two-fifths">
+  <div class="column is-three-fifths">
     <article class="message is-dark">
       <div class="message-header"><p>ยอดขาย</p></div>
       <div class="message-body" style="position: relative;">
@@ -20,7 +20,7 @@
       </div>
       </article>
   </div>
-  <div class="column is-two-fifths">
+  <div class="column is-three-fifths">
     <article class="message is-dark">
       <div class="message-header"><p>กำไร</p></div>
       <div class="message-body" style="position: relative;">
@@ -32,7 +32,7 @@
       </div>
       </article>
   </div>
-  <div class="column">
+  <div class="column is-three-fifths">
   </div>
 </div>
   <div class="columns">
