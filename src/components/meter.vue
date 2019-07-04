@@ -256,7 +256,7 @@
                           <div class="detail">
                             <h3 class="title is-3">{{menu.foodname}}</h3>
                             <h6 class="">ราคา&nbsp;{{menu.foodprice}}&nbsp;บาท</h6>
-                            <h6>จำนวน&nbsp;{{menu.type}}&nbsp;ชิ้น</h6>
+                            <h6>จำนวน&nbsp;{{menu.meters[0].qty}}&nbsp;{{menu.type}}&nbsp;</h6>
                           </div>
                           <span class="icon is-small cartButton" v-if="menus[key].Cart === 0" @click="Cart(menu.foodname, menu.foodprice, menu.foodtype, menu.key, menu.meters, menu.Cost, menu.type)">
                             <i class="fas fa-cart-plus"></i>
@@ -393,7 +393,7 @@
                                       <button @click="removemeter()"><i class="fas fa-times"></i></button>
                                     </div>
                                   </div>
-                                  <div class="columns">
+                                  <div class="columns" v-if="meters.length === 0">
                                     <div class="column is-2">
                                       เพิ่มวัตถุดิบ :
                                     </div>
@@ -720,7 +720,7 @@
                               <button @click="removemeter()"><i class="fas fa-times"></i></button>
                             </div>
                           </div>
-                          <div class="columns">
+                          <div class="columns" v-if="meters.length === 0">
                             <div class="column is-2">
                               เพิ่มวัตถุดิบ :
                             </div>
@@ -1314,7 +1314,7 @@ export default {
       this.menus.sort((a, b) => a.foodname < b.foodname ? -1 : 1)
     },
     removemeter () {
-      this.meters.splice(0, 1)
+      this.meters = []
     },
     truestock () {
       for (var i = 0; i < this.meters.length; i++) {
@@ -1416,6 +1416,7 @@ export default {
         data.push(item)
       })
       this.menus = data
+      this.checkstocklist()
     })
     dbRefObjectshow.on('value', snap => {
       var data = []
