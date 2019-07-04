@@ -3,7 +3,7 @@
   <link href="https://fonts.googleapis.com/css?family=Prompt" rel="stylesheet">
   <br>
   <br>
-  <h1 class="title"><center>สรุปยอดขายร้าน{{this.selectShop}}</center></h1>
+  <h1 class="title"><center>สรุปยอดขายร้าน {{this.detail.name}}</center></h1>
   <br>
   <div class="columns">
   <div class="column">
@@ -196,7 +196,8 @@ export default {
       select2: 'day',
       piedaymoney: '',
       summoney: 0,
-      tmpreportmoney: ''
+      tmpreportmoney: '',
+      detail: ''
     }
   },
   methods: {
@@ -739,6 +740,9 @@ export default {
       })
       this.piedaymoney = data
       this.beforesortpie()
+    })
+    firebase.database().ref().child('foodcenter/detail').child(this.selectShop).on('value', snap => {
+      this.detail = snap.val()
     })
   },
   computed: {
