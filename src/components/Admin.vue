@@ -28,7 +28,7 @@
                     <th>ลบ</th>
                   </tr>
                 </thead>
-                <tfoot>
+                <!-- <tfoot>
                   <tr>
                     <th>ชื่อผู้ใช้</th>
                     <th>พาสเวิร์ด</th>
@@ -40,11 +40,12 @@
                     <th>เเก้ไข</th>
                     <th>ลบ</th>
                   </tr>
-                </tfoot>
+                </tfoot> -->
                 <tbody>
                   <tr :key="key" v-for="(user, key) in users">
                     <td>{{user.username}}</td>
-                    <td>{{user.password}}{{convertPassword(user.password)}}</td>
+                    <!-- <td>{{user.password}}{{convertPassword(user.password)}}</td> -->
+                    <td>{{convertPassword(user.password)}}</td>
                     <td>{{user.firstname}}</td>
                     <td>{{user.lastname}}</td>
                     <td>{{user.phonenumber}}</td>
@@ -93,7 +94,7 @@
                     <th>ลบ</th>
                   </tr>
                 </thead>
-                <tfoot>
+                <!-- <tfoot>
                   <tr>
                     <th>ชื่อร้าน</th>
                     <th>เบอร์โทร</th>
@@ -102,7 +103,7 @@
                     <th>เเก้ไข</th>
                     <th>ลบ</th>
                   </tr>
-                </tfoot>
+                </tfoot> -->
                 <tbody>
                   <tr :key="key" v-for="(shop, key) in shops">
                     <td>{{shop.name}}</td>
@@ -145,13 +146,13 @@
                     <th>ลบ</th>
                   </tr>
                 </thead>
-                <tfoot>
+                <!-- <tfoot>
                   <tr>
                     <th>อีเมล์</th>
                     <th>ชื่อผู้ใช้</th>
                     <th>ลบ</th>
                   </tr>
-                </tfoot>
+                </tfoot> -->
                 <tbody>
                   <tr :key="key" v-for="(shop, key) in facebooks">
                     <td>{{shop.email}}</td>

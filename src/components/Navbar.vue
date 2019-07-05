@@ -16,11 +16,30 @@
           <li><a class="navbar-item" href="#/foodcenter">
               <span class="icon"><i class="fas fa-home"></i></span>
               <span>ร้านอาหารทั้งหมด</span></a></li>
-          <li><a class="navbar-item" href="#/shopmeter">
+          <li v-if="permission === '2'"><a class="navbar-item" href="#/order2">
               <span class="icon"><i class="fas fa-home"></i></span>
-              <span @click="myshop()">ร้านค้าวัตถุดิบทั้งหมด</span></a></li><li><a class="navbar-item" href="#/stockmeter">
+              <span @click="myshop()">จัดการ Order</span></a></li>
+          <li v-if="permission === '2'"><a class="navbar-item" href="#/shop">
               <span class="icon"><i class="fas fa-home"></i></span>
-              <span>สต็อตร้านวัตถุดิบ</span></a></li>
+              <span @click="myshop()">ร้านของฉัน</span></a></li>
+          <li v-if="permission === '2'"><a class="navbar-item" href="#/Reportsell">
+              <span class="icon"><i class="fas fa-home"></i></span>
+              <span @click="myshop()">สรุปยอดขาย</span></a></li>
+          <li v-if="permission === '2'"><a class="navbar-item" href="#/stockshop">
+              <span class="icon"><i class="fas fa-home"></i></span>
+              <span @click="myshop()">สต็อตร้านอาหาร</span></a></li>
+          <li v-if="permission === '2' || permission === '5'"><a class="navbar-item" href="#/shopmeter">
+              <span class="icon"><i class="fas fa-home"></i></span>
+              <span>ร้านค้าวัตถุดิบทั้งหมด</span></a></li>
+          <li v-if="permission === '5'"><a class="navbar-item" href="#/meter">
+              <span class="icon"><i class="fas fa-home"></i></span>
+              <span @click="myshop()">ร้านวัตถุดิบของฉัน</span></a></li>
+          <li v-if="permission === '5'"><a class="navbar-item" href="#/stockmeter">
+              <span class="icon"><i class="fas fa-home"></i></span>
+              <span @click="myshop()">สต็อตร้านวัตถุดิบ</span></a></li>
+          <li v-if="permission === '4'"><a class="navbar-item" href="#/admin">
+              <span class="icon"><i class="fas fa-home"></i></span>
+              <span>จัดการผู้ใช้</span></a></li>
         </ul>
 </aside>
 </div>
@@ -88,7 +107,7 @@
                 <i class="fas fa-home"></i>
               </span>
               <span>
-                stockshop
+                สต็อตร้านอาหาร
               </span>
       </a>
       <a v-if="permission === '2' || permission === '5'" class="navbar-item" href="#/shopmeter">
@@ -99,20 +118,20 @@
                 ร้านค้าวัตถุดิบ
               </span>
       </a>
+      <a v-if="permission === '5'" class="navbar-item" href="#/meter" @click="myshop()">
+        <span class="icon">
+                <i class="fas fa-home"></i>
+              </span>
+              <span>
+                ร้านวัตถุดิบของฉัน
+              </span>
+      </a>
       <a v-if="permission === '5'" class="navbar-item" href="#/stockmeter" @click="myshop()">
         <span class="icon">
                 <i class="fas fa-home"></i>
               </span>
               <span>
                 สต็อตร้านวัตถุดิบ
-              </span>
-      </a>
-      <a v-if="permission === '5'" class="navbar-item" href="#/meter" @click="myshop()">
-        <span class="icon">
-                <i class="fas fa-home"></i>
-              </span>
-              <span>
-                ร้านวัตถุดิบ
               </span>
       </a>
     </div>
