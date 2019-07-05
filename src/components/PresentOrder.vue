@@ -14,7 +14,7 @@
               <br>
             </p>
             <p>
-              <button class="button button4" @click="noti(findkey.customer, findkey)">ปุ่มแจ้งเตือน</button>
+              <button class="button button4" @click="beforcenoti(findkey.customer, findkey)">ปุ่มแจ้งเตือน</button>
             </p>
           </header>
           <div :key="keyy" v-for="(detail, keyy) in findkey.menu">
@@ -188,6 +188,16 @@ export default {
           // count: order
         })
       this.noti(username, orderNoti)
+    },
+    beforcenoti (username, orderNoti) {
+      if (orderNoti.status === 'ทำเสร็จเเล้ว') { this.noti(username, orderNoti) } else {
+        this.$swal({
+          type: 'error',
+          title: 'ขออภัย',
+          text: 'รายการนี้ยังทำไม่เสร็จ!!!'
+          // footer: '<a href>Why do I have this issue?</a>'
+        })
+      }
     },
     async noti (username, orderNoti) {
       this.interfacealert(username)
