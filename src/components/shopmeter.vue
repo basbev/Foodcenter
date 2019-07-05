@@ -10,7 +10,7 @@
           <input type="text" v-model="Search" class="inputSearch" placeholder="ค้นหาร้าน" @input="filterShop(Search)">
         </div>
       </div>
-      <div v-if="permission !== '1' & permission !== null" >
+      <div v-if="permission !== '1' && permission !== null && hasShop === ''" >
         <hr>
         <h3 class="is-size-4">เพิ่มร้านวัตถุดิบ</h3>
         <div class="columns">
@@ -440,7 +440,8 @@ export default {
   computed: {
     ...mapGetters({
       permission: 'permission',
-      selectShop: 'selectShop'
+      selectShop: 'selectShop',
+      hasShop: 'hasShop'
     }),
     shopsSlide () {
       let arr = []
