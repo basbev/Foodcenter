@@ -8,7 +8,7 @@
   <div class="columns">
   <div class="column">
   </div>
-  <div class="column is-three-fifths">
+  <div class="column is-one-third">
     <article class="message is-dark">
       <div class="message-header"><p>ยอดขาย</p></div>
       <div class="message-body" style="position: relative;">
@@ -20,7 +20,7 @@
       </div>
       </article>
   </div>
-  <div class="column is-three-fifths">
+  <div class="column is-one-third">
     <article class="message is-dark">
       <div class="message-header"><p>กำไร</p></div>
       <div class="message-body" style="position: relative;">
@@ -32,7 +32,18 @@
       </div>
       </article>
   </div>
-  <div class="column is-three-fifths">
+  <div class="column is-one-third">
+    <!-- วัตถุดิบ -->
+    <article class="message is-dark">
+      <div class="message-header"><p>การสั่งซื้อวัตถุดิบ</p></div>
+      <div class="message-body" style="position: relative;">
+      <!-- <button class="button button2" @click="exportPdf">exportPDF</button> -->
+      <button class="button" @click="getDataFirebasemeter(getvalue, day)" v-bind:class="{ 'is-warning is-hovered': select === 'meterday' }">รายวัน</button>
+      <button class="button" @click="getDataFirebasemeter(getvalue, month)" v-bind:class="{ 'is-warning is-hovered': select === 'metermonth' }">รายเดือน</button>
+      <button class="button" @click="getDataFirebasemeter(getvalue, year)" v-bind:class="{ 'is-warning is-hovered': select === 'meteryear' }">รายปี</button>
+      <!-- <button class="button button5" @click="showsellhit()">เมนูขายดี</button> -->
+      </div>
+      </article>
   </div>
 </div>
   <div class="columns">
@@ -83,19 +94,25 @@
               </div>
               <div class="column">
                <article class="message is-dark">
-                <div class="message-header"><p>เมนูอาหารขายดีตลอดกาล</p></div>
+                <div class="message-header"><p>เมนูอาหารขายดีตลอดกาล เเละ การสั่งวัตถุดิบยอดฮิต</p></div>
                 <div class="message-body" style="position: relative;">
+                  <a class="button" @click="sellofmenu()" v-bind:class="{ 'is-warning is-hovered': select3 === 'menu' }">เมนูอาหารขายดีตลอดกาล</a>
+                  <a class="button" @click="sellofmeter()" v-bind:class="{ 'is-warning is-hovered': select3 === 'meter' }">การสั่งวัตถุดิบยอดฮิต</a>
                 <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                 <thead>
                   <tr>
-                    <th>ชื่อเมนู</th>
+                    <th v-if="select3 === 'menu'">ชื่อเมนู</th>
+                    <th v-if="select3 === 'meter'">ชื่อวัตถุดิบ</th>
                     <th>จำนวน</th>
+                    <th v-if="select3 === 'meter'">ราคา</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr :key="key" v-for="(record, key) in records">
                     <td>{{record.key}}</td>
-                    <td>{{record.amount}} จาน</td>
+                    <td v-if="record.amount">{{record.amount}} จาน</td>
+                    <td v-if="record.quantity">{{record.quantity}} {{record.type}}</td>
+                    <td v-if="record.price">{{record.price}} บาท</td>
                   </tr>
                 </tbody>
               </table>
@@ -194,10 +211,13 @@ export default {
       menudayhit: [],
       select: 0,
       select2: 'day',
+      select3: 'menu',
       piedaymoney: '',
       summoney: 0,
       tmpreportmoney: '',
-      detail: ''
+      detail: '',
+      tmprecords: '',
+      recordmeter: ''
     }
   },
   methods: {
@@ -262,6 +282,23 @@ export default {
         this.ShowGraph(this.getvalue, scale)
       })
     },
+    getDataFirebasemeter (getvalue, scale) {
+      this.select = 'meter' + scale
+      var ref = firebase.database().ref('foodcenter/reportmeter/' + this.selectShop + '/' + scale)
+      ref.once('value', snap => {
+        var data = []
+        var data1 = []
+        snap.forEach(ss => {
+          var item = ss.val().value
+          var item1 = ss.val().label
+          data.push(item)
+          data1.push(item1)
+        })
+        this.getvalue = data
+        this.getvalue1 = data1
+        this.ShowGraph(this.getvalue, scale)
+      })
+    },
     ShowGraph: function (getvalue, scale) {
       // console.log(Math.max(...this.getvalue))
       if (scale === 'day') { scale = 'ประจำวัน' }
@@ -297,7 +334,7 @@ export default {
             }
           },
           series: [{
-            name: 'Inflation',
+            name: 'ยอดขาย',
             data: this.getvalue
           }],
           xaxis: {
@@ -330,7 +367,7 @@ export default {
               }
             },
             tooltip: {
-              enabled: true,
+              // enabled: true,
               offsetY: -35
             }
           },
@@ -676,6 +713,24 @@ export default {
         })
         tmp = data
         this.reportmoney = tmp.sort((a, b) => a.money < b.money ? 1 : -1)
+      })
+    },
+    sellofmenu () {
+      this.select3 = 'menu'
+      this.records = this.tmprecords
+    },
+    sellofmeter () {
+      this.select3 = 'meter'
+      this.tmprecords = this.records
+      const dbRefObjectMenuhit = firebase.database().ref().child('foodcenter/recordmeter').child(this.selectShop)
+      dbRefObjectMenuhit.orderByChild('amount').limitToLast(5).on('value', snap => {
+        var data = []
+        snap.forEach(ss => {
+          var item = ss.val()
+          item.key = ss.key
+          data.push(item)
+        })
+        this.records = data.sort((a, b) => a.money < b.money ? 1 : -1)
       })
     }
   },

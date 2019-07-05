@@ -74,7 +74,9 @@ export default {
       viewstock: {},
       detail: '',
       email: '',
-      once: {}
+      once: {},
+      meter: {},
+      recordRef: {}
     }
   },
   computed: {
@@ -104,6 +106,12 @@ export default {
       await this.report()
       await this.reportmonth()
       await this.reportyear()
+      //
+      await this.reportmeter()
+      await this.reportmetermonth()
+      await this.reportmeteryear()
+      await this.recordmeter(products)
+      //
       await this.Cutstock(products)
       await this.sendmail(products)
       for (var i = 0; i < products.length; i++) {
@@ -292,6 +300,83 @@ export default {
         database.ref('/foodcenter/deliver').child(this.hasshop).push(data)
       }
     },
+    reportmeter () {
+      let foundday = ''
+      let day = moment().tz('Asia/Bangkok').format().slice(0, 10)
+      const reportday = firebase.database().ref().child('foodcenter/reportmeter').child(this.hasshop).child('day').orderByChild('label').equalTo(day)
+      reportday.on('child_added', snap => {
+        foundday = snap.val()
+      })
+      if (foundday === '') {
+        let data = {
+          label: day,
+          value: this.total
+        }
+        firebase.database().ref().child('foodcenter/reportmeter').child(this.hasshop).child('day').child(day).set(data)
+      } else {
+        let updatavalue = foundday.value + this.total
+        firebase.database().ref().child('foodcenter/reportmeter').child(this.hasshop).child('day').child(day).child('value').set(updatavalue)
+      }
+    },
+    reportmetermonth () {
+      let foundmonth = ''
+      let month = moment().tz('Asia/Bangkok').format().slice(0, 7)
+      const reportmonth = firebase.database().ref().child('foodcenter/reportmeter').child(this.hasshop).child('month').orderByChild('label').equalTo(month)
+      reportmonth.on('child_added', snap => {
+        foundmonth = snap.val()
+      })
+      if (foundmonth === '') {
+        let data = {
+          label: month,
+          value: this.total
+        }
+        firebase.database().ref().child('foodcenter/reportmeter').child(this.hasshop).child('month').child(month).set(data)
+      } else {
+        let updatavalue = foundmonth.value + this.total
+        firebase.database().ref().child('foodcenter/reportmeter').child(this.hasshop).child('month').child(month).child('value').set(updatavalue)
+      }
+    },
+    reportmeteryear () {
+      let foundyear = ''
+      let year = moment().tz('Asia/Bangkok').format().slice(0, 4)
+      const reportyear = firebase.database().ref().child('foodcenter/reportmeter').child(this.hasshop).child('year').orderByChild('label').equalTo(year)
+      reportyear.on('child_added', snap => {
+        foundyear = snap.val()
+      })
+      if (foundyear === '') {
+        let data = {
+          label: year,
+          value: this.total
+        }
+        firebase.database().ref().child('foodcenter/reportmeter').child(this.hasshop).child('year').child(year).set(data)
+      } else {
+        let updatavalue = foundyear.value + this.total
+        firebase.database().ref().child('foodcenter/reportmeter').child(this.hasshop).child('year').child(year).child('value').set(updatavalue)
+      }
+    },
+    recordmeter (products) {
+      for (var i = 0; i < products.length; i++) {
+        let found = ''
+        const meter = firebase.database().ref().child('foodcenter/recordmeter').child(this.hasshop).orderByChild('name').equalTo(products[i].name)
+        meter.on('child_added', snap => {
+          found = snap.val()
+        })
+        if (found) {
+          let updateprice = found.price + (products[i].price * products[i].quantity)
+          let updateqty = found.quantity + (products[i].quantity * products[i].meters[0].qty)
+          firebase.database().ref().child('foodcenter/recordmeter').child(this.hasshop).child(products[i].name).child('price').set(updateprice)
+          firebase.database().ref().child('foodcenter/recordmeter').child(this.hasshop).child(products[i].name).child('quantity').set(updateqty)
+        } else {
+          let data = {
+            name: products[i].name,
+            type: products[i].unit,
+            quantity: products[i].quantity * products[i].meters[0].qty,
+            price: products[i].price * products[i].quantity
+          }
+          firebase.database().ref().child('foodcenter/recordmeter').child(this.hasshop).child(products[i].name).set(data)
+        }
+      }
+    },
     beforeremove (key) {
       this.$swal({
         title: 'คุณกำลังลบเมนูอาหารนี้?',
@@ -341,6 +426,14 @@ export default {
     const dbRefObject4 = database.ref('/user')
     dbRefObject4.on('value', snap => {
       this.once = snap.val()
+    })
+    const dbRefObject5 = foodcenterRef.child('reportmeter')
+    dbRefObject5.on('value', snap => {
+      this.meter = snap.val()
+    })
+    const dbRefObject6 = firebase.database().ref().child('foodcenter/recordmeter')
+    dbRefObject6.on('value', snap => {
+      this.recordRef = snap.val()
     })
     // ดึงข้อมูลมาซึ้งกัน
   }
