@@ -62,7 +62,7 @@
               </div>
               <div class="column is-three-fifths">
                <article class="message is-dark">
-                <div class="message-header"><p>Chart</p></div>
+                <div class="message-header"><p>Chart</p><button class="button" @click="selectday()">เลือกวัน</button></div>
                 <div class="message-body" style="position: relative;">
                 <div id="chart"></div>
                 </div>
@@ -176,16 +176,82 @@
             </div>
             <!-- table -->
               <!--  -->
+              <div id="modal-ter" class="modal is-active" v-show="showmodal" @close="showmodal = false">
+                          <div class="modal-background"></div>
+                            <div class="modal-card">
+                              <header class="modal-card-head">
+                                <p class="modal-card-title">เลือกวันที่เริ่มต้น เเละ เลือกวันที่สิ้นสุด</p>
+                                <button class="delete" aria-label="close" @click="Closemodal()"></button>
+                              </header>
+                              <section class="modal-card-body">
+                                <div class="content">
+                                  <!-- เนื้อหา -->
+                                  <!-- <form action> -->
+                                    <div class="columns">
+                                      <div class="column is-3">
+                                        <h5 style="padding-top:10%">
+                                        วันที่เริ่มต้น
+                                        </h5>
+                                      </div>
+                                      <div class="column">
+                                        <!-- <flat-pickr v-model="date" :config="config" style="width:100%"></flat-pickr> -->
+                                        <div class="control has-icons-left">
+                                          <flat-pickr v-model="date" :config="config" style="width:100%;margin-top: 0px;padding-left: 2.25em;"></flat-pickr>
+                                        <span class="icon is-small is-left">
+                                          <i class="fas fa-calendar-alt"></i>
+                                        </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="columns">
+                                      <div class="column is-3">
+                                        <h5 style="padding-top:10%">
+                                        วันที่สิ้นสุด
+                                        </h5>
+                                      </div>
+                                      <div class="column">
+                                        <!-- <flat-pickr v-model="date2" :config="config" style="width:100%"></flat-pickr> -->
+                                        <div class="control has-icons-left">
+                                          <flat-pickr v-model="date2" :config="config" style="width:100%;margin-top: 0px;padding-left: 2.25em;"></flat-pickr>
+                                        <span class="icon is-small is-left">
+                                          <i class="fas fa-calendar-alt"></i>
+                                        </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                <!-- </form> -->
+                                <!-- เนื้อหา -->
+                              </div>
+                            </section>
+                            <footer class="modal-card-foot">
+                              <button class="button is-success" @click="findday()">ตกลง</button>
+                              <!-- <button class="button is-success">บันทึกข้อมูล</button> -->
+                              <button class="button" @click="Closemodal()">ยกเลิก</button>
+                            </footer>
+                          </div>
+                        </div>
 </div>
 </template>
 <script>
+import flatPickr from 'vue-flatpickr-component'
+import 'flatpickr/dist/flatpickr.css'
 import { mapGetters } from 'vuex'
 import firebase from 'firebase'
 import ApexCharts from 'apexcharts'
 export default {
   name: 'Reportsell',
+  components: {
+    flatPickr
+  },
   data: function () {
     return {
+      config: {
+        // enable: [
+        //   '2019-07-01', '2019-07-02'
+        // ],
+        altFormat: 'j M, Y',
+        dateFormat: 'd-m-Y'
+      },
       getvalue: [],
       getvalue1: [],
       getvalue2: [],
@@ -200,12 +266,14 @@ export default {
       showsell: false,
       showsellweek: false,
       showmoneyweek: false,
+      report: '',
       reportsell: '',
       reportmoney: '',
       reportprofit: '',
       Week: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
       allday: [],
-      date: new Date(),
+      date: null,
+      date2: null,
       dayhit: [],
       moneyhit: [],
       menudayhit: [],
@@ -217,7 +285,10 @@ export default {
       tmpreportmoney: '',
       detail: '',
       tmprecords: '',
-      recordmeter: ''
+      recordmeter: '',
+      showmodal: false,
+      tmpvalue: '',
+      tmpvalu2: ''
     }
   },
   methods: {
@@ -524,18 +595,20 @@ export default {
       this.getsell()
     },
     async getdonut (getvalue, scale) {
+      let value = ''
+      let value2 = ''
       var ref = firebase.database().ref('foodcenter/report/' + this.selectShop + '/' + scale)
       await ref.on('value', snap => {
         var data = []
-        var data1 = []
+        // var data1 = []
         snap.forEach(ss => {
           var item = ss.val().value
-          var item1 = ss.val().label
+          // var item1 = ss.val().label
           data.push(item)
-          data1.push(item1)
+          // data1.push(item1)
         })
-        this.getvalue = data
-        this.getvalue1 = data1
+        value = data
+        // this.getvalue1 = data1
       })
       var ref2 = firebase.database().ref('foodcenter/reportprofit/' + this.selectShop + '/' + scale)
       await ref2.on('value', snap => {
@@ -548,17 +621,17 @@ export default {
           data1.push(item1)
         })
         console.log(data)
-        this.getvalue2 = data
+        value2 = data
       })
-      this.reducevalue()
+      this.reducevalue(value, value2)
     },
-    reducevalue () {
+    reducevalue (value, value2) {
       // การขาย
-      const result = this.getvalue.reduce((sum, number) => {
+      const result = value.reduce((sum, number) => {
         return sum + number
       }, 0)
       // กำไรขั้นต้น
-      const result2 = this.getvalue2.reduce((sum, number) => {
+      const result2 = value2.reduce((sum, number) => {
         return sum + number
       }, 0)
       this.Graphdonut(result - result2, result2)
@@ -732,6 +805,38 @@ export default {
         })
         this.records = data.sort((a, b) => a.money < b.money ? 1 : -1)
       })
+    },
+    selectday () {
+      this.showmodal = true
+      // this.config.enable = this.getvalue1
+    },
+    Closemodal () {
+      this.showmodal = false
+    },
+    findday () {
+      let tmp = ''
+      let tmp2 = ''
+      console.log(this.date, this.date2)
+      tmp = this.date.slice(6, 10) + this.date.slice(2, 6) + this.date.slice(0, 2)
+      tmp2 = this.date2.slice(6, 10) + this.date2.slice(2, 6) + this.date2.slice(0, 2)
+      console.log(tmp, tmp2)
+      let found = this.getvalue1.findIndex(p => p === tmp)
+      let found2 = this.getvalue1.findIndex(p => p === tmp2)
+      console.log(found, found2)
+      if (found !== -1 && found2 !== -1) {
+        this.getvalue = this.getvalue.slice(found, found2 + 1)
+        this.getvalue1 = this.getvalue1.slice(found, found2 + 1)
+        this.ShowGraph(this.getvalue, this.select)
+        this.showmodal = false
+        this.date = ''
+        this.date2 = ''
+      } else {
+        this.$swal({
+          type: 'error',
+          title: 'ขออภัย...',
+          text: 'กรุณาเลือกวันที่มีในกราฟด้วย'
+        })
+      }
     }
   },
   mounted () {
@@ -784,7 +889,7 @@ export default {
       })
       this.reportprofit = data
       console.log(data)
-      this.getdonut(this.getvalue, this.year)
+      // this.getdonut(this.getvalue, this.year)
     })
     firebase.database().ref().child('foodcenter/weekmoney').child(this.selectShop).on('value', snap => {
       var data = []
@@ -798,6 +903,10 @@ export default {
     })
     firebase.database().ref().child('foodcenter/detail').child(this.selectShop).on('value', snap => {
       this.detail = snap.val()
+    })
+    firebase.database().ref().child('foodcenter/report').child(this.selectShop).on('value', snap => {
+      this.report = snap.val()
+      this.getdonut(this.getvalue, this.year)
     })
   },
   computed: {
