@@ -1099,6 +1099,7 @@ export default {
         })
       } else {
         foodcenterRef.child('promo').child(this.selectShop).push(data)
+        foodcenterRef.child('detail').child(this.selectShop).child('Pronew').set(prodetail)
         this.notiemail(prodetail)
         this.prodetail = ''
       }
