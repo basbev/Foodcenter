@@ -91,8 +91,10 @@
         <div class="row">
           <div class="column">
     <img src="https://www.img.live/images/2018/11/20/img_352451.png" class="imageTel">&nbsp;{{detail.tel}}
+    <h5 v-if="detail.Pronew">โปรโมชั่นล่าสุด: <i class="fas fa-star"></i>&nbsp;{{detail.Pronew}}&nbsp;&nbsp;<i class="fas fa-star"></i></h5>
      <h1>คิวที่รอ :&nbsp;<span class="number">&nbsp;&nbsp;{{detail.q}}&nbsp;&nbsp;</span></h1>
      <h5>กำลังทำของ:&nbsp;{{detail.doing}}&nbsp;&nbsp;</h5>
+     <h5 v-if="detail.lastorder">รายการอาหาร:&nbsp;{{detail.lastorder}}&nbsp;&nbsp;</h5>
         <!-- <button v-if="permission === '3'" class="button button4" @click="setUpdatefood(detail.tel, detail.name, key)">Update1</button> -->
         <!-- <button v-if="permission === '3'" class="button button6" @click="deletefoodcenter(detail.key)">Delete</button> -->
         </div>
@@ -103,7 +105,8 @@
               </article>
                   <button v-if="permission === '3'" class="button button4" @click="setUpdatefoodcenter(detail.tel, detail.name, detail.key)">Update</button>
                   <button v-if="permission === '3'" class="button button3" @click="DelFood(detail.key)">Delete</button>
-                  <button class="button button2-invert" @click="GoSee(detail.key)" v-if="detail.doing !== 'ว่าง'">Order&nbsp;</button>
+                  <!-- <button class="button button2-invert" @click="GoSee(detail.key)" v-if="detail.doing !== 'ว่าง'">Order&nbsp;</button> -->
+                  <button class="button button2-invert" @click="GoSee(detail.key)" v-if="detail.q !== 0">Order&nbsp;</button>
                 </div>
             </div>
           </div>
@@ -255,7 +258,8 @@ export default {
       showModal: false,
       tmp: '',
       shoppoints: '',
-      useradd: ''
+      useradd: '',
+      Reforder: ''
     }
   },
   methods: {
@@ -396,7 +400,8 @@ export default {
     },
     sortHighest () {
       this.shops.sort((a, b) => a.Rating < b.Rating ? 1 : -1)
-    }
+      this.findorders()
+    },
     // async setUpdatefood (tel, name, key) {
     //   // document.getElementById('swal-input1').value = name
     //   const {value: formValues} = await this.$swal({
@@ -433,6 +438,26 @@ export default {
     //     // this.updatefoodcenter()
     //   }
     // }
+    findorders () {
+      for (var i = 0; i < this.Reforder.length; i++) {
+        let tmp = ''
+        foodcenterRef.child('order').child(this.Reforder[i].key).on('value', snap => {
+          let data = []
+          snap.forEach(ss => {
+            var item = ss.val()
+            item.key = ss.key
+            data.push(item)
+          })
+          tmp = data
+        })
+        // console.log(tmp)
+        let found = tmp.find(p => p.customer === this.user)
+        if (found) {
+          let found2 = this.shops.find(p => p.key === this.Reforder[i].key)
+          found2.lastorder = 'มี order ของคุณ'
+        }
+      }
+    }
   },
   mounted () {
     const dbRefObject = foodcenterRef.child('detail')
@@ -459,6 +484,16 @@ export default {
     getuser.on('child_added', snap => {
       this.useradd = snap.key
       console.log(this.useradd)
+    })
+    foodcenterRef.child('order').on('value', snap => {
+      var data = []
+      snap.forEach(ss => {
+        var item = ss.val()
+        item.key = ss.key
+        data.push(item)
+      })
+      this.Reforder = data
+      this.findorders()
     })
   },
   computed: {
