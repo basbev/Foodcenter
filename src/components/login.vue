@@ -63,7 +63,8 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase'
-
+const messaging = firebase.messaging()
+messaging.usePublicVapidKey('BPYiRhXJmradMivdBv3IFGdIA2Lnae6uWvT9PbLd8vUNnxm2f5Lo18eQLvGp3snSMZlWmTILmVdUQDi9kakgPHk')
 export default {
   name: 'login',
   data: function () {
@@ -78,8 +79,6 @@ export default {
   },
   created () {
     if (this.user) { this.$router.push('/foodcenter') }
-    // const messaging = firebase.messaging()
-    // messaging.usePublicVapidKey('BPYiRhXJmradMivdBv3IFGdIA2Lnae6uWvT9PbLd8vUNnxm2f5Lo18eQLvGp3snSMZlWmTILmVdUQDi9kakgPHk')
   },
   methods: {
     ...mapActions([
@@ -153,8 +152,6 @@ export default {
         )
     },
     requestPermission () {
-      const messaging = firebase.messaging()
-      messaging.usePublicVapidKey('BPYiRhXJmradMivdBv3IFGdIA2Lnae6uWvT9PbLd8vUNnxm2f5Lo18eQLvGp3snSMZlWmTILmVdUQDi9kakgPHk')
       console.log('Requesting permission...')
       // [START request_permission]
       messaging.requestPermission().then(() => {
@@ -204,11 +201,7 @@ export default {
       this.facebook = snap.val()
       console.log(this.facebook)
     })
-    // try {
     this.requestPermission()
-    // } catch (error) {
-    //   console.log(error)
-    // }
   },
   computed: {
     ...mapGetters({
