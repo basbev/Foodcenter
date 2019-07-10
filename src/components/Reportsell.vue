@@ -236,7 +236,7 @@
                           <div class="modal-background"></div>
                             <div class="modal-card">
                               <header class="modal-card-head">
-                                <p class="modal-card-title">เลือกวันที่เริ่มต้น เเละ เลือกวันที่สิ้นสุด</p>
+                                <p class="modal-card-title">เลือกเดือนที่เริ่มต้น เเละ เลือกเดือนที่สิ้นสุด</p>
                                 <button class="delete" aria-label="close" @click="Closemodal2()"></button>
                               </header>
                               <section class="modal-card-body">
@@ -246,7 +246,7 @@
                                     <div class="columns">
                                       <div class="column is-3">
                                         <h5 style="padding-top:10%">
-                                        วันที่เริ่มต้น
+                                        เดือนที่เริ่มต้น
                                         </h5>
                                       </div>
                                       <div class="column">
@@ -261,7 +261,7 @@
                                     <div class="columns">
                                       <div class="column is-3">
                                         <h5 style="padding-top:10%">
-                                        วันที่สิ้นสุด
+                                        เดือนที่สิ้นสุด
                                         </h5>
                                       </div>
                                       <div class="column">
@@ -288,7 +288,7 @@
                           <div class="modal-background"></div>
                             <div class="modal-card">
                               <header class="modal-card-head">
-                                <p class="modal-card-title">เลือกวันที่เริ่มต้น เเละ เลือกวันที่สิ้นสุด</p>
+                                <p class="modal-card-title">เลือกปีที่เริ่มต้น เเละ เลือกปีที่สิ้นสุด</p>
                                 <button class="delete" aria-label="close" @click="Closemodal3()"></button>
                               </header>
                               <section class="modal-card-body">
@@ -298,7 +298,7 @@
                                     <div class="columns">
                                       <div class="column is-3">
                                         <h5 style="padding-top:10%">
-                                        วันที่เริ่มต้น
+                                        ปีที่เริ่มต้น
                                         </h5>
                                       </div>
                                       <div class="column">
@@ -313,7 +313,7 @@
                                     <div class="columns">
                                       <div class="column is-3">
                                         <h5 style="padding-top:10%">
-                                        วันที่สิ้นสุด
+                                        ปีที่สิ้นสุด
                                         </h5>
                                       </div>
                                       <div class="column">
@@ -940,7 +940,7 @@ export default {
       let found = this.getvalue1.findIndex(p => p === tmp)
       let found2 = this.getvalue1.findIndex(p => p === tmp2)
       console.log(found, found2)
-      if (found !== -1 && found2 !== -1) {
+      if (found !== -1 && found2 !== -1 && found <= found2) {
         this.getvalue = this.getvalue.slice(found, found2 + 1)
         this.getvalue1 = this.getvalue1.slice(found, found2 + 1)
         this.ShowGraph(this.getvalue, this.select)
@@ -951,7 +951,7 @@ export default {
         this.$swal({
           type: 'error',
           title: 'ขออภัย...',
-          text: 'กรุณาเลือกวันที่มีในกราฟด้วย'
+          text: 'กรุณาเลือกวันที่มีในกราฟด้วย เเละ วันเริ่มต้นควรน้อยกว่าวันสิ้นสุด'
         })
       }
     },
@@ -971,7 +971,7 @@ export default {
       let found = this.getvalue1.findIndex(p => p === tmp)
       let found2 = this.getvalue1.findIndex(p => p === tmp2)
       console.log(found, found2)
-      if (found !== -1 && found2 !== -1) {
+      if (found !== -1 && found2 !== -1 && found <= found2) {
         this.getvalue = this.getvalue.slice(found, found2 + 1)
         this.getvalue1 = this.getvalue1.slice(found, found2 + 1)
         this.ShowGraph(this.getvalue, this.select)
@@ -982,7 +982,7 @@ export default {
         this.$swal({
           type: 'error',
           title: 'ขออภัย...',
-          text: 'กรุณาเลือกวันที่มีในกราฟด้วย'
+          text: 'กรุณาเลือกเดือนที่มีในกราฟด้วย เเละ เดือนเริ่มต้นควรน้อยกว่าเดือนสิ้นสุด'
         })
       }
     },
@@ -1002,7 +1002,7 @@ export default {
       let found = this.getvalue1.findIndex(p => p === tmp)
       let found2 = this.getvalue1.findIndex(p => p === tmp2)
       console.log(found, found2)
-      if (found !== -1 && found2 !== -1) {
+      if (found !== -1 && found2 !== -1 && found <= found2) {
         this.getvalue = this.getvalue.slice(found, found2 + 1)
         this.getvalue1 = this.getvalue1.slice(found, found2 + 1)
         this.ShowGraph(this.getvalue, this.select)
@@ -1013,7 +1013,7 @@ export default {
         this.$swal({
           type: 'error',
           title: 'ขออภัย...',
-          text: 'กรุณาเลือกวันที่มีในกราฟด้วย'
+          text: 'กรุณาเลือกปีที่มีในกราฟด้วย เเละ ปีเริ่มต้นควรน้อยกว่าปีสิ้นสุด'
         })
       }
     }
