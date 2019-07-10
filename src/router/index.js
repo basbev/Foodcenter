@@ -4,6 +4,7 @@ import foodcenter from '@/components/foodcenter'
 import login from '@/components/login'
 import Register from '@/components/Register'
 import Addshop from '@/components/Addshop'
+import Addmeter from '@/components/Addmeter'
 import Profile from '@/components/Profile'
 import shop from '@/components/shop'
 import Cart from '@/components/Cart'
@@ -39,6 +40,11 @@ export default new Router({
       path: '/Addshop',
       name: 'Addshop',
       component: Addshop
+    },
+    {
+      path: '/Addmeter',
+      name: 'Addmeter',
+      component: Addmeter
     },
     {
       path: '/Profile',

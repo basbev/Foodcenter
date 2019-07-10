@@ -1335,13 +1335,6 @@ export default {
   text-align: center;
 } */
 
-.bucket {
-  position: fixed;
-  bottom: 5vh;
-  left: 5vw;
-  cursor: pointer;
-  z-index: 100;
-}
 .file-label {
   font-size: 18px;
   display: unset;

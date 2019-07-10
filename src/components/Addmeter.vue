@@ -2,7 +2,7 @@
   <div class="hero-body">
     <div class="container has-text-centered">
       <div class="column is-4 is-offset-4">
-        <h3 class="title has-text-grey">เพิ่มร้านอาหาร</h3>
+        <h3 class="title has-text-grey">เพิ่มร้านวัตถุดิบ</h3>
         <div class="box">
           <figure class="avatar">
             <img src="/static/logo1.png">
@@ -18,7 +18,7 @@
               </div>
             </div>
             <div class="buttons is-centered">
-              <span class="button is-success" v-on:click="Addshop(name, tel)">เพิ่มร้านอาหาร</span>
+              <span class="button is-success" v-on:click="Addshop(name, tel)">เพิ่มวัตถุดิบ</span>
             </div>
           </form>
         </div>
@@ -32,7 +32,7 @@ import firebase from 'firebase'
 import { mapGetters } from 'vuex'
 var database = firebase.database()
 var UserRef = database.ref('/user')
-var ShopRef = database.ref('/foodcenter')
+var ShopRef = database.ref('/meters')
 export default {
   name: 'Addshop',
   data () {
@@ -70,13 +70,13 @@ export default {
       })
       await UserRef.child(this.useradd).child('hasShop').set(key)
       await this.SelectShop(key)
-      this.$router.push('/shop')
+      this.$router.push('/meter')
     },
     SelectShop (name) {
       this.$store.dispatch('selectShop', name)
         .then(
           user => {
-            this.$router.push('/shop')
+            this.$router.push('/meter')
           },
           err => {
             alert(err.message)

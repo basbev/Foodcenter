@@ -1715,11 +1715,10 @@ export default {
   /* .report {
     text-align: center;
   } */
-
   .bucket {
     position: fixed;
     bottom: 5vh;
-    right: 2vw;
+    left: 2vw;
     cursor: pointer;
     z-index: 1;
   }

@@ -117,6 +117,9 @@ export default {
         } if (this.isLoggedIn === true && this.permission === '5' && this.selectShop !== '') {
           alert('Successfully sign in\nWelcome User Shopmeter: ' + ' ' + this.user)
           this.$router.push('/meter')
+        } if (this.isLoggedIn === true && this.permission === '5' && this.selectShop === '') {
+          alert('Successfully sign in\nWelcome User Shop: ' + ' ' + this.user)
+          this.$router.push('/Addmeter')
         }
       }
     },

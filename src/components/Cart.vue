@@ -39,7 +39,7 @@
                 </tbody>
         </table>
         &nbsp;ผู้สั่ง : {{this.users}} <br>
-        &nbsp;ร้านค้า : {{this.SelectShops}}
+        &nbsp;ร้านค้า : {{this.shops.name}}
         <hr>
         <span v-if="shops.q">&nbsp;จำนวนคิว ณ ขณะนี้ {{shops.q}} คิว  <br></span>
         &nbsp;เวลารายการอาหารล่าสุด&nbsp;{{((shops.SaveDate)?shops.SaveDate.slice(11,16):'00.00 น.')}}&nbsp;น.<br>
@@ -494,11 +494,6 @@ export default {
 .cart {
   font-size: 19px;
   font-family: 'Prompt', sans-serif;
-}
-.bucket {
-  position: fixed;
-  right: 72%;
-  cursor: pointer;
 }
 .file-label {
   font-size: 18px;

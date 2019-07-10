@@ -296,10 +296,10 @@
                                   <div>
                                    <div class="columns">
                                     <div class="column is-2">
-                                      ชื่อเมนูอาหาร :
+                                      ชื่อวัตถุดิบ :
                                     </div>
                                     <div class="column">
-                                      <input type="text" v-model="updateMenufood" placeholder="ชื่อเมนูอาหาร">
+                                      <input type="text" v-model="updateMenufood" placeholder="ชื่อวัตถุดิบ">
                                     </div>
                                     <div class="column is-2">
                                       ประเภทอาหาร :
@@ -613,7 +613,7 @@
                   <div class="modal-background"></div>
                     <div class="modal-card">
                       <header class="modal-card-head">
-                        <p class="modal-card-title">เพิ่มเมนูอาหาร {{selectShop}}</p>
+                        <p class="modal-card-title">เพิ่มวัตถุดิบ</p>
                         <button class="delete" aria-label="close" @click="Closemodal2()"></button>
                       </header>
                       <section class="modal-card-body">
@@ -627,7 +627,7 @@
                                 ชื่อวัตถุดิบ
                               </div>
                               <div class="column">
-                                <input type="text" v-model="foodname" placeholder="ชื่อเมนูอาหาร">
+                                <input type="text" v-model="foodname" placeholder="ชื่อวัตถุดิบ">
                               </div>
                               <div class="column is-2">
                                 ประเภทอาหาร :
@@ -1508,7 +1508,7 @@ export default {
   .bucket {
     position: fixed;
     bottom: 5vh;
-    right: 2vw;
+    left: 2vw;
     cursor: pointer;
     z-index: 1;
   }

@@ -40,7 +40,7 @@
             </tbody>
     </table>
     &nbsp;ผู้สั่ง : {{this.users}} <br>
-    &nbsp;ร้านค้า : {{this.SelectShops}}
+    &nbsp;ร้านค้า : {{this.shops.name}}
     <hr>
     <!-- &nbsp;จำนวนคิว ณ ขณะนี้ {{shops.q}} คิว  <br> -->
     <!-- &nbsp;เวลารายการอาหารล่าสุด&nbsp;{{shops.SaveDate.slice(11,16)}}<br> -->
@@ -427,7 +427,7 @@ export default {
     dbRefObject4.on('value', snap => {
       this.once = snap.val()
     })
-    const dbRefObject5 = foodcenterRef.child('reportmeter')
+    const dbRefObject5 = firebase.database().ref().child('foodcenter/reportmeter').child(this.hasshop)
     dbRefObject5.on('value', snap => {
       this.meter = snap.val()
     })
@@ -446,12 +446,6 @@ export default {
 .cart {
   font-size: 19px;
   font-family: 'Prompt', sans-serif;
-}
-.bucket {
-  position: fixed;
-  top: 65%;
-  right: 72%;
-  cursor: pointer;
 }
 .file-label {
   font-size: 18px;
