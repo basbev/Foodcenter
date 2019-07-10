@@ -451,9 +451,15 @@ export default {
           tmp = data
         })
         // console.log(tmp)
-        let found = tmp.find(p => p.customer === this.user)
+        // let found = tmp.find(p => p.customer === this.user)
+        let found = tmp.find(p => {
+          return p.customer === this.user && p.status !== 'ทำเสร็จเเล้ว'
+        })
         if (found) {
-          let found2 = this.shops.find(p => p.key === this.Reforder[i].key)
+          // let found2 = this.shops.find(p => p.key === this.Reforder[i].key)
+          let found2 = this.shops.find(element => {
+            return element.key === this.Reforder[i].key
+          })
           found2.lastorder = 'มี order ของคุณ'
         }
       }
