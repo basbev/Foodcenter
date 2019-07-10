@@ -284,6 +284,58 @@
                             </footer>
                           </div>
                         </div>
+              <div id="modal-ter" class="modal is-active" v-show="showmodal3" @close="showmodal3 = false">
+                          <div class="modal-background"></div>
+                            <div class="modal-card">
+                              <header class="modal-card-head">
+                                <p class="modal-card-title">เลือกวันที่เริ่มต้น เเละ เลือกวันที่สิ้นสุด</p>
+                                <button class="delete" aria-label="close" @click="Closemodal3()"></button>
+                              </header>
+                              <section class="modal-card-body">
+                                <div class="content">
+                                  <!-- เนื้อหา -->
+                                  <!-- <form action> -->
+                                    <div class="columns">
+                                      <div class="column is-3">
+                                        <h5 style="padding-top:10%">
+                                        วันที่เริ่มต้น
+                                        </h5>
+                                      </div>
+                                      <div class="column">
+                                        <div class="control has-icons-left">
+                                          <flat-pickr v-model="date5" :config="configs.year" style="width:100%;margin-top: 0px;padding-left: 2.25em;"></flat-pickr>
+                                        <span class="icon is-small is-left">
+                                          <i class="fas fa-calendar-alt"></i>
+                                        </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="columns">
+                                      <div class="column is-3">
+                                        <h5 style="padding-top:10%">
+                                        วันที่สิ้นสุด
+                                        </h5>
+                                      </div>
+                                      <div class="column">
+                                        <div class="control has-icons-left">
+                                          <flat-pickr v-model="date6" :config="configs.year" style="width:100%;margin-top: 0px;padding-left: 2.25em;"></flat-pickr>
+                                        <span class="icon is-small is-left">
+                                          <i class="fas fa-calendar-alt"></i>
+                                        </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                <!-- </form> -->
+                                <!-- เนื้อหา -->
+                              </div>
+                            </section>
+                            <footer class="modal-card-foot">
+                              <button class="button is-success" @click="findyear()">ตกลง</button>
+                              <!-- <button class="button is-success">บันทึกข้อมูล</button> -->
+                              <button class="button" @click="Closemodal3()">ยกเลิก</button>
+                            </footer>
+                          </div>
+                        </div>
 </div>
 </template>
 <script>
@@ -306,6 +358,9 @@ export default {
         },
         month: {
           dateFormat: 'm-Y'
+        },
+        year: {
+          dateFormat: 'Y'
         }
       },
       getvalue: [],
@@ -332,6 +387,8 @@ export default {
       date2: null,
       date3: null,
       date4: null,
+      date5: null,
+      date6: null,
       dayhit: [],
       moneyhit: [],
       menudayhit: [],
@@ -346,6 +403,7 @@ export default {
       recordmeter: '',
       showmodal: false,
       showmodal2: false,
+      showmodal3: false,
       tmpvalue: '',
       tmpvalu2: ''
     }
@@ -920,6 +978,37 @@ export default {
         this.showmodal2 = false
         this.date3 = ''
         this.date4 = ''
+      } else {
+        this.$swal({
+          type: 'error',
+          title: 'ขออภัย...',
+          text: 'กรุณาเลือกวันที่มีในกราฟด้วย'
+        })
+      }
+    },
+    selectyear () {
+      this.showmodal3 = true
+    },
+    Closemodal3 () {
+      this.showmodal3 = false
+    },
+    findyear () {
+      let tmp = ''
+      let tmp2 = ''
+      console.log(this.date5, this.date6)
+      tmp = this.date5
+      tmp2 = this.date6
+      console.log(tmp, tmp2)
+      let found = this.getvalue1.findIndex(p => p === tmp)
+      let found2 = this.getvalue1.findIndex(p => p === tmp2)
+      console.log(found, found2)
+      if (found !== -1 && found2 !== -1) {
+        this.getvalue = this.getvalue.slice(found, found2 + 1)
+        this.getvalue1 = this.getvalue1.slice(found, found2 + 1)
+        this.ShowGraph(this.getvalue, this.select)
+        this.showmodal3 = false
+        this.date5 = ''
+        this.date6 = ''
       } else {
         this.$swal({
           type: 'error',
