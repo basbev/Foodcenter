@@ -62,7 +62,11 @@
               </div>
               <div class="column is-three-fifths">
                <article class="message is-dark">
-                <div class="message-header"><p>Chart</p><button class="button" @click="selectday()">เลือกวัน</button></div>
+                <div class="message-header"><p>Chart</p>
+                <button v-if="select === 'day' || select === 'proday' || select === 'meterday'" class="button" @click="selectday()">เลือกวัน</button>
+                <button v-if="select === 'month' || select === 'promonth' || select === 'metermonth'" class="button" @click="selectmonth()">เลือกเดือน</button>
+                <button v-if="select === 'year' || select === 'proyear' || select === 'meteryear'" class="button" @click="selectyear()">เลือกปี</button>
+                </div>
                 <div class="message-body" style="position: relative;">
                 <div id="chart"></div>
                 </div>
@@ -194,9 +198,8 @@
                                         </h5>
                                       </div>
                                       <div class="column">
-                                        <!-- <flat-pickr v-model="date" :config="config" style="width:100%"></flat-pickr> -->
                                         <div class="control has-icons-left">
-                                          <flat-pickr v-model="date" :config="config" style="width:100%;margin-top: 0px;padding-left: 2.25em;"></flat-pickr>
+                                          <flat-pickr v-model="date" :config="configs.basic" style="width:100%;margin-top: 0px;padding-left: 2.25em;"></flat-pickr>
                                         <span class="icon is-small is-left">
                                           <i class="fas fa-calendar-alt"></i>
                                         </span>
@@ -210,9 +213,8 @@
                                         </h5>
                                       </div>
                                       <div class="column">
-                                        <!-- <flat-pickr v-model="date2" :config="config" style="width:100%"></flat-pickr> -->
                                         <div class="control has-icons-left">
-                                          <flat-pickr v-model="date2" :config="config" style="width:100%;margin-top: 0px;padding-left: 2.25em;"></flat-pickr>
+                                          <flat-pickr v-model="date2" :config="configs.basic" style="width:100%;margin-top: 0px;padding-left: 2.25em;"></flat-pickr>
                                         <span class="icon is-small is-left">
                                           <i class="fas fa-calendar-alt"></i>
                                         </span>
@@ -227,6 +229,58 @@
                               <button class="button is-success" @click="findday()">ตกลง</button>
                               <!-- <button class="button is-success">บันทึกข้อมูล</button> -->
                               <button class="button" @click="Closemodal()">ยกเลิก</button>
+                            </footer>
+                          </div>
+                        </div>
+                      <div id="modal-ter" class="modal is-active" v-show="showmodal2" @close="showmodal2 = false">
+                          <div class="modal-background"></div>
+                            <div class="modal-card">
+                              <header class="modal-card-head">
+                                <p class="modal-card-title">เลือกวันที่เริ่มต้น เเละ เลือกวันที่สิ้นสุด</p>
+                                <button class="delete" aria-label="close" @click="Closemodal2()"></button>
+                              </header>
+                              <section class="modal-card-body">
+                                <div class="content">
+                                  <!-- เนื้อหา -->
+                                  <!-- <form action> -->
+                                    <div class="columns">
+                                      <div class="column is-3">
+                                        <h5 style="padding-top:10%">
+                                        วันที่เริ่มต้น
+                                        </h5>
+                                      </div>
+                                      <div class="column">
+                                        <div class="control has-icons-left">
+                                          <flat-pickr v-model="date3" :config="configs.month" style="width:100%;margin-top: 0px;padding-left: 2.25em;"></flat-pickr>
+                                        <span class="icon is-small is-left">
+                                          <i class="fas fa-calendar-alt"></i>
+                                        </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="columns">
+                                      <div class="column is-3">
+                                        <h5 style="padding-top:10%">
+                                        วันที่สิ้นสุด
+                                        </h5>
+                                      </div>
+                                      <div class="column">
+                                        <div class="control has-icons-left">
+                                          <flat-pickr v-model="date4" :config="configs.month" style="width:100%;margin-top: 0px;padding-left: 2.25em;"></flat-pickr>
+                                        <span class="icon is-small is-left">
+                                          <i class="fas fa-calendar-alt"></i>
+                                        </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                <!-- </form> -->
+                                <!-- เนื้อหา -->
+                              </div>
+                            </section>
+                            <footer class="modal-card-foot">
+                              <button class="button is-success" @click="findmonth()">ตกลง</button>
+                              <!-- <button class="button is-success">บันทึกข้อมูล</button> -->
+                              <button class="button" @click="Closemodal2()">ยกเลิก</button>
                             </footer>
                           </div>
                         </div>
@@ -245,12 +299,14 @@ export default {
   },
   data: function () {
     return {
-      config: {
-        // enable: [
-        //   '2019-07-01', '2019-07-02'
-        // ],
-        altFormat: 'j M, Y',
-        dateFormat: 'd-m-Y'
+      configs: {
+        basic: {
+          altFormat: 'j M, Y',
+          dateFormat: 'd-m-Y'
+        },
+        month: {
+          dateFormat: 'm-Y'
+        }
       },
       getvalue: [],
       getvalue1: [],
@@ -274,6 +330,8 @@ export default {
       allday: [],
       date: null,
       date2: null,
+      date3: null,
+      date4: null,
       dayhit: [],
       moneyhit: [],
       menudayhit: [],
@@ -287,6 +345,7 @@ export default {
       tmprecords: '',
       recordmeter: '',
       showmodal: false,
+      showmodal2: false,
       tmpvalue: '',
       tmpvalu2: ''
     }
@@ -830,6 +889,37 @@ export default {
         this.showmodal = false
         this.date = ''
         this.date2 = ''
+      } else {
+        this.$swal({
+          type: 'error',
+          title: 'ขออภัย...',
+          text: 'กรุณาเลือกวันที่มีในกราฟด้วย'
+        })
+      }
+    },
+    selectmonth () {
+      this.showmodal2 = true
+    },
+    Closemodal2 () {
+      this.showmodal2 = false
+    },
+    findmonth () {
+      let tmp = ''
+      let tmp2 = ''
+      console.log(this.date3, this.date4)
+      tmp = this.date3.slice(3, 7) + this.date3.slice(2, 3) + this.date3.slice(0, 2)
+      tmp2 = this.date4.slice(3, 7) + this.date4.slice(2, 3) + this.date4.slice(0, 2)
+      console.log(tmp, tmp2)
+      let found = this.getvalue1.findIndex(p => p === tmp)
+      let found2 = this.getvalue1.findIndex(p => p === tmp2)
+      console.log(found, found2)
+      if (found !== -1 && found2 !== -1) {
+        this.getvalue = this.getvalue.slice(found, found2 + 1)
+        this.getvalue1 = this.getvalue1.slice(found, found2 + 1)
+        this.ShowGraph(this.getvalue, this.select)
+        this.showmodal2 = false
+        this.date3 = ''
+        this.date4 = ''
       } else {
         this.$swal({
           type: 'error',
