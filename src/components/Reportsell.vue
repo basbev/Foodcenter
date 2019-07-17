@@ -495,9 +495,9 @@ export default {
       if (value !== undefined && value2 !== undefined) {
         range = value + ' ถึง ' + value2
       }
-      if (scale === 'day') { scale = 'ประจำวัน' }
-      if (scale === 'month') { scale = 'ประจำเดือน' }
-      if (scale === 'year') { scale = 'ประจำปี' }
+      if (scale === 'day' || scale === 'proday' || scale === 'meterday') { scale = 'ประจำวัน' }
+      if (scale === 'month' || scale === 'promonth' || scale === 'meter') { scale = 'ประจำเดือน' }
+      if (scale === 'year' || scale === 'proyear' || scale === 'meteryear') { scale = 'ประจำปี' }
       this.showtable = false
       this.showsell = true
       if (this.showchart !== '') { this.showchart.destroy() }
@@ -1072,7 +1072,7 @@ export default {
             for (var b = startmonth; b <= lastmonth; b++) {
               console.log(lastmonth)
               if (b === lastmonth && a === betweenyear) { day = parseInt(this.date2.slice(0, 2), 10) } else { day = new Date(year, month, 0).getDate() }
-              if (b !== 0) { start = 0 } else { start = this.date.slice(0, 2) }
+              if (b !== lastmonth && a !== betweenyear) { start = 0 } else { start = this.date.slice(0, 2) }
               for (var c = start; c <= day; c++) {
                 console.log(year + '-' + ((month.toString().length === 1) ? '0' + '' + month : month) + '-' + ((c.toString().length === 1) ? '0' + '' + c : c))
                 let foundday = this.getvalue1.find(p => p === year + '-' + ((month.toString().length === 1) ? '0' + '' + month : month) + '-' + ((c.toString().length === 1) ? '0' + '' + c : c))
