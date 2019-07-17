@@ -405,7 +405,9 @@ export default {
       showmodal2: false,
       showmodal3: false,
       tmpvalue: '',
-      tmpvalu2: ''
+      tmpvalu2: '',
+      tmpgetvalue: '',
+      tmpgetvalue1: ''
     }
   },
   methods: {
@@ -487,8 +489,12 @@ export default {
         this.ShowGraph(this.getvalue, scale)
       })
     },
-    ShowGraph: function (getvalue, scale) {
+    ShowGraph: function (getvalue, scale, value, value2) {
       // console.log(Math.max(...this.getvalue))
+      let range = ''
+      if (value !== undefined && value2 !== undefined) {
+        range = value + ' ถึง ' + value2
+      }
       if (scale === 'day') { scale = 'ประจำวัน' }
       if (scale === 'month') { scale = 'ประจำเดือน' }
       if (scale === 'year') { scale = 'ประจำปี' }
@@ -503,6 +509,7 @@ export default {
           },
           plotOptions: {
             bar: {
+              horizontal: false,
               dataLabels: {
                 position: 'top', // top, center, bottom
                 columnWidth: '80%'
@@ -591,13 +598,98 @@ export default {
             }
           },
           title: {
-            text: 'รายงาน, ' + scale,
+            text: 'รายงาน, ' + scale + ' ' + range,
             floating: true,
             // offsetY: 320,
             align: 'center',
             style: {
               color: '#444'
-            }}
+            }},
+          responsive: [
+            {
+              breakpoint: 1000,
+              options: {
+                chart: {
+                  height: 700
+                },
+                plotOptions: {
+                  bar: {
+                    horizontal: true
+                  }
+                },
+                legend: {
+                  position: 'bottom'
+                },
+                dataLabels: {
+                  offsetY: 0,
+                  offsetX: 30,
+                  enabled: true,
+                  // offsetX: -6,
+                  style: {
+                    fontSize: '12px',
+                    colors: ['#000000']
+                  }
+                },
+                stroke: {
+                  show: true,
+                  width: 1,
+                  colors: ['#000000']
+                },
+                yaxis: {
+                  title: {
+                    text: 'วันที่'
+                  },
+                  axisBorder: {
+                    show: true
+                  },
+                  axisTicks: {
+                    show: true
+                  },
+                  labels: {
+                    show: true,
+                    formatter: function (val) {
+                      return val
+                    }
+                  }
+                },
+                xaxis: {
+                  title: {
+                    text: 'บาท'
+                  },
+                  rotate: -90,
+                  labels: {
+                    show: true,
+                    rotate: -90,
+                    rotateAlways: true,
+                    formatter: function (val) {
+                      return val
+                    }
+                  },
+                  axisBorder: {
+                    show: true
+                  },
+                  axisTicks: {
+                    show: true
+                  },
+                  crosshairs: {
+                    fill: {
+                      type: 'gradient',
+                      gradient: {
+                        colorFrom: '#D8E3F0',
+                        colorTo: '#BED1E6',
+                        stops: [0, 100],
+                        opacityFrom: 0.4,
+                        opacityTo: 0.5
+                      }
+                    }
+                  },
+                  tooltip: {
+                    offsetY: -35
+                  }
+                }
+              }
+            }
+          ]
         }
       )
       this.showchart.render()
@@ -690,8 +782,8 @@ export default {
                 }
               },
               chart: {
-                width: 200,
-                height: 200
+                width: 380,
+                height: 380
               },
               hart: {
                 width: 100,
@@ -780,8 +872,8 @@ export default {
                 }
               },
               chart: {
-                width: 200
-                // height: 200
+                width: 300,
+                height: 300
               },
               hart: {
                 width: 100
@@ -933,6 +1025,12 @@ export default {
     findday () {
       let tmp = ''
       let tmp2 = ''
+      let value = []
+      let value2 = []
+      if (this.tmpgetvalue) {
+        this.getvalue = this.tmpgetvalue
+        this.getvalue1 = this.tmpgetvalue1
+      }
       console.log(this.date, this.date2)
       tmp = this.date.slice(6, 10) + this.date.slice(2, 6) + this.date.slice(0, 2)
       tmp2 = this.date2.slice(6, 10) + this.date2.slice(2, 6) + this.date2.slice(0, 2)
@@ -940,10 +1038,62 @@ export default {
       let found = this.getvalue1.findIndex(p => p === tmp)
       let found2 = this.getvalue1.findIndex(p => p === tmp2)
       console.log(found, found2)
-      if (found !== -1 && found2 !== -1 && found <= found2) {
-        this.getvalue = this.getvalue.slice(found, found2 + 1)
-        this.getvalue1 = this.getvalue1.slice(found, found2 + 1)
-        this.ShowGraph(this.getvalue, this.select)
+      if (tmp <= tmp2) {
+        if (this.date.slice(3, 5) === this.date2.slice(3, 5) && this.date.slice(6, 10) === this.date2.slice(6, 10)) {
+          for (var i = this.date.slice(0, 2); i <= this.date2.slice(0, 2); i++) {
+            // console.log(this.date.slice(6, 10) + this.date.slice(2, 6) + ((i.toString().length === 1) ? '0' + '' + i : i))
+            let foundday = this.getvalue1.find(p => p === this.date.slice(6, 10) + this.date.slice(2, 6) + ((i.toString().length === 1) ? '0' + '' + i : i))
+            let foundindex = this.getvalue1.findIndex(p => p === this.date.slice(6, 10) + this.date.slice(2, 6) + ((i.toString().length === 1) ? '0' + '' + i : i))
+            console.log(foundday)
+            if (foundday) {
+              value.push(foundday)
+              value2.push(this.getvalue[foundindex])
+            }
+          }
+        } else {
+          let betweenyear = this.date2.slice(6, 10) - this.date.slice(6, 10)
+          // let betweenmonth = this.date2.slice(3, 5) - this.date.slice(3, 5)
+          let year = parseInt(this.date.slice(6, 10), 10)
+          let month = parseInt(this.date.slice(3, 5), 10)
+          let day = ''
+          let start = ''
+          let startmonth = ''
+          let lastmonth = ''
+          for (var a = 0; a <= betweenyear; a++) {
+            console.log(betweenyear)
+            if (a === 0) {
+              lastmonth = (betweenyear === 0) ? parseInt(this.date2.slice(3, 5), 10) : 12
+              startmonth = month
+            }
+            if (a !== 0) {
+              lastmonth = parseInt(this.date2.slice(3, 5), 10)
+              startmonth = 1
+            }
+            for (var b = startmonth; b <= lastmonth; b++) {
+              console.log(lastmonth)
+              if (b === lastmonth && a === betweenyear) { day = parseInt(this.date2.slice(0, 2), 10) } else { day = new Date(year, month, 0).getDate() }
+              if (b !== 0) { start = 0 } else { start = this.date.slice(0, 2) }
+              for (var c = start; c <= day; c++) {
+                console.log(year + '-' + ((month.toString().length === 1) ? '0' + '' + month : month) + '-' + ((c.toString().length === 1) ? '0' + '' + c : c))
+                let foundday = this.getvalue1.find(p => p === year + '-' + ((month.toString().length === 1) ? '0' + '' + month : month) + '-' + ((c.toString().length === 1) ? '0' + '' + c : c))
+                let foundindex = this.getvalue1.findIndex(p => p === year + '-' + ((month.toString().length === 1) ? '0' + '' + month : month) + '-' + ((c.toString().length === 1) ? '0' + '' + c : c))
+                console.log(foundday)
+                if (foundday) {
+                  value.push(foundday)
+                  value2.push(this.getvalue[foundindex])
+                }
+              }
+              month = ((month === 12) ? 0 : month) + 1
+            }
+            year = year + 1
+          }
+        }
+        console.log(value, value2)
+        this.tmpgetvalue = this.getvalue
+        this.tmpgetvalue1 = this.getvalue1
+        this.getvalue = value2
+        this.getvalue1 = value
+        this.ShowGraph(this.getvalue, this.select, tmp, tmp2)
         this.showmodal = false
         this.date = ''
         this.date2 = ''
