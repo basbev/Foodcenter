@@ -439,6 +439,8 @@ export default {
       document.title = tempTitle
     },
     getDataFirebase (getvalue, scale) {
+      this.tmpgetvalue = []
+      this.tmpgetvalue1 = []
       this.select = scale
       var ref = firebase.database().ref('foodcenter/report/' + this.selectShop + '/' + scale)
       ref.once('value', snap => {
@@ -456,6 +458,8 @@ export default {
       })
     },
     getDataFirebaseprofit (getvalue, scale) {
+      this.tmpgetvalue = []
+      this.tmpgetvalue1 = []
       this.select = 'pro' + scale
       var ref = firebase.database().ref('foodcenter/reportprofit/' + this.selectShop + '/' + scale)
       ref.once('value', snap => {
@@ -473,6 +477,8 @@ export default {
       })
     },
     getDataFirebasemeter (getvalue, scale) {
+      this.tmpgetvalue = []
+      this.tmpgetvalue1 = []
       this.select = 'meter' + scale
       var ref = firebase.database().ref('foodcenter/reportmeter/' + this.selectShop + '/' + scale)
       ref.once('value', snap => {
@@ -1017,7 +1023,6 @@ export default {
     },
     selectday () {
       this.showmodal = true
-      // this.config.enable = this.getvalue1
     },
     Closemodal () {
       this.showmodal = false
@@ -1027,7 +1032,7 @@ export default {
       let tmp2 = ''
       let value = []
       let value2 = []
-      if (this.tmpgetvalue) {
+      if (this.tmpgetvalue.length !== 0) {
         this.getvalue = this.tmpgetvalue
         this.getvalue1 = this.tmpgetvalue1
       }
