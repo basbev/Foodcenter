@@ -1075,9 +1075,20 @@ export default {
               startmonth = 1
             }
             for (var b = startmonth; b <= lastmonth; b++) {
-              console.log(lastmonth)
-              if (b === lastmonth && a === betweenyear) { day = parseInt(this.date2.slice(0, 2), 10) } else { day = new Date(year, month, 0).getDate() }
-              if (b !== lastmonth && a !== betweenyear) { start = 0 } else { start = this.date.slice(0, 2) }
+              if (b === lastmonth) {
+                day = parseInt(this.date2.slice(0, 2), 10)
+                start = 1
+                console.log('DO1')
+              }
+              if (b === startmonth) {
+                start = parseInt(this.date.slice(0, 2), 10)
+                day = new Date(year, month, 0).getDate()
+                console.log('DO2')
+              }
+              if (b !== startmonth && b !== lastmonth) {
+                start = 1
+                day = new Date(year, month, 0).getDate()
+              }
               for (var c = start; c <= day; c++) {
                 console.log(year + '-' + ((month.toString().length === 1) ? '0' + '' + month : month) + '-' + ((c.toString().length === 1) ? '0' + '' + c : c))
                 let foundday = this.getvalue1.find(p => p === year + '-' + ((month.toString().length === 1) ? '0' + '' + month : month) + '-' + ((c.toString().length === 1) ? '0' + '' + c : c))
@@ -1086,6 +1097,11 @@ export default {
                 if (foundday) {
                   value.push(foundday)
                   value2.push(this.getvalue[foundindex])
+                } else {
+                  let data = year + '-' + ((month.toString().length === 1) ? '0' + '' + month : month) + '-' + ((c.toString().length === 1) ? '0' + '' + c : c)
+                  let data2 = 0
+                  value.push(data)
+                  value2.push(data2)
                 }
               }
               month = ((month === 12) ? 0 : month) + 1
